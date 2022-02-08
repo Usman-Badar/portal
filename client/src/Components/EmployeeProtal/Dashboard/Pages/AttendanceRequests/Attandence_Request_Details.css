@@ -1,0 +1,127 @@
+.Attandence_Request_Details {
+    display: grid;
+    grid-template-columns: 70fr 30fr;
+    grid-column-gap: 30px;
+    width: 100%;
+    padding: 30px;
+}
+
+.Attandence_Request_Details .Requests {
+    background-color: #fff;
+    padding: 30px;
+}
+
+.Attandence_Request_Details .Requests .one {
+    display: grid;
+    grid-template-columns: 15fr 15fr 15fr;
+    grid-column-gap: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: .3s;
+    /* background-color: #ECF0F5; */
+    position: relative;
+}
+
+.Attandence_Request_Details .Requests .one:hover {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+
+.Attandence_Request_Details .Requests .one .index {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Attandence_Request_Details .Requests .one .index span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+}
+
+.Attandence_Request_Details .Requests .one img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+.Attandence_Request_Details .Requests .one .Text {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.Attandence_Request_Details .Requests .one .ShowOnHover {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.Attandence_Request_Details .Requests .one:hover .ShowOnHover {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    width: 20%;
+    height: 100%;
+    padding: 0 30px;
+}
+
+.Attandence_Request_Details .Requests .one .ShowOnHover i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    color: black;
+    text-decoration: none;
+    transition: .3s;
+    border-radius: 50%;
+}
+
+.Attandence_Request_Details .Requests .one .ShowOnHover i:hover {
+    background-color: rgb(207, 207, 207);
+}
+
+.Attandence_Request_Details .Attandence_Request_Details_Grid {
+    width: 100%;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    display: grid;
+    grid-template-rows: 15fr 85fr;
+    padding: 20px;
+    background: #fff;
+    font-size: 12px;
+}
+
+.Attandence_Request_Details .Attandence_Request_Details_Grid .Attandence_Request_Details_Header {
+    height: max-content;
+}
+
+.Attandence_Request_Details .Attandence_Request_Details_Grid .Attandence_Request_Details_Header div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Attandence_Request_Details .Attandence_Request_Details_Grid .Attandence_Request_Details_Header div img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.Attandence_Request_Details .Attandence_Request_Details_Grid .requestImg img {
+    width: 100%;
+    height: 200px;
+}
+
+.Attandence_Request_Details .Attandence_Request_Details_Grid .Attandence_Request_Details_info .TimeGrid {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    grid-column-gap: 10px;
+}

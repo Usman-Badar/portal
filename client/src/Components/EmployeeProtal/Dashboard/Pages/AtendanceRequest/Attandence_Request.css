@@ -1,0 +1,134 @@
+.Attandence_Request {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    padding: 30px 0;
+}
+
+.Attandence_Request video {
+    width: 100% !important;
+}
+
+.Attandence_Request input,
+.Attandence_Request textarea,
+.Attandence_Request select,
+.Attandence_Request option {
+    font-size: 12px;
+    font-family: Quicksand !important;
+    border: 1px solid rgb(212, 212, 212) !important;
+    border-radius: 5px !important;
+    box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;
+    background-color: rgb(240, 240, 240, 0.5);
+}
+
+.Attandence_Request .Attandence_Request_Form {
+    width: 30%;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+    padding: 30px;
+    height: max-content;
+    background: #fff;
+}
+
+.Attandence_Request .Attandence_Request_Form .Request_Form_Grid {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    grid-column-gap: 20px;
+}
+
+.Attandence_Request .checkmark__circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+    stroke: #000;
+    fill: none;
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.Attandence_Request .checkmark {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 2;
+    stroke: #000;
+    stroke-miterlimit: 10;
+    box-shadow: inset 0px 0px 0px #000;
+    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+
+.Attandence_Request .checkmark__check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes scale {
+    0%,
+    100% {
+        transform: none;
+    }
+    50% {
+        transform: scale3d(1.1, 1.1, 1);
+    }
+}
+
+@keyframes fill {
+    100% {
+        box-shadow: inset 0px 0px 0px 30px #fff;
+    }
+}
+
+@media only screen and (max-width: 1300px) {
+    .Attandence_Request .Attandence_Request_Form {
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width: 1050px) {
+    .Attandence_Request .Attandence_Request_Form {
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .Attandence_Request .Attandence_Request_Form {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 720px) {
+    .Attandence_Request .Attandence_Request_Form {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .Attandence_Request .Attandence_Request_Form {
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .Attandence_Request .Attandence_Request_Form {
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .Attandence_Request {
+        padding: 30px 10px;
+    }
+    .Attandence_Request .Attandence_Request_Form {
+        width: 100%;
+    }
+}

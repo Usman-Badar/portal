@@ -1,0 +1,65 @@
+.Inventory .navbar {
+    font-family: Poppins;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.Inventory .navbar .logo {
+    width: 120px;
+}
+
+.Inventory .navbar .profileDiv {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.Inventory .navbar .profileDiv .EmpImg {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.Inventory .navbar .profileDiv .profileAbs {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 10px 20px;
+    background: #fff;
+    font-size: 12px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    width: 100%;
+}
+
+.Inventory .navbar .profileDiv .profileAbs i {
+    font-size: 20px;
+    padding-right: 8px;
+}
+
+.Inventory .navbar .navbar-nav {
+    padding: 0 50px;
+}
+
+.Inventory .navbar .navbar-nav .nav-item .nav-link {
+    display: block;
+    padding: 10px 30px;
+}
+
+.Inventory .Inventory_Dashboard_main_content {
+    height: auto;
+    width: 82%;
+    margin-left: 18%;
+    background-color: #ECF0F5;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+@media only screen and (max-width: 1200px) {
+    .Inventory .Inventory_Dashboard_main_content {
+        width: 100vw;
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,85 @@
+.ViewPurchaseOrder {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 30fr 70fr;
+    grid-column-gap: 30px;
+    padding: 10px 10px 0px 10px;
+}
+
+.ViewPurchaseOrder .Left,
+.ViewPurchaseOrder .Right {
+    width: 100%;
+}
+
+.ViewPurchaseOrder .Left .RequestContainer {
+    height: calc( 100vh - 130px);
+    overflow-x: auto;
+}
+
+.ViewPurchaseOrder .Right .RequestDetails {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.ViewPurchaseOrder .Right .RequestDetails .view {
+    width: 100%;
+    border: 1px solid lightgray;
+    height: 65vh;
+    overflow: auto;
+}
+
+.ViewPurchaseOrder .Right .RequestDetails .DocsContainer {
+    display: grid;
+    grid-template-columns: 33.33fr 33.33fr 33.33fr;
+    grid-gap: 30px;
+    padding: 30px;
+}
+
+.ViewPurchaseOrder .Right .RequestDetails .DocsContainer .UploadVouchers i {
+    font-size: 30px;
+    padding: 10px;
+    border: 1px dotted lightgray;
+    color: lightgray;
+    border-radius: 50%;
+    transition: .5s;
+}
+
+.ViewPurchaseOrder .Right .RequestDetails .DocsContainer .UploadVouchers:hover {
+    border-color: gray;
+}
+
+.ViewPurchaseOrder .Right .RequestDetails .DocsContainer .UploadVouchers:hover>i {
+    color: gray;
+    border-color: gray;
+}
+
+.ViewPurchaseOrder iframe {
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.RequestDetails .printContainer {
+    position: relative;
+}
+
+.RequestDetails .printContainer .options {
+    position: absolute;
+    bottom: 100%;
+    right: 50%;
+    width: 280px;
+    height: 235px;
+    background-color: #fff;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    z-index: -1;
+    opacity: 0;
+    transition: .5s;
+    padding: 10px;
+}
+
+.RequestDetails .printContainer .showOptions {
+    z-index: 1 !important;
+    opacity: 1 !important;
+}

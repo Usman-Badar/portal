@@ -1,0 +1,184 @@
+.History .checkmark__circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+    stroke: #28A745;
+    fill: none;
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.History .checkmark {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 2;
+    stroke: #28A745;
+    stroke-miterlimit: 10;
+    margin: auto;
+    box-shadow: inset 0px 0px 0px #28A745;
+    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+
+.History .checkmark__check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+.cross__svg {
+    border-radius: 50%;
+    display: block;
+    height: 30px;
+    margin: 0 auto;
+    stroke-width: 3;
+    width: 30px;
+}
+
+.cross__circle {
+    animation: 0.6s ease 0s normal forwards 1 running stroke;
+    fill: none;
+    margin: auto;
+    stroke: #e55454;
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 1;
+}
+
+.cross__path {
+    stroke: #e55454;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    transform-origin: 50% 50% 0;
+}
+
+.f {
+    stroke: #e55454;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    transform-origin: 50% 50% 0;
+    animation: 0.3s ease 0.8s normal forwards 1 running stroke;
+}
+
+.l {
+    stroke: #e55454;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    transform-origin: 50% 50% 0;
+    animation: 1s ease 0.8s normal forwards 1 running stroke;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+.Short_Leave_Form,
+.Filters {
+    width: 100%;
+    padding-top: 20px;
+}
+
+.Short_Leave_Form .Application_Form,
+.History .histories,
+.Filters .inner {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    background-color: #ffff;
+    border-radius: 10px;
+    width: 30%;
+    padding: 20px;
+    margin: auto;
+    transition: .5s;
+    animation: popups .2s linear 1 forwards alternate;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.Short_Leave_Form p {
+    margin-bottom: 0;
+}
+
+.Short_Leave_Form .Application_Form .Leave_Duration .Leave_Duration_Time input,
+.Short_Leave_Form .Application_Form .Leave_Duration .Leave_Duration_Time select {
+    border: 1px solid rgb(212, 212, 212) !important;
+    border-radius: 5px !important;
+    box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;
+    background-color: rgb(240, 240, 240, 0.5);
+}
+
+.Short_Leave_Form .Application_Form .Leave_Purpose textarea {
+    border: 1px solid rgb(212, 212, 212) !important;
+    border-radius: 5px !important;
+    box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;
+    background-color: rgb(240, 240, 240, 0.5);
+}
+
+.Short_Leave_Form .Application_Form form button {
+    background-color: black;
+    color: white;
+}
+
+.Short_Leave_Form .Application_Form form h5,
+.Short_Leave_Form .Application_Form form input,
+.Short_Leave_Form .Application_Form form select,
+.Short_Leave_Form .Application_Form form textarea,
+.Short_Leave_Form .Application_Form form button,
+.Short_Leave_Form .Application_Form form p {
+    font-size: 12px;
+}
+
+@media only screen and (max-width: 1460px) {
+    .Short_Leave_Form .Application_Form,
+    .Filters .inner {
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    .Short_Leave_Form .Application_Form,
+    .Filters .inner {
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width: 880px) {
+    .Short_Leave_Form .Application_Form,
+    .Filters .inner {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 730px) {
+    .Short_Leave_Form .Application_Form,
+    .Filters .inner {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width: 630px) {
+    .Short_Leave_Form .Application_Form,
+    .Filters .inner {
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    .Short_Leave_Form .Application_Form,
+    .Filters .inner {
+        width: 90%;
+    }
+    .Short_Leave_Form .Application_Form form button {
+        width: 50%;
+        margin-bottom: 10px;
+    }
+    .Short_Leave_Form .Application_Form {
+        padding: 5px;
+    }
+    .Short_Leave_Form .Application_Form form h3 {
+        font-size: 25px;
+        padding-top: 10px;
+    }
+}

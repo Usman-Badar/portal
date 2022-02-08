@@ -1,0 +1,96 @@
+.notification {
+    position: relative;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.notification:hover {
+    overflow: visible;
+}
+
+.notification:hover>.Notifications_Box {
+    z-index: 5;
+}
+
+.notification .notification_number {
+    position: absolute;
+    top: 2px;
+    left: calc(75% - 10px);
+    width: 7px;
+    height: 7px;
+    background-color: #0DB8DE;
+    border-radius: 50%;
+}
+
+.notification .Notifications_Box {
+    position: absolute;
+    top: 100%;
+    left: -250px;
+    width: 300px;
+    background-color: rgb(255, 255, 255, .8);
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    font-size: 12px !important;
+    opacity: 0;
+    z-index: -1;
+    transition: .5s;
+}
+
+.notification .Notifications_Box .Notifications_list {
+    max-height: 300px;
+    overflow-y: auto;
+    word-break: break-all;
+}
+
+.notification .Notifications_Box .Notifications_list .list {
+    padding: 10px 30px;
+    transition: .5s;
+    position: relative;
+    border-bottom: 1px solid lightgray;
+    color: #000;
+    display: block;
+    text-decoration: none;
+}
+
+.notification .Notifications_Box .Notifications_list .list .cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 20px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+}
+
+.notification .Notifications_Box .Notifications_list .list .cross:hover {
+    background-color: lightgray;
+}
+
+.notification .Notifications_Box .Notifications_list .list:hover {
+    background-color: rgb(211, 211, 211, .3);
+}
+
+.notification:hover .Notifications_Box {
+    opacity: 1;
+    z-index: 100;
+}
+
+.notification .Notifications_Box .Notifications_Clear {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding: 10px;
+}
+
+.notification .Notifications_Box .Notifications_Clear button {
+    width: 30%;
+    background-color: lightgray;
+    font-size: 12px;
+}
+
+.notification .Notifications_Box .Notifications_Clear button:hover {
+    background-color: rgb(236, 236, 236);
+}

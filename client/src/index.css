@@ -1,0 +1,15 @@
+html {
+    margin: 0;
+    padding: 0;
+}
+
+.btn:focus,
+.form-control:focus {
+    box-shadow: none;
+}
+
+.d-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

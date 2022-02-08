@@ -1,0 +1,77 @@
+/* width */
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: #222D32;
+}
+
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1A2226;
+}
+
+.btn:focus {
+    box-shadow: none !important;
+}
+
+.form-control {
+    border: 1px solid lightgray !important;
+}
+
+.d-450-block {
+    display: none !important;
+}
+
+.d-450-none {
+    display: block !important;
+}
+
+.d-1200-block {
+    display: none !important;
+}
+
+@media only screen and (max-width: 1200px) {
+    .d-1200-block {
+        display: block !important;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    .d-450-block {
+        display: block !important;
+    }
+    .d-450-none {
+        display: none !important;
+    }
+    .Descussion .previous_descussions {
+        width: 100%;
+    }
+}
+
+@keyframes popups {
+    50% {
+        opacity: .5;
+        transform: scale(1.1);
+        z-index: -1 !important;
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        z-index: -1 !important;
+    }
+}

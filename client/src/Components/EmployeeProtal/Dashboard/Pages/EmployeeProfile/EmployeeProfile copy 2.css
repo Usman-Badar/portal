@@ -1,0 +1,337 @@
+.NewProfile_Header {
+    width: 100%;
+    height: 100vh;
+    padding: 10px;
+    font-size: 12px;
+}
+
+.NewProfile_Header .NewProfile_Grid {
+    display: grid;
+    grid-template-columns: 20fr 80fr;
+    grid-column-gap: 20px;
+    background-color: #fff;
+    padding: 30px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Display_Picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Display_Picture .Edit_DP {
+    display: none;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Display_Picture:hover .Edit_DP {
+    position: absolute;
+    width: 90%;
+    background-color: black;
+    bottom: 0;
+    color: white;
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Display_Picture .Edit_DP div {
+    text-align: center;
+    padding: 20px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Display_Picture .Edit_DP div:hover {
+    background-color: white;
+    color: black;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 img {
+    width: 300px;
+    height: 300px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Emp_Time {
+    display: flex;
+    padding: 20px 10px;
+    margin: 20px 0;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 button {
+    background-color: #0db8de;
+    color: white;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 {
+    display: grid;
+    grid-template-rows: 30fr 70fr;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 p {
+    margin-bottom: 0;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_upper {
+    padding: 20px 0;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_upper .Emp_Desig div {
+    padding: 5px 10px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .About_Tabs {
+    display: grid;
+    grid-template-columns: 25fr 25fr 25fr 25fr;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .About_Tabs div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .Tabs {
+    height: 50vh;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .Tab1Div {
+    padding: 0 50px;
+    margin-bottom: 40px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .Aboutleft {
+    width: 15%;
+    font-weight: bold;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .AboutInfoDiv {
+    display: flex;
+    justify-content: space-between;
+    width: 20%;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .AboutInfoDiv .Edit_Icon {
+    display: none;
+    cursor: pointer;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .AboutInfoDiv:hover .Edit_Icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 p {
+    font-size: 13px;
+    font-family: Noto;
+}
+
+.b1-bottom-none {
+    border-bottom: 2px solid #0db8de!important;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs2 {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    grid-column-gap: 20px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs2 .Records_Grid {
+    display: grid;
+    grid-template-columns: 20fr 20fr;
+    grid-column-gap: 20px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs2 .Records_Grid .Div1 {
+    position: relative;
+    cursor: pointer;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs2 .Records_Grid .Div1 .InfoText {
+    display: none;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs2 .Records_Grid .Div1:hover .InfoText {
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.5);
+    width: 100%;
+    top: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_GridShow {
+    display: none;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_upperShow {
+    display: none;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs2 .Records_Grid img {
+    width: 100%;
+}
+
+.AboutTabs1::-webkit-scrollbar,
+.AboutTabs2::-webkit-scrollbar {
+    width: 10px;
+    display: none;
+}
+
+
+/* Track */
+
+.AboutTabs1::-webkit-scrollbar-track,
+.AboutTabs2::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+
+/* Handle */
+
+.AboutTabs1::-webkit-scrollbar-thumb,
+.AboutTabs2::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+
+/* Handle on hover */
+
+.AboutTabs1::-webkit-scrollbar-thumb:hover,
+.AboutTabs2::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+@media only screen and (max-width: 1300px) {
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .Aboutleft {
+        width: 25%;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .AboutInfoDiv {
+        width: 30%;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs2 {
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .Aboutleft {
+        width: 35%;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .AboutInfoDiv {
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .Tab1Div {
+        padding: 0;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .Aboutleft {
+        width: 45%;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1 .AboutInfoDiv {
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 img {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .NewProfile_Header {
+        padding: 30px 10px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Emp_Time {
+        padding: 0;
+    }
+}
+
+@media only screen and (max-width: 650px) {
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 img {
+        width: 150px;
+        height: 150px;
+    }
+    .NewProfile_Header h3 {
+        font-size: 20px;
+    }
+    .NewProfile_Header .NewProfile_Grid {
+        display: block;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 {
+        display: none;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_upper {
+        display: none;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow {
+        display: block;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_upperShow {
+        display: block;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Display_Picture {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        cursor: pointer;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Display_Picture .Edit_DP {
+        display: none;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Display_Picture:hover .Edit_DP {
+        position: absolute;
+        width: 90%;
+        background-color: black;
+        bottom: 0;
+        color: white;
+        display: grid;
+        grid-template-columns: 50fr 50fr;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Display_Picture .Edit_DP div {
+        text-align: center;
+        padding: 20px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Display_Picture .Edit_DP div:hover {
+        background-color: white;
+        color: black;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow img {
+        width: 70%;
+        margin: 0 auto;
+        height: 200px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Emp_Time {
+        display: flex;
+        padding: 20px 10px;
+        margin: 20px 0;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow button {
+        background-color: #0db8de;
+        color: white;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs1,
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .AboutTabs2 {
+        padding: 30px 0;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .About_Tabs {
+        display: grid;
+        grid-template-columns: 33.33fr 33.33fr 33.33fr;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 {
+        grid-template-rows: 100fr;
+    }
+    .NewProfile_Header {
+        height: max-content;
+    }
+}

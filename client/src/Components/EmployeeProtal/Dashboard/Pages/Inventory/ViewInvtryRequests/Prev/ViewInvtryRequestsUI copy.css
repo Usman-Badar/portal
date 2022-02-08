@@ -1,0 +1,284 @@
+.down {
+    display: none;
+}
+
+.down .form-control {
+    border: 1px solid lightgray !important;
+    border-radius: 0 !important;
+    margin-bottom: 10px;
+}
+
+.Invtry_Application_Details {
+    width: 100%;
+    padding: 20px;
+    font-size: 12px !important;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid {
+    display: grid;
+    grid-template-columns: 25fr 75fr;
+    grid-column-gap: 30px;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .DIV1 {
+    display: flex;
+    border-radius: 5px !important;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    margin-bottom: 10px;
+    height: max-content;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .DIV1 input {
+    width: 100%;
+    height: 40px;
+    border: 0;
+    border-radius: 0 !important;
+    font-size: 12px;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .DIV1 i {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #ffff;
+    font-size: 20px;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .invtry_requests {
+    height: calc( 100vh - 85px);
+    overflow: auto;
+    padding: 0 3px;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .invtry_requests .requests {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    background-color: #ffff;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 20px;
+    width: 100%;
+    cursor: pointer;
+    transition: .5s;
+    animation: popups .2s linear 1 forwards alternate;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .invtry_requests .requests:hover {
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .invtry_requests .requests .shortDetails {
+    display: none;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .invtry_requests .requests .status {
+    padding: 5px 8px;
+    border-radius: 3px;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .invtry_requests .requests .statusa {
+    background-color: #defaed;
+    color: #307365;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .invtry_requests .requests .statusr {
+    background-color: #ffeaed;
+    color: #d19399;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .invtry_requests .requests .statusp {
+    background-color: #fff4e9;
+    color: #fc9701;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Left .invtry_requests .requests .statusv {
+    background-color: #6C757D;
+    color: #fff;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right {
+    display: grid;
+    grid-template-columns: 30fr 70fr;
+    grid-column-gap: 20px;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right1 {
+    transition: .5s;
+    animation: popups .2s linear 1 forwards alternate;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right1 .Leave_Emp_Info {
+    height: max-content;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    background-color: #ffff;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 20px;
+    font-size: 10px !important;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right p,
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right table tr,
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right table input {
+    font-size: 10px !important;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right table .form-control {
+    padding: 2px !important;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right1 .Leave_Emp_Info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right1 .Emp_Leave_Details {
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 5px;
+    height: 60vh;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right1 .Emp_Leave_Details .history {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right1 .Emp_Leave_Details .history:hover {
+    background-color: rgb(211, 211, 211, .2);
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right1 .Emp_Leave_Details .history p {
+    margin-bottom: 0 !important;
+    font-size: 10px;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right1 .Emp_Leave_Details .history div p:first-child {
+    font-weight: bold;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_TopBox {
+    display: grid;
+    grid-template-columns: 25fr 25fr 25fr 25fr;
+    grid-column-gap: 20px;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_TopBox .TopBox_Leave0 {
+    background-color: #ddf5f5 !important;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_TopBox .TopBox_Leave1 {
+    background-color: #fbe2dd !important;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_TopBox .TopBox_Leave2 {
+    background-color: #d2edff !important;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_TopBox .TopBox_Leave3 {
+    background-color: #fef0d3 !important;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_TopBox .TopBox_Leave {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    background-color: #ffff;
+    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bolder;
+    padding: 25px 0;
+    transition: .5s;
+    animation: popups .2s linear 1 forwards alternate;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_TopBox .TopBox_Leave p {
+    margin-bottom: 0;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_TopBox .TopBox_Leave p:first-child {
+    font-size: 20px;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_BottomBox {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    background-color: #ffff;
+    border-radius: 5px;
+    padding: 20px;
+    transition: .5s;
+    animation: popups .2s linear 1 forwards alternate;
+    opacity: 0;
+    transform: scale(0.8);
+    position: relative;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_BottomBox .attachments {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_BottomBox .attachmentBtns {
+    cursor: pointer;
+    padding: 10px 20px;
+    border-bottom: 1px solid #0EB8DE;
+    border-left: 1px solid #0EB8DE;
+    color: #0EB8DE;
+    border-radius: 0 5px 0 0;
+    transition: .5s;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_BottomBox .attachmentBtns:hover {
+    background-color: #0EB8DE;
+    color: #fff;
+}
+
+.Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_BottomBox p {
+    margin-bottom: 0 !important;
+}
+
+@media only screen and (max-width: 1200px) {
+    .Invtry_Application_Details .Invtry_Application_Details_Grid {
+        grid-column-gap: 10px;
+    }
+    .Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right {
+        grid-column-gap: 10px;
+        grid-template-columns: 50fr 50fr;
+    }
+    .Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_TopBox .TopBox_Leave {
+        font-size: 10px !important;
+    }
+    .Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_TopBox .TopBox_Leave p {
+        margin-bottom: 0;
+    }
+    .Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right .Grid_Right2 .Right2_TopBox .TopBox_Leave p:first-child {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .Invtry_Application_Details .Invtry_Application_Details_Grid {
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .Invtry_Application_Details .Invtry_Application_Details_Grid .Details_Grid_Right {
+        display: block;
+    }
+}
