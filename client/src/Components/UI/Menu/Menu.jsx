@@ -14,14 +14,14 @@ const Menu = (props) => {
     const ShowMenuGrid = () => {
         $('.Menu_Speeddail .Speeddail_Grid').slideToggle(200);
         
-        if ( $('.Menu_Speeddail .Button .las').hasClass('la-bars') )
+        if ( $('.Menu_Speeddail .Menu_Speeddail_circle .las').hasClass('la-bars') )
         {
-            $('.Menu_Speeddail .Button .las').removeClass('la-bars');
-            $('.Menu_Speeddail .Button .las').addClass('la-times');
+            $('.Menu_Speeddail .Menu_Speeddail_circle .las').removeClass('la-bars');
+            $('.Menu_Speeddail .Menu_Speeddail_circle .las').addClass('la-times');
         }else
         {
-            $('.Menu_Speeddail .Button .las').removeClass('la-times');
-            $('.Menu_Speeddail .Button .las').addClass('la-bars');      
+            $('.Menu_Speeddail .Menu_Speeddail_circle .las').removeClass('la-times');
+            $('.Menu_Speeddail .Menu_Speeddail_circle .las').addClass('la-bars');      
         }
 
     }
@@ -57,7 +57,7 @@ const Menu = (props) => {
                                     }
                             </div>
                             <div className="Menu_Speeddail">
-                                <div className=" " onClick={ShowMenuGrid}>
+                                <div className="Menu_Speeddail_circle" onClick={ShowMenuGrid}>
                                     <i class="las la-times"></i>
                                 </div>
                                 <div className="Speeddail_Grid">

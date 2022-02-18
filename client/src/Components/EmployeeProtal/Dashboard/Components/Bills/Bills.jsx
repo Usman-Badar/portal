@@ -22,7 +22,6 @@ const Bills = () => {
             ).then(
                 (res) => {
 
-                    console.log( res.data )
                     setBills( res.data[2] );
 
                 }

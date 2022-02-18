@@ -53,8 +53,6 @@ const PR_printUI = () => {
         arr.push(x * num);
     }
 
-    const d = new Date();
-
     return (
         <>
             {
@@ -97,7 +95,7 @@ const PR_printUI = () => {
                                                     </div>
                                                     <div className="d-flex border py-1">
                                                         <div className="border-right w-50 text-center"><p className="font-weight-bolder">Date  </p></div>
-                                                        <div className="text-center w-50"><p>{d.toDateString()}</p></div>
+                                                        <div className="text-center w-50"><p>{d3 ? d3.toDateString() : null}</p></div>
                                                     </div>
                                                 </div>
                                             </div>

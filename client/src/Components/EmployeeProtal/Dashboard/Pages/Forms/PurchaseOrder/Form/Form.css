@@ -5,11 +5,11 @@
     padding: 20px;
     position: relative;
     overflow: hidden;
-    z-index: 1;
+    /* z-index: 1; */
 }
 
 .POForm .form-control {
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .POForm .watermark {
@@ -70,7 +70,7 @@
     border: 1px solid lightgray;
     padding: 3px 0;
     padding-left: 5px;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .POForm .Upper.RequestInfo .Right.RequestInfo .TableDiv .divs:nth-child( odd) {
@@ -127,7 +127,7 @@
 }
 
 .POForm .GridContainer.Venders.ShipTo .NewVender .btn {
-    font-size: 13px;
+    font-size: 12px;
     padding: 0 20px;
     margin-top: 10px;
     display: block;
@@ -141,11 +141,51 @@
 
 .POForm .PO_printUI_Middle {
     padding: 30px 0;
+    overflow-x: auto;
 }
 
 .POForm .PO_printUI_Middle .PO_printUI_Grid {
     display: grid;
-    grid-template-columns: 5fr 35fr 35fr 8.33fr 8.33fr 8.33fr !important;
+    grid-template-columns: minmax(20px, 5fr) minmax(150px, 25fr) minmax(200px, 30fr) minmax(50px, 8.33fr) minmax(50px, 8.33fr) minmax(75px, 7.5fr) minmax(75px, 7.5fr) minmax(50px, 8.33fr);
+    width: 1200px;
+    overflow: auto;
+}
+
+.POForm .PO_printUI_Middle .PO_printUI_Grid #individualTax {
+    background: none;
+    width: 100%;
+    border: none;
+    font-size: 10px;
+}
+
+.POForm .PO_printUI_Middle .PO_printUI_Grid #individualTax:focus {
+    outline: none;
+}
+
+.POForm .PO_printUI_Middle .PO_printUI_Grid_Bottom {
+    display: grid;
+    grid-template-columns: 67.51fr 16.66fr 15.83fr !important;
+}
+
+.POForm .PO_printUI_Middle .PO_printUI_Grid_Bottom div:last-child {
+    display: grid;
+    grid-template-columns: 20fr 80fr;
+    align-items: center;
+}
+
+.POForm .PO_printUI_Middle .PO_printUI_Grid_Bottom div:nth-child(1) {
+    border: 0;
+}
+
+.POForm .PO_printUI_Middle .PO_printUI_Grid_Bottom div select {
+    background: none;
+    border: none;
+    padding: 0;
+    height: auto
+}
+
+.POForm .PO_printUI_Middle .PO_printUI_Grid_Bottom div select:focus {
+    outline: none;
 }
 
 .POForm .PO_printUI_Middle .PO_printUI_Grid div {
@@ -159,7 +199,8 @@
 }
 
 .POForm .PO_printUI_Middle .PO_printUI_Grid input,
-.POForm .PO_printUI_Middle .PO_printUI_Grid textarea {
+.POForm .PO_printUI_Middle .PO_printUI_Grid textarea,
+.POForm .PO_printUI_Middle .PO_printUI_Grid select {
     border: 0 !important;
     height: max-content;
     padding: 0 10px;

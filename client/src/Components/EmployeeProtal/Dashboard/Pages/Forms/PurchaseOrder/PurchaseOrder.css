@@ -4,6 +4,13 @@
     font-family: Poppins;
 }
 
+
+/* SPECIALLY FOR CUSTOM MODAL COMPONENT */
+
+.PurchaseOrderContainer .Attandence_Request_Div .Attandence_Request_Div_Content {
+    width: 40% !important;
+}
+
 .PurchaseOrderContainer p {
     margin-bottom: 0;
     font-size: 13px;

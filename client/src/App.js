@@ -165,8 +165,8 @@ const App = () => {
                         <Route exact path='/purchaserequisition/view=:view/:pr_id' component={Dashboard} />
 
                         <Route exact path='/purchaserorder' component={Dashboard} />
-                        <Route exact path='/purchaseorder/view=home' component={Dashboard} />
-                        <Route exact path='/purchaseorder/view=form' component={Dashboard} />
+                        <Route exact path='/purchaseorder/view=:view' component={Dashboard} />
+                        <Route exact path='/purchaseorder/view=:view/:id/:id' component={Dashboard} />
 
                         <Route exact path='/attdevices' component={Dashboard} />
                         <Route exact path='/guests' component={Dashboard} />
@@ -263,6 +263,8 @@ const App = () => {
                         <Route exact path="/purchaserequisition/home" component={ Dashboard } />
                         <Route exact path="/purchaserequisition/view=:view&&id=:pr_id" component={ Dashboard } />
 
+                        <Route exact path="/purchaseorder/home" component={ Dashboard } />
+                        <Route exact path="/purchaseorder/window=:view&&id=:id" component={ Dashboard } />
                     </Switch>
                 </Suspense>
             </>

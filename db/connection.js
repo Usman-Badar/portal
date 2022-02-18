@@ -11,13 +11,14 @@ const db = mysql.createPool(
         supportBigNumbers: true,
         connectionLimit: 300
 
-        // host: 'remotemysql.com',
+        // host: 'localhost',
         // port : '3306',
-        // user: 'HVCcBMfMED',
-        // password: 'JgQVsIZ8mY',
-        // database: 'HVCcBMfMED',
+        // user: 'root',
+        // password: 'vONn&p{c2\d_9ZXL',
+        // database: 'id17010227_seaboard',
         // multipleStatements: true,
         // supportBigNumbers: true,
+        // connectionLimit: 300
     }
 );
 

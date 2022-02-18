@@ -1,0 +1,38 @@
+.ViewPurchaseOrderContainer {
+    width: 100%;
+    font-family: Quicksand;
+    padding-top: 20px;
+}
+
+.ViewPurchaseOrderContainer p,
+.ViewPurchaseOrderContainer button {
+    margin-bottom: 0;
+    font-size: 13px;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer {
+    display: grid;
+    grid-template-columns: 30fr 70fr;
+    grid-column-gap: 20px;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Left.RequestsList {
+    padding: 0 15px;
+    margin: 15px 0;
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .PreviewWindow {
+    height: 70vh;
+    margin-top: 20px;
+    padding-right: 15px;
+    overflow: auto;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .POControls {
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -59,6 +59,7 @@ const InvtryLocation = lazy( () => import(  './Pages/Inventory/InvtryLocation/In
 const InvtrySubLocations = lazy( () => import(  './Pages/Inventory/InvtryLocation/InvtrySubLocations/InvtrySubLocations' ) );
 
 const ViewPurchaseRequisition = lazy( () => import( './Pages/Procurement/ViewPurchaseRequisition/ViewPurchaseRequisition' ) );
+const ViewPurchaseOrder = lazy( () => import( './Pages/Procurement/ViewPurchaseOrder/ViewPurchaseOrder' ) );
 
 const Dashboard = () => {
     
@@ -354,14 +355,14 @@ const Dashboard = () => {
                         </div>
                         <div className="Forms_options _options procurement_options dropoptions">
                             {
-                                AccessControls.access ? JSON.parse(AccessControls.access).includes(510) || JSON.parse(AccessControls.access).includes(512) || JSON.parse(AccessControls.access).includes(513) || JSON.parse(AccessControls.access).includes(514) || JSON.parse(AccessControls.access).includes(515) || JSON.parse(AccessControls.access).includes(1)
+                                AccessControls.access ? JSON.parse(AccessControls.access).includes(510) || JSON.parse(AccessControls.access).includes(512) || JSON.parse(AccessControls.access).includes(513) || JSON.parse(AccessControls.access).includes(514) || JSON.parse(AccessControls.access).includes(515) || JSON.parse(AccessControls.access).includes(524) || JSON.parse(AccessControls.access).includes(523) || JSON.parse(AccessControls.access).includes(1)
                                     ?
                                     <>
                                         <NavLink activeClassName="Dashboard_active" to="/purchaserequisition/home" className="d-center links" onClick={() => SideBarClose()}>
                                             <div className="pr-3"><i className="las la-stream"></i></div>
                                             <div className="links_txt">View Purchase Requisition</div>
                                         </NavLink>
-                                        <NavLink activeClassName="Dashboard_active" to="/invtry/requests=purchase_order" className="d-center links" onClick={() => SideBarClose()}>
+                                        <NavLink activeClassName="Dashboard_active" to="/purchaseorder/home" className="d-center links" onClick={() => SideBarClose()}>
                                             <div className="pr-3"><i className="las la-stream"></i></div>
                                             <div className="links_txt">View Purchase Orders</div>
                                         </NavLink>
@@ -444,7 +445,7 @@ const Dashboard = () => {
                         null
                 }
                 {
-                    AccessControls.access ? JSON.parse(AccessControls.access).includes(519) || JSON.parse(AccessControls.access).includes(1)
+                    AccessControls.access ? JSON.parse(AccessControls.access).includes(1) || JSON.parse(AccessControls.access).includes(519)
                         ?
                         <>
                             <NavLink activeClassName="Dashboard_active" to='/purchaseorder/view=home' className="d-center links" onClick={() => SideBarClose()}>
@@ -485,8 +486,8 @@ const Dashboard = () => {
                             <Route exact path='/purchaserequisition/view=:view/:pr_id' component={ PurchaseRequisition } />
                             
                             <Route exact path='/purchaserorder' component={ PurchaseOrder } />
-                            <Route exact path='/purchaseorder/view=home' component={ PurchaseOrder } />
-                            <Route exact path='/purchaseorder/view=form' component={ PurchaseOrder } />
+                            <Route exact path='/purchaseorder/view=:view' component={ PurchaseOrder } />
+                            <Route exact path='/purchaseorder/view=:view/:id/:id' component={PurchaseOrder} />
 
                             <Route exact path='/attdevices' component={ Devices } />
                             <Route exact path='/guests' component={ Guests } />
@@ -533,6 +534,9 @@ const Dashboard = () => {
 
                             <Route exact path="/purchaserequisition/home" component={ ViewPurchaseRequisition } />
                             <Route exact path="/purchaserequisition/view=:view&&id=:pr_id" component={ ViewPurchaseRequisition } />
+                            
+                            <Route exact path="/purchaseorder/home" component={ ViewPurchaseOrder } />
+                            <Route exact path="/purchaseorder/window=:view&&id=:id" component={ ViewPurchaseOrder } />
                         </div>
                     </Suspense>
                 </div>

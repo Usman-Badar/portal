@@ -31,13 +31,6 @@ const PurchaseRequisition = (props) => {
 
                         return (
                             <>
-                                <iframe 
-                                    title="pr" 
-                                    id="pr" 
-                                    className="d-none w-100"
-                                    src={ 'https://' + window.location.host + '/#/view=purchase_requisition/' + val.pr_id }
-                                >
-                                </iframe>
                                 <div className="PR_printUIView">
                                     <div className="PR_printUI_Div">
                                         <h1 className=" font-weight-bolder text-center">Seaboard Group</h1>

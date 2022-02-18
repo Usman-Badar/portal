@@ -19,7 +19,10 @@ const Form = ( props ) => {
     const [ ShiptoLocations, setShiptoLocations ] = useState([]);
     const [ VendersList, setVendersList ] = useState([]);
     const [ VendersFound, setVendersFound ] = useState([]);
+    const [ Index, setIndex ] = useState();
     const [ Data, setData ] = useState({});
+    
+    const [ FinalValues, setFinalValues ] = useState([]);
 
     useEffect(
         () => {
@@ -35,9 +38,61 @@ const Form = ( props ) => {
     useEffect(
         () => {
 
-            GetAllVenders();
+            setIndex( props.Index );
 
-        }, []
+        }, [ props.Index ]
+    );
+
+    useEffect(
+        () => {
+
+            GetAllVenders();
+            setFinalValues(
+                [
+                    {
+                        key: "Sub Total",
+                        value: props.Total.toLocaleString('en-US'),
+                        editable: true,
+                        name: 'subTotal',
+                        unit: 'Rs',
+                        dropdown: false
+                    },
+                    {
+                        key: "Tax",
+                        value: props.RequestInformation ? props.RequestInformation.gst : null,
+                        editable: props.IndividualTax,
+                        name: 'gst',
+                        unit: '%',
+                        dropdown: !props.IndividualTax
+                    },
+                    {
+                        key: "Cartage",
+                        value: props.RequestInformation ? props.RequestInformation.cartage : null,
+                        editable: false,
+                        name: 'cartage',
+                        unit: 'Rs',
+                        dropdown: false
+                    },
+                    {
+                        key: "Others",
+                        value: props.RequestInformation ? props.RequestInformation.others : null,
+                        editable: false,
+                        name: 'others',
+                        unit: 'Rs',
+                        dropdown: false
+                    },
+                    {
+                        key: "Total",
+                        value: props.RequestInformation ? props.RequestInformation.total.toLocaleString('en-US') : null,
+                        editable: true,
+                        name: 'total',
+                        unit: 'Rs',
+                        dropdown: false
+                    }
+                ]
+            )
+
+        }, [props.RequestInformation, props.Total, props.IndividualTax]
     );
 
     const d = new Date();
@@ -143,6 +198,15 @@ const Form = ( props ) => {
 
     }
 
+    // WHEN EMPLOYEE SUBMITTING PO
+    const SubmitPurchaseOrder = ( e ) => {
+
+        e.preventDefault();
+        $('.submitPO').hide('fast');
+        props.SubmitPurchaseOrder();
+
+    }
+
     return (
         <>
             <div className="POForm">
@@ -188,8 +252,9 @@ const Form = ( props ) => {
                         <select 
                             className="form-control companies"
                             onChange={ props.OnChangeCompany }
+                            value={ props.RequestInformation.company.company_code }
                         >
-                            <option value="">Select the company</option>
+                            <option value={ 0 }>Select the company</option>
                             {
                                 Companies.map(
                                     ( val, index ) => {
@@ -210,8 +275,9 @@ const Form = ( props ) => {
                                 <select 
                                     className="form-control locations"
                                     onChange={ props.OnChangeLocation }
+                                    value={ props.RequestInformation.location.location_code }
                                 >
-                                    <option value="">Select the location</option>
+                                    <option value={ 0 }>Select the location</option>
                                     {
                                         Locations.map(
                                             ( val, index ) => {
@@ -264,13 +330,29 @@ const Form = ( props ) => {
                                 PR Number
                             </div>
                             {/* VALUE */}
-                            <div className='divs'>
+                            <div className='divs d-flex align-items-center'>
                                 <input 
                                     type="text" 
                                     className="form-control prNumber" 
                                     placeholder='Like: SBS-01-22/23' 
-                                    onKeyDown={ props.OnChangePrNumber }   
+                                    onKeyDown={ props.OnChangePrNumber }
                                 />
+                                {
+                                    props.PRCode.length > 0
+                                    ?
+                                    <i 
+                                        className="las la-external-link-alt"
+                                        style={
+                                            {
+                                                fontSize: '15px',
+                                                cursor: 'pointer'
+                                            }
+                                        }
+                                        onClick={ props.ShowHide }
+                                    ></i>
+                                    :
+                                    null
+                                }
                             </div>
 
                             {/* KEY */}
@@ -326,7 +408,7 @@ const Form = ( props ) => {
                         {
                             NewVender
                             ?
-                            <form onSubmit={ AddVender } className="NewVender">
+                            <form onSubmit={ AddVender } className="NewVender" autoComplete='off'>
                                 <p><b>Note:</b> Every vender name should be unique.</p>
                                 <div className="d-flex align-items-center">
                                     <p className="mb-0 pr-2 font-weight-bold">Name: </p>
@@ -438,6 +520,7 @@ const Form = ( props ) => {
                         <select 
                             className="form-control companies"
                             onChange={ props.OnChangeShipToCompany }
+                            value={ props.RequestInformation.ShipTo.company.company_code }
                         >
                             <option>Select the company</option>
                             {
@@ -460,6 +543,7 @@ const Form = ( props ) => {
                                 <select 
                                     className="form-control locations"
                                     onChange={ props.OnChangeShipToLocation }
+                                    value={ props.RequestInformation.ShipTo.location.location_code }
                                 >
                                     <option>Select the location</option>
                                     {
@@ -514,7 +598,21 @@ const Form = ( props ) => {
                         <div><p className="font-weight-bolder">Description <sub className='d-block'>(include specification required)</sub> </p></div>
                         <div><p className="font-weight-bolder">Reason</p></div>
                         <div><p className="font-weight-bolder">Quantity</p></div>
-                        <div><p className="font-weight-bolder">Estimated Cost <sub>(PKR)</sub> </p></div>
+                        <div><p className="font-weight-bolder" >Estimated Cost <sub>(PKR)</sub> </p></div>
+                        <div><p className="font-weight-bolder" >Tax <sub>Required ?</sub> </p></div>
+                        <div>
+                            <p className="font-weight-bolder" >Tax %</p>
+                            {
+                                props.Item.taxRequired === "YES" && props.Item.tax.length > 0
+                                ?
+                                <select id="individualTax" onChange={ props.IndividualTaxMode }>
+                                    <option value="inclusive">inclusive</option>
+                                    <option value="exclusive" selected>exclusive</option>
+                                </select>
+                                :
+                                null
+                            }
+                        </div>
                         <div><p className="font-weight-bolder">Total Cost</p></div>
                     </div>
                     {
@@ -523,12 +621,19 @@ const Form = ( props ) => {
 
                                 return (
 
-                                    <div id={"Item" + index} className={"PO_printUI_Grid MyItems MyItems" + index} key={index} onDoubleClick={() => props.OnEdit(index)} onContextMenu={() => props.onDelete(index)}>
+                                    <div
+                                        className={"PO_printUI_Grid MyItems MyItems" + index}
+                                        key={index}
+                                        onDoubleClick={() => props.OnEdit(index)}
+                                        onContextMenu={() => props.onDelete(index)}
+                                    >
                                         <div> <p> {index + 1} </p>  </div>
                                         <div> <p> {val.description} </p></div>
                                         <div> <p> {val.reason} </p></div>
                                         <div> <p> {val.quantity} </p> </div>
                                         <div> <p> {val.price} </p> </div>
+                                        <div> <p> {val.taxRequired} </p> </div>
+                                        <div> <p> {val.tax} </p> </div>
                                         <div> <p> {'Rs ' + val.amount.toLocaleString('en-US')} </p> </div>
                                     </div>
 
@@ -537,8 +642,8 @@ const Form = ( props ) => {
                             }
                         )
                     }
-                    <div className="PO_printUI_Grid">
-                        <div className="d-flex align-items-center justify-content-center"><p>{props.Items.length + 1}</p></div>
+                    <div className="PO_printUI_Grid insertion">
+                        <div className="d-flex align-items-center justify-content-center"><p>{ Index !== undefined ? ( Index + 1 ) : (props.Items.length + 1 ) }</p></div>
                         <div>
                             <textarea
                                 className="form-control"
@@ -546,6 +651,7 @@ const Form = ( props ) => {
                                 onKeyDown={props.AddItem}
                                 value={props.Item.description}
                                 name="description"
+                                autoComplete='off'
                             />
                         </div>
                         <div>
@@ -555,6 +661,7 @@ const Form = ( props ) => {
                                 onKeyDown={props.AddItem}
                                 value={props.Item.reason}
                                 name="reason"
+                                autoComplete='off'
                             />
                             <p className="err_reason text-danger"></p>
                         </div>
@@ -568,6 +675,7 @@ const Form = ( props ) => {
                                 value={props.Item.quantity}
                                 pattern="[0-9]+"
                                 name="quantity"
+                                autoComplete='off'
                             />
                         </div>
                         <div>
@@ -580,6 +688,33 @@ const Form = ( props ) => {
                                 value={props.Item.price}
                                 pattern="[0-9]+"
                                 name="price"
+                                autoComplete='off'
+                            />
+                        </div>
+                        <div>
+                            <select
+                                type="text"
+                                className="form-control"
+                                placeholder="0"
+                                onChange={props.OnChangeHandler}
+                                name="taxRequired"
+                            >
+                                <option value="NO">No</option>
+                                <option value="YES">YES</option>
+                            </select>
+                        </div>
+                        <div>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="0"
+                                onChange={props.OnChangeHandler}
+                                onKeyDown={props.AddItem}
+                                value={props.Item.tax}
+                                name="tax"
+                                id="TAX"
+                                autoComplete='off'
+                                disabled
                             />
                         </div>
                         <div>
@@ -590,18 +725,54 @@ const Form = ( props ) => {
                                 value={'Rs ' + props.Amount.toLocaleString('en-US')}
                                 pattern="[0-9]+"
                                 name="itemAmount"
+                                autoComplete='off'
                                 disabled
                             />
                         </div>
                     </div>
-                    <div className="PO_printUI_Grid">
-                        <div></div>
-                        <div style={{ backgroundColor: "rgb(243, 243, 243)" }}><p className="font-weight-bolder text-right mr-2">Total :</p></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div><p>{'Rs ' + props.Total.toLocaleString('en-US')}</p></div>
-                    </div>
+                    {
+                        FinalValues.map(
+                            ( val, index ) => {
+
+                                return (
+                                    <div className="PO_printUI_Grid PO_printUI_Grid_Bottom" key={ index }>
+                                        <div></div>
+                                        <div style={{ backgroundColor: "rgb(243, 243, 243)" }}>
+                                            <p className="font-weight-bolder text-right mr-2">
+                                                {
+                                                    val.dropdown && val.value.length > 0
+                                                    ?
+                                                    <>
+                                                        <select onChange={ props.ExclusiveInclusiveTax }>
+                                                            <option value="exclusive" selected>exclusive</option>
+                                                            <option value="inclusive">inclusive</option>
+                                                        </select>
+                                                    </>
+                                                    :
+                                                    null
+                                                }
+                                                { val.key }:
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-left ml-2"> { val.unit } </p>
+                                            <input 
+                                                type="text"
+                                                className="form-control"
+                                                disabled={ val.editable }
+                                                value={ val.value }
+                                                pattern="[0-9]+"
+                                                name={ val.name }
+                                                onChange={ props.FinalValuesChangeHandler }
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                )
+
+                            }
+                        )
+                    }
                 </div>
 
                 {/* SENDER COMMENTS ON PURCHASE ORDER */}
@@ -614,6 +785,7 @@ const Form = ( props ) => {
                     <textarea 
                         placeholder='Please enter your comments on the request.'
                         className="form-control rounded-0"
+                        id="requestComments"
                         onChange={ props.OnComments }
                     />
 
@@ -688,7 +860,7 @@ const Form = ( props ) => {
 
             </div>
 
-            <button className='btn btn-primary d-block my-3 ml-auto' onClick={ props.SubmitPurchaseOrder }>Submit</button>
+            <button className='btn btn-primary d-block my-3 ml-auto submitPO' onClick={ SubmitPurchaseOrder }>Submit</button>
         </>
     )
 }

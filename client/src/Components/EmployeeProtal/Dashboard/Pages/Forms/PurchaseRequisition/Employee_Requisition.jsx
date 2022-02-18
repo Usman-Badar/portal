@@ -816,7 +816,7 @@ const Employee_Requisition = () => {
                 socket.emit('newpurchaserequision');
 
                 const Data3 = new FormData();
-                Data3.append('access', JSON.stringify([512, 514]));
+                Data3.append('access', JSON.stringify([512, 514, 1]));
                 axios.post('/getemployeeaccesslike', Data3).then(
                     (res) => {
 

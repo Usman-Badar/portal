@@ -186,6 +186,7 @@ router.post('/purchaserequision', ( req, res ) => {
                         if( err )
                         {
             
+                            console.log( err );
                             connection.release();
                             res.send( err );
                             res.end();
@@ -206,6 +207,7 @@ router.post('/purchaserequision', ( req, res ) => {
                                     if( err )
                                     {
                         
+                                        console.log( err );
                                         res.send( err );
                                         connection.release();
                         
@@ -242,6 +244,7 @@ router.post('/purchaserequision', ( req, res ) => {
                                                 if( err )
                                                 {
                                     
+                                                    console.log( err );
                                                     res.send( err );
                                                     connection.release();
                                     
@@ -256,6 +259,7 @@ router.post('/purchaserequision', ( req, res ) => {
                                                             if( err )
                                                             {
                                                                 
+                                                                console.log( err );
                                                                 res.send( err );
                                                                 connection.release();
                                                                 
@@ -272,6 +276,7 @@ router.post('/purchaserequision', ( req, res ) => {
                                                                             if( err )
                                                                             {
                                                                 
+                                                                                console.log( err );
                                                                                 res.send( err );
                                                                                 connection.release();
                                                                 
@@ -493,20 +498,12 @@ router.post('/getallpr', ( req, res ) => {
                                             RIGHT OUTER JOIN invtry_purchase_requests ON employees.emp_id = invtry_purchase_requests.request_for \
                                             WHERE invtry_purchase_requests.total < " + parseFloat( rslt[0] ? rslt[0].approval_limit : 0.00 );
                 
-                                            // if ( access.includes(513) && !access.includes(1) && !access.includes(514) ) // if employee has limited access
-                                            // {
-                                            //     q = q.concat(' AND ', "invtry_purchase_requests.status != 'Sent' AND invtry_purchase_requests.status != 'Viewed'")
-                                            // }
-                
-                                            if ( !access.includes(516) && !access.includes(1) && !access.includes(514) ) // if employee cannot approve the request for multiple companies
+                                            if ( result[0] )
                                             {
-                                                if ( result[0] )
+                                                q = q.concat(' AND ', "invtry_purchase_requests.company_code = " + result[0].company_code);
+                                                for ( let x = 0; x < result.length; x++ )
                                                 {
-                                                    q = q.concat(' AND ', "invtry_purchase_requests.company_code = " + result[0].company_code);
-                                                    for ( let x = 0; x < result.length; x++ )
-                                                    {
-                                                        q = q.concat(' OR ', "invtry_purchase_requests.company_code = " + result[x].company_code);
-                                                    }
+                                                    q = q.concat(' OR ', "invtry_purchase_requests.company_code = " + result[x].company_code);
                                                 }
                                             }
                                             
@@ -635,20 +632,12 @@ router.post('/getallprsorted', ( req, res ) => {
                                             RIGHT OUTER JOIN invtry_purchase_requests ON employees.emp_id = invtry_purchase_requests.request_for \
                                             WHERE " + filteredQuery + " invtry_purchase_requests.total < " + parseFloat( rslt[0] ? rslt[0].approval_limit : 0.00 );
                 
-                                            // if ( access.includes(513) && !access.includes(1) && !access.includes(514) ) // if employee has limited access
-                                            // {
-                                            //     q = q.concat(' AND ', "invtry_purchase_requests.status != 'Sent' AND invtry_purchase_requests.status != 'Viewed'")
-                                            // }
-                
-                                            if ( !access.includes(516) && !access.includes(1) && !access.includes(514) ) // if employee cannot approve the request for multiple companies
+                                            if ( result[0] )
                                             {
-                                                if ( result[0] )
+                                                q = q.concat(' AND ', "invtry_purchase_requests.company_code = " + result[0].company_code);
+                                                for ( let x = 0; x < result.length; x++ )
                                                 {
-                                                    q = q.concat(' AND ', "invtry_purchase_requests.company_code = " + result[0].company_code);
-                                                    for ( let x = 0; x < result.length; x++ )
-                                                    {
-                                                        q = q.concat(' OR ', "invtry_purchase_requests.company_code = " + result[x].company_code);
-                                                    }
+                                                    q = q.concat(' OR ', "invtry_purchase_requests.company_code = " + result[x].company_code);
                                                 }
                                             }
                                             
@@ -1116,62 +1105,80 @@ router.post('/setprtowaitforapproval', ( req, res ) => {
                         }else 
                         {
                             
-                            const { Attachments } = req.files;
-                            for ( let x= 0; x < Attachments.length; x++ )
+                            // IF THERE ARE SOME FILES ATTACHED
+                            if ( req.files )
                             {
-                                let folderName = prID + "_" + day + " " + moment(d).format("Do MMM YYYY") + ' at ' + d.getHours() + d.getMinutes() + d.getSeconds();
-                                connection.query(
-                                    "INSERT INTO invtry_purchase_request_quotations (pr_id, image, image_type) VALUES (?,?,?)",
-                                    [ prID, folderName + '/' + Attachments[x].name, Attachments[x].mimetype.split('/')[1] ],
-                                    ( err ) => {
-                            
-                                        if( err )
-                                        {
-                            
-                                            res.send( err );
-                                            connection.release();
-                            
-                                        }else 
-                                        {
-                            
-                                            fs.mkdir('client/public/images/Inventory/pr_attachments/' + folderName,
-                                                { recursive: true },
-                                                (err) => {
-                                                    if (err) {
+                                const { Attachments } = req.files;
 
-                                                        res.send(err);
-                                                        connection.release();
+                                let arr;
+                                if ( Attachments.name )
+                                {
+                                    arr = [Attachments];
+                                }else
+                                {
+                                    arr = Attachments;
+                                }
 
-                                                    }
-                                                    else {
-
-                                                        Attachments[x].mv('client/public/images/Inventory/pr_attachments/' + folderName + '/' + Attachments[x].name, (err) => {
-
-                                                            if (err) {
-
-                                                                res.send(err);
-                                                                connection.release();
-
-                                                            }
-
-                                                            if ( parseInt ( x + 1 ) === Attachments.length )
-                                                            {
-                                                                res.send( 'success' );
-                                                                connection.release();
-                                                            }
-                                                            
+                                for ( let x= 0; x < arr.length; x++ )
+                                {
+                                    let folderName = prID + "_" + day + " " + moment(d).format("Do MMM YYYY") + ' at ' + d.getHours() + d.getMinutes() + d.getSeconds();
+                                    connection.query(
+                                        "INSERT INTO invtry_purchase_request_quotations (pr_id, image, image_type) VALUES (?,?,?)",
+                                        [ prID, folderName + '/' + arr[x].name, arr[x].mimetype.split('/')[1] ],
+                                        ( err ) => {
+                                
+                                            if( err )
+                                            {
+                                
+                                                console.log( err );
+                                                res.send( err );
+                                                connection.release();
+                                
+                                            }else 
+                                            {
+                                
+                                                fs.mkdir('client/public/images/Inventory/pr_attachments/' + folderName,
+                                                    { recursive: true },
+                                                    (err) => {
+                                                        if (err) {
+    
+                                                            console.log( err );
+                                                            res.send(err);
+                                                            connection.release();
+    
                                                         }
-                                                        )
-
+                                                        else {
+    
+                                                            arr[x].mv('client/public/images/Inventory/pr_attachments/' + folderName + '/' + arr[x].name, 
+                                                                (err) => {
+    
+                                                                    if (err) {
+        
+                                                                        console.log( err );
+                                                                        res.send(err);
+                                                                        connection.release();
+        
+                                                                    }
+                                                                
+                                                                }
+                                                            )
+    
+                                                        }
                                                     }
-                                                }
-                                            )
-                            
+                                                )
+                                
+                                            }
+                                
                                         }
-                            
-                                    }
                                     );
-                                    
+        
+                                    if ( ( x + 1 ) === arr.length )
+                                    {
+                                        res.send( 'success' );
+                                        connection.release();
+                                    }
+                                        
+                                }
                             }
 
                         }
@@ -1248,7 +1255,7 @@ router.post('/setprtoapprove', ( req, res ) => {
                 connection.query(
                     "UPDATE invtry_purchase_requests SET status = 'Approved', approve_by = ?, approve_date = ?, approve_time = ?, remarks = ? WHERE pr_id = ? AND status = 'Waiting For Approval'",
                     [ empID, d, d.toTimeString(), remarks, prID ],
-                    ( err, rslt ) => {
+                    ( err ) => {
             
                         if( err )
                         {
@@ -1292,7 +1299,7 @@ router.post('/setprtodeliver', ( req, res ) => {
                 connection.query(
                     "UPDATE invtry_purchase_requests SET status = 'Delivered', delivery_date = ?, delivery_time = ?, emp_remarks = ? WHERE pr_id = ? AND status = 'Approved'",
                     [ d, d.toTimeString(), remarks, prID ],
-                    ( err, rslt ) => {
+                    ( err ) => {
             
                         if( err )
                         {

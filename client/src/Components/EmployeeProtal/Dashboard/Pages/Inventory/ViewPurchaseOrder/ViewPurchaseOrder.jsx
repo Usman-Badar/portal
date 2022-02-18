@@ -172,7 +172,6 @@ const Viewpurchaseorder = () => {
         ).then(
             res => { // RESPONSE
 
-                console.log( res.data );
                 setPurchaseOrder(
                     {
                         ...PurchaseOrder,

@@ -351,8 +351,9 @@ const Employee_Chat = () => {
     }
 
     const ShowCalender = () => {
-        $('.RightCalender').show();
+        $('.RightCalender').toggle();
         $('.SecondDiv .Left').hide();
+        $('.SecondDiv .Center').hide();
         $('.SecondDiv .Right').hide();
     }
 
@@ -443,7 +444,6 @@ const Employee_Chat = () => {
                                             :
                                             null
                                     }
-
                                     {
                                         Chat.map(
                                             (val, index) => {
@@ -647,8 +647,14 @@ const Employee_Chat = () => {
                     </div>
 
                 </div>
-                <div className='calenderdiv'>
-
+                <div className='RightCalender'>
+                    <Calendar
+                        onChange={setCalender}
+                        value={Calender}
+                    />
+                </div>
+                <div className='calenderdiv' onClick={ShowCalender}>
+                    <i className="las la-calendar"></i>
                 </div>
 
             </div>

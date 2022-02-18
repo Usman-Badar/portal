@@ -16,59 +16,63 @@ const Home = (props) => {
 
             // IMPORTANT VARIABLES
             let count = [];
-            // let rejected = 0;
-            // let approved = 0;
-            // let waiting = 0;
-            // let sent = 0;
-            // let viewed = 0;
+            let rejected = 0;
+            let approved = 0;
+            let waiting = 0;
+            let sent = 0;
+            let viewed = 0;
 
-            // // FOR REJECTED
-            // for (let x = 0; x < props.CountStatus.length; x++) {
+            // FOR REJECTED
+            for (let x = 0; x < props.CountStatus.length; x++) {
 
-            //     if (props.CountStatus[x] === 'Rejected') {
-            //         rejected = rejected + 1;
-            //     }
+                if (props.CountStatus[x] === 'Rejected') {
+                    rejected = rejected + 1;
+                }
 
-            // }
+            }
 
-            // // FOR APPROVED
-            // for (let x = 0; x < props.CountStatus.length; x++) {
+            // FOR APPROVED
+            for (let x = 0; x < props.CountStatus.length; x++) {
 
-            //     if (props.CountStatus[x] === 'Approved') {
-            //         approved = approved + 1;
-            //     }
+                if (props.CountStatus[x] === 'Approved') {
+                    approved = approved + 1;
+                }
 
-            // }
+            }
 
-            // // FOR WAITING
-            // for (let x = 0; x < props.CountStatus.length; x++) {
+            // FOR WAITING
+            for (let x = 0; x < props.CountStatus.length; x++) {
 
-            //     if (props.CountStatus[x] === 'Waiting For Approval') {
-            //         waiting = waiting + 1;
-            //     }
+                if (props.CountStatus[x] === 'Waiting For Approval') {
+                    waiting = waiting + 1;
+                }
 
-            // }
+            }
 
-            // // FOR SENT
-            // for (let x = 0; x < props.CountStatus.length; x++) {
+            // FOR SENT
+            for (let x = 0; x < props.CountStatus.length; x++) {
 
-            //     if (props.CountStatus[x] === 'Sent') {
-            //         sent = sent + 1;
-            //     }
+                if (props.CountStatus[x] === 'Sent') {
+                    sent = sent + 1;
+                }
 
-            // }
+            }
 
-            // // FOR VIEWED
-            // for (let x = 0; x < props.CountStatus.length; x++) {
+            // FOR VIEWED
+            for (let x = 0; x < props.CountStatus.length; x++) {
 
-            //     if (props.CountStatus[x] === 'Viewed') {
-            //         viewed = viewed + 1;
-            //     }
+                if (props.CountStatus[x] === 'Viewed') {
+                    viewed = viewed + 1;
+                }
 
-            // }
+            }
 
             count.push(
-                1,1,1,1,1
+                rejected,
+                approved,
+                waiting,
+                sent,
+                viewed
             )
 
             setChartData(
@@ -94,21 +98,21 @@ const Home = (props) => {
         }, [props.CountStatus]
     );
 
-    // useEffect(
-    //     () => {
+    useEffect(
+        () => {
 
-    //         let total = 0.00;
-    //         for( let x = 0; x < props.ViewRequest.length; x++ )
-    //         {
+            let total = 0.00;
+            for( let x = 0; x < props.ViewRequest.length; x++ )
+            {
 
-    //             total = total + parseFloat( props.ViewRequest[x].total );
+                total = total + parseFloat( props.ViewRequest[x].total );
 
-    //         }
+            }
 
-    //         setTotalValue( total );
+            setTotalValue( total );
 
-    //     }, [ props.ViewRequest ]
-    // )
+        }, [ props.ViewRequest ]
+    )
 
     useEffect(
         () => {

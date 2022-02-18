@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
 import './Home.css';
-import { Pie } from 'react-chartjs-2';
-import ReactTooltip from 'react-tooltip';
+import { Pie, Line } from 'react-chartjs-2';
 
 const Home = (props) => {
 
     const [ChartData, setChartData] = useState({});
-    const [MonthlyRequests, setMonthlyRequests] = useState([]);
+    const [MonthlyRequests, setMonthlyRequests] = useState(
+        {
+            requests: [],
+            months: []
+        }
+    );
     const [RequestsSplit, setRequestsSplit] = useState([]);
 
-    const [MinMax, setMinMax] = useState([]);
     const [EmpData, setEmpData] = useState({});
     
     const [TotalValue, setTotalValue] = useState(0.00);
@@ -105,17 +108,24 @@ const Home = (props) => {
     useEffect(
         () => {
 
-            setMonthlyRequests(props.MonthlyRequests);
             let arr = [];
+            let arr2 = [];
 
             for ( let x = 0; x < props.MonthlyRequests.length; x++ )
             {
                 arr.push( props.MonthlyRequests[x].count );
+                arr2.push( props.MonthlyRequests[x].month );
             }
 
-            setMinMax( arr );
+            setMonthlyRequests(
+                {
+                    ...MonthlyRequests,
+                    requests: arr,
+                    months: arr2
+                }
+            )
 
-        }, [props.MonthlyRequests]
+        }, [ props.MonthlyRequests ]
     )
 
     useEffect(
@@ -181,17 +191,8 @@ const Home = (props) => {
         }, [ props.EmpData ]
     )
 
-    useEffect(
-        () => {
-
-            ReactTooltip.rebuild();
-
-        }
-    )
-
     return (
         <div className="Home">
-            <ReactTooltip />
             <div className="three">
                 <div className="Calculate px-4">
                     <small className="text-secondary">Total Requests</small>
@@ -267,90 +268,32 @@ const Home = (props) => {
                     }
                 </div>
             </div>
-            {/* <div className="graph">
-                <div className='Heading'> <h4> Monthly Requests </h4> </div>
-                {
-                    MonthlyRequests.map(
-                        (val, index) => {
-
-                            let totalCount = 0;
-                            for (let x = 0; x < MonthlyRequests.length; x++) {
-                                totalCount = totalCount + MonthlyRequests[x].count;
-                            }
-
-                            let percent = (val.count / totalCount) * 85;
-
-                            return (
-                                <div
-                                    style={
-                                        {
-                                            height: percent + '%'
-                                        }
-                                    }
-                                    className='GraphItem'
-                                    data-tip={val.month + ' ' + val.year} key={index}
-                                >
-                                    <div> {val.count} </div>
-                                </div>
-                            )
-
-                        }
-                    )
+            <div
+                style={
+                    {
+                        backgroundColor: "#fff",
+                        borderRadius: '5px'
+                    }
                 }
-            </div> */}
-            <div className="ViewPrRequests_graph">
-                <div className="border-bottom mb-3"><h4>Monthly Requests</h4></div>
-                <div className="d-flex">
-                    <div style={{ display: "grid", marginRight: "10px" }} >
-                        <p className="font-weight-bolder">{Math.max(...MinMax)}</p>
-                        <p className="d-flex align-items-end font-weight-bolder">{Math.min(...MinMax)}</p>
-                    </div>
-                    <div className="ViewPrRequests_graphdiv">
-                        <div className="graph_data ">
-                            <div className="Graph_Bargrid">
+            >
+                <Line
+                    width='100px'
+                    height='40px'
+                    maintainAspectRatio={ false }
+                    data={
+                        {
+                            labels: MonthlyRequests.months,
+                            datasets: [
                                 {
-                                    MonthlyRequests.map(
-                                        (val, index) => {
-
-                                            let totalCount = 0;
-
-                                            for (let x = 0; x < MonthlyRequests.length; x++) {
-                                                totalCount = totalCount + MonthlyRequests[x].count;
-                                            }
-
-                                            let percent = (val.count / totalCount) * 100;
-
-                                            return (
-                                                <>
-                                                    <div key={ index } className="graphbar" style={{ height: percent + '%' }}>
-                                                        <div className="tooltip">{val.count} Requests</div>
-                                                    </div>
-                                                </>
-                                            )
-                                        }
-                                    )
+                                    id: 1,
+                                    label: 'Monthly Received Requests',
+                                    data: MonthlyRequests.requests,
+                                    borderColor: '#F14B71'
                                 }
-                            </div>
-                            <div className="Graph_monthgrid">
-                                {
-                                     MonthlyRequests.map(
-                                        (val, index) => {
-
-                                            return (
-                                                <>
-                                                    <div key={ index }>{val.month}</div>
-                                                </>
-                                            )
-                                        }
-                                    )
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="graphyear">
-                    2022
-                </div>
+                            ],
+                        }
+                    }
+                />
             </div>
         </div>
     );

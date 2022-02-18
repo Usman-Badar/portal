@@ -144,7 +144,7 @@ const PurchaseRequisition = () => {
 
                 console.log(err);
 
-            })
+            });
 
             AllPr();
             AllCompanies();
@@ -1016,7 +1016,7 @@ const PurchaseRequisition = () => {
 
         if ( AttachQuotations.length === 0 )
         {
-            toast.dark('Please attach atleast 1 quotation', {
+            toast.dark('Please attach at least 1 quotation', {
                 position: 'top-center',
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -1192,6 +1192,13 @@ const PurchaseRequisition = () => {
             <div className="ViewPrRequests">
                 <Modal show={ ModalShow } Hide={HideModelFunction} content={ModalContent} />
                 <ToastContainer />
+                <iframe 
+                    title="pr" 
+                    id="pr" 
+                    className="d-none w-100"
+                    src={ 'https://' + window.location.host + '/#/view=purchase_requisition/' + PRID }
+                >
+                </iframe>
 
                 {/* TOPBAR FOR SEARCH FILTERS */}
                 <div className="SearchnFilterDiv">
@@ -1250,7 +1257,7 @@ const PurchaseRequisition = () => {
                                 <option value="Viewed">Viewed</option>
                             </select>
                         </div>
-                        <div cl>
+                        <div>
                             <label >Date</label>
                             <input type="date" onChange={(e) => onSearchPR('MyDate', e)} className="form-control" name="" />
                         </div>
