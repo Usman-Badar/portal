@@ -1,4 +1,4 @@
-# Project Information
+# Version Information
 In this version, the precrument module has been completed:
 * Purchase Requisition
   * Form
@@ -55,3 +55,23 @@ In this module, the inventory department sends the request to the accounts to fi
 | Attachment of Purchase Requisition | Get the historic Purchase Order |
 |------------|-------------|
 | ![Purchase Order Demonstration --- Filling all the required fields](https://www.linkpicture.com/q/Screenshot-25_8.png) | ![Purchase Order Demonstration --- Filling all the required fields](https://www.linkpicture.com/q/Screenshot-26_7.png) |
+
+<br/>
+<br/>
+
+## Purchase Order - Receiving Portal View
+![Purchase Order Demonstration](https://www.linkpicture.com/q/Screenshot-27_11.png)
+
+<br/>
+
+| Home | View Details | Attach Vouchers |
+|------------|-------------|-------------|
+| ![Purchase Order Demonstration --- Home Page](https://www.linkpicture.com/q/Screenshot-27_11.png) | ![Purchase Order Demonstration --- Viewing Details of the request](https://www.linkpicture.com/q/Screenshot-28_11.png) | ![Purchase Order Demonstration --- Attaching the vouchers with the request](https://www.linkpicture.com/q/Screenshot-31_9.png) |
+
+## NOTE: THE PURCHASE ORDER MODULE HAS BEEN TESTED AND IT WORKS FINE
+
+# TODO: 
+ This version needs to be updated more and more, we will work on the following points:
+  * Add overall & individual tax in purchase requisition (currently individual tax applied)
+  * Add total value of the Request (PR & PO) in the employee portal's email
+  * The portal glitching when the user refresh it.
