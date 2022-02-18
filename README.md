@@ -10,7 +10,7 @@ In this version, the precrument module has been completed:
 ![Purchase Requisition Demonstration](https://www.linkpicture.com/q/Screenshot-12_11.png)
 
 ### Summary
-In this form, the employee first fill all the required fields and enter the information about the required item(s), then he/she will send it to the inventory department. The inventory department will gather the information about the item(s) and put forward the quotations attached with the request to the accounts department. The accounts department can approve or reject the request and send it back to the inventory department. The inventory department then buy the required item(s) if the request has approved and deliver them to the employee.
+In this module, the employee first fill all the required fields and enter the information about the required item(s), then he/she will send it to the inventory department. The inventory department will gather the information about the item(s) and put forward the quotations attached with the request to the accounts department. The accounts department can approve or reject the request and send it back to the inventory department. The inventory department then buy the required item(s) if the request has approved and deliver them to the employee.
 
 <br/>
 
@@ -36,3 +36,22 @@ In this form, the employee first fill all the required fields and enter the info
 ![Purchase Requisition Demonstration --- Put Forward The Purchase Request](https://www.linkpicture.com/q/Screenshot-19_6.png)
 
 ## NOTE: THE PURCHASE REQUISITION MODULE HAS NOT TESTED YET
+
+<br/>
+<br/>
+
+## Purchase Order - Form View
+![Purchase Order Demonstration ---  ](https://www.linkpicture.com/q/Screenshot-21_11.png)
+
+### Summary
+In this module, the inventory department sends the request to the accounts to finalyze the purchasing process. Purchase Order can be next step of the Purchase Requisition and the details entered in the purchase order is the final details with accurate price including/excluding taxes. The accounts will approve/reject the request.
+
+<br/>
+
+| Filling all the required fields |  | Attaching The Bills |
+|------------|-------------|-------------|
+| ![Purchase Order Demonstration --- Filling all the required fields](https://www.linkpicture.com/q/Screenshot-22_5.png) | ![Purchase Order Demonstration --- Filling all the required fields](https://www.linkpicture.com/q/Screenshot-23_5.png) | ![Purchase Order Demonstration --- Filling all the required fields](https://www.linkpicture.com/q/Screenshot-24_1.png) |
+
+| Attachment of Purchase Requisition | Get the historic Purchase Order |
+|------------|-------------|
+| ![Purchase Order Demonstration --- Filling all the required fields](https://www.linkpicture.com/q/Screenshot-25_8.png) | ![Purchase Order Demonstration --- Filling all the required fields](https://www.linkpicture.com/q/Screenshot-26_7.png) |
