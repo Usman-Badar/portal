@@ -355,13 +355,23 @@ const Dashboard = () => {
                         </div>
                         <div className="Forms_options _options procurement_options dropoptions">
                             {
-                                AccessControls.access ? JSON.parse(AccessControls.access).includes(510) || JSON.parse(AccessControls.access).includes(512) || JSON.parse(AccessControls.access).includes(513) || JSON.parse(AccessControls.access).includes(514) || JSON.parse(AccessControls.access).includes(515) || JSON.parse(AccessControls.access).includes(524) || JSON.parse(AccessControls.access).includes(523) || JSON.parse(AccessControls.access).includes(1)
+                                AccessControls.access ? JSON.parse(AccessControls.access).includes(510) || JSON.parse(AccessControls.access).includes(512) || JSON.parse(AccessControls.access).includes(513) || JSON.parse(AccessControls.access).includes(514) || JSON.parse(AccessControls.access).includes(515) || JSON.parse(AccessControls.access).includes(1)
                                     ?
                                     <>
                                         <NavLink activeClassName="Dashboard_active" to="/purchaserequisition/home" className="d-center links" onClick={() => SideBarClose()}>
                                             <div className="pr-3"><i className="las la-stream"></i></div>
                                             <div className="links_txt">View Purchase Requisition</div>
                                         </NavLink>
+                                    </>
+                                    :
+                                    null
+                                    :
+                                    null
+                            }
+                            {
+                                AccessControls.access ? JSON.parse(AccessControls.access).includes(523) || JSON.parse(AccessControls.access).includes(524) || JSON.parse(AccessControls.access).includes(1)
+                                    ?
+                                    <>
                                         <NavLink activeClassName="Dashboard_active" to="/purchaseorder/home" className="d-center links" onClick={() => SideBarClose()}>
                                             <div className="pr-3"><i className="las la-stream"></i></div>
                                             <div className="links_txt">View Purchase Orders</div>
