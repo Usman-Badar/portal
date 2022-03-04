@@ -57,16 +57,6 @@ const ChatBot_Notification = () => {
                                         Data.map(
                                             (val, index) => {
 
-                                                
-
-                                                {/* setTimeout(
-                                                    () => {
-                                                        
-                                                        $('.ChatBot_Notification_Speeddail .Speeddail_Grid').css('opacity', 0);
-
-                                                    }, val.txt.length * 100
-                                                ) */}
-
                                                 return (
                                                     <>
                                                         {

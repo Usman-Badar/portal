@@ -38,7 +38,7 @@ const db = mysql.createPool(
 // }, 2000);
 
 setInterval(() => {
-    console.log(`Database Open Connections ${db._allConnections.length}`);
+    console.log(`Database Open Connections ${ db._allConnections.length }`);
 	console.log(`Acquiring Connections ${db._acquiringConnections.length}`);
 	console.log(`Free Connections ${db._freeConnections.length}`);
 	console.log(`Queue Connections ${db._connectionQueue.length}`);

@@ -42,12 +42,12 @@
     display: block !important;
 }
 
-.d-1200-block {
+.d-1400-block {
     display: none !important;
 }
 
-@media only screen and (max-width: 1200px) {
-    .d-1200-block {
+@media only screen and (max-width: 1400px) {
+    .d-1400-block {
         display: block !important;
     }
 }

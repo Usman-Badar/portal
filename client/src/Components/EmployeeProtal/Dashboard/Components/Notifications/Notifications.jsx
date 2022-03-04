@@ -9,17 +9,23 @@ import socket from '../../../../../io';
 
 function Notifications( props ) {
 
+    let GetNotify;
     const history = useHistory();
     const [ Notificationss, setNotificationss ] = useState([]);
+    const [ Permisstion, setPermisstion ] = useState( true );
 
     useEffect(
         () => {
 
             if (Notification.permission !== 'granted') {
+
                 Notification.requestPermission().then(permission => {
 
                     if (permission === 'granted') {
                         GetNotify();
+                    }else
+                    {
+                        setPermisstion( false );
                     }
 
                 })
@@ -40,7 +46,7 @@ function Notifications( props ) {
                 }
             )
 
-        }, []
+        }, [ GetNotify, props.Data.emp_id ]
     )
 
     const getOS = () => {
@@ -66,17 +72,14 @@ function Notifications( props ) {
         return os;
     }
 
-    const GetNotify = () => {
+    GetNotify = () => {
 
         const Data = new FormData();
         Data.append('EmpID', sessionStorage.getItem('EmpID'));
-        // if ( getStore('notifications') === undefined || getStore('notifications') === null )
-        // {
     
             axios.post('/getnotifications', Data).then(res => {
     
                 setNotificationss( res.data.reverse() );
-                // newStore( 'notifications', JSON.stringify( res.data.reverse() ) );
                 
                 let notify = false;
                 let sender = null;
@@ -115,74 +118,42 @@ function Notifications( props ) {
                 console.log(err);
     
             });
-        // }else
-        // {
-
-            // setNotificationss( getStore('notifications') );
-                
-            //     let notify = false;
-            //     let sender = null;
-            //     let txt = null;
-            //     for ( let x = 0; x < getStore('notifications').length; x++ )
-            //     {
-            //         if ( getStore('notifications')[x].notified === null )
-            //         {
-            //             notify = true;
-            //             sender = getStore('notifications')[x].notification_title;
-            //             txt = getStore('notifications')[x].notification_body;
-            //         }
-            //     }
-    
-            //     if ( notify )
-            //     {
-            //         axios.post('/notified', Data).then(res => {
-    
-            //             if (getOS() !== 'iOS' && getOS() !== 'Android') {
-            //                 Note(getStore('notifications').length, sender, txt);
-            //             }
-                    
-            
-            //         }).catch(err => {
-            
-            //             console.log(err);
-            
-            //         });
-            //     }else
-            //     {
-            //         document.title = 'Employee Portal';
-            //     }
-
-        // }
 
     }
 
 
-    const Note = ( length, name, body ) => {
+    const Note = ( length, sender, body ) => {
 
-        document.title = 'Employee Portal Has (' + length + ') Notifications';
-        let notification = new Notification('Employee Portal', {
-            icon: 'https://images-na.ssl-images-amazon.com/images/I/31Ytep50ATL.jpg',
-            body: body,
-        });
-        notification.onclick = function () {
-            window.open('https://192.168.10.14/');
-        };
+        if ( Permisstion )
+        {
+            document.title = 'Employee Portal Has (' + length + ') Notifications';
+            let notification = new Notification('Employee Portal', {
+                icon: 'https://p.kindpng.com/picc/s/12-120109_employee-self-service-icon-hd-png-download.png',
+                body: body,
+            });
+            notification.onclick = function () {
+                window.open('https://192.168.10.14/');
+            };
+            
+        }
 
     }
     const OnSeenNotifications = () => {
 
-        const Data = new FormData();
-        Data.append('EmpID', sessionStorage.getItem('EmpID'));
-        axios.post('/seennotifications', Data).then(() => {
-
-            // deleteStore('notifications');
-            GetNotify();
-
-        }).catch(err => {
-
-            console.log(err);
-
-        });
+        if ( Notificationss.length > 0 )
+        {
+            const Data = new FormData();
+            Data.append('EmpID', sessionStorage.getItem('EmpID'));
+            axios.post('/seennotifications', Data).then(() => {
+    
+                GetNotify();
+    
+            }).catch(err => {
+    
+                console.log(err);
+    
+            });
+        }
 
     }
     
@@ -269,9 +240,15 @@ function Notifications( props ) {
                             )
                         }
                     </div>
-                    <div className="Notifications_Clear">
-                        <button className="btn" onClick={RemoveAllNotifications} >Clear All</button>
-                    </div>
+                    {
+                        Notificationss.length > 0
+                        ?
+                        <div className="Notifications_Clear">
+                            <button className="btn" onClick={RemoveAllNotifications} >Clear All</button>
+                        </div>
+                        :
+                        null
+                    }
                 </div>
             </div>
         </>

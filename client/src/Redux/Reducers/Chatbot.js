@@ -15,10 +15,8 @@ const ChatBot = ( state = initialState, action ) => {
                 ...state,
                 Data: data
             }
-            break;
         default:
             return state;
-            break;
 
     }
 

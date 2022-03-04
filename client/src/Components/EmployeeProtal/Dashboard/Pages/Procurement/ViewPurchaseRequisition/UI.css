@@ -16,79 +16,6 @@
     font-size: 13px;
 }
 
-.ViewPrRequests .SearchnFilterDiv {
-    display: grid;
-    grid-template-columns: 30fr 70fr;
-    background-color: white;
-    padding: 20px 5px;
-    width: 95%;
-    margin: 0 auto;
-    border-radius: 15px;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-}
-
-.ViewPrRequests .SearchnFilterDiv .searchdiv {
-    margin: 0 15px;
-    padding: 5px;
-    display: flex;
-    border-radius: 5px !important;
-    background-color: rgba(236, 240, 245, 255);
-}
-
-.ViewPrRequests .SearchnFilterDiv input {
-    border: 0 !important;
-    border-left: 1px solid lightgray !important;
-    border-radius: 0 5px 5px 0;
-    background: none;
-}
-
-.ViewPrRequests .SearchnFilterDiv .searchdiv div {
-    font-size: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    background-color: rgba(236, 240, 245, 255);
-    color: lightgray;
-    border-radius: 5px 0 0 5px;
-}
-
-.ViewPrRequests .SearchnFilterDiv .filterdiv {
-    display: flex;
-}
-
-.ViewPrRequests .SearchnFilterDiv .filterdiv div {
-    background-color: rgba(236, 240, 245, 255);
-    margin-right: 10px;
-    padding: 0 10px;
-    border-radius: 5px;
-    width: 100%;
-    position: relative;
-}
-
-.ViewPrRequests .SearchnFilterDiv .filterdiv label {
-    position: absolute;
-    top: -25%;
-    font-size: 12px;
-    font-weight: bolder;
-    margin-bottom: 0;
-    background-color: #fff;
-    padding: 0 5px;
-    border-radius: 5px;
-}
-
-.ViewPrRequests .SearchnFilterDiv .filterdiv select,
-.ViewPrRequests .SearchnFilterDiv .filterdiv input[type=date] {
-    background-color: rgba(236, 240, 245, 255);
-    border: 0 !important;
-    border-radius: 5px;
-    height: 100%;
-}
-
-.ViewPrRequests .SearchnFilterDiv .filterdiv select option {
-    background-color: #fff;
-}
-
 .ViewPrRequests .ViewPrRequests_grid {
     display: grid;
     grid-template-columns: 30fr 70fr;
@@ -116,6 +43,24 @@
     justify-content: center;
 }
 
+.ViewPrRequests .Menu {
+    display: none;
+}
+
+@media only screen and (max-width: 1600px) {
+    .ViewPrRequests .ViewPrRequests_grid {
+        grid-template-columns: 40% 60% !important;
+        grid-column-gap: 0;
+    }
+}
+
+@media only screen and (max-width: 1400px) {
+    .ViewPrRequests .ViewPrRequests_grid {
+        grid-template-columns: 30% 70% !important;
+        grid-column-gap: 0;
+    }
+}
+
 @media only screen and (max-width: 1200px) {
     .ViewPrRequests .ViewPrRequests_grid {
         grid-column-gap: 5px;
@@ -123,24 +68,28 @@
     .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Left {
         padding: 0 5px;
     }
-}
-
-@media only screen and (max-width: 1100px) {
     .ViewPrRequests .ViewPrRequests_grid {
         grid-template-columns: 40fr 60fr;
     }
 }
 
-@media only screen and (max-width: 900px) {
-    .ViewPrRequests .ViewPrRequests_grid {
-        grid-template-columns: 50fr 50fr;
+@media only screen and (max-width: 992px) {
+    .ViewPrRequests .Menu {
+        display: block;
     }
-}
-
-@media only screen and (max-width: 700px) {
     .ViewPrRequests .ViewPrRequests_grid {
         display: block;
     }
+    .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Left {
+        display: none;
+    }
+    .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .previewWindow {
+        padding: 15px;
+    }
+}
+
+
+/* @media only screen and (max-width: 700px) {
     .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Left {
         display: none;
     }
@@ -162,4 +111,4 @@
         width: 92%;
         padding: 10px
     }
-}
+} */

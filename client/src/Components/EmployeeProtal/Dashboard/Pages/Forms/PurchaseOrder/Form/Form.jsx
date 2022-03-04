@@ -594,26 +594,28 @@ const Form = ( props ) => {
                 {/* INPUTS FIELDS */}
                 <div className="PO_printUI_Middle">
                     <div className="PO_printUI_Grid" style={{ backgroundColor: "rgb(243, 243, 243)" }}>
-                        <div><p className="font-weight-bolder">No</p></div>
-                        <div><p className="font-weight-bolder">Description <sub className='d-block'>(include specification required)</sub> </p></div>
-                        <div><p className="font-weight-bolder">Reason</p></div>
-                        <div><p className="font-weight-bolder">Quantity</p></div>
-                        <div><p className="font-weight-bolder" >Estimated Cost <sub>(PKR)</sub> </p></div>
-                        <div><p className="font-weight-bolder" >Tax <sub>Required ?</sub> </p></div>
-                        <div>
-                            <p className="font-weight-bolder" >Tax %</p>
-                            {
-                                props.Item.taxRequired === "YES" && props.Item.tax.length > 0
-                                ?
-                                <select id="individualTax" onChange={ props.IndividualTaxMode }>
-                                    <option value="inclusive">inclusive</option>
-                                    <option value="exclusive" selected>exclusive</option>
-                                </select>
-                                :
-                                null
-                            }
+                        <div className="d-flex align-items-center justify-content-center"><p className="font-weight-bolder">No</p></div>
+                        <div className="d-flex align-items-center justify-content-center"><p className="font-weight-bolder">Description <sub className='d-block'>(include specification required)</sub> </p></div>
+                        <div className="d-flex align-items-center justify-content-center"><p className="font-weight-bolder">Reason</p></div>
+                        <div className="d-flex align-items-center justify-content-center"><p className="font-weight-bolder">Quantity</p></div>
+                        <div className="d-flex align-items-center justify-content-center"><p className="font-weight-bolder" >Unit Price <br /> <sub>(PKR)</sub> </p></div>
+                        <div className="d-flex align-items-center justify-content-center"><p className="font-weight-bolder" >Tax <sub>Required ?</sub> </p></div>
+                        <div className="d-flex align-items-center justify-content-center">
+                            <span>
+                                <p className="font-weight-bolder" >Tax %</p>
+                                {
+                                    props.Item.taxRequired === "YES" && props.Item.tax.length > 0
+                                    ?
+                                    <select id="individualTax" onChange={ props.IndividualTaxMode }>
+                                        <option value="inclusive">inclusive</option>
+                                        <option value="exclusive" selected>exclusive</option>
+                                    </select>
+                                    :
+                                    null
+                                }
+                            </span>
                         </div>
-                        <div><p className="font-weight-bolder">Total Cost</p></div>
+                        <div className="d-flex align-items-center justify-content-center"><p className="font-weight-bolder">Total Cost</p></div>
                     </div>
                     {
                         props.Items.map(

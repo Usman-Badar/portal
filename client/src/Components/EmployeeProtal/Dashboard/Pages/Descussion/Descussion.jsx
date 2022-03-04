@@ -8,9 +8,6 @@ import axios from '../../../../../axios';
 const Descussion = () => {
 
     const [ PrevDescussions, setPrevDescussions ] = useState([]);
-    const [ Longitude, setLongitude ] = useState();
-    const [ Latitude, setLatitude ] = useState();
-    const [ Status, setStatus ] = useState();
 
     useEffect(
         () => {
@@ -23,28 +20,6 @@ const Descussion = () => {
 
         }, []
     )
-
-    setInterval(() => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-
-                    if (position.coords.longitude > 67.015267 && position.coords.longitude < 67.015415 && position.coords.latitude > 24.814399 && position.coords.latitude < 24.8145572) {
-                        setLatitude(position.coords.longitude);
-                        setLongitude(position.coords.latitude);
-                        setStatus('in office');
-                    } else {
-                        setLatitude(position.coords.longitude);
-                        setLongitude(position.coords.latitude);
-                        setStatus('not in office');
-                    }
-
-                }
-            )
-        } else {
-            console.log('Geolocation is not supported');
-        }
-    }, 500);
 
     const getPrevDescussions = () => {
 
@@ -96,24 +71,8 @@ const Descussion = () => {
                                         </div>
                                         <img src={ "images/descussions/" + val.image } width="100%" alt="Post Img" />
                                         <div className="description">
-                                        {/* <p className="font-weight-bold">Latitude: {Latitude}</p>
-                                        <p className="font-weight-bold">Latitude: {Latitude}</p>
-                                        <p className="font-weight-bold">Status: {Status}</p> */}
                                             { val.description }
                                         </div>
-                                        {/* <div className="UX">
-                                            <div className="d-flex justify-content-center align-items-center w-50">
-                                                <div className=""><i className="lar la-thumbs-up pr-2"></i>Like</div>
-                                            </div>
-                                            |
-                                            <div className="d-flex justify-content-center align-items-center w-50">
-                                                <div className="comments"><i className="las la-comments pr-2"></i>Comments</div>
-                                            </div>
-                                        </div>
-                                        <div className="comments_input">
-                                            <input type="text" className="form-control" placeholder="Write A Comments" />
-                                            <small className="d-block mx-auto pl-3 text-secondary">Press enter to post</small>
-                                        </div> */}
                                     </div>
                             )
                         }

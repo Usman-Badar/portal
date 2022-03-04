@@ -22,7 +22,7 @@
     overflow: auto hidden !important;
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1400px) {
     .Dashboard .Dashboard_main_content {
         width: 100vw;
         margin-left: 0;

@@ -38,6 +38,7 @@
     font-family: Raleway;
     z-index: 300;
     border-radius: 5px;
+    display: none;
 }
 
 .Dashboard_topbar .icons .emp_img_container .emp_dropdown .links {
@@ -78,6 +79,7 @@
     padding: 10px;
     z-index: 300;
     background-color: #fff;
+    display: none;
 }
 
 .Dashboard_topbar .icons .search .search_dropdown .form-control {
@@ -135,7 +137,7 @@
     color: #ECF0F5;
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1400px) {
     .Dashboard_topbar {
         width: 100vw;
     }

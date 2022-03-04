@@ -17,6 +17,7 @@ const Home = (props) => {
     const [EmpData, setEmpData] = useState({});
     
     const [TotalValue, setTotalValue] = useState(0.00);
+    const [Resize, setResize] = useState(false);
 
     useEffect(
         () => {
@@ -101,8 +102,7 @@ const Home = (props) => {
                 }
             );
 
-
-        }, [props.CountStatus]
+        }, [ props.CountStatus, Resize ]
     );
 
     useEffect(
@@ -188,6 +188,14 @@ const Home = (props) => {
 
             setEmpData( props.EmpData );
 
+            window.addEventListener(
+                'resize', () => {
+
+                    setResize( !Resize );
+                    
+                }
+            )
+
         }, [ props.EmpData ]
     )
 
@@ -221,7 +229,7 @@ const Home = (props) => {
                 <div className="RequestStatusChart">
                     <Pie
                         width='100%'
-                        height='100px'
+                        // height='100px'
                         data={ChartData}
                     />
                 </div>

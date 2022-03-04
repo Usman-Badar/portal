@@ -404,9 +404,6 @@ const PurchaseOrder = () => {
                     total: subTotal + amount + others + cartage
                 }
             );
-            // if ( !IndividualTax )
-            // {
-            // }
 
 
         }, [ RequestInformation.gst, RequestInformation.cartage, RequestInformation.others, Total ]
@@ -936,6 +933,9 @@ const PurchaseOrder = () => {
 
 
                     }
+
+                    $('textarea, input, select').blur();
+                    $('textarea[name=description]').focus();
                 }
 
             }

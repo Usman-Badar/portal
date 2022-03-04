@@ -13,6 +13,7 @@
 .ViewPrRequests .PR_printUIView {
     padding: 20px;
     background-color: #fff;
+    min-width: 1000px;
 }
 
 .ViewPrRequests .PR_printUIView p {
@@ -63,7 +64,7 @@
     display: grid;
     grid-template-columns: minmax(20px, 5fr) minmax(200px, 30fr) minmax(200px, 30fr) minmax(50px, 8.33fr) minmax(50px, 8.33fr) minmax(50px, 5fr) minmax(50px, 5fr) minmax(50px, 8.33fr);
     /* grid-template-columns: 5fr 30fr 30fr 8.33fr 8.33fr 5fr 5fr 8.33fr !important; */
-    overflow: auto;
+    /* overflow: auto; */
 }
 
 .ViewPrRequests .PR_printUI_Middle .PR_printUI_Grid div {
@@ -109,12 +110,14 @@
 
 .ViewPrRequests .PR_printUI_Remarks .DIVS {
     display: grid;
-    grid-template-columns: 50fr 50fr;
+    grid-template-columns: 20fr 80fr;
     padding: 5px;
     border-bottom: 0 !important;
     border-right: 1px solid rgb(201, 201, 201);
 }
 
+
+/* 
 .ViewPrRequests .PR_printUI_Remarks:last-child .DIVS {
     display: grid;
     grid-template-columns: 20fr 80fr;
@@ -123,7 +126,7 @@
 .ViewPrRequests .PR_printUI_Remark .DIVS {
     display: grid;
     grid-template-columns: 30fr 70fr;
-}
+} */
 
 .Employee_Requisition .Employee_Requisition_Right .RightButtonDiv {
     margin-bottom: 30px;
@@ -164,4 +167,22 @@
     text-align: center;
     margin-top: 5px;
     font-size: 12px;
+}
+
+@media only screen and (max-width: 600px) {
+    .ViewPrRequests .PR_printUI_Top .PR_printUI_Top_select {
+        display: block;
+    }
+    .ViewPrRequests .PR_printUIView p {
+        font-size: 12px;
+    }
+    .ViewPrRequests .PR_printUIView h1 {
+        font-size: 25px;
+    }
+    .ViewPrRequests .PR_printUIView h3 {
+        font-size: 20px;
+    }
+    .ViewPrRequests .PR_printUI_Remarks .DIVS {
+        display: block;
+    }
 }

@@ -2,17 +2,22 @@
     width: 100%;
     height: calc( 100vh - 60px);
     margin-top: 10px;
-    background-color: #F9FBFC;
+    /* background-color: #F9FBFC; */
     padding: 20px;
     display: grid;
     grid-template-columns: 25fr 50fr 25fr;
     grid-column-gap: 20px;
     font-size: 13px;
     position: relative;
+    overflow: hidden;
 }
 
 .EmployeeChat p {
     margin-bottom: 0;
+}
+
+.EmployeeChat .Left {
+    position: relative;
 }
 
 .EmployeeChat .Left p:nth-child(2) {
@@ -46,28 +51,6 @@
     border-radius: 0 10px 0 0;
 }
 
-.EmployeeChat .Left .List {
-    height: calc( 100vh - 175px);
-    overflow: auto;
-}
-
-.EmployeeChat .Left .employee {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    background-color: #F3F5F9;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: .5s;
-}
-
-.EmployeeChat .Left .employee:hover {
-    background-color: #CED5E0;
-}
-
 .EmployeeChat .Center {
     width: 100%;
 }
@@ -93,33 +76,7 @@
     padding: 20px 30px;
     background-color: #F3F5F9;
     scroll-behavior: smooth;
-}
-
-.EmployeeChat .Center .ChatContent .Tweet {
-    width: 100%;
-    color: #5b6d80;
-    margin-bottom: 10px;
-}
-
-.EmployeeChat .Center .ChatContent .Tweet.owner {
-    text-align: right;
-}
-
-.EmployeeChat .Center .ChatContent .Tweet.owner .TweetBox {
-    margin-left: auto;
-    background-color: #2D6BE6;
-    color: #e6feff;
-}
-
-.EmployeeChat .Center .ChatContent .TweetDate {
-    font-size: 15px;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.EmployeeChat .Center .ChatContent .Tweet p {
-    margin-left: 10px;
-    font-size: 12px;
+    position: relative;
 }
 
 .EmployeeChat .Center .ChatContent .TweetBox {
@@ -173,6 +130,7 @@
 
 .EmployeeChat .Right {
     color: #000;
+    position: relative;
 }
 
 .EmployeeChat .Right .react-calendar {
@@ -182,6 +140,10 @@
     margin-bottom: 20px;
     width: 100%;
     margin-right: 0 !important;
+}
+
+.EmployeeChat .RightCalender {
+    display: none;
 }
 
 .SecondDiv .RightCalender .react-calendar {
@@ -201,7 +163,7 @@
     color: #5b6d80;
 }
 
-.EmployeeChat .calenderdiv {
+.EmployeeChat .Center .calenderdiv {
     position: absolute;
     right: -50px;
     bottom: 20%;
@@ -217,33 +179,33 @@
     color: white;
 }
 
-.SecondDiv {
-    display: none;
-    overflow: hidden;
-}
-
 @media only screen and (max-width: 992px) {
     .EmployeeChat {
         grid-template-columns: 40fr 60fr;
     }
-    .EmployeeChat .calenderdiv {
-        opacity: 1;
-    }
+
     .EmployeeChat .Right {
         display: none;
     }
 }
 
-@media only screen and (max-width: 650px) {
+@media only screen and (max-width: 750px) {
     .EmployeeChat {
+        grid-template-columns: 100fr;
+    }
+
+    .EmployeeChat .Center {
         display: none;
     }
-    .SecondDiv {
-        display: block;
+    
+    .EmployeeChat .Center .calenderdiv {
+        opacity: 1;
     }
-    .SecondDiv .Center {
-        display: none;
+
+    .EmployeeChat .Center .ChatContent {
+        height: calc( 100vh - 27vh);
     }
+
 }
 
 @media only screen and (max-width: 500px) {
@@ -255,8 +217,8 @@
     }
 }
 
-@media only screen and (max-height: 700px) {
+/* @media only screen and (max-height: 700px) {
     .EmployeeChat .Center .ChatContent {
         height: calc( 100vh - 28vh);
     }
-}
+} */

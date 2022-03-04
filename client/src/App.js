@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense } from 'react';
 
 import './App.css';
 
@@ -9,6 +9,8 @@ import PR_printUI from './Components/EmployeeProtal/Dashboard/Components/PR_prin
 import Vouchers from './Components/EmployeeProtal/Dashboard/Components/Vouchers/Vouchers';
 import Quatation from './Components/EmployeeProtal/Dashboard/Components/Quatation/Quatation';
 import Bills from './Components/EmployeeProtal//Dashboard/Components/Bills/Bills';
+
+import LoadingIcon from './images/loadingIcons/icons8-loading-circle.gif';
 
 const Login = lazy( () => import( './Components/EmployeeProtal/Auth/Login/Login' ) );
 const Dashboard = lazy( () => import( './Components/EmployeeProtal/Dashboard/Dashboard' ) );
@@ -29,86 +31,6 @@ const InvtryLogOut = lazy( () => import( './Components/Inventory/Invtry_Logout/I
 const OutOfLocation = lazy( () => import( './Components/EmployeeProtal/OutOfLocation/OutOfLocation' ) );
 
 const App = () => {
-
-    useEffect(
-        () => {
-            // var findIP = new Promise(r => { var w = window, a = new (w.RTCPeerConnection || w.mozRTCPeerConnection || w.webkitRTCPeerConnection)({ iceServers: [] }), b = () => { }; a.createDataChannel(""); a.createOffer(c => a.setLocalDescription(c, b, b), b); a.onicecandidate = c => { try { c.candidate.candidate.match(/([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g).forEach(r) } catch (e) { } } })
-
-            // /*Usage example*/
-            // findIP.then(ip => console.log('your ip: ', ip)).catch(e => console.error(e))
-
-            var RTCPeerConnection = /*window.RTCPeerConnection ||*/ window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
-
-            if ( RTCPeerConnection ) 
-            {
-                var rtc = new RTCPeerConnection(
-                    {
-                        iceServers: []
-                    }
-                );
-
-                if ( 1 || window.mozRTCPeerConnection ) {
-
-                    rtc.createDataChannel(
-                        '', {
-                            reliable: false
-                        }
-                    );
-                };
-
-                rtc.onicecandidate = function (evt) 
-                {
-                    if (evt.candidate) grepSDP("a=" + evt.candidate.candidate);
-                };
-
-                rtc.createOffer(
-                    function (offerDesc) 
-                    {
-                        grepSDP(offerDesc.sdp);
-                        rtc.setLocalDescription(offerDesc);
-                    }, 
-                    function (e) {
-                        console.warn("offer failed", e);
-                    }
-                );
-                
-                var addrs = Object.create(null);
-                addrs["0.0.0.0"] = false;
-
-                function updateDisplay(newAddr) 
-                {
-                    if (newAddr in addrs) return;
-                    else addrs[newAddr] = true;
-                    var displayAddrs = Object.keys(addrs).filter(function (k) {
-                        return addrs[k];
-                    });
-                    
-                    if ( displayAddrs[2] )
-                    {
-                        sessionStorage.setItem('IPv4', displayAddrs[2]);
-                    }
-                }
-
-                function grepSDP(sdp) {
-                    sdp.split('\r\n').forEach(function (line) {
-                        if (~line.indexOf("a=candidate")) {
-                            var parts = line.split(' '),
-                                addr = parts[4],
-                                type = parts[7];
-                            if (type === 'host') updateDisplay(addr);
-                        } else if (~line.indexOf("c=")) {
-                            var parts = line.split(' '),
-                                addr = parts[2];
-                            updateDisplay(addr);
-                        }
-                    });
-                }
-            }
-            else {
-                console.log('IP is not found');
-            }
-        }
-    )
 
     // window.onload = function () {
     //     var loadTime = window.performance.timing.domContentLoadedEventEnd-window.performance.timing.navigationStart; 
@@ -142,12 +64,31 @@ const App = () => {
     
         return ( 
             <>
-                <Suspense fallback={<Loading display={ true } />}>
+                <Suspense 
+                    fallback={ 
+                        <Loading 
+                            display={ true }
+                            styling={
+                                {
+                                    zIndex: 100000
+                                }
+                            }
+                            icon={ 
+                                <img 
+                                    src={ LoadingIcon }
+                                    className="LoadingImg"
+                                    alt="LoadingIcon"
+                                /> 
+                            }
+                            txt="Please Wait"
+                        />
+                    }
+                >
                     <Switch>
 
                         {/* 
-                        For Employee Portal
-                    */}
+                            For Employee Portal
+                        */}
 
                         <Redirect exact path='/' to='/login' />
                         <Route exact path='/dashboard' component={Dashboard} />
@@ -160,7 +101,7 @@ const App = () => {
                         <Route exact path='/logout' component={Logout} />
                         <Route exact path='/descuss_chat/:id' component={Dashboard} />
 
-                        <Route exact path='/purchaserequisition/view=home' component={Dashboard} />
+                        <Route exact path='/purchaserequisition/view=:view' component={Dashboard} />
                         <Route exact path='/purchaserequisition/view=form' component={Dashboard} />
                         <Route exact path='/purchaserequisition/view=:view/:pr_id' component={Dashboard} />
 
@@ -189,8 +130,8 @@ const App = () => {
                         <Route exact path='/empdailyattendance' component={Dashboard} />
 
                         {/* 
-                        For Admin Module
-                    */}
+                            For Admin Module
+                        */}
 
                         <Route exact path='/admin_login' component={Admin_login} />
                         <Route exact path='/admin_logout' component={Admin_logout} />
@@ -208,8 +149,8 @@ const App = () => {
                         <Route exact path='/createuser' component={AdminModule} />
 
                         {/* 
-                        For Attendance
-                    */}
+                            For Attendance
+                        */}
                         <Route exact path='/atthome' component={Home} />
                         <Route exact path='/attdashboard' component={AttDashboard} />
                         <Route exact path='/attdevicesetup' component={AttDashboard} />
@@ -226,7 +167,7 @@ const App = () => {
 
 
                         {/* 
-                        For Inventory
+                            For Inventory
                         */}
                         <Route exact path='/invtry' component={ Dashboard } />
                         <Route exact path="/invtry_assets" component={ Dashboard } />
@@ -257,7 +198,7 @@ const App = () => {
                         <Route exact path="/view=vouchers/:id" component={ Vouchers } />
 
                         {/* 
-                        For Procurement
+                            For Procurement
                         */}
 
                         <Route exact path="/purchaserequisition/home" component={ Dashboard } />

@@ -21,7 +21,7 @@ const New_PR_Request = () => {
                         <div className="one" onClick={ () => RequestDetails(1) }>
                             <div className="d-flex">
                                 <div className="d-flex justify-content-center align-items-center">
-                                    <img src={ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThLP6xJXBY_W2tT5waakogfnpHk4uhpVTy7A&usqp=CAU' } alt="Image" />
+                                    <img src={ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThLP6xJXBY_W2tT5waakogfnpHk4uhpVTy7A&usqp=CAU' } alt="new things will display here" />
                                 </div>
                                 <div className="d-flex align-items-center">
                                     <div>
@@ -55,7 +55,7 @@ const New_PR_Request = () => {
                                 </div>
                             </div>
                             <div className="ShowOnHover">
-                                <a href="#" title="Delete"><i class="las la-trash"></i></a>
+                                <a href="##" title="Delete"><i class="las la-trash"></i></a>
                             </div>
                         </div>
                     </div>

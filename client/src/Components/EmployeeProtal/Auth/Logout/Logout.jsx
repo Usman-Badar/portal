@@ -15,18 +15,12 @@ const Logout = () => {
         )
         sessionStorage.removeItem('EmpID');
 
-        history.replace('/login');
-
-    } else {
-
-        history.replace('/login');
 
     }
 
-    return(
-        <>
-        </>
-    )
+    history.replace('/login');
+
+    return(<></>)
     
 }
 

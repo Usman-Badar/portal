@@ -1,52 +1,78 @@
 import React, { useEffect, useState } from 'react';
 
 import './Loading.css';
-import $ from 'jquery';
 
 const Loading = ( props ) => {
 
-    const [ Load, setLoad ] = useState(0);
+    const [ ShowLoading, setShowLoading ] = useState( false );
+    const [ LoadingState, setLoadingState ] = useState(
+        {
+            icon: '',
+            txt: ''
+        }
+    );
+    const [ Styling, setStyling ] = useState({});
 
     useEffect(
         () => {
 
-            for ( let i=0; i < 100; i++) {
+            setShowLoading( props.display );
+            setStyling( props.styling );
 
-                Task(i);
-                
+            let i = 0;
+            let txt = props.txt ? props.txt : '';
+            let speed = 80;
+            let val = '';
+
+            function typeWriter() {
+                if ( i < txt.length ) {
+                    val += txt.charAt(i);
+                    setLoadingState(
+                        {
+                        icon: props.icon,
+                        txt: val
+                        }
+                    );
+                    i++;
+                    setTimeout(typeWriter, speed);
+                }
             }
 
-        }, []
+            typeWriter();
+
+        }, [ props.display, props.styling, props.icon, props.txt ]
     )
-
-    const Task = ( i ) => {
-
-        setTimeout(function () {
-
-            $('.Loading .loadingState .loadingStateComplete').css('width', i + '%');
-            // setLoad(i);
-
-        }, 50 * i);
-
-    }
-
-    const styling = {
-        'display' : props.display === true ? 'flex' : 'none'
-    }
 
     return (
         <>
-            <div className="Loading d-center text-center" style={ styling }>
-                <div className="w-100">
-                    <h5 className="mb-0" style={ { 'fontFamily' : 'Poppins', fontSize: '20px' } }>Please Wait...</h5>
-                    <div className='loadingState'>
-                        <div className='loadingStateComplete'></div>
-                        {
-                            Load ? ( Load + '%' ) : null
-                        }
+            {/* IF THE STATE IS TRUE THEN THE LOADING PAGE WILL SHOW OTHERWISE IT WILL BE HIDE */}
+            {
+                ShowLoading
+                ?
+                <>
+                    <div 
+                        className="Loading d-center text-center"
+                        style={ Styling }
+                    >
+
+                        <div>
+                            {/* LOADING IMAGE */}
+                            {
+                                LoadingState.icon
+                            }
+                            {/* LOADING TEXT */}
+                            <p className='text-center mb-0'>
+                                {
+                                    LoadingState.txt
+                                }
+                            </p>
+                        </div>
+
                     </div>
-                </div>
-            </div>
+                </>
+                :
+                null
+            }
         </>
     )
 

@@ -65,6 +65,11 @@
     border-radius: 30px;
 }
 
+.Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .PassDiv,
+.Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .ButtonDiv2 {
+    display: none;
+}
+
 .Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .LoginDiv,
 .Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .PassDiv {
     padding: 10px 30px;

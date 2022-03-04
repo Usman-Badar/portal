@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 import './SideBar.css';
 import $ from 'jquery';
@@ -8,16 +8,14 @@ import { ShowSideBar } from '../../../../../Redux/Actions/Action';
 
 const SideBar = ( props ) => {
 
+    const [ Data, setData ] = useState();
+
     const ShowBar = useSelector( ( state ) => state.SideBar.ShowSideBar );
 
     const dispatch = useDispatch();
 
     useEffect(
         () => {
-
-            setTimeout(() => {
-                $('.dropoptions').slideUp(0);
-            }, 100);
 
             $('.Dashboard_links .dropoptions a').on( 'click', () => {
 
@@ -31,21 +29,29 @@ const SideBar = ( props ) => {
 
             } );
 
-        }, []
+        }, [ dispatch ]
     );
+
+    useMemo(
+        () => {
+
+            return setData( props.Data );
+
+        }, [ props.Data ]
+    )
 
     return (
         <>
-
             <div className={ ShowBar ? "Dashboard_sideBar ShowBar" : "Dashboard_sideBar" }>
 
                 <div className="Dashboard_logo d-center">
-                    <div><h4 className="mb-0 logo">SEABOARD</h4></div>
-                    <div><button className="btn btn-sm p-0 m-0 sideBar_bars"><i className={ ShowBar ?"las la-times cross" : "las la-bars" }></i></button></div>
+                    <div><h4 style={ { whiteSpace: 'nowrap' } } className="mb-0 logo">EMPLOYEE PORTAL</h4></div>
+                    <div><button className="btn btn-sm p-0 m-0 sideBar_bars"><i className={ ShowBar ? "las la-times cross" : "" }></i></button></div>
                 </div>
 
+                {/* SIDEBAR CONTENT */}
                 {
-                    props.Data
+                    Data
                 }
             </div>
         </>

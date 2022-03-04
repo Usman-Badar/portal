@@ -1,24 +1,30 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useMemo, lazy, Suspense } from "react";
 
 import './UI.css';
 import axios from "../../../../../../axios";
 import $ from 'jquery';
 
+import Loader from '../../../../../../images/loadingIcons/icons8-iphone-spinner.gif';
+
 // React Redux Packages
 import { useSelector } from 'react-redux';
 import { useHistory, Route } from 'react-router-dom';
-import Home from "./Components/Home/Home";
-import Requests from "./Components/Requests/Requests";
-import Purchaserequisition from "./Components/PurchaseRequisition/PurchaseRequisition";
-import Quotations from "./Components/Quotations/Quotations";
-import Discussions from "./Components/Discussions/Discussions";
 
 import socket from '../../../../../../io';
 
 import Modal from '../../../../../UI/Modal/Modal';
+import Menu from '../../../../../UI/Menu/Menu';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+const Home = lazy( () => import("./Components/Home/Home") );
+const Requests = lazy( () => import("./Components/Requests/Requests") );
+const Purchaserequisition = lazy( () => import("./Components/PurchaseRequisition/PurchaseRequisition") );
+const Quotations = lazy( () => import("./Components/Quotations/Quotations") );
+const Discussions = lazy( () => import("./Components/Discussions/Discussions") );
+const SearchFilters = lazy( () => import("./Components/SearchFilters/SearchFilters") );
 
 const PurchaseRequisition = () => {
     
@@ -91,6 +97,10 @@ const PurchaseRequisition = () => {
         }
     );
     const [ Tweets, setTweets ] = useState([]); // FOR PR DISCUSSIONS
+    const [ WindowLocation, setWindowLocation ] = useState(); // FOR WINDOW LOCATION (URL)
+
+    // MENU ITEMS
+    const [Data, setData] = useState( [] );
     
 
     // Current Employee Data
@@ -98,60 +108,68 @@ const PurchaseRequisition = () => {
     // HISTORY FOR REACT ROUTING
     const history = useHistory();
 
+    useMemo(
+        () => {
+
+            return setWindowLocation( window.location.href.split('/').pop().split('id=').pop() );
+
+        }, [ parseInt( window.location.href.split('/').pop().split('id=').pop() ) ]
+    )
+
     useEffect(
         () => {
 
-            let pr_id = window.location.href.split('/').pop().split('id=').pop(); // RETURNS AN ID ( PR ID ) FROM THE URL
-
-            axios.post(
-                '/getpurchaseorderdetails',
-                {
-                    pr_id: pr_id,
-                    po_id: null
-                }
-            ).then(
-                (res) => {
-                    
-                    setItems( res.data[5] );
-                    setList( res.data[4] );
-                    setTotal( res.data[4][0].total );
-
-                    if ( res.data[4][0].status !== 'Approved' || res.data[4][0].status !== 'Delivered' || res.data[4][0].status !== 'Waiting For Approval' )
+            if ( !isNaN( parseInt( WindowLocation ) ) )
+            {
+                
+                let pr_id = window.location.href.split('/').pop().split('id=').pop(); // RETURNS AN ID ( PR ID ) FROM THE URL
+    
+                axios.post(
+                    '/getpurchaseorderdetails',
                     {
-                        setAttachQuotations( res.data[6] ); // QUOTATIONS
+                        pr_id: pr_id,
+                        po_id: null
                     }
+                ).then(
+                    (res) => {
+                        
+                        setItems( res.data[5] );
+                        setList( res.data[4] );
+                        setTotal( res.data[4][0].total );
+    
+                        if ( res.data[4][0].status !== 'Approved' || res.data[4][0].status !== 'Delivered' || res.data[4][0].status !== 'Waiting For Approval' )
+                        {
+                            setAttachQuotations( res.data[6] ); // QUOTATIONS
+                        }
+    
+                        setEditMode(false);
+                        setIndex(0);
+    
+                        setAmount(0.00);
+                        $('select').val('NO');
+                        setItem({
+                            description: '',
+                            reason: '',
+                            price: 0,
+                            taxRequired: "NO",
+                            tax: '',
+                            quantity: 1,
+                        });
+    
+                        $(".ViewPrRequests .PR_printUI_Middle .PR_printUI_Grid.MyItems").removeClass("d-none");
+                        setPRID( parseInt( pr_id ) );
+                        GetDiscussions( parseInt( pr_id ) );
+    
+                    }
+                ).catch(err => {
+    
+                    console.log(err);
+    
+                });
+            }
 
-                    setEditMode(false);
-                    setIndex(0);
-
-                    setAmount(0.00);
-                    $('select').val('NO');
-                    setItem({
-                        description: '',
-                        reason: '',
-                        price: 0,
-                        taxRequired: "NO",
-                        tax: '',
-                        quantity: 1,
-                    });
-
-                    $(".ViewPrRequests .PR_printUI_Middle .PR_printUI_Grid.MyItems").removeClass("d-none");
-                    setPRID( parseInt( pr_id ) );
-                    GetDiscussions( parseInt( pr_id ) );
-
-                }
-            ).catch(err => {
-
-                console.log(err);
-
-            });
-
-            AllPr();
-            AllCompanies();
-            AllLocations();
-            GetMonthlyRequests();
-
-        }, [ window.location.href.split('/').pop().split('id=').pop() ]
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [ WindowLocation ]
     )
 
     useEffect(
@@ -177,6 +195,25 @@ const PurchaseRequisition = () => {
                 GetDiscussions( window.location.href.split('/').pop().split('id=').pop() );
 
             });
+
+            AllPr();
+            AllCompanies();
+            AllLocations();
+            GetMonthlyRequests();
+
+            setData(
+                [
+                    {
+                        icon: 'las la-user',
+                        txt: 'Requests',
+                        link: false, // || true
+                        func: () => {
+                            $('.ViewPrRequests_Left').show();
+                            $('.ViewPrRequests_Right').hide();
+                        }
+                    }
+                ]
+            )
 
         }, []
     )
@@ -788,27 +825,30 @@ const PurchaseRequisition = () => {
 
     }
 
-    const ViewTheRequest = ( pr_id ) => {
+    const ViewTheRequest = ( pr_id, status ) => {
 
-        if ( JSON.parse(  EmpData.access ).includes(512) || JSON.parse( EmpData.access ).includes(514) || JSON.parse( EmpData.access ).includes(1) )
+        if ( status === "Sent" )
         {
-            const Data2 = new FormData();
-            Data2.append('prID', pr_id);
-            Data2.append('empID', EmpData.emp_id);
-            axios.post('/setprtoviewed', Data2).then(
-                () => {
-
-                    socket.emit('newpurchaserequision');
+            if ( JSON.parse(  EmpData.access ).includes(512) || JSON.parse( EmpData.access ).includes(514) || JSON.parse( EmpData.access ).includes(1) )
+            {
+                const Data2 = new FormData();
+                Data2.append('prID', pr_id);
+                Data2.append('empID', EmpData.emp_id);
+                axios.post('/setprtoviewed', Data2).then(
+                    () => {
     
-                }
-    
-            ).catch(
-                (err) => {
-    
-                    console.log(err);
-    
-                }
-            )
+                        socket.emit('newpurchaserequision');
+        
+                    }
+        
+                ).catch(
+                    (err) => {
+        
+                        console.log(err);
+        
+                    }
+                )
+            }
         }
 
     }
@@ -1190,6 +1230,7 @@ const PurchaseRequisition = () => {
     return (
         <>
             <div className="ViewPrRequests">
+            <Menu data={ Data } />
                 <Modal show={ ModalShow } Hide={HideModelFunction} content={ModalContent} />
                 <ToastContainer />
                 <iframe 
@@ -1201,106 +1242,85 @@ const PurchaseRequisition = () => {
                 </iframe>
 
                 {/* TOPBAR FOR SEARCH FILTERS */}
-                <div className="SearchnFilterDiv">
-                    <div className="searchdiv">
-                        <div><i class="las la-search"></i></div>
-                        <input
-                            type="text"
-                            placeholder="Tap To Search"
-                            className="form-control"
-                            onChange={(e) => onSearchPR('Key', e)}
-                        />
-                    </div>
-                    <div className="filterdiv">
-                        <div>
-                            <label >Companies</label>
-                            <select name="companies" id="" onChange={onChangeCompany} className="form-control">
-                                <option value="">Default</option>
-                                {
-                                    Companies.map(
-                                        (val) => {
-                                            return (
-                                                <>
-                                                    <option value={val.company_code}>{val.company_name}</option>
-                                                </>
-                                            )
-                                        }
-                                    )
-                                }
-                            </select>
-                        </div>
-                        <div>
-                            <label >Locations</label>
-                            <select onChange={onChangeLocation} className="form-control">
-                                <option value="">Default</option>
-                                {
-                                    Locations.map(
-                                        (val) => {
-                                            return (
-                                                <>
-                                                    <option value={val.location_code}>{val.location_name}</option>
-                                                </>
-                                            )
-                                        }
-                                    )
-                                }
-                            </select>
-                        </div>
-                        <div>
-                            <label >Status</label>
-                            <select onChange={(e) => onSearchPR('Status', e)} className="form-control">
-                                <option value="">Default</option>
-                                <option value="Approved">Approved</option>
-                                <option value="Rejected">Rejected</option>
-                                <option value="Waiting For Approval">Waiting For Approval</option>
-                                <option value="Sent">Sent</option>
-                                <option value="Viewed">Viewed</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label >Date</label>
-                            <input type="date" onChange={(e) => onSearchPR('MyDate', e)} className="form-control" name="" />
-                        </div>
-                    </div>
-                </div>
+                    {
+                        useMemo(
+                            () => {
+
+                                return (
+                                    <Suspense fallback={ <>Please Wait....</> }>
+                                        <SearchFilters 
+                                            Locations={ Locations }
+                                            Companies={ Companies }
+
+                                            onSearchPR={ onSearchPR }
+                                            onChangeCompany={ onChangeCompany }
+                                            onChangeLocation={ onChangeLocation }
+                                        />
+                                    </Suspense>
+                                )
+
+                            }, [ Locations, Companies ]
+                        )
+                    }
+                
                 <div className="ViewPrRequests_grid">
                     <div className="ViewPrRequests_Left">
-                        {
-                            ViewRequest.map(
-                                (val, index) => {
+                        <Suspense fallback={
+                            <div className="w-100 d-flex justify-content-center mt-5">
+                                <div>
+                                    <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                    <p className="mb-0">Processing....</p>
+                                </div>
+                            </div>
+                            }
+                        >
+                            {
+                                ViewRequest.map(
+                                    (val, index) => {
 
-                                    const d = new Date(val.request_date);
+                                        const d = new Date(val.request_date);
 
-                                    return (
-                                        <>
-                                            <Requests 
-                                                key={index} 
-                                                data={val} 
-                                                date={d} 
-                                                ViewTheRequest={ ViewTheRequest } 
-                                                EmpData={ EmpData }
-                                            />
-                                        </>
-                                    )
-                                }
-                            )
-                        }
+                                        return (
+                                            <>
+                                                <Requests 
+                                                    key={index} 
+                                                    data={val} 
+                                                    date={d} 
+                                                    ViewTheRequest={ ViewTheRequest } 
+                                                    EmpData={ EmpData }
+                                                />
+                                            </>
+                                        )
+                                    }
+                                )
+                            }
+                        </Suspense>
                     </div>
                     <div className="ViewPrRequests_Right">
                         <div className='previewWindow'>
-
                             <Route
                                 exact
                                 path="/purchaserequisition/home"
                                 render={
                                     () =>
-                                        <Home
-                                            ViewRequest={ ViewRequest }
-                                            CountRequests={ViewRequest.length}
-                                            CountStatus={CountStatus}
-                                            MonthlyRequests={MonthlyRequests}
-                                            EmpData={ EmpData }
-                                        />
+                                        <Suspense fallback={
+                                            <div className="w-100 d-flex justify-content-center mt-5">
+                                                <div>
+                                                        <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                                        <p className="mb-0">Loading....</p>
+                                                </div>  
+                                            </div>
+                                            
+
+                                        }>
+                                            <Home
+                                                ViewRequest={ ViewRequest }
+                                                CountRequests={ViewRequest.length}
+                                                CountStatus={CountStatus}
+                                                MonthlyRequests={MonthlyRequests}
+                                                EmpData={ EmpData }
+                                            />
+                                        </Suspense>
                                 }
                             />
 
@@ -1309,18 +1329,29 @@ const PurchaseRequisition = () => {
                                 path="/purchaserequisition/view=purchase_requisition&&id=:pr_id"
                                 render={
                                     () =>
-                                        <Purchaserequisition
-                                            List={List}
-                                            Items={Items}
-                                            Item={Item}
-                                            Total={Total}
-                                            Amount={Amount}
+                                        <Suspense fallback={
+                                            <div className="w-100 d-flex justify-content-center mt-5">
+                                                <div>
+                                                        <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                                        <p className="mb-0">Loading....</p>
+                                                </div>  
+                                            </div>
+                                            
 
-                                            onChnageHandler={onChangeHandler}
-                                            AddItem={AddItem}
-                                            OnEdit={OnEdit}
-                                            onDelete={onDelete}
-                                        />
+                                        }>
+                                            <Purchaserequisition
+                                                List={List}
+                                                Items={Items}
+                                                Item={Item}
+                                                Total={Total}
+                                                Amount={Amount}
+
+                                                onChnageHandler={onChangeHandler}
+                                                AddItem={AddItem}
+                                                OnEdit={OnEdit}
+                                                onDelete={onDelete}
+                                            />
+                                        </Suspense>
                                 }
                             />
 
@@ -1329,15 +1360,25 @@ const PurchaseRequisition = () => {
                                 path="/purchaserequisition/view=quotations&&id=:pr_id"
                                 render={
                                     () =>
-                                        <Quotations
-                                            List={List}
-                                            AttachQuotations={AttachQuotations}
-                                            QuotationPreview={QuotationPreview}
+                                        <Suspense fallback={
+                                            <div className="w-100 d-flex justify-content-center mt-5">
+                                                <div>
+                                                        <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                                        <p className="mb-0">Loading....</p>
+                                                </div>  
+                                            </div>
+                                            }
+                                        >
+                                            <Quotations
+                                                List={List}
+                                                AttachQuotations={AttachQuotations}
+                                                QuotationPreview={QuotationPreview}
 
-                                            onAttachQuotations={onAttachQuotations}
-                                            PreviewQuotation={PreviewQuotation}
-                                            RemoveQuotation={RemoveQuotation}
-                                        />
+                                                onAttachQuotations={onAttachQuotations}
+                                                PreviewQuotation={PreviewQuotation}
+                                                RemoveQuotation={RemoveQuotation}
+                                            />
+                                        </Suspense>
                                 }
                             />
 
@@ -1346,16 +1387,27 @@ const PurchaseRequisition = () => {
                                 path="/purchaserequisition/view=discussions&&id=:pr_id"
                                 render={
                                     () =>
-                                        <Discussions
-                                            Tweets={ Tweets }
-                                            EmpData={ EmpData }
+                                        <Suspense fallback={
+                                            <div className="w-100 d-flex justify-content-center mt-5">
+                                                <div>
+                                                        <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                                        <p className="mb-0">Loading....</p>
+                                                </div>  
+                                            </div>
+                                            }
+                                        >
+                                            <Discussions
+                                                Tweets={ Tweets }
+                                                EmpData={ EmpData }
 
-                                            onTweetboxChange={ onTweetboxChange }
-                                            onTweet={ onTweet }
-                                            AttachDrive={ AttachDrive }
-                                        />
+                                                onTweetboxChange={ onTweetboxChange }
+                                                onTweet={ onTweet }
+                                                AttachDrive={ AttachDrive }
+                                            />
+                                        </Suspense>
                                 }
                             />
+
 
                         </div>
                         <div className="control">

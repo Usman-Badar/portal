@@ -423,7 +423,7 @@ router.post('/deletedoc', ( req, res ) => {
                 {
                     connection.query(
                         "DELETE FROM `emp_drive_main` WHERE id = " + driveID + " AND emp_id = " + empID,
-                        ( err, rslt ) => {
+                        ( err ) => {
                 
                             if( err )
                             {
@@ -439,6 +439,9 @@ router.post('/deletedoc', ( req, res ) => {
                                 {
                                     // would be true. Period found in file name
                                     MakeDir.unlinkSync('client/public/images/drive/' + docName);
+                                    res.send( rslt );
+                                    res.end();
+                                    connection.release();
                                 }else
                                 {
                                     connection.query(

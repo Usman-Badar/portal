@@ -87,7 +87,7 @@ const Requests = ( props ) => {
                     <p>{props.data.location_name}</p>
                 </div>
             </div>
-            <div className="ViewPrRequests_button" onClick={ () => props.ViewTheRequest( props.data.pr_id ) }>
+            <div className="ViewPrRequests_button" onClick={ () => props.ViewTheRequest( props.data.pr_id, props.data.status ) }>
                 {/* <button className="btn">Decline</button> */}
                 <Link className="btn" to={ "/purchaserequisition/view=purchase_requisition&&id=" + props.data.pr_id }>
                     View

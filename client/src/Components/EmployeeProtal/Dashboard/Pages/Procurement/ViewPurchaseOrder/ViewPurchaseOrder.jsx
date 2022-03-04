@@ -1,8 +1,12 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { Suspense, lazy, useEffect, useState, useMemo } from "react";
 
 import { ToastContainer, toast } from "react-toastify";
 import Modal from "../../../../../UI/Modal/Modal";
 import axios from "../../../../../../axios";
+
+// LOADING IMAGE
+import Loader from '../../../../../../images/loadingIcons/icons8-iphone-spinner.gif';
 
 // CSS FILE
 import './ViewPurchaseOrder.css';
@@ -20,7 +24,7 @@ import { Route, useHistory } from "react-router-dom";
 import SearchBar from "./Components/SearchBar/SearchBar";
 // REQUESTS COMPONENT
 // ALL PURCHASE ORDER REQUEST WILL LISTED
-import Requests from "./Components/Requests/Requests";
+const Requests = lazy( () => import("./Components/Requests/Requests") );
 // HOME COMPONENT WHERE EMPLOYEE CAN VIEW THE STATUS OF THE REQUESTS AND OTHER USE FULL INFORMATION
 const Home = lazy( () => import("./Components/Home/Home") );
 // FORM COMPONENT TO VIEW THE REQUEST DETAILS ( PURCHASE ORDER ) IN FORM VIEW
@@ -122,6 +126,8 @@ const ViewPurchaseOrder = () => {
     const [ AttachVouchers, setAttachVouchers ] = useState([]);
     // TO VIEW THE ATTACHED VOUCHER (PREVIEW) 
     const [ VoucherPreview, setVoucherPreview ] = useState([]);
+    // FOR WINDOW LOCATION (URL)
+    const [ WindowLocation, setWindowLocation ] = useState();
 
     // ! CURRENT EMPLOYEE DATA
     // RETRIEVE FROM REACT REDUX
@@ -129,6 +135,112 @@ const ViewPurchaseOrder = () => {
 
     // REACT NAVIGATION
     const history = useHistory();
+
+    // TO SAVE THE LOCATION URL
+    useMemo(
+        () => {
+
+            return setWindowLocation( window.location.href.split('/').pop().split('id=').pop() );
+
+        }, [ parseInt( window.location.href.split('/').pop().split('id=').pop() ) ]
+    )
+
+    // TODO: REACT LIFECYCLE
+    useEffect(
+        () => {
+
+            if ( !isNaN( parseInt( WindowLocation ) ) )
+            {
+                let po_id = window.location.href.split('/').pop().split('id=').pop(); // RETURNS AN ID ( PO ID ) FROM THE URL
+
+                // GET PURCHASE ORDER'S PURCHASE REQUISITION ID
+                axios.post(
+                    '/getpridfrompo',
+                    {
+                        po_id: po_id
+                    }
+                ).then(
+                    ( res ) => {
+
+                        axios.post(
+                            '/getpurchaseorderdetails',
+                            {
+                                pr_id: res.data[0] ? res.data[0].pr_id : null,
+                                po_id: po_id
+                            }
+                        ).then(
+                            (res) => {
+
+                                setQuotationPreview([]);
+                                setBillPreview([]);
+                                setVoucherPreview([]);
+                                
+                                let poInfo = res.data[0];
+                                if ( res.data[4][0] )
+                                {
+                                    poInfo[0].pr_code = res.data[4][0].pr_code;
+                                }
+                                setDetails( res.data[0] );
+                                setPurchaseOrderDetails(
+                                    {
+                                        ...PurchaseOrderDetails,
+                                        info: poInfo,
+                                        specifications: res.data[1],
+                                        venders: res.data[3]
+                                    }
+                                )
+                                setAttachBills( res.data[2] );
+                                setAttachVouchers( res.data[7] );
+                                if ( res.data[4][0] )
+                                {
+                                    setPurchaseRequisitionDetails(
+                                        {
+                                            ...PurchaseRequisitionDetails,
+                                            info: res.data[4],
+                                            specifications: res.data[5],
+                                        }
+                                    )
+
+                                    setAttachQuotations( res.data[6] );
+                                }else
+                                {
+                                    setPurchaseRequisitionDetails(
+                                        {
+                                            ...PurchaseRequisitionDetails,
+                                            info: [],
+                                            specifications: [],
+                                        }
+                                    )
+
+                                    setAttachQuotations([]);
+                                }
+                                
+                                setPOID( parseInt( po_id ) );
+            
+                            }
+                        ).catch(err => {
+            
+                            console.log(err);
+            
+                        });
+                    
+                    }
+                )
+            }
+
+        }, [ WindowLocation ]
+    )
+
+    // TODO: REACT LIFECYCLE
+    useEffect(
+        () => {
+
+            // CALL FUNCTION TO GET ALL PURCHASE ORDER REQUESTS
+            // WHICH ARE SORTED AND FILTERS
+            SortedPO();
+
+        }, [ Key, Company, Location, Status, MyDate ]
+    )
 
     // TODO: REACT LIFECYCLE
     useEffect(
@@ -150,100 +262,6 @@ const ViewPurchaseOrder = () => {
             AllLocations();
 
         }, []
-    )
-
-    // TODO: REACT LIFECYCLE
-    useEffect(
-        () => {
-
-            let po_id = window.location.href.split('/').pop().split('id=').pop(); // RETURNS AN ID ( PO ID ) FROM THE URL
-
-            // GET PURCHASE ORDER'S PURCHASE REQUISITION ID
-            axios.post(
-                '/getpridfrompo',
-                {
-                    po_id: po_id
-                }
-            ).then(
-                ( res ) => {
-
-                    axios.post(
-                        '/getpurchaseorderdetails',
-                        {
-                            pr_id: res.data[0] ? res.data[0].pr_id : null,
-                            po_id: po_id
-                        }
-                    ).then(
-                        (res) => {
-
-                            setQuotationPreview([]);
-                            setBillPreview([]);
-                            setVoucherPreview([]);
-                            
-                            let poInfo = res.data[0];
-                            if ( res.data[4][0] )
-                            {
-                                poInfo[0].pr_code = res.data[4][0].pr_code;
-                            }
-                            setDetails( res.data[0] );
-                            setPurchaseOrderDetails(
-                                {
-                                    ...PurchaseOrderDetails,
-                                    info: poInfo,
-                                    specifications: res.data[1],
-                                    venders: res.data[3]
-                                }
-                            )
-                            setAttachBills( res.data[2] );
-                            setAttachVouchers( res.data[7] );
-                            if ( res.data[4][0] )
-                            {
-                                setPurchaseRequisitionDetails(
-                                    {
-                                        ...PurchaseRequisitionDetails,
-                                        info: res.data[4],
-                                        specifications: res.data[5],
-                                    }
-                                )
-
-                                setAttachQuotations( res.data[6] );
-                            }else
-                            {
-                                setPurchaseRequisitionDetails(
-                                    {
-                                        ...PurchaseRequisitionDetails,
-                                        info: [],
-                                        specifications: [],
-                                    }
-                                )
-
-                                setAttachQuotations([]);
-                            }
-                            
-                            setPOID( parseInt( po_id ) );
-        
-                        }
-                    ).catch(err => {
-        
-                        console.log(err);
-        
-                    });
-                
-                }
-            )
-
-        }, [ window.location.href.split('/').pop().split('id=').pop() ]
-    )
-
-    // TODO: REACT LIFECYCLE
-    useEffect(
-        () => {
-
-            // CALL FUNCTION TO GET ALL PURCHASE ORDER REQUESTS
-            // WHICH ARE SORTED AND FILTERS
-            SortedPO();
-
-        }, [ Key, Company, Location, Status, MyDate ]
     )
 
     // GET ALL PURCHASE ORDERS
@@ -471,32 +489,35 @@ const ViewPurchaseOrder = () => {
 
     // WHEN EMPLOYEE CLICKS ON AN INDIVIDUAL REQUEST TO VIEW ITS DETAILS
     // THIS FUNCTIONS WILL CALL WHICH RETRIEVE THE DETAILS
-    const ViewRequestDetails = ( po_id ) => {
+    const ViewRequestDetails = ( po_id, status ) => {
 
-        if 
-        ( 
-            JSON.parse( EmpData.access ).includes(523) || 
-            JSON.parse( EmpData.access ).includes(524) || 
-            JSON.parse( EmpData.access ).includes(1) 
-        )
+        if ( status === "Sent" )
         {
-            const Data2 = new FormData();
-            Data2.append('poID', po_id);
-            Data2.append('empID', EmpData.emp_id);
-            axios.post('/setpotoviewed', Data2).then( // SET THAT REQUEST'S STATUS TO VIEWED
-                () => {
-
-                    socket.emit('newpurchaseorder');
-    
-                }
-    
-            ).catch(
-                (err) => {
-    
-                    console.log(err);
-    
-                }
+            if 
+            ( 
+                JSON.parse( EmpData.access ).includes(523) || 
+                JSON.parse( EmpData.access ).includes(524) || 
+                JSON.parse( EmpData.access ).includes(1) 
             )
+            {
+                const Data2 = new FormData();
+                Data2.append('poID', po_id);
+                Data2.append('empID', EmpData.emp_id);
+                axios.post('/setpotoviewed', Data2).then( // SET THAT REQUEST'S STATUS TO VIEWED
+                    () => {
+    
+                        socket.emit('newpurchaseorder');
+        
+                    }
+        
+                ).catch(
+                    (err) => {
+        
+                        console.log(err);
+        
+                    }
+                )
+            }
         }
 
     }
@@ -862,57 +883,89 @@ const ViewPurchaseOrder = () => {
             >
             </iframe>
 
-            {/* TOP BAR COMPONENT */}
-            {/* WHERE EMPLOYEE CAN SEARCH REQUESTS */}
-            {/* BY COMPANY, BY LOCATION, BY STATUS, BY DATE */}
-            <SearchBar 
-                Locations={ Locations }
-                Companies={ Companies }
+            <Suspense fallback=
+                {
+                    <div className="w-100 d-flex justify-content-center mt-5">
+                        <div>
+                            <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                            <p className="mb-0">Processing....</p>
+                        </div>
+                    </div>
+                }
+            >
+                {/* TOP BAR COMPONENT */}
+                {/* WHERE EMPLOYEE CAN SEARCH REQUESTS */}
+                {/* BY COMPANY, BY LOCATION, BY STATUS, BY DATE */}
+                {
+                    useMemo(
+                        () => {
 
-                // FUNCTIONS
-                onChangeLocation={ onChangeLocation }
-                onChangeCompany={ onChangeCompany }
-                onSearchPO={ onSearchPO }
-            />
+                            return (
+                                    <SearchBar 
+                                        Locations={ Locations }
+                                        Companies={ Companies }
+
+                                        // FUNCTIONS
+                                        onChangeLocation={ onChangeLocation }
+                                        onChangeCompany={ onChangeCompany }
+                                        onSearchPO={ onSearchPO }
+                                    />
+                            )
+
+                        }, [ Locations, Companies ]
+                    )
+                }
+            </Suspense>
 
             {/* GRID CONTAINER */}
             {/* MAIN CONTENT */}
             {/* WHERE EMPLOYEE CAN VIEW THE REQUESTS AND PROCEED THE IT */}
             <div className="ViewPurchaseOrderGridContainer">
 
-                {/* LEFT SIDE */}
-                {/* REQUESTS LIST */}
-                {/* IN DESCENDING ORDER */}
-                <div className="Left RequestsList">
-
-                    {/* MAPPING THE REQUESTS */}
-                    {/* ALL REQUESTS ARE LISTED HERE */}
-                    {/* LIST CONTAINER */}
+                <Suspense fallback=
                     {
-                        PurchaseOrders.map(
-                            (val, index) => {
+                        <div className="w-100 d-flex justify-content-center mt-5">
+                            <div className="text-center">
+                                <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                <p className="mb-0">Loading Requests</p>
+                            </div>
+                        </div>
+                    }
+                >
+                    {/* LEFT SIDE */}
+                    {/* REQUESTS LIST */}
+                    {/* IN DESCENDING ORDER */}
+                    <div className="Left RequestsList">
+                            {/* MAPPING THE REQUESTS */}
+                            {/* ALL REQUESTS ARE LISTED HERE */}
+                            {/* LIST CONTAINER */}
+                            {
+                                PurchaseOrders.map(
+                                    (val, index) => {
 
-                                const d = new Date(val.request_date);
+                                        const d = new Date(val.request_date);
 
-                                return (
-                                    <>
-                                        {/* PURCHASE ORDER LIST COMPONENT */}
-                                        <Requests
-                                            key={ index } 
-                                            data={ val } 
-                                            date={ d } 
-                                            EmpData={ EmpData }
+                                        return (
+                                            <>
+                                                {/* PURCHASE ORDER LIST COMPONENT */}
+                                                <Requests
+                                                    key={ index } 
+                                                    data={ val } 
+                                                    date={ d } 
+                                                    EmpData={ EmpData }
 
-                                            // FUNCTIONS
-                                            ViewRequestDetails={ ViewRequestDetails } 
-                                        />
-                                    </>
+                                                    // FUNCTIONS
+                                                    ViewRequestDetails={ ViewRequestDetails } 
+                                                />
+                                            </>
+                                        )
+                                    }
                                 )
                             }
-                        )
-                    }
 
-                </div>
+
+                    </div>
+                </Suspense>
 
                 {/* RIGHT SIDE */}
                 {/* REQUEST DETAILS */}
@@ -923,21 +976,30 @@ const ViewPurchaseOrder = () => {
                     {/* ROUTES */}
                     <div className="PreviewWindow">
 
-                        <Suspense fallback={ <div>Loading....</div> }>
-
                             {/* HOME ROUTE */}
                             <Route
                                 exact
                                 path="/purchaseorder/home"
                                 render={
                                     () =>
-                                        <Home
-                                            ViewRequest={ PurchaseOrders }
-                                            CountRequests={ PurchaseOrders.length }
-                                            CountStatus={ CountStatus }
-                                            MonthlyRequests={ MonthlyRequests }
-                                            EmpData={ EmpData }
-                                        />
+                                        <Suspense
+                                            fallback={
+                                                <div className="w-100 d-flex justify-content-center mt-5">
+                                                    <div>
+                                                        <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                                        <p className="mb-0">Please Wait</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        >
+                                            <Home
+                                                ViewRequest={ PurchaseOrders }
+                                                CountRequests={ PurchaseOrders.length }
+                                                CountStatus={ CountStatus }
+                                                MonthlyRequests={ MonthlyRequests }
+                                                EmpData={ EmpData }
+                                            />
+                                        </Suspense>
                                 }
                             />
 
@@ -948,9 +1010,20 @@ const ViewPurchaseOrder = () => {
                                 path="/purchaseorder/window=purchaseorder&&id=:id"
                                 render={
                                     () =>
-                                        <Form
-                                            PurchaseOrderDetails={ PurchaseOrderDetails }
-                                        />
+                                        <Suspense
+                                            fallback={
+                                                <div className="w-100 d-flex justify-content-center mt-5">
+                                                    <div>
+                                                        <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                                        <p className="mb-0">Please Wait</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        >
+                                            <Form
+                                                PurchaseOrderDetails={ PurchaseOrderDetails }
+                                            />
+                                        </Suspense>
                                 }
                             />
 
@@ -961,9 +1034,20 @@ const ViewPurchaseOrder = () => {
                                 path="/purchaseorder/window=purchaserequisition&&id=:id"
                                 render={
                                     () =>
-                                        <PRForm
-                                            PurchaseRequisitionDetails={ PurchaseRequisitionDetails }
-                                        />
+                                        <Suspense
+                                            fallback={
+                                                <div className="w-100 d-flex justify-content-center mt-5">
+                                                    <div>
+                                                        <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                                        <p className="mb-0">Please Wait</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        >
+                                            <PRForm
+                                                PurchaseRequisitionDetails={ PurchaseRequisitionDetails }
+                                            />
+                                        </Suspense>
                                 }
                             />
                             
@@ -975,14 +1059,25 @@ const ViewPurchaseOrder = () => {
                                 path="/purchaseorder/window=quotations&&id=:id"
                                 render={
                                     () =>
-                                        <Quotations
-                                            List={ Details }
-                                            AttachQuotations={ AttachQuotations }
-                                            QuotationPreview={ QuotationPreview }
+                                        <Suspense
+                                            fallback={
+                                                <div className="w-100 d-flex justify-content-center mt-5">
+                                                    <div>
+                                                        <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                                        <p className="mb-0">Please Wait</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        >
+                                            <Quotations
+                                                List={ Details }
+                                                AttachQuotations={ AttachQuotations }
+                                                QuotationPreview={ QuotationPreview }
 
-                                            // FUNCTIONS
-                                            PreviewQuotation={ PreviewQuotation }
-                                        />
+                                                // FUNCTIONS
+                                                PreviewQuotation={ PreviewQuotation }
+                                            />
+                                        </Suspense>
                                 }
                             />
 
@@ -992,13 +1087,24 @@ const ViewPurchaseOrder = () => {
                                 path="/purchaseorder/window=bills&&id=:id"
                                 render={
                                     () =>
-                                        <Bills
-                                            AttachBills={ AttachBills }
-                                            BillPreview={ BillPreview }
+                                        <Suspense
+                                            fallback={
+                                                <div className="w-100 d-flex justify-content-center mt-5">
+                                                    <div>
+                                                        <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                                        <p className="mb-0">Please Wait</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        >
+                                            <Bills
+                                                AttachBills={ AttachBills }
+                                                BillPreview={ BillPreview }
 
-                                            // FUNCTIONS
-                                            PreviewBill={ PreviewBill }
-                                        />
+                                                // FUNCTIONS
+                                                PreviewBill={ PreviewBill }
+                                            />
+                                        </Suspense>
                                 }
                             />
                             
@@ -1007,20 +1113,29 @@ const ViewPurchaseOrder = () => {
                                 path="/purchaseorder/window=vouchers&&id=:id"
                                 render={
                                     () =>
-                                        <Vouchers
-                                            Details={ Details }
-                                            AttachVouchers={ AttachVouchers }
-                                            VoucherPreview={ VoucherPreview }
+                                        <Suspense
+                                            fallback={
+                                                <div className="w-100 d-flex justify-content-center mt-5">
+                                                    <div>
+                                                        <img className="rounded-circle" src={ Loader } width="60" height="60" alt="Loading...." />
+                                                        <p className="mb-0">Please Wait</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        >
+                                            <Vouchers
+                                                Details={ Details }
+                                                AttachVouchers={ AttachVouchers }
+                                                VoucherPreview={ VoucherPreview }
 
-                                            // FUNCTIONS
-                                            PreviewVoucher={ PreviewVoucher }
-                                            onAttachVouchers={ onAttachVouchers }
-                                            RemoveVoucher={ RemoveVoucher }
-                                        />
+                                                // FUNCTIONS
+                                                PreviewVoucher={ PreviewVoucher }
+                                                onAttachVouchers={ onAttachVouchers }
+                                                RemoveVoucher={ RemoveVoucher }
+                                            />
+                                        </Suspense>
                                 }
                             />
-
-                        </Suspense>
 
                     </div>   
 

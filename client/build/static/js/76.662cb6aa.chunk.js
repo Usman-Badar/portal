@@ -1,2 +1,0 @@
-(this.webpackJsonpclient=this.webpackJsonpclient||[]).push([[76],{792:function(e,t,n){"use strict";n.r(t);n(1);var r=n(3),s=n(0);t.default=function(){var e=Object(r.g)();return sessionStorage.getItem("InvtryEmpID")?(sessionStorage.removeItem("InvtryEmpID"),e.replace("/")):e.replace("/"),Object(s.jsx)(s.Fragment,{})}}}]);
-//# sourceMappingURL=76.662cb6aa.chunk.js.map

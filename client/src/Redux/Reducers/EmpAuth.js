@@ -16,10 +16,8 @@ const EmpLogin = ( state = initialState, action ) => {
                 ...state,
                 EmployeeData: data, EmpLogin: true
             }
-            break;
         default:
             return state;
-            break;
 
     }
 

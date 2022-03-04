@@ -113,7 +113,7 @@
     }
     .Menu .Menu_Speeddail {
         display: block;
-        position: absolute;
+        position: fixed;
         bottom: 30px;
         left: 20px;
         z-index: 2;
@@ -127,6 +127,7 @@
         background-color: #fff;
         box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
         border-radius: 50%;
+
     }
     .Menu .Menu_Speeddail .Button {
         animation: roll 3s;

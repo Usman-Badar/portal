@@ -74,6 +74,7 @@ const Employee_Requisition = () => {
     });
     
     const [CountStatus, setCountStatus] = useState([]);
+    const [RequestedBy, setRequestedBy] = useState('');
 
     const Data = useSelector( ( state ) => state.EmpAuth.EmployeeData ); // CURRENT EMPLOYEE DATA
 
@@ -712,6 +713,8 @@ const Employee_Requisition = () => {
                     }
                 );
 
+                setRequestedBy( employee.name );
+
                 createPRCode( employee.company_code );
 
             }).catch(err => {
@@ -1026,6 +1029,7 @@ const Employee_Requisition = () => {
                             render={  
                                 () =>
                                     <Form
+                                        RequestedBy={ RequestedBy }
                                         PRCode={ PRCode }
                                         PurchaseRequisitionCode={ PurchaseRequisitionCode }
                                         Items={Items}

@@ -11,7 +11,7 @@
 
 .Dashboard_sideBar .Dashboard_logo {
     width: 100%;
-    height: max-content;
+    height: 50px;
     justify-content: space-between !important;
     padding: 10px 20px;
     font-family: Oxygen;
@@ -40,10 +40,9 @@
     white-space: nowrap;
 }
 
-
-/* .Dashboard_sideBar ._options {
-    background-color: #5b6d80;
-} */
+.Dashboard_sideBar .dropoptions {
+    display: none;
+}
 
 .Dashboard_sideBar .links i {
     font-size: 18px;
@@ -60,7 +59,7 @@
     color: #f1f9fb;
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1400px) {
     .Dashboard_sideBar {
         width: 0;
     }

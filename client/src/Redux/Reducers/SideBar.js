@@ -15,10 +15,8 @@ const SideBar = ( state = initialState, action ) => {
                 ...state,
                 ShowSideBar: data
             }
-            break;
         default:
             return state;
-            break;
 
     }
 

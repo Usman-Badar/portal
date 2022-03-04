@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, lazy, Suspense, useMemo } from 'react';
 import './Employee_Drive.css';
 
 import Menu from '../../../../UI/Menu/Menu';
@@ -17,7 +17,8 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import LoadingUI from '../../../../UI/Loading/Loading';
 
-import InsteadImg from '../../../../../images/not found.png';
+const EmpFolders = lazy( () => import('./Folders/Folders') );
+const EmpFiles = lazy( () => import('./Files/Files') );
 
 const Employee_Drive = () => {
 
@@ -32,13 +33,6 @@ const Employee_Drive = () => {
     const [ Data, setData ] = useState([]);
     const [ Drive, setDrive ] = useState([]);
     const [ Folders, setFolders ] = useState([]);
-
-    const [ Files, setFiles ] = useState(
-        {
-            file: '',
-            name: ''
-        }
-    );
     const [ ShowModal, setShowModal ] = useState(false);
     const [ Loading, setLoading ] = useState(<></>);
     const [ Content, setContent ] = useState();
@@ -126,15 +120,6 @@ const Employee_Drive = () => {
 
         }, []
     )
-    
-
-    useEffect(
-        () => {
-
-            getDrive();
-
-        }, [ Drive ]
-    )
 
     const getOld = () => {
         setDefaultContent();
@@ -203,6 +188,9 @@ const Employee_Drive = () => {
         Data.append('docName', type === 'document' ? Drive[index].name : Folders[index].name);
         Data.append('DID', sessionStorage.getItem('SelectedFolder'));
 
+        setTimeout(() => {
+            getDrive();
+        }, 1000);
         axios.post('/deletedoc', Data).then( () => {
 
             toast.dark('Document Deleted', {
@@ -315,7 +303,7 @@ const Employee_Drive = () => {
         } );
 
         axios.post('/getemployeedrivefolders', Data).then( res => {
-
+            
             setFolders( res.data );
     
         } ).catch( err => {
@@ -359,12 +347,6 @@ const Employee_Drive = () => {
 
             if( reader.readyState === 2 )
             {
-                setFiles(
-                    {
-                        file: event.target.files[0],
-                        name: event.target.files[0].name
-                    }
-                );
 
                 let arr = [];
 
@@ -400,6 +382,7 @@ const Employee_Drive = () => {
                     setDefaultContent();
                     setShowModal(false);
                     setStartLoading( false );
+                    getDrive();
                     toast.dark('Document Uploaded', {
                         position: 'top-right',
                         autoClose: 5000,
@@ -515,6 +498,7 @@ const Employee_Drive = () => {
     
                 setDefaultContent();
                 setShowModal( false );
+                getDrive();
     
             } ).catch( err => {
     
@@ -529,6 +513,7 @@ const Employee_Drive = () => {
     
                 setDefaultContent();
                 setShowModal( false );
+                getDrive();
     
             } ).catch( err => {
     
@@ -570,6 +555,7 @@ const Employee_Drive = () => {
 
             setDefaultContent();
             setShowModal( false );
+            getDrive();
 
         } ).catch( err => {
 
@@ -660,6 +646,7 @@ const Employee_Drive = () => {
 
             setDefaultContent();
             setShowModal( false );
+            getDrive();
             toast.dark('Document moved'.toString(), {
                 position: 'top-right',
                 autoClose: 5000,
@@ -702,6 +689,7 @@ const Employee_Drive = () => {
                 ]
             );
         }, 500);
+        getDrive();
 
     }
     
@@ -727,6 +715,7 @@ const Employee_Drive = () => {
                 ]
             );
         }, 500);
+        getDrive();
 
     }
 
@@ -738,300 +727,49 @@ const Employee_Drive = () => {
                 <input type='file' name='docuploads' className="form-control d-none docuploads" onChange={ onFilesSelection } multiple  />
                 <Modal show={ ShowModal } Hide={ onUploadBtnClicked } content={ Content } />
                 <>
+                    
                     {
-                        Folders.length > 0
-                            ?
-                            <>
-                                <h5 className="pt-2">Folders</h5>
-                                <div className="Employee_Drive_Grid folders">
-                                    {
-                                        Folders.length === 0
-                                            ?
-                                            null
-                                            :
-                                            Folders.map(
-                                                (val, index) => {
+                        useMemo(
+                            () => {
 
-                                                    return (
-                                                        <>
-                                                            <div className="Div1 d-flex p-3 align-items-center justify-content-between" onClick={() => OpenFolder(val.id, val.name)}>
-                                                                <div className='d-flex align-items-center'>
-                                                                    <i className="las la-wallet"></i> <p className="font-weight-bold"> {val.name} </p>
-                                                                </div>
-                                                                <div className="Drive_Icon">
-                                                                    <i className="las la-ellipsis-v mr-0"
-                                                                        onClick={() => ShowChangesMenuDiv1("Show_Changes_Menu-1" + index)}
-                                                                    ></i>
-                                                                    <div
-                                                                        style={{ top: '5%', right: '100%', width: '150px' }}
-                                                                        className={"Show_Changes_Menu Show_Changes_Menu-1" + index}>
-                                                                        <div className="DropDown_Drive_Menu">
-                                                                            <div className="d-flex align-items-center my-2 px-3 py-1" onClick={() => OpenFolder(val.id, val.name)}>
-                                                                                <i className="las la-share"></i>
-                                                                                <p>Open</p>
-                                                                            </div>
-                                                                            <div className="d-flex align-items-center my-2 px-3 py-1" onClick={() => DeleteDoc(index, 'folder')}>
-                                                                                <i className="las la-trash-alt"></i>
-                                                                                <p>Delete</p>
-                                                                            </div>
-                                                                            {/* <div className="d-flex align-items-center my-2 px-3 py-1">
-                                                                                        <i className="las la-remove-format"></i>
-                                                                                        <p>Rename</p>
-                                                                                    </div> */}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </>
-                                                    )
-
-                                                }
-                                            )
-                                    }
-                                </div>
-                            </>
-                            :
-                            null
-                    }
-                    <h5 className="pt-2">Files</h5>
-                    <div className="Employee_Drive_Grid" >
-                        {
-                            Drive.length === 0
-                                ?
-                                <>
-                                    {
-                                        Loading
-                                    }
-                                </>
-                                :
-                                Drive.map(
-                                    (val, index) => {
-
-                                        let icon = null;
-                                        let title = null;
-
-                                        if (val.doc_type) {
-                                            if (
-                                                val.doc_type.toLowerCase() === 'jpeg' ||
-                                                val.doc_type.toLowerCase() === 'jpg' ||
-                                                val.doc_type.toLowerCase() === 'png' ||
-                                                val.doc_type.toLowerCase() === 'gif'
-                                            ) {
-                                                icon = <i className="lar la-image"></i>
-                                                title = <img src={
-                                                    val.doc_type ?
-                                                        val.doc_type.toLowerCase() === 'jpeg' ||
-                                                            val.doc_type.toLowerCase() === 'jpg' ||
-                                                            val.doc_type.toLowerCase() === 'png' ||
-                                                            val.doc_type.toLowerCase() === 'gif'
-                                                            ?
-                                                            ('images/drive/' + val.name)
-                                                            :
-                                                            InsteadImg
-                                                        :
-                                                        null
-                                                }
-                                                    alt="Image1"
-                                                />
-                                            } else
-
-                                                if (
-                                                    val.doc_type.toLowerCase() === 'psd' ||
-                                                    val.doc_type.toLowerCase() === 'ai' ||
-                                                    val.doc_type.toLowerCase() === 'svg' ||
-                                                    val.doc_type.toLowerCase() === 'tiff'
-                                                ) {
-                                                    icon = <i className="lab la-adobe"></i>
-                                                    title = <img src={
-                                                        val.doc_type ?
-                                                            val.doc_type.toLowerCase() === 'jpeg' ||
-                                                                val.doc_type.toLowerCase() === 'jpg' ||
-                                                                val.doc_type.toLowerCase() === 'png' ||
-                                                                val.doc_type.toLowerCase() === 'gif'
-                                                                ?
-                                                                ('images/drive/' + val.name)
-                                                                :
-                                                                InsteadImg
-                                                            :
-                                                            null
-                                                    }
-                                                        alt="Image1"
-                                                    />
-                                                } else
-
-                                                    if (val.doc_type.toLowerCase() === 'html' || val.doc_type.toLowerCase() === 'htm' || val.doc_type.toLowerCase() === 'xml') {
-                                                        icon = <i className="lar la-file-code"></i>
-                                                        title = <iframe src={'images/drive/' + val.name} width="100%" height="500" title="description"></iframe>
-                                                    } else
-
-                                                        if (val.doc_type.toLowerCase() === 'css' || val.doc_type.toLowerCase() === 'scss' || val.doc_type.toLowerCase() === 'sass' || val.doc_type.toLowerCase() === 'less') {
-                                                            icon = <i className="lab la-css3"></i>
-                                                            title = <iframe src={'images/drive/' + val.name} width="100%" height="500" title="description"></iframe>
-                                                        } else
-
-                                                            if (val.doc_type.toLowerCase() === 'js' || val.doc_type.toLowerCase() === 'jsx') {
-                                                                icon = <i className="lab la-node-js"></i>
-                                                                title = <iframe src={'images/drive/' + val.name} width="100%" height="500" title="description"></iframe>
-                                                            } else
-
-                                                                if (val.doc_type.toLowerCase() === 'php') {
-                                                                    icon = <i className="lab la-php"></i>
-                                                                    title = <iframe src={'images/drive/' + val.name} width="100%" height="500" title="description"></iframe>
-                                                                } else
-
-                                                                    if (val.doc_type.toLowerCase() === 'pdf') {
-                                                                        icon = <i className="las la-file-pdf"></i>
-                                                                        title = <iframe src={'images/drive/' + val.name} width="100%" height="500" title="description"></iframe>
-                                                                    } else
-
-                                                                        if (
-                                                                            val.doc_type.toLowerCase() === 'docx' ||
-                                                                            val.doc_type.toLowerCase() === 'doc' ||
-                                                                            val.doc_type.toLowerCase() === 'docm' ||
-                                                                            val.doc_type.toLowerCase() === 'dotx' ||
-                                                                            val.doc_type.toLowerCase() === 'dot'
-
-                                                                        ) {
-                                                                            icon = <i className="las la-file-word"></i>
-                                                                            title = <img src={
-                                                                                val.doc_type ?
-                                                                                    val.doc_type.toLowerCase() === 'jpeg' ||
-                                                                                        val.doc_type.toLowerCase() === 'jpg' ||
-                                                                                        val.doc_type.toLowerCase() === 'png' ||
-                                                                                        val.doc_type.toLowerCase() === 'gif'
-                                                                                        ?
-                                                                                        ('images/drive/' + val.name)
-                                                                                        :
-                                                                                        InsteadImg
-                                                                                    :
-                                                                                    null
-                                                                            }
-                                                                                alt="Image1"
-                                                                            />
-                                                                        } else
-
-                                                                            if (
-                                                                                val.doc_type.toLowerCase() === 'xlsx' ||
-                                                                                val.doc_type.toLowerCase() === 'xlsm' ||
-                                                                                val.doc_type.toLowerCase() === 'xltx' ||
-                                                                                val.doc_type.toLowerCase() === 'xls' ||
-                                                                                val.doc_type.toLowerCase() === 'xla'
-
-                                                                            ) {
-                                                                                icon = <i className="las la-file-excel"></i>
-                                                                                title = <img src={
-                                                                                    val.doc_type ?
-                                                                                        val.doc_type.toLowerCase() === 'jpeg' ||
-                                                                                            val.doc_type.toLowerCase() === 'jpg' ||
-                                                                                            val.doc_type.toLowerCase() === 'png' ||
-                                                                                            val.doc_type.toLowerCase() === 'gif'
-                                                                                            ?
-                                                                                            ('images/drive/' + val.name)
-                                                                                            :
-                                                                                            InsteadImg
-                                                                                        :
-                                                                                        null
-                                                                                }
-                                                                                    alt="Image1"
-                                                                                />
-                                                                            } else
-
-                                                                                if (
-                                                                                    val.doc_type.toLowerCase() === 'mov' ||
-                                                                                    val.doc_type.toLowerCase() === 'mp4' ||
-                                                                                    val.doc_type.toLowerCase() === 'avi' ||
-                                                                                    val.doc_type.toLowerCase() === 'flv' ||
-                                                                                    val.doc_type.toLowerCase() === 'mpeg' ||
-                                                                                    val.doc_type.toLowerCase() === 'wmv' ||
-                                                                                    val.doc_type.toLowerCase() === 'mpg'
-                                                                                ) {
-                                                                                    icon = <i className="las la-video"></i>
-                                                                                    title = <video width="100%">
-                                                                                        <source src={'images/drive/' + val.name} type="video/mp4" />
-                                                                                        Your browser does not support the video tag.
-                                                                                    </video>
-                                                                                } else {
-                                                                                    icon = <i className="las la-file"></i>
-                                                                                    title = <img src={
-                                                                                        val.doc_type ?
-                                                                                            val.doc_type.toLowerCase() === 'jpeg' ||
-                                                                                                val.doc_type.toLowerCase() === 'jpg' ||
-                                                                                                val.doc_type.toLowerCase() === 'png' ||
-                                                                                                val.doc_type.toLowerCase() === 'gif'
-                                                                                                ?
-                                                                                                ('images/drive/' + val.name)
-                                                                                                :
-                                                                                                InsteadImg
-                                                                                            :
-                                                                                            null
-                                                                                    }
-                                                                                        alt="Image1"
-                                                                                    />
-                                                                                }
-                                        }
-
-                                        return (
-                                            <>
-                                                <div className="Div1" key={index} style={{ animationDelay: (0 + '.' + index).toString() + 's' }}>
-                                                    <div className="Div1_IMG" onClick={() => ShowPicDiv(index)}>
-                                                        {
-                                                            title
-                                                        }
-                                                    </div>
-                                                    <div className="Employee_Drive_Text">
-                                                        <div>
-                                                            <div className="pr-lg-2 pr-md-2 pr-sm-0">
-                                                                {
-                                                                    icon
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <p className="font-weight-bold mb-0"> {val.name ? val.name.split('/').pop().substring(0, 35) : null} </p>
-                                                        </div>
-                                                        <div className="Drive_Icon">
-                                                            <i className="las la-ellipsis-v mr-0"
-                                                                onClick={() => ShowChangesMenuDiv1("Show_Changes_Menu1" + index)}
-                                                            ></i>
-                                                            <div className={"Show_Changes_Menu Show_Changes_Menu1" + index}>
-                                                                <div className="DropDown_Drive_Menu">
-                                                                    <div className="d-flex align-items-center my-2 px-3 py-1" onClick={() => ShowPicDiv(index)}>
-                                                                        <i class="las la-expand-arrows-alt"></i>
-                                                                        <p>Preview</p>
-                                                                    </div>
-                                                                    {/* <div className="d-flex align-items-center my-2 px-3 py-1">
-                                                                            <i className="las la-share"></i>
-                                                                            <p>Share</p>
-                                                                        </div> */}
-                                                                    <div className="d-flex align-items-center my-2 px-3 py-1" onClick={() => DownloadDoc(index)}>
-                                                                        <i class="las la-arrow-circle-down"></i>
-                                                                        <p>Download</p>
-                                                                    </div>
-                                                                    <div className="d-flex align-items-center my-2 px-3 py-1" onClick={() => DeleteDoc(index, 'document')}>
-                                                                        <i className="las la-trash-alt"></i>
-                                                                        <p>Delete</p>
-                                                                    </div>
-                                                                    <div className="d-flex align-items-center my-2 px-3 py-1" onClick={() => MoveDoc(index)}>
-                                                                        <i className="las la-suitcase-rolling"></i>
-                                                                        <p>Move</p>
-                                                                    </div>
-                                                                    {/* <div className="d-flex align-items-center my-2 px-3 py-1">
-                                                                            <i className="las la-remove-format"></i>
-                                                                            <p>Rename</p>
-                                                                        </div> */}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </>
-                                        )
-
-                                    }
+                                return (
+                                    <Suspense fallback={ <p className="my-3">Loading Folders....</p> }>
+                                        <EmpFolders 
+                                            Folders={ Folders }
+                                            OpenFolder={ OpenFolder }
+                                            ShowChangesMenuDiv1={ ShowChangesMenuDiv1 }
+                                            DeleteDoc={ DeleteDoc }
+                                        />
+                                    </Suspense>
                                 )
-                        }
-                    </div>
+
+                            }, [ Folders ]
+                        )
+                    }
+
+                    {
+                        useMemo(
+                            () => {
+
+                                return (
+                                    <Suspense fallback={ <p className="my-3">Loading Files....</p> }>
+                                        <EmpFiles 
+                                            Drive={ Drive }
+                                            Loading={ Loading }
+                                            ShowPicDiv={ ShowPicDiv }
+                                            ShowChangesMenuDiv1={ ShowChangesMenuDiv1 }
+                                            DownloadDoc={ DownloadDoc }
+                                            DeleteDoc={ DeleteDoc }
+                                            MoveDoc={ MoveDoc }
+                                        />
+                                    </Suspense>
+                                )
+
+                            }, [ Drive, Loading ]
+                        )
+                    }
+
+                    
                 </>
             </div>
             <ToastContainer />

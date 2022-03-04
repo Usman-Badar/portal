@@ -176,7 +176,7 @@ const Form = (props) => {
                         </div>
                         <div className="PR_printUI_Remarks PR_printUI_Remark">
                             <div >
-                                <div className="DIVS" ><p className="font-weight-bolder ">Name : </p><p>{props.Data.name}</p></div>
+                                <div className="DIVS" ><p className="font-weight-bolder ">Name : </p><p>{ props.RequestedBy.length > 0 ? props.RequestedBy : props.Data.name }</p></div>
                                 <div className="DIVS" ><p className="font-weight-bolder">Date : </p><p>{d.toDateString()}</p></div>
                             </div>
                             <div >

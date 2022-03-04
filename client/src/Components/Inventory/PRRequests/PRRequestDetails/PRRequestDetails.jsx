@@ -37,7 +37,7 @@ const PRRequestDetails = () => {
                     </div>
                     <div className="PR_EMP_Info mt-3">
                         <div className="PR_EMP_Img text-center">
-                            <img src={Img} alt="Employee Image" />
+                            <img src={Img} alt="Employee will be display here" />
                         </div>
                         <div className="d-flex align-items-center">
                             <div className="w-100">
@@ -126,7 +126,7 @@ const PRRequestDetails = () => {
                                         <div className="ItmsContent">
                                             <div className="Itms">
                                                 <div className="d-flex align-items-center">
-                                                    <img src={Img} alt="Items Image" />
+                                                    <img src={Img} alt="Items will be display here" />
                                                 </div>
                                                 <div className="d-flex align-items-center">
                                                     <p className="mb-0 font-weight-bold">Laptop</p>
@@ -137,7 +137,7 @@ const PRRequestDetails = () => {
                                             </div>
                                             <div className="Itms">
                                                 <div className="d-flex align-items-center">
-                                                    <img src={Img} alt="Items Image" />
+                                                    <img src={Img} alt="Items will be display here" />
                                                 </div>
                                                 <div className="d-flex align-items-center">
                                                     <p className="mb-0 font-weight-bold">AC</p>
@@ -148,7 +148,7 @@ const PRRequestDetails = () => {
                                             </div>
                                             <div className="Itms">
                                                 <div className="d-flex align-items-center">
-                                                    <img src={Img} alt="Items Image" />
+                                                    <img src={Img} alt="Items will be display here" />
                                                 </div>
                                                 <div className="d-flex align-items-center">
                                                     <p className="mb-0 font-weight-bold">Tyre</p>
@@ -159,7 +159,7 @@ const PRRequestDetails = () => {
                                             </div>
                                             <div className="Itms">
                                                 <div className="d-flex align-items-center">
-                                                    <img src={Img} alt="Items Image" />
+                                                    <img src={Img} alt="Items will be display here" />
                                                 </div>
                                                 <div className="d-flex align-items-center">
                                                     <p className="mb-0 font-weight-bold">Laptop</p>
@@ -170,7 +170,7 @@ const PRRequestDetails = () => {
                                             </div>
                                             <div className="Itms">
                                                 <div className="d-flex align-items-center">
-                                                    <img src={Img} alt="Items Image" />
+                                                    <img src={Img} alt="Items will be display here" />
                                                 </div>
                                                 <div className="d-flex align-items-center">
                                                     <p className="mb-0 font-weight-bold">Laptop</p>
@@ -181,7 +181,7 @@ const PRRequestDetails = () => {
                                             </div>
                                             <div className="Itms">
                                                 <div className="d-flex align-items-center">
-                                                    <img src={Img} alt="Items Image" />
+                                                    <img src={Img} alt="Items will be display here" />
                                                 </div>
                                                 <div className="d-flex align-items-center">
                                                     <p className="mb-0 font-weight-bold">Laptop</p>
@@ -192,7 +192,7 @@ const PRRequestDetails = () => {
                                             </div>
                                             <div className="Itms">
                                                 <div className="d-flex align-items-center">
-                                                    <img src={Img} alt="Items Image" />
+                                                    <img src={Img} alt="Items will be display here" />
                                                 </div>
                                                 <div className="d-flex align-items-center">
                                                     <p className="mb-0 font-weight-bold">Laptop</p>
@@ -203,7 +203,7 @@ const PRRequestDetails = () => {
                                             </div>
                                             <div className="Itms">
                                                 <div className="d-flex align-items-center">
-                                                    <img src={Img} alt="Items Image" />
+                                                    <img src={Img} alt="Items will be display here" />
                                                 </div>
                                                 <div className="d-flex align-items-center">
                                                     <p className="mb-0 font-weight-bold">Laptop</p>
@@ -221,7 +221,7 @@ const PRRequestDetails = () => {
                     <div className="PR_Lower mt-3">
                         <div className="Items_Info">
                             <div className="ItmImage">
-                                <img src={Img} alt="Items Image" />
+                                <img src={Img} alt="Items will be display here" />
                             </div>
                             <div className="ItmDesc">
                                 <div>
@@ -232,7 +232,7 @@ const PRRequestDetails = () => {
                         </div>
                         <div className="Items_Info">
                             <div className="ItmImage">
-                                <img src={Img} alt="Items Image" />
+                                <img src={Img} alt="Items will be display here" />
                             </div>
                             <div className="ItmDesc">
                                 <div>
