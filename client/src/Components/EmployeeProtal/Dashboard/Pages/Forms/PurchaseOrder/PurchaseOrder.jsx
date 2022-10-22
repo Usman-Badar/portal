@@ -213,6 +213,12 @@ const PurchaseOrder = () => {
                     [
                         {
                             icon: 'las la-hand-holding-usd',
+                            txt: 'Dashboard',
+                            link: true,
+                            href: "/purchaseorder/view=home"
+                        },
+                        {
+                            icon: 'las la-hand-holding-usd',
                             txt: 'Purchase Order',
                             link: false,
                             func: () => OpenPurchaseOrderForm()
@@ -229,6 +235,12 @@ const PurchaseOrder = () => {
             {
                 setMenuData(
                     [
+                        {
+                            icon: 'las la-hand-holding-usd',
+                            txt: 'Dashboard',
+                            link: true,
+                            href: "/purchaseorder/view=home"
+                        },
                         {
                             icon: 'las la-hand-holding-usd',
                             txt: 'Purchase Order',
@@ -249,6 +261,12 @@ const PurchaseOrder = () => {
                     [
                         {
                             icon: 'las la-hand-holding-usd',
+                            txt: 'Dashboard',
+                            link: true,
+                            href: "/purchaseorder/view=home"
+                        },
+                        {
+                            icon: 'las la-hand-holding-usd',
                             txt: 'Purchase Order',
                             link: false,
                             func: () => OpenPurchaseOrderForm()
@@ -257,6 +275,7 @@ const PurchaseOrder = () => {
                 )
             }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [ window.location.href ]
     )
 
@@ -294,6 +313,7 @@ const PurchaseOrder = () => {
 
             setRequestInformation( val );
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [ RequestInformation.cartage, RequestInformation.others, Total]
     )
 
@@ -349,6 +369,7 @@ const PurchaseOrder = () => {
             }
     
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [ Item.tax, Item.quantity, Item.price, TaxMode ]
     )
 
@@ -885,6 +906,9 @@ const PurchaseOrder = () => {
                         if (objDiv !== null) {
                             objDiv.scrollTop = objDiv.scrollHeight;
                         }
+                        
+                        let input = document.getElementById('TAX');
+                        input.disabled = true;
 
                     } else {
                         let arr = Items;
@@ -930,6 +954,8 @@ const PurchaseOrder = () => {
                         setEditMode(false);
                         setIndex();
                         $(".POForm .PO_printUI_Middle .PO_printUI_Grid.MyItems").removeClass("d-none");
+                        let input = document.getElementById('TAX');
+                        input.disabled = true;
 
 
                     }
@@ -1062,6 +1088,7 @@ const PurchaseOrder = () => {
                             if (res.data[0]) {
                                 for (let x = 0; x < res.data.length; x++) {
 
+                                    socket.emit('NewNotification', res.data[x].emp_id);
                                     const Data2 = new FormData();
                                     Data2.append('eventID', 3);
                                     Data2.append('link', '');
@@ -1073,7 +1100,6 @@ const PurchaseOrder = () => {
 
                                         axios.post('/sendmail', Data2).then(() => {
 
-                                            socket.emit('NewNotification', res.data[x].emp_id);
 
                                         })
                                     });
@@ -1338,6 +1364,14 @@ const PurchaseOrder = () => {
         setShowHide( !ShowHide );
 
     }
+
+    const CollapseRequests = () => {
+
+        $('.PurchaseOrderContainer .PurchaseOrderGrid').toggleClass('d-block');
+        $('.openCollapseBtn').toggleClass('d-block');
+        $('.PurchaseOrderContainer .PurchaseOrderGrid .Left.PreviousPurchaseOrders').toggle('slow');
+
+    }
     
     return (
 
@@ -1384,6 +1418,9 @@ const PurchaseOrder = () => {
                 {/* LEFT PANEL */}
                 {/* PREVIOUS REQUESTS */}
                 <div className="Left PreviousPurchaseOrders">
+                    <button className="btn btn-sm btn-dark" onClick={ CollapseRequests }>
+                        <i className="las la-compress"></i>
+                    </button>
 
                     {/* REQUESTS */}
                     {
@@ -1399,20 +1436,20 @@ const PurchaseOrder = () => {
                                 const d = new Date( val.request_date );
                                 let txt = val.status;
 
-                                let bgColor = '#0eb8de';
+                                let bgColor = 'var(--blue)';
 
                                 if (val.status === 'Approved' || val.status === 'Delivered') {
-                                    bgColor = '#307365';
+                                    bgColor = 'var(--success)';
                                     txt = "Approved By accounts";
                                 }
 
                                 if (val.status === 'Rejected') {
-                                    bgColor = '#d19399';
+                                    bgColor = 'var(--orange)';
                                     txt = "Rejected by accounts";
                                 }
 
                                 if (val.status === 'Waiting For Approval') {
-                                    bgColor = '#fc9701';
+                                    bgColor = 'var(--c-green)';
                                 }
 
                                 return (
@@ -1434,6 +1471,9 @@ const PurchaseOrder = () => {
                 {/* RIGHT PANEL */}
                 {/* MAIN CONTENT */}
                 <div className="Right MainContentWindow">
+                    <button className="btn btn-sm btn-dark d-none openCollapseBtn" onClick={ CollapseRequests }>
+                        <i className="las la-external-link-alt"></i>
+                    </button>
 
                     <Suspense fallback={ <div>Loading....</div> }>
                         

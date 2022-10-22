@@ -3,7 +3,7 @@ import $ from 'jquery';
 import './Employee_Leave_Application_Form.css';
 import axios from '../../../../../../../../axios';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Employee_Leave_Application_Form = ( props ) => {
@@ -76,8 +76,8 @@ const Employee_Leave_Application_Form = ( props ) => {
                 if ( LeaveData.leaveTo > value )
                 {
 
-                    const startDate  = value;
-                    const endDate    = LeaveData.leaveTo;    
+                    const startDate = value;
+                    const endDate = LeaveData.leaveTo;    
                     
                     const days = moment(endDate).diff(moment(startDate), 'days');
                     NoOfDays = parseInt(days);
@@ -359,7 +359,7 @@ const Employee_Leave_Application_Form = ( props ) => {
                                 <div className="mb-1"><p>To : </p></div>
                                 <div><input type="date" className="form-control mb-2" name="leaveTo" onChange={ DaysAndDate } /></div>
                                 <div className="mb-1"><p>No. of Days : </p></div>
-                                <div><input value={ LeaveData.NoOfDays } disabled type="text" className="form-control" /></div>
+                                <div><input value={ LeaveData.NoOfDays + 1 } disabled type="text" className="form-control" /></div>
                             </div>
                             <div className="Leave_Duration_Date Leave_Duration_Date2 p-1" >
                                 <div className="mb-1"><p >Date : </p></div>
@@ -371,7 +371,7 @@ const Employee_Leave_Application_Form = ( props ) => {
                                 <h5 className="font-weight-bolder mb-0">{props.heading}</h5>
                             </div>
                             <div className="Leave_Purpose_reason p-1">
-                                <textarea name="Purpose" onChange={ onChangeHandler } required minLength='30' placeholder="Discribe your reason in detail" style={{height: '80px'}} className="form-control"></textarea>
+                                <textarea name="Purpose" onChange={ onChangeHandler } required minLength='30' placeholder="Describe your reason in detail" style={{height: '80px'}} className="form-control"></textarea>
                             </div>
                         </div>
                         <div className="Medical_Prove p-1">

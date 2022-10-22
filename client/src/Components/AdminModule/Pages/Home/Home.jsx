@@ -8,7 +8,8 @@ const Home = () => {
         <>
             <div className="Admin_Home">
                 <div className="Admin_Home-content">
-                    <h1 className="text-center">Admin Panel Home</h1>
+                    <h2 className="text-center">Admin Panel Home</h2>
+                    <h6 className="text-center">This Page is Under Construction</h6>
                 </div>
             </div>
         </>

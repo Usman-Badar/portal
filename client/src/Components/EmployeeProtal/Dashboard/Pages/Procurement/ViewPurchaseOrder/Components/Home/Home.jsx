@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
 import './Home.css';
-import { Pie } from 'react-chartjs-2';
+import CanvasJSReact from '../../../../../../../../canvasjs.react';
 import ReactTooltip from 'react-tooltip';
 
 const Home = (props) => {
 
-    const [ChartData, setChartData] = useState({});
+    const CanvasJS = CanvasJSReact.CanvasJS;
+    const CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+    const [DataSet, setDataSet] = useState([]);
     const [MonthlyRequests, setMonthlyRequests] = useState([]);
     const [RequestsSplit, setRequestsSplit] = useState([]);
 
@@ -72,31 +75,13 @@ const Home = (props) => {
             }
 
             count.push(
-                rejected,
-                approved,
-                waiting,
-                sent,
-                viewed
+                { y: rejected, label: 'rejected' },
+                { y: approved, label: 'approved' },
+                { y: waiting, label: 'waiting' },
+                { y: sent, label: 'sent' },
+                { y: viewed, label: 'viewed' }
             )
-
-            setChartData(
-                {
-                    labels: ['Rejected', 'Approved', 'Waiting For Approval', 'Sent', 'Viewed'],
-                    datasets: [
-                        {
-                            label: 'Requests for the year',
-                            data: count,
-                            backgroundColor: [
-                                '#DC3545',
-                                '#28A745',
-                                '#FFC107',
-                                '#17A2B8',
-                                '#007BFF'
-                            ]
-                        }
-                    ]
-                }
-            );
+            setDataSet( count );
 
 
         }, [props.CountStatus]
@@ -189,6 +174,37 @@ const Home = (props) => {
         }
     )
 
+    CanvasJS.addColorSet(
+        "customShades",
+        [//colorSet Array
+
+        "#E7604A",
+        "#56CC82",
+        "#29C7CA",
+        "#5C6E9C",
+        "#5C6E9C"             
+        ]
+    );
+
+    const options = {
+        exportEnabled: false,
+        animationEnabled: true,
+        title: {
+            text: "Summery"
+        },
+        colorSet: "customShades",
+        data: [{
+            type: "pie",
+            startAngle: 75,
+            toolTipContent: "<b>{label}</b>: {y}%",
+            showInLegend: "true",
+            legendText: "{label}",
+            indexLabelFontSize: 10,
+            indexLabel: "{label} - {y}%",
+            dataPoints: DataSet
+        }]
+    }
+
     return (
         <div className="Home">
             <ReactTooltip />
@@ -218,10 +234,8 @@ const Home = (props) => {
                     }
                 </div>
                 <div className="RequestStatusChart">
-                    <Pie
-                        width='100%'
-                        height='100px'
-                        data={ChartData}
+                    <CanvasJSChart options = {options}
+                        /* onRef={ref => this.chart = ref} */
                     />
                 </div>
                 <div className="RequestStatusChart py-4 px-3">

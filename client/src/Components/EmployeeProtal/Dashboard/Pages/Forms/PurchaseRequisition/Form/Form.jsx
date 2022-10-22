@@ -2,9 +2,9 @@ import React from 'react';
 
 import './Form.css';
 
-import QFS from '../../../../../../../images/QFS-LOGO.PNG';
-import SBL from '../../../../../../../images/SBL-LOGO.PNG';
-import SBS from '../../../../../../../images/SEABOARD-SERVICES.PNG';
+// import QFS from '../../../../../../../images/QFS-LOGO.PNG';
+// import SBL from '../../../../../../../images/SBL-LOGO.PNG';
+// import SBS from '../../../../../../../images/SEABOARD-SERVICES.PNG';
 
 const Form = (props) => {
 
@@ -14,12 +14,12 @@ const Form = (props) => {
         <>
             <div className="PR_printUI">
                 <div className="PR_printUI_Div">
-                    <h1 className=" font-weight-bolder text-center">Seaboard Group</h1>
+                    {/* <h1 className=" font-weight-bolder text-center">Seaboard Group</h1>
                     <div className="PR_printUI_Logos">
                         <div><img src={QFS} alt="QFS Logo" /></div>
                         <div><img src={SBS} alt="SBS Logo" /></div>
                         <div><img src={SBL} alt="SBL Logo" /></div>
-                    </div>
+                    </div> */}
                     <h3 className="font-weight-bolder text-center" >Purchase Requisition</h3>
                     <div className="PR_printUI_Top mt-5">
                         <div>
@@ -170,20 +170,20 @@ const Form = (props) => {
                     </div>
                     <div className="w-100">
                         <div className="PR_printUI_Remarks mt-4" style={ { backgroundColor: "rgb(243, 243, 243)" } }>
-                            <div className="DIVS" ><p className="font-weight-bolder">Sumbitted By</p></div>
-                            <div className="DIVS" ><p className="font-weight-bolder">Approved By</p></div>
+                            <div className="DIVS" ><p className="font-weight-bolder">Requested By</p></div>
                             <div className="DIVS" ><p className="font-weight-bolder">Submitted To</p></div>
+                            <div className="DIVS" ><p className="font-weight-bolder">Approved By</p></div>
                         </div>
                         <div className="PR_printUI_Remarks PR_printUI_Remark">
-                            <div >
+                            <div>
                                 <div className="DIVS" ><p className="font-weight-bolder ">Name : </p><p>{ props.RequestedBy.length > 0 ? props.RequestedBy : props.Data.name }</p></div>
                                 <div className="DIVS" ><p className="font-weight-bolder">Date : </p><p>{d.toDateString()}</p></div>
                             </div>
-                            <div >
+                            <div>
                                 <div className="DIVS" ><p className="font-weight-bolder">Name : </p><p></p></div>
                                 <div className="DIVS" ><p className="font-weight-bolder">Date : </p><p></p></div>
                             </div>
-                            <div >
+                            <div>
                                 <div className="DIVS" ><p className="font-weight-bolder">Name : </p><p></p></div>
                                 <div className="DIVS" ><p className="font-weight-bolder">Date : </p><p></p></div>
                             </div>

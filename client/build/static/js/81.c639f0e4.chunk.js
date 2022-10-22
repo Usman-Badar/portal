@@ -1,2 +1,0 @@
-(this.webpackJsonpclient=this.webpackJsonpclient||[]).push([[81],{788:function(t,e,s){"use strict";s.r(e);s(1);var n=s(3),o=s(98),a=s(0);e.default=function(){var t=Object(n.g)();return sessionStorage.getItem("EmpID")&&(o.a.emit("UserLost",sessionStorage.getItem("EmpID")),sessionStorage.removeItem("EmpID")),t.replace("/login"),Object(a.jsx)(a.Fragment,{})}},98:function(t,e,s){"use strict";var n=s(163).a.connect("https://192.168.10.116:8888",{autoConnect:!0});e.a=n}}]);
-//# sourceMappingURL=81.c639f0e4.chunk.js.map

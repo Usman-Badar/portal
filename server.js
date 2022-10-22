@@ -1,30 +1,50 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
 const app = express();
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const compression = require('compression')
 const fs = require('fs');
-
-const NodeCache = require("node-cache");
-const myCache = new NodeCache();
+// const wbm = require('wbm');
 
 const d = new Date();
 
 process.on('uncaughtException', function (err) {
-    console.error( d.toLocaleDateString(), err);
+
+    fs.appendFile(
+        'logs/log_' + d.toISOString().substring(0,10) + '.txt',
+        d.toTimeString() + '\n' +
+        'type: error' + '\n' +
+        err.toString() + '\n' +
+        '\n',
+        'utf-8',
+        ( err ) => {
+
+            if ( err )
+            {
+                console.error(
+                    err
+                );
+            }
+
+        }
+    )
+
 });
 
 const http = require('http');
 const https = require('https');
 
-const sslserver = https.createServer(
-    {
-        key: fs.readFileSync('client/SSL/key.pem'),
-        cert: fs.readFileSync('client/SSL/cert.pem')
-    },
-    app
-)
+// const sslserver = https.createServer(
+//     {
+//         key: fs.readFileSync('client/SSL/key.pem'),
+//         cert: fs.readFileSync('client/SSL/cert.pem')
+//     },
+//     app
+// )
+
+const sslserver = http.createServer(app);
 
 // CREATE SOCKET
 const io = require('socket.io')( sslserver,
@@ -37,39 +57,40 @@ const io = require('socket.io')( sslserver,
 );
 
 module.exports = io;
-    
-const PORT = process.env.PORT || 8888;
 
 // different express packages other things
-
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use( cors() );
 app.use( express.json() );
-app.use( express.static( path.join( __dirname, 'client' ) ) );
+
+// simulate delay response
+app.use((req, res, next) => {
+    setTimeout(() => next(), 500);
+});
+
+app.use("/client", express.static(__dirname + "/client"));
+app.use("/assets", express.static(__dirname + "/assets"));
 app.use( fileUpload() );
 app.use( compression() );
+require('dotenv').config();
 
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
-
-// if ( process.env.NODE_ENV === 'production' )
-// {
-    //     app.use( express.static( 'client/' ) );
-//     app.get("*", (req, res) => {
-        
-//         res.sendFile(path.resolve(__dirname, 'client', 'index.html'));
-    
-//     });
-// }
 
 // app.get('/', function ( req, res ) {
 //     res.sendFile( path.join( __dirname, 'client', 'index.html' ) );
 // })
 
+app.get('/testing', function ( req, res ) {
+    res.send('success');
+})
+
 // Following route for user authentication i.e login/logout
 app.use( require('./Routes/Auth/auth') );
 
 // Following route for employee logs
-app.use( require('./Routes/Employee/logs') );
+app.use( require('./Routes/Employee/logs').router );
 
 // Following route for employee form
 app.use( require('./Routes/Employee/employee') );
@@ -122,6 +143,14 @@ app.use( require('./Routes/Services/SetInOutStatusToValid') );
 // Following route for employee leave
 app.use( require('./Routes/Employee/leave') );
 
+
+
+app.use( require('./Routes/Inventory/assets') );
+
+
+
+
+
 // Following route for inventory categories
 app.use( require('./Routes/Inventory/Assets/category') );
 
@@ -167,18 +196,102 @@ app.use( require('./Routes/Admin_Modules/users') );
 // Following route for Admin Module users
 app.use( require('./Routes/Admin_Modules/user_roles') );
 
+// STORE MODULE APIS
+app.use( require('./Routes/Store/store') );
+
+// ITEM REQUESTS
+app.use( require('./Routes/ItemRequests/itemrequests') );
+
+// EMPLOYEE PROFILE
+app.use( require('./Routes/Employee/profile') );
+
+// ADMIN ROUTES
+app.use( require('./Routes/Admin_Modules/menu') );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// INVENTORY - STORE MODULE
+app.use( require('./Inventory/products').router );
+app.use( require('./Inventory/auth') );
+app.use( require('./Inventory/vender') );
+app.use( require('./Inventory/locations') );
+app.use( require('./Inventory/categories') );
+app.use( require('./Inventory/itemrequests') );
+app.use( require('./Inventory/repair_request') );
+
+
+
+
+// ATTENDANCE - ATTENDANCE MANAGEMENT SYSTEM
+app.use( require('./Attendance/auth') );
+
+
+
+
+
+
+
+
+// WHATSAPP ROUTES
+app.use( require('./Routes/Whatsapp/whatsapp').router );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // the following block of code is to define the port number which is dynamic
 
-setInterval(() => {
-    sslserver.getConnections(function(error, count) {
-        // console.log( error );
-        console.log( count );
-    });
-}, 1000);
+// setInterval(() => {
+//     sslserver.getConnections(function(error, count) {
+//         // console.log( error );
+//         console.log( 'Total Open Connections: ', count );
+//     });
+// }, 5000);
 
 
-sslserver.listen(PORT, () => {
-    
-    console.log(`Server run on localhost:${PORT} with id = ${ process.pid }`);
-    
+
+
+// wbm.start(
+//     {showBrowser: true, session: true}
+// ).then(
+//     async () => {
+
+//         console.log("Whatsapp Connected");
+
+//     }
+// ).catch(err => console.log(err));
+
+
+sslserver.listen(process.env.SERVER_PORT, () => {
+
+    console.log("**************************************************");
+    console.log(`Server run on localhost:${ process.env.SERVER_PORT } with id = ${ process.pid }`);
+    console.log("**************************************************");
+
 });

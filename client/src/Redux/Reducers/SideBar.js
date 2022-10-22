@@ -1,5 +1,5 @@
 const initialState = {
-    ShowSideBar: false
+    ShowSideBar: true
 }
 
 const SideBar = ( state = initialState, action ) => {

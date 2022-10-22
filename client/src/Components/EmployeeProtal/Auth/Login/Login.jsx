@@ -4,7 +4,6 @@ import './Login.css';
 import $ from 'jquery';
 
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,8 +11,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from '../../../../axios';
 
 import Loading from '../../../UI/Loading/Loading';
-
-import { EmployeeLogin } from '../../../../Redux/Actions/Action';
 
 import FrmLogin from './frmLogin';
 
@@ -36,7 +33,6 @@ const Employee_Login = () => {
 
     // To change URL
     const history = useHistory();
-    const dispatch = useDispatch();
 
     let key = 'real secret keys should be long and random';
     const encryptor = require('simple-encryptor')(key);
@@ -57,15 +53,16 @@ const Employee_Login = () => {
         $('.ButtonDiv2').hide();
         $('.ButtonDiv1').show();
         $('.Emp_Login2_Grid .HideDiv').css('left', '0');
-        $('.Emp_Login2_Grid .HideDiv').html('Login ID');
+        $('.Emp_Login2_Grid .HideDiv').html('LOGIN ID');
 
     }
 
-    const Login_Div2= ( e ) => {
+    const Login_Div2 = ( e ) => {
 
         e.preventDefault();
         setText("Processing");
         setStartLoading( true );
+
 
         // IF USER WANT TO TO GO TO ATTENDANCE PAGE
         if ( UserData.LoginID === '1234567890' )
@@ -79,7 +76,7 @@ const Employee_Login = () => {
 
             for (let x = 0; x < response.data.length; x++) {
 
-                // if the password and login id ofthe current index of an array is matched with 
+                // if the password and login id of the current index of an array is matched with 
                 // the entered login id and password, the following condition will be true
 
                 if ( UserData.LoginID === encryptor.decrypt( response.data[x].login_id ) ) {
@@ -89,7 +86,7 @@ const Employee_Login = () => {
                     $('.ButtonDiv2').show();
                     $('.ButtonDiv1').hide();
                     $('.Emp_Login2_Grid .HideDiv').css('left', '50%');
-                    $('.Emp_Login2_Grid .HideDiv').html('Password');
+                    $('.Emp_Login2_Grid .HideDiv').html('PASSWORD');
 
                     setEmployee(response.data[x]);
                     setStartLoading(false);
@@ -186,14 +183,16 @@ const Employee_Login = () => {
         {
             ShowNotification( 'Login Success' );
 
+            sessionStorage.setItem('Token', encryptor.encrypt(emp.emp_id));
             sessionStorage.setItem('EmpID', emp.emp_id);
-            sessionStorage.setItem('name', employee[0].name);
+            sessionStorage.setItem('name', employee[0][0].name);
 
             socket.emit(
                 'NewUser', emp.emp_id
             );
 
-            dispatch( EmployeeLogin( employee[0] ) );
+            // BECAUSE IT GIVES ERRORS
+            // dispatch( EmployeeLogin( employee[0] ) );
             
             setUserData( { LoginID: '', LoginPass: '' } );
     
@@ -207,9 +206,17 @@ const Employee_Login = () => {
 
     }
 
-    if ( sessionStorage.getItem('EmpID') ) {
-
-        history.replace('/dashboard');
+    if ( sessionStorage.getItem('Token') ) {
+        
+        if 
+        ( 
+            parseInt( encryptor.decrypt( sessionStorage.getItem("Token") ) )
+            ===
+            parseInt( sessionStorage.getItem('EmpID') )
+        )
+        {
+            history.replace('/dashboard');
+        }
         
     };
 
@@ -223,7 +230,7 @@ const Employee_Login = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-        });;
+        });
 
     }
 
@@ -248,7 +255,7 @@ const Employee_Login = () => {
                 }
                 txt={ Text }
             />
-            <FrmLogin Login_Div2={ Login_Div2 } LoginShow={LoginShow} OnChangeHandler={OnChangeHandler} UserData={UserData} OnUserLogin={OnUserLogin} />
+            <FrmLogin Employee={ Employee } Login_Div2={ Login_Div2 } LoginShow={ LoginShow } OnChangeHandler={ OnChangeHandler } UserData={ UserData } OnUserLogin={ OnUserLogin } />
         </>
     )
 }

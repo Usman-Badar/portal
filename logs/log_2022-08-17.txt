@@ -1,0 +1,20 @@
+09:29:08 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: insufficient memory
+
+09:37:36 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: insufficient memory
+
+09:37:36 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: insufficient memory
+
+09:37:36 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: insufficient memory
+
+09:50:50 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+

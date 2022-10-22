@@ -57,9 +57,9 @@
     display: grid;
     grid-template-columns: 33.33fr 33.33fr 33.33fr;
     width: 95%;
-    background-color: white;
-    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
-    border-radius: 10px;
+    /* background-color: rgb(255, 255, 255, .7);
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
+    border-radius: 5px;
 }
 
 .Menu .Menu_Speeddail .Speeddail_Grid .Speeddail_Grid1 {
@@ -127,7 +127,6 @@
         background-color: #fff;
         box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
         border-radius: 50%;
-
     }
     .Menu .Menu_Speeddail .Button {
         animation: roll 3s;

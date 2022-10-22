@@ -210,7 +210,7 @@ router.get('/getemployeesid&name', ( req, res ) => {
             }else
             {
                 connection.query(
-                    "SELECT emp_id, name FROM employees",
+                    "SELECT emp_id, name FROM employees WHERE emp_status = 'Active'",
                     ( err, rslt ) => {
             
                         if( err )

@@ -49,39 +49,23 @@ router.post('/addinvtrysublocation', ( req, res ) => {
 
 router.post('/getallsublocations', ( req, res ) => {
 
-    const { AssetCode } = req.body;
+    const { location_code } = req.body;
 
-    db.getConnection(
-        ( err, connection ) => {
+    connection.query(
+        "SELECT * FROM invtry_sub_locations WHERE invtry_sub_locations.location_code = " + location_code,
+        ( err, rslt ) => {
 
-            if ( err )
+            if( err )
             {
-                res.status(503).send(err);
+                res.status(500).send(err);
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "SELECT * FROM invtry_sub_locations WHERE invtry_sub_locations.location_code = " + AssetCode,
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
-                            res.status(500).send(err);
-                            res.end();
-                            connection.release();
 
-                        }else 
-                        {
-            
-                            res.send(rslt);
-                            res.end();
-                            connection.release();
-            
-                        }
-            
-                    }
-                )
+                res.send(rslt);
+                res.end();
+
             }
 
         }

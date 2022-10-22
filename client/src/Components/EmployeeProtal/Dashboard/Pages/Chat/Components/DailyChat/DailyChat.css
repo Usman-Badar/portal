@@ -22,8 +22,8 @@
 
 .EmployeeChat .Center .ChatContent .Tweet.owner .TweetBox {
     margin-left: auto;
-    background-color: #2D6BE6;
-    color: #e6feff;
+    background-color: var( --dark-c-green );
+    color: #fff;
 }
 
 .EmployeeChat .Center .ChatContent .TweetDate {

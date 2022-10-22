@@ -3,24 +3,30 @@ const mysql = require('mysql');
 const db = mysql.createPool( 
     {
         host: '127.0.0.1',
-        port : '3306',
-        user: 'root',
-        password: '',
-        database: 'seaboard',
+        port : process.env.DB_PORT,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
         multipleStatements: true,
         supportBigNumbers: true,
         connectionLimit: 300
-
-        // host: 'localhost',
-        // port : '3306',
-        // user: 'root',
-        // password: 'vONn&p{c2\d_9ZXL',
-        // database: 'id17010227_seaboard',
-        // multipleStatements: true,
-        // supportBigNumbers: true,
-        // connectionLimit: 300
     }
 );
+
+db.getConnection(
+    ( err, connection ) => {
+
+        if ( err )
+        {
+            console.log("Could not connect to MySQL.");
+        }else
+        {
+            console.log("Connected to MySQL.");
+            connection.release();
+        }
+
+    }
+)
 
 // db.on(
 //     'release', ( connection ) => {
@@ -37,11 +43,11 @@ const db = mysql.createPool(
 
 // }, 2000);
 
-setInterval(() => {
-    console.log(`Database Open Connections ${ db._allConnections.length }`);
-	console.log(`Acquiring Connections ${db._acquiringConnections.length}`);
-	console.log(`Free Connections ${db._freeConnections.length}`);
-	console.log(`Queue Connections ${db._connectionQueue.length}`);
-}, 5000);
+// setInterval(() => {
+//     console.log('Database Open Connections: ', db._allConnections.length);
+// 	console.log('Acquiring Connections: ', db._acquiringConnections.length);
+// 	console.log('Free Connections: ', db._freeConnections.length);
+// 	console.log('Queue Connections: ', db._connectionQueue.length);
+// }, 10000);
 
 module.exports = db;

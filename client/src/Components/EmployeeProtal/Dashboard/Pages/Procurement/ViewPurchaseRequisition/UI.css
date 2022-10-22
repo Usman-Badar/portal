@@ -1,7 +1,7 @@
 .ViewPrRequests {
     width: 100%;
     font-family: Quicksand;
-    padding-top: 20px;
+    padding: 15px 0;
 }
 
 .ViewPrRequests iframe {
@@ -13,7 +13,7 @@
 .ViewPrRequests p,
 .ViewPrRequests button {
     margin-bottom: 0;
-    font-size: 13px;
+    font-size: 11px;
 }
 
 .ViewPrRequests .ViewPrRequests_grid {
@@ -27,6 +27,21 @@
     margin: 15px 0;
     overflow-y: auto;
     max-height: 80vh;
+    position: relative;
+}
+
+.ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Left .collapseBtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px 0;
+    background-color: var(--dark-black);
+    color: #fff;
+}
+
+.ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right {
+    overflow: auto;
+    height: 70vh;
 }
 
 .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .previewWindow {
@@ -36,11 +51,49 @@
     overflow: auto;
 }
 
+.ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .previewWindow .openBtn {
+    display: none;
+    margin: 0 auto;
+    padding: 0 20px;
+    background-color: var(--dark-black);
+    color: #fff;
+}
+
 .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .control {
     padding-top: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .control .firstBtn {
+    background-color: var(--gray-text);
+    color: #fff;
+}
+
+.ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .control .secondBtn {
+    background-color: var(--dark-black);
+    color: #fff;
+}
+
+.ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .control .thirdBtn {
+    background-color: var(--c-green);
+    color: #fff;
+}
+
+.ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .control .forthBtn {
+    background-color: var(--blue);
+    color: #fff;
+}
+
+.ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .control .fifthBtn {
+    background-color: var(--orange);
+    color: #fff;
+}
+
+.ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .control .sixthBtn {
+    background-color: var(--success);
+    color: #fff;
 }
 
 .ViewPrRequests .Menu {
@@ -56,7 +109,7 @@
 
 @media only screen and (max-width: 1400px) {
     .ViewPrRequests .ViewPrRequests_grid {
-        grid-template-columns: 30% 70% !important;
+        grid-template-columns: 25% 75% !important;
         grid-column-gap: 0;
     }
 }

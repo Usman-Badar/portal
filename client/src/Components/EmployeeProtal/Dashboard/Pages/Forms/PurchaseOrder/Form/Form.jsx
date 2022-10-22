@@ -146,6 +146,7 @@ const Form = ( props ) => {
         {
             $('.btn.cancelBtn').trigger('click');
             props.AddVender( val );
+            AddNewVender();
         }
 
     }
@@ -862,7 +863,7 @@ const Form = ( props ) => {
 
             </div>
 
-            <button className='btn btn-primary d-block my-3 ml-auto submitPO' onClick={ SubmitPurchaseOrder }>Submit</button>
+            <button className='btn d-block my-3 ml-auto submitPO' onClick={ SubmitPurchaseOrder }>Submit</button>
         </>
     )
 }

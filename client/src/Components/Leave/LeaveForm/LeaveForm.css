@@ -1,0 +1,101 @@
+.LeaveApplicationForm {
+    width: 80%;
+    padding: 30px;
+    background-color: #fff;
+    margin: 0 auto;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    font-size: 12px;
+}
+
+.LeaveApplicationForm .LeaveType,
+.LeaveApplicationForm .DateRange {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    grid-gap: 15px;
+}
+
+.LeaveApplicationForm .LeaveType .type {
+    border: 1px solid lightgray;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.LeaveApplicationForm .LeaveType .type.active {
+    border: 1px solid var(--c-green);
+}
+
+.LeaveApplicationForm .LeaveType .type:hover {
+    background-color: rgb(41, 199, 202, .1);
+}
+
+.LeaveApplicationForm .LeaveType .type i {
+    font-size: 30px;
+}
+
+.LeaveApplicationForm .DateRange {
+    grid-gap: 30px;
+}
+
+.LeaveApplicationForm .form-control {
+    border: 0 !important;
+    background-color: var(--lightgray);
+    border-bottom: 1px solid rgb(128, 128, 128, .5) !important;
+    border-radius: 0;
+}
+
+.LeaveApplicationForm .react-calendar {
+    background: none;
+    border: 0;
+    font-family: Poppins;
+    margin-bottom: 20px;
+    width: 100%;
+    margin-right: 0 !important;
+}
+
+.react-calendar__tile--now:enabled {
+    background: var( --orange ) !important;
+    color: white !important;
+}
+
+.react-calendar__tile--active:enabled,
+.react-calendar__tile--active:enabled:hover, 
+.react-calendar__tile--active:enabled:focus {
+    background: var( --c-green ) !important;
+    color: white !important;
+}
+
+.react-calendar__tile--active:enabled:hover {
+    background: var( --dark-c-green ) !important;
+    color: white !important;
+}
+
+.react-calendar__month-view__days__day--weekend {
+    color: var( --dark-c-green ) !important;
+}
+
+.LeaveApplicationForm .react-calendar {
+    background: none;
+    border: 0;
+    font-family: Poppins;
+    margin-bottom: 20px;
+    width: 100%;
+    margin-right: 0 !important;
+}
+
+.LeaveApplicationForm textarea {
+    padding: 20px;
+}
+
+.LeaveApplicationForm .submit {
+    background-color: var(--blue);
+    color: #fff;
+    border-radius: 20px;
+    padding: 5px 20px;
+    margin-top: 30px;
+}

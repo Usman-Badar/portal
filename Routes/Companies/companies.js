@@ -2,6 +2,100 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../db/connection');
 
+const CreateLogs = require('../Employee/logs').CreateLog;
+
+router.post('/addnewcompany', ( req, res ) => {
+
+    const { company_code, code, company_name, website, logo } = req.body;
+    
+    db.query(
+        "SELECT company_code FROM `companies` WHERE company_code = ?;",
+        [ company_code ],
+        ( err, rslt ) => {
+            
+            if( err )
+            {
+                
+                res.status(500).send(err);
+                res.end();
+                
+            }else 
+            {
+                
+                if ( rslt[0] )
+                {
+                    res.send("COMPANY EXISTS");
+                    res.end();
+                }else
+                {
+                    db.query(
+                        "INSERT INTO `companies`(`company_code`, `code`, `company_name`, `website`, `logo`) VALUES (?,?,?,?,?);",
+                        [ company_code, code, company_name, website, logo ],
+                        ( err ) => {
+                            
+                            if( err )
+                            {
+                                
+                                res.status(500).send(err);
+                                res.end();
+                                
+                            }else 
+                            {
+                                
+                                CreateLogs( 
+                                    'companies', 
+                                    company_code,
+                                    "New Company " + company_name + " added",
+                                    'info'
+                                );
+                                res.send("SUCCESS");
+                                res.end();
+                
+                            }
+                
+                        }
+                    )
+                }
+
+            }
+
+        }
+    )
+
+} );
+
+router.post('/getcompanylogs', ( req, res ) => {
+
+    const { company_code } = req.body;
+
+    db.query(
+        "SELECT * \
+        FROM \
+        tbl_logs \
+        WHERE  \
+        tbl_logs.tbl_name = 'companies' AND tbl_logs.id = ?",
+        [ company_code ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                res.status(500).send(err);
+                res.end();
+
+            }else 
+            {
+                
+                res.send( rslt );
+                res.end();
+
+            }
+
+        }
+    )
+
+} );
+
 router.post('/getcompanylocations', ( req, res ) => {
 
     const { company_code } = req.body;

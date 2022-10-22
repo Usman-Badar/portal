@@ -211,7 +211,7 @@ const Files = React.memo(
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <p className="font-weight-bold mb-0"> {val.name ? val.name.split('/').pop().substring(0, 35) : null} </p>
+                                                        <p className="mb-0"> {val.name ? val.name.split('/').pop().substring(0, 25) : null} </p>
                                                     </div>
                                                     <div className="Drive_Icon">
                                                         <i className="las la-ellipsis-v mr-0"

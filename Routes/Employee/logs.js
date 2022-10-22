@@ -49,4 +49,25 @@ router.post('/newlog', ( req, res ) => {
 
 } );
 
-module.exports = router;
+const CreateLog = ( tbl_name, get_id, log, log_type, action_type ) => {
+
+    const d = new Date();
+
+    db.query(
+        "INSERT INTO `tbl_logs`(`tbl_name`, `id`, `log`, `log_time`, `log_date`, `log_type`, `action_type`) VALUES (?,?,?,?,?,?,?)",
+        [tbl_name, get_id, log, d.toTimeString(), d, log_type, action_type ? action_type : 'edit'],
+        (err) => {
+
+            if (err) {
+                console.log(err);
+            }
+
+        }
+    )
+
+}
+
+module.exports = {
+    router: router,
+    CreateLog: ( tbl_name, get_id, log, log_type, action_type ) => CreateLog( tbl_name, get_id, log, log_type, action_type )
+};

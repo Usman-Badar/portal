@@ -1,3 +1,14 @@
+export const UserLogin = ( data ) => {
+
+    return {
+        type: "USRLOGIN",
+        payload: {
+            data: data
+        }
+    }
+
+}
+
 export const EmployeeLogin = ( data ) => {
 
     return {

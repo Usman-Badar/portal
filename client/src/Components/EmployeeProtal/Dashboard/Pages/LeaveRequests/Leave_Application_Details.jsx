@@ -111,10 +111,10 @@ const Leave_Application_Details = () => {
         if ( $('.Menusearch').val().length > 0 )
             {
                 setShowX( true );
-                OnSearch( e.target.value );
+                // OnSearch( e.target.value );
             }else
             {
-                OnSearch( e.target.value );
+                // OnSearch( e.target.value );
                 setShowX( false );
             }
 
@@ -122,32 +122,6 @@ const Leave_Application_Details = () => {
     const clickcross = () =>{
         setEmpSearch( { value: '' } );
         setShowX( false );
-    }
-
-    const OnSearch = ( val ) => {
-
-        // setEmployees([]);
-        // const Data = new FormData();
-        // Data.append('SearchKey', val);
-        // Data.append('currentEmp', sessionStorage.getItem('EmpID'));
-        // axios.post('/srchemp', Data).then( res => {
-
-        //     setEmployees( res.data );
-
-        // } ).catch( err => {
-
-        //     toast.dark( err , {
-        //             position: 'top-right',
-        //             autoClose: 5000,
-        //             hideProgressBar: false,
-        //             closeOnClick: true,
-        //             pauseOnHover: true,
-        //             draggable: true,
-        //             progress: undefined,
-        //         });;
-
-        // } );
-
     }
 
     const openLeaves = () => {
@@ -310,7 +284,7 @@ const Leave_Application_Details = () => {
         setLeaveTook( [] );
         setEmpHistory( [] );
     
-        if ( status === 'Sent' )
+        if ( status === 'sent' )
         {
             UpdateStatusToWating( Requests[index].emp_id, Requests[index].leave_id, Requests[index].leave_time ? 'short leave' : 'leave' );
         }
@@ -452,45 +426,74 @@ const Leave_Application_Details = () => {
                         }
                     ]
                 );
-    
-                axios.post('/getallleaves', Data).then( res => {
-    
-                    setEmpHistory( res.data );
 
-                    if ( window.outerWidth < 992 ) {
-            
-                        openDiv1();
-            
-                        setData(
-                            [
-                                {
-                                    icon: 'lar la-comments',
-                                    txt: 'Short Leaves',
-                                    link: false,
-                                    func: () => OpenShortLeaveBox()
-                                },
-                                {
-                                    icon: 'las la-comment-dots',
-                                    txt: 'Leaves',
-                                    link: false,
-                                    func: () => OpenLeaveBox('contacts')
-                                },
-                                {
-                                    icon: 'las la-users',
-                                    txt: 'Leaves',
-                                    link: false,
-                                    func: () => openLeaves()
-                                }
-                            ]
-                        );
-            
-                    }
+                if ( window.outerWidth < 992 ) {
         
-                } ).catch( err => {
+                    openDiv1();
         
-                    console.log( err );
+                    setData(
+                        [
+                            {
+                                icon: 'lar la-comments',
+                                txt: 'Short Leaves',
+                                link: false,
+                                func: () => OpenShortLeaveBox()
+                            },
+                            {
+                                icon: 'las la-comment-dots',
+                                txt: 'Leaves',
+                                link: false,
+                                func: () => OpenLeaveBox('contacts')
+                            },
+                            {
+                                icon: 'las la-users',
+                                txt: 'Leaves',
+                                link: false,
+                                func: () => openLeaves()
+                            }
+                        ]
+                    );
         
-                } );
+                }
+    
+                // axios.post('/getallleaves', Data).then( res => {
+    
+                //     setEmpHistory( res.data );
+
+                //     if ( window.outerWidth < 992 ) {
+            
+                //         openDiv1();
+            
+                //         setData(
+                //             [
+                //                 {
+                //                     icon: 'lar la-comments',
+                //                     txt: 'Short Leaves',
+                //                     link: false,
+                //                     func: () => OpenShortLeaveBox()
+                //                 },
+                //                 {
+                //                     icon: 'las la-comment-dots',
+                //                     txt: 'Leaves',
+                //                     link: false,
+                //                     func: () => OpenLeaveBox('contacts')
+                //                 },
+                //                 {
+                //                     icon: 'las la-users',
+                //                     txt: 'Leaves',
+                //                     link: false,
+                //                     func: () => openLeaves()
+                //                 }
+                //             ]
+                //         );
+            
+                //     }
+        
+                // } ).catch( err => {
+        
+                //     console.log( err );
+        
+                // } );
     
             } ).catch( err => {
     
@@ -539,7 +542,7 @@ const Leave_Application_Details = () => {
 
         }
 
-        if ( status === 'Sent' )
+        if ( status === 'sent' )
         {
             UpdateStatusToWating( EmpHistory[index].emp_id, EmpHistory[index].leave_id, Requests[index].leave_time ? 'short leave' : 'leave' );
         }
@@ -819,7 +822,7 @@ const Leave_Application_Details = () => {
                                                             val.leave_time ?
                                                             content = <HistoryItm index={ index } onClickListner={ () => PrevRequests( index, val.request_status ) } leave="SHORT LEAVE" request_status={ val.request_status } requested_date={ val.requested_date } leave_time={ val.leave_time } />
                                                             :
-                                                            content = <HistoryItm index={ index } onClickListner={ () => PrevRequests( index, val.request_status ) } leave="LEAVE" request_status={ val.request_status } requested_date={ val.requested_date } date_from={ val.leave_from.substring(0,10) } date_to={ val.leave_to === null ? 'Single Day Leave' : val.leave_to.substring(0,10) } />
+                                                            content = <HistoryItm index={ index } onClickListner={ () => PrevRequests( index, val.request_status ) } leave="LEAVE" request_status={ val.request_status } requested_date={ val.requested_date } date_from={ val.leave_from ? val.leave_from.substring(0,10) : null } date_to={ val.leave_to === null ? 'Single Day Leave' : val.leave_to.substring(0,10) } />
 
                                                             return (
                                                                 <>

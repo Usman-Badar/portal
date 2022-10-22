@@ -62,61 +62,83 @@ router.post('/getchatemployees', ( req, res ) => {
 
     const { currentEmp } = req.body;
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        "SELECT DISTINCT employees.emp_id, \
+        employees.name, \
+        locations.location_name, \
+        companies.company_name, \
+        departments.department_name, \
+        designations.designation_name, \
+        emp_app_profile.emp_image \
+        FROM employees  \
+        RIGHT OUTER JOIN emp_chats ON employees.emp_id = emp_chats.sender_id  \
+        OR \
+        employees.emp_id = emp_chats.receiver_id \
+        LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id \
+        LEFT OUTER JOIN locations ON employees.location_code = locations.location_code \
+        LEFT OUTER JOIN companies ON employees.company_code = companies.company_code \
+        LEFT OUTER JOIN departments ON employees.department_code = departments.department_code \
+        LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code \
+        WHERE employees.emp_status = 'Active' AND emp_chats.sender_id = " + currentEmp + " OR emp_chats.receiver_id = " + currentEmp + " \
+        ORDER BY emp_chats.id DESC;",
+        ( err, rslt ) => {
 
-            if ( err )
+            if( err )
             {
 
-                
-                res.send([]);
+                res.status(500).send(err);
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "SELECT DISTINCT employees.emp_id, \
-                    employees.name, \
-                    locations.location_name, \
-                    companies.company_name, \
-                    departments.department_name, \
-                    designations.designation_name, \
-                    emp_app_profile.emp_image \
-                    FROM employees  \
-                    RIGHT OUTER JOIN emp_chats ON employees.emp_id = emp_chats.sender_id  \
-                    OR \
-                    employees.emp_id = emp_chats.receiver_id \
-                    LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id \
-                    LEFT OUTER JOIN locations ON employees.location_code = locations.location_code \
-                    LEFT OUTER JOIN companies ON employees.company_code = companies.company_code \
-                    LEFT OUTER JOIN departments ON employees.department_code = departments.department_code \
-                    LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code \
-                    WHERE emp_chats.sender_id = " + currentEmp + " OR emp_chats.receiver_id = " + currentEmp + " AND employees.emp_status = 'Active' \
-                    ORDER BY emp_chats.id DESC;",
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
-            
-                            res.status(500).send(err);
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-            
-                            res.send( rslt );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
+
+                if ( rslt.length > 0 )
+                {
+                    let lastChats = [];
+                    for ( let x = 0; x < rslt.length; x++ )
+                    {
+                        db.query(
+                            "SELECT emp_chats.* \
+                            FROM \
+                            emp_chats \
+                            WHERE sender_id = " + currentEmp + " \
+                            AND receiver_id = " + rslt[x].emp_id + " \
+                            OR receiver_id = " + currentEmp + " \
+                            AND sender_id = " + rslt[x].emp_id + " \
+                            AND sender_status != 'deleted' ORDER BY id DESC LIMIT 1",
+                            ( err, result ) => {
+                    
+                                if( err )
+                                {
+                    
+                                    res.status(500).send(err);
+                                    res.end();
+                    
+                                }else 
+                                {
+
+                                    lastChats.push( result[0] );
+                                    if ( lastChats.length === rslt.length )
+                                    {
+                                        res.send( [rslt, lastChats] );
+                                        res.end();
+                                    }
+                    
+                                }
+                    
+                            }
+                        );
                     }
-                );
+                }else
+                {
+                    res.send( [rslt, []] );
+                    res.end();
+                }
+
             }
 
         }
-    )
+    );
 
 } );
 
@@ -124,56 +146,79 @@ router.post('/getallemployees', ( req, res ) => {
 
     const { currentEmp } = req.body;
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        "SELECT employees.emp_id, \
+        employees.name, \
+        locations.location_name, \
+        companies.company_name, \
+        departments.department_name, \
+        designations.designation_name, \
+        emp_app_profile.emp_image \
+        FROM employees \
+        LEFT OUTER JOIN locations ON employees.location_code = locations.location_code \
+        LEFT OUTER JOIN companies ON employees.company_code = companies.company_code \
+        LEFT OUTER JOIN departments ON employees.department_code = departments.department_code \
+        LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code \
+        LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id \
+        WHERE employees.emp_status = 'Active' AND employees.emp_id != " + currentEmp + " ORDER BY employees.name ASC",
+        ( err, rslt ) => {
 
-            if ( err )
+            if( err )
             {
 
-                res.status(503).send(err);
+                res.status(500).send(err);
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "SELECT employees.emp_id, \
-                    employees.name, \
-                    locations.location_name, \
-                    companies.company_name, \
-                    departments.department_name, \
-                    designations.designation_name, \
-                    emp_app_profile.emp_image \
-                    FROM employees \
-                    LEFT OUTER JOIN locations ON employees.location_code = locations.location_code \
-                    LEFT OUTER JOIN companies ON employees.company_code = companies.company_code \
-                    LEFT OUTER JOIN departments ON employees.department_code = departments.department_code \
-                    LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code \
-                    LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id \
-                    WHERE employees.emp_status = 'Active' AND employees.emp_id != " + currentEmp,
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
-            
-                            res.status(500).send(err);
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-            
-                            res.send( rslt );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
+
+                if ( rslt.length > 0 )
+                {
+                    let lastChats = [];
+                    for ( let x = 0; x < rslt.length; x++ )
+                    {
+                        db.query(
+                            "SELECT emp_chats.* \
+                            FROM \
+                            emp_chats \
+                            WHERE sender_id = " + currentEmp + " \
+                            AND receiver_id = " + rslt[x].emp_id + " \
+                            OR receiver_id = " + currentEmp + " \
+                            AND sender_id = " + rslt[x].emp_id + " \
+                            AND sender_status != 'deleted' ORDER BY id DESC LIMIT 1",
+                            ( err, result ) => {
+                    
+                                if( err )
+                                {
+                    
+                                    res.status(500).send(err);
+                                    res.end();
+                    
+                                }else 
+                                {
+
+                                    lastChats.push( result[0] );
+                                    if ( lastChats.length === rslt.length )
+                                    {
+                                        res.send( [rslt, lastChats] );
+                                        res.end();
+                                    }
+                    
+                                }
+                    
+                            }
+                        );
                     }
-                );
+                }else
+                {
+                    res.send( [rslt, []] );
+                    res.end();
+                }
+
             }
 
         }
-    )
+    );
 
 } );
 
@@ -313,7 +358,7 @@ router.post('/getemployeewithchat', ( req, res ) => {
                     "SELECT emp_chats.* \
                     FROM \
                     emp_chats \
-                    WHERE sender_id = " + sender + " AND receiver_id = " + receiver + " OR receiver_id = " + sender + " AND sender_id = " + receiver + " AND sender_status != 'deleted'",
+                    WHERE sender_id = " + sender + " AND receiver_id = " + receiver + " OR receiver_id = " + sender + " AND sender_id = " + receiver + " AND sender_status != 'deleted' LIMIT 100",
                     ( err, rslt ) => {
             
                         if( err )

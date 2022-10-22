@@ -1,0 +1,16 @@
+.AttLoading {
+    width: 100%;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background-color: rgb(255, 255, 255, .5);
+}
+
+.AttLoading .loadingImage {
+    width: 100px;
+    border-radius: 50%;
+}

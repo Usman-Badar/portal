@@ -37,7 +37,7 @@ const Descussion = () => {
 
     return (
         <>
-            <div className="Descussion container-fluid mt-3">
+            <div className="Descussion container-fluid pt-3">
                 <AddNewPost />
                 {
                     PrevDescussions.length === 0 ? null :
@@ -61,11 +61,11 @@ const Descussion = () => {
                             cTime = fullTimes.toString();
 
                             return (
-                                    <div className="previous_descussions" key={ index }>
+                                    <div className="previous_descussions popUps" key={ index }>
                                         <div className="d-flex justify-content-start align-items-center mb-3">
                                             <div className="emp_img" style={{ 'backgroundImage': "url('images/employees/" + val.emp_image + "')" }}></div>
                                             <div className="pl-3">
-                                                <h6 className="mb-0">{ val.name + ' ' + val.father_name }</h6>
+                                                <p className="mb-0 color-c-green font-weight-light">{ val.name + ' ' + val.father_name }</p>
                                                 <p className="mb-0 text-secondary">{ d.getDate() + ' ' + monthNames[d.getMonth()] + ' ' + d.getFullYear() + ' at ' + cTime }</p>
                                             </div>
                                         </div>

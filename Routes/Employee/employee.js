@@ -29,6 +29,7 @@ router.post('/initializeemployee', ( req, res ) => {
             if ( err )
             {
 
+                console.log( err );
                 res.status(503).send(err);
                 res.end();
 
@@ -36,12 +37,13 @@ router.post('/initializeemployee', ( req, res ) => {
             {
                 connection.query(
                     "INSERT INTO employees (name, father_name, date_of_birth, place_of_birth, residential_address, permanent_address, emergency_person_name, emergency_person_number, landline, cell, gender, emp_status, email, children, marital_status, created_at, user_id, cnic, cnic_date_of_issue, cnic_date_of_expiry, cnic_place_of_issue, cnic_front_image, cnic_back_image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                    [ Name, FatherName, Dob, PoB, RsdtAddress, PrmtAddress, Emergency_contact_person, Emergency_contact_number, landlineHome, personal_no, gender, 'Waiting For Approval', Email, children, maritalStatus, d, parseInt( userID ), cnic, cnic_DoI, cnic_DoE, cnic_PoI, cnic_f_name, cnic_b_name ],
-                    ( err, rslt ) => {
+                    [ Name, FatherName, Dob, PoB, RsdtAddress, PrmtAddress, Emergency_contact_person, Emergency_contact_number, landlineHome, personal_no, gender, 'Waiting For Approval', Email, children, maritalStatus, d, isNaN( userID ) ? null : parseInt( userID ), cnic, cnic_DoI, cnic_DoE, cnic_PoI, cnic_f_name, cnic_b_name ],
+                    ( err ) => {
             
                         if( err )
                         {
             
+                            console.log( err );
                             res.status(500).send( err );
                             res.end();
                             connection.release();
@@ -56,6 +58,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                     if ( err )
                                     {
             
+                                        console.log( err );
                                         res.status(500).send( err );
                                         res.end();
                                         connection.release();
@@ -73,6 +76,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                                     if ( err )
                                                     {
                             
+                                                        console.log( err );
                                                         res.status(500).send( err );
                                                         res.end();
                                                         connection.release();
@@ -92,6 +96,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                                     if ( err )
                                                     {
                             
+                                                        console.log( err );
                                                         res.status(500).send( err );
                                                         res.end();
                                                         connection.release();
@@ -109,6 +114,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                                 if ( err )
                                                 {
                         
+                                                    console.log( err );
                                                     res.status(500).send( err );
                                                     res.end();
                                                     connection.release();
@@ -123,6 +129,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                                             if ( err )
                                                             {
                                     
+                                                                        console.log( err );
                                                                 res.status(500).send(err);
                                                                 res.end();
                                                                 connection.release();
@@ -134,6 +141,7 @@ router.post('/initializeemployee', ( req, res ) => {
             
                                                                     if (err) {
                                                             
+                                                                        console.log( err );
                                                                         res.status(500).send(err);
                                                                         res.end();
                                                                         connection.release();
@@ -146,6 +154,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                                             
                                                                     if (err) {
                                                             
+                                                                        console.log( err );
                                                                         res.status(500).send(err);
                                                                         res.end();
                                                                         connection.release();
@@ -158,6 +167,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                                             
                                                                     if (err) {
                                                             
+                                                                        console.log( err );
                                                                         res.status(500).send(err);
                                                                         res.end();
                                                                         connection.release();
@@ -170,6 +180,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                                             
                                                                     if (err) {
                                                             
+                                                                        console.log( err );
                                                                         res.status(500).send(err);
                                                                         res.end();
                                                                         connection.release();
@@ -182,6 +193,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                                             
                                                                     if (err) {
                                                             
+                                                                            console.log( err );
                                                                         res.status(500).send(err);
                                                                         res.end();
                                                                         connection.release();
@@ -196,6 +208,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                                             
                                                                         if (err) {
                                                             
+                                                                            console.log( err );
                                                                             res.status(500).send(err);
                                                                             res.end();
                                                                             connection.release();
@@ -211,6 +224,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                                             
                                                                         if (err) {
                                                             
+                                                                            console.log( err );
                                                                             res.status(500).send(err);
                                                                             res.end();
                                                                             connection.release();
@@ -228,6 +242,7 @@ router.post('/initializeemployee', ( req, res ) => {
                                                                         if ( err )
                                                                         {
                                                             
+                                                                            console.log( err );
                                                                             res.status(500).send(err);
                                                                             res.end();
                                                                             connection.release();
@@ -312,67 +327,61 @@ router.post('/usernameexistornot', ( req, res ) => {
 
 router.post('/getemployee', ( req, res ) => {
 
-    const { empID } = req.body;
+    const { empID, view } = req.body;
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        "SELECT employees.*, \
+        ADDDATE(employees.date_of_birth, INTERVAL 1 DAY) `date_of_birth`, \
+        ADDDATE(employees.date_of_join, INTERVAL 1 DAY) `date_of_join`, \
+        users.user_name, \
+        users.user_image, \
+        emp_app_profile.*, \
+        emp_cv.cv, \
+        emp_prf_address.proof_of_address, \
+        emp_armed_license.armed_license, \
+        emp_driving_license.driving_license, \
+        companies.company_name, \
+        companies.code AS comp_code, \
+        locations.location_name, \
+        designations.designation_name, \
+        departments.department_name \
+        FROM employees \
+        LEFT OUTER JOIN users ON employees.user_id = users.user_id \
+        LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id \
+        LEFT OUTER JOIN emp_cv ON employees.emp_id = emp_cv.emp_id \
+        LEFT OUTER JOIN emp_prf_address ON employees.emp_id = emp_prf_address.emp_id \
+        LEFT OUTER JOIN emp_armed_license ON employees.emp_id = emp_armed_license.emp_id \
+        LEFT OUTER JOIN emp_driving_license ON employees.emp_id = emp_driving_license.emp_id \
+        LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code \
+        LEFT OUTER JOIN departments ON designations.department_code = departments.department_code \
+        LEFT OUTER JOIN companies ON employees.company_code = companies.company_code \
+        LEFT OUTER JOIN locations ON employees.location_code = locations.location_code \
+        WHERE \
+        employees.emp_id = " + empID + ";" +
+        "SELECT \
+        tbl_er.sr, \
+        tbl_er.category, \
+        employees.name \
+        FROM tbl_er \
+        LEFT OUTER JOIN employees ON employees.emp_id = tbl_er.sr \
+        WHERE tbl_er.jr = ?;" +
+        ( view ? "SELECT * FROM `tbl_portal_menu` WHERE view = ? ORDER BY indexing ASC" : '' ),
+        [ empID, view ],
+        ( err, rslt ) => {
 
-            if ( err )
+            if( err )
             {
-                res.status(503).send(err);
+
+                console.log( err )
+                res.status(500).send(err);
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "SELECT employees.*, \
-                    ADDDATE(employees.date_of_birth, INTERVAL 1 DAY) `date_of_birth`, \
-                    ADDDATE(employees.date_of_join, INTERVAL 1 DAY) `date_of_join`, \
-                    users.user_name, \
-                    users.user_image, \
-                    emp_app_profile.*, \
-                    emp_cv.cv, \
-                    emp_prf_address.proof_of_address, \
-                    emp_armed_license.armed_license, \
-                    emp_driving_license.driving_license, \
-                    companies.company_name, \
-                    companies.code AS comp_code, \
-                    locations.location_name, \
-                    designations.designation_name, \
-                    departments.department_name \
-                    FROM employees \
-                    LEFT OUTER JOIN users ON employees.user_id = users.user_id \
-                    LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id \
-                    LEFT OUTER JOIN emp_cv ON employees.emp_id = emp_cv.emp_id \
-                    LEFT OUTER JOIN emp_prf_address ON employees.emp_id = emp_prf_address.emp_id \
-                    LEFT OUTER JOIN emp_armed_license ON employees.emp_id = emp_armed_license.emp_id \
-                    LEFT OUTER JOIN emp_driving_license ON employees.emp_id = emp_driving_license.emp_id \
-                    LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code \
-                    LEFT OUTER JOIN departments ON designations.department_code = departments.department_code \
-                    LEFT OUTER JOIN companies ON employees.company_code = companies.company_code \
-                    LEFT OUTER JOIN locations ON employees.location_code = locations.location_code \
-                    WHERE \
-                    employees.emp_id = " + empID,
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
-            
-                            res.status(500).send(err);
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-            
-                            res.send( rslt );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
-                    }
-                );
+
+                res.send( rslt );
+                res.end();
+
             }
 
         }
@@ -396,7 +405,7 @@ router.post('/getemployeedetails', ( req, res ) => {
             }else
             {
                 connection.query(
-                    "SELECT employees.*, companies.company_name, departments.department_name, locations.location_name, designations.designation_name, emp_app_profile.emp_image \
+                    "SELECT employees.*, companies.company_name, departments.department_name, locations.location_name, designations.designation_name, emp_app_profile.emp_image, emp_app_profile.emp_password  \
                     FROM employees \
                     LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id \
                     LEFT OUTER JOIN companies ON employees.company_code = companies.company_code \

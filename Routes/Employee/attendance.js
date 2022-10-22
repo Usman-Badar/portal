@@ -2,6 +2,27 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../db/connection');
 
+const CreateLogs = require('./logs').CreateLog;
+
+router.get('/getnextattendancetimelimit', ( req, res ) => {
+
+    db.query(
+        "SELECT valueInt1 FROM tblmisc WHERE id = 1;",
+        ( err, rslt ) => {
+
+            if ( err )
+            {
+                console.log( err );
+            }else
+            {
+                res.send( rslt );
+            }
+
+        }
+    )
+
+} );
+
 router.post('/getallemployeestodayattendancecompanywise', ( req, res ) => {
 
     const { locationID } = req.body;
@@ -64,39 +85,35 @@ router.post('/allemployeesattcompanywiseaccordingtodate', ( req, res ) => {
 
     const { CompanyCode, DateFrom, DateTo } = req.body;
 
-    db.getConnection(
-        ( err, connection ) => {
+    let q = '';
+    if ( DateTo === '' )
+    {
+        q = "SELECT emp_attendance.`id`, emp_attendance.`emp_id`, emp_attendance.`time_in`, emp_attendance.`time_out`, emp_attendance.`status`, emp_attendance.`break_in`, emp_attendance.`break_out`, ADDDATE(emp_attendance.emp_date, INTERVAL 1 DAY) `emp_date`, employees.company_code, employees.name, employees.emp_id FROM employees LEFT OUTER JOIN emp_attendance ON employees.emp_id = emp_attendance.emp_id WHERE employees.company_code = " + CompanyCode + " AND emp_attendance.emp_date = '" + DateFrom + "' ORDER BY emp_attendance.emp_date DESC;";
+    }else
+    if ( DateFrom === '' )
+    {
+        q = "SELECT emp_attendance.`id`, emp_attendance.`emp_id`, emp_attendance.`time_in`, emp_attendance.`time_out`, emp_attendance.`status`, emp_attendance.`break_in`, emp_attendance.`break_out`, ADDDATE(emp_attendance.emp_date, INTERVAL 1 DAY) `emp_date`, employees.company_code, employees.name, employees.emp_id FROM employees LEFT OUTER JOIN emp_attendance ON employees.emp_id = emp_attendance.emp_id WHERE employees.company_code = " + CompanyCode + " AND emp_attendance.emp_date = '" + DateTo + "' ORDER BY emp_attendance.emp_date DESC;";
+    }else
+    {
+        q = "SELECT emp_attendance.`id`, emp_attendance.`emp_id`, emp_attendance.`time_in`, emp_attendance.`time_out`, emp_attendance.`status`, emp_attendance.`break_in`, emp_attendance.`break_out`, ADDDATE(emp_attendance.emp_date, INTERVAL 1 DAY) `emp_date`, employees.company_code, employees.name, employees.emp_id FROM employees LEFT OUTER JOIN emp_attendance ON employees.emp_id = emp_attendance.emp_id WHERE employees.company_code = " + CompanyCode + " AND emp_attendance.emp_date BETWEEN '" + DateFrom + "' AND '" + DateTo + "' ORDER BY emp_attendance.emp_date DESC;";
+    }
 
-            if ( err )
+    db.query(
+        q,
+        ( err, rslt ) => {
+
+            if( err )
             {
 
-                res.status(503).send(err);
+                res.status(500).send(err);
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "SELECT emp_attendance.`id`, emp_attendance.`emp_id`, emp_attendance.`time_in`, emp_attendance.`time_out`, emp_attendance.`status`, emp_attendance.`break_in`, emp_attendance.`break_out`, ADDDATE(emp_attendance.emp_date, INTERVAL 1 DAY) `emp_date`, employees.company_code, employees.name, employees.emp_id FROM employees LEFT OUTER JOIN emp_attendance ON employees.emp_id = emp_attendance.emp_id WHERE employees.company_code = " + CompanyCode + " AND emp_attendance.emp_date BETWEEN '" + DateFrom + "' AND '" + DateTo + "' ORDER BY emp_attendance.emp_date DESC;",
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
 
-                            res.status(500).send(err);
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-            
-                            res.send( rslt );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
-                    }
-                )
+                res.send( rslt );
+                res.end();
+
             }
 
         }
@@ -327,7 +344,7 @@ router.post('/getempattdetails', ( req, res ) => {
             }else
             {
                 connection.query(
-                    "SELECT `id`, `emp_id`, `time_in`, `time_out`, `break_in`, `break_out`, `status`, `emp_date`  FROM emp_attendance WHERE emp_id = " + empID + " ORDER BY emp_date DESC",
+                    "SELECT `id`, `emp_id`, `time_in`, `time_out`, `break_in`, `break_out`, `status`, `emp_date` FROM emp_attendance WHERE emp_id = " + empID + " AND MONTH(`emp_date`) = MONTH(CURRENT_DATE()) AND YEAR(`emp_date`) = YEAR(CURRENT_DATE()) ORDER BY emp_date DESC",
                     ( err, rslt ) => {
             
                         if( err )
@@ -411,6 +428,231 @@ router.post('/getweeklyattendanceperformance', ( req, res ) => {
             
                     }
                 )
+            }
+
+        }
+    )
+
+} );
+
+router.post('/getthatdateemployeeslist', ( req, res ) => {
+
+    const { date_time, company } = req.body;
+
+    let q = db.query(
+        "SELECT \
+        emp_attendance.status, \
+        employees.emp_id, \
+        employees.time_in as timing, \
+        employees.name, \
+        emp_app_profile.emp_image \
+        FROM emp_attendance \
+        LEFT OUTER JOIN employees ON employees.emp_id = emp_attendance.emp_id \
+        LEFT OUTER JOIN emp_app_profile ON emp_app_profile.emp_id = emp_attendance.emp_id \
+        WHERE emp_attendance.emp_date = ? AND employees.company_code = ?;",
+        [ date_time, company ],
+        ( err, rslt ) => {
+
+            if ( err )
+            {
+                console.log( err );
+            }else
+            {
+
+                console.log( q.sql )
+                res.send( rslt );
+            }
+
+        }
+    )
+
+} );
+
+
+
+router.post('/getemployeefullattendance', ( req, res ) => {
+
+    const { emp_id, date } = req.body;
+
+    db.query(
+        "SELECT \
+        emp_machine_thumbs.*, \
+        locations.location_name \
+        FROM \
+        employees \
+        LEFT OUTER JOIN emp_machine_thumbs ON employees.emp_id = emp_machine_thumbs.emp_id \
+        LEFT OUTER JOIN locations ON emp_machine_thumbs.location = locations.location_code \
+        WHERE emp_machine_thumbs.emp_id = ? AND emp_machine_thumbs.date = ?;",
+        [ emp_id, date ],
+        ( err, rslt ) => {
+
+            if ( err )
+            {
+                console.log( err );
+            }else
+            {
+                db.query(
+                    "SELECT \
+                    emp_attendance.* \
+                    FROM \
+                    emp_attendance \
+                    WHERE emp_attendance.emp_id = ? AND emp_attendance.emp_date = ?;",
+                    [ emp_id, date ],
+                    ( err, rslt2 ) => {
+            
+                        if ( err )
+                        {
+                            console.log( err );
+                        }else
+                        {
+            
+                            db.query(
+                                "SELECT \
+                                * \
+                                FROM \
+                                tbl_logs \
+                                WHERE tbl_logs.tbl_name = 'emp_attendance' \
+                                AND \
+                                tbl_logs.id = ?",
+                                [ rslt2[0].id ],
+                                ( err, rslt3 ) => {
+                        
+                                    if ( err )
+                                    {
+                                        console.log( err );
+                                    }else
+                                    {
+                        
+                                        let arr = [];
+                                        arr.push( rslt );
+                                        arr.push( rslt2 );
+                                        arr.push( rslt3 );
+                                        res.send( arr );
+                                    }
+                        
+                                }
+                            )
+                        }
+            
+                    }
+                )
+            }
+
+        }
+    )
+
+} );
+
+router.post('/updateemployeeattendance', ( req, res ) => {
+
+    const {
+        emp_id,
+        record_id,
+        time_in,
+        time_out,
+        break_in,
+        break_out,
+        edit_by,
+        edit_by_name,
+        previous_time_in,
+        previous_time_out,
+        previous_break_in,
+        previous_break_out
+    } = req.body;
+
+    db.query(
+        "SELECT time_in FROM employees WHERE emp_id = ?;",
+        [ emp_id ],
+        ( err, time_in_data ) => {
+
+
+            if ( err )
+            {
+                console.log( err );
+            }else
+            {
+
+                let status = '';
+                let time = '';
+
+                if ( time_in_data[0].time_in === '09:00 AM' )
+                {
+                    time = '09:15:00';
+                }else
+                if ( time_in_data[0].time_in === '10:00 AM' )
+                {
+                    time = '10:15:00';
+                }else
+                if ( time_in_data[0].time_in === '11:00 AM' )
+                {
+                    time = '11:15:00';
+                }else
+                if ( time_in_data[0].time_in === '08:00 AM' )
+                {
+                    time = '08:15:00';
+                }
+
+                if ( time_in > time )
+                {
+                    status = "Late";
+                }else
+                {
+                    status = "Present";
+                }
+
+                db.query(
+                    "UPDATE emp_attendance SET status = ?, time_in = ?, time_out = ?, break_in = ?, break_out = ?, edit_by = ?, edit_date = ?, edit_time = ? WHERE id = ?;",
+                    [ status, time_in, time_out, break_in, break_out, edit_by, new Date(), new Date().toTimeString(), record_id ],
+                    ( err ) => {
+            
+            
+                        if ( err )
+                        {
+                            console.log( err );
+                        }else
+                        {
+            
+                            CreateLogs( 
+                                'emp_attendance', 
+                                record_id,
+                                edit_by_name + " (" + edit_by + ") update the attendance record. \n Previous timings was ( time_in = " + previous_time_in + ", time_out = " + previous_time_out + ", break_in = " + previous_break_in + ", break_out = " + previous_break_out + " )",
+                                'info'
+                            )
+                            res.send( 'SUCCESS' );
+                        }
+            
+                    }
+                )
+            }
+
+        }
+    )
+
+} );
+
+router.post('/getemployeecompaniesauth', ( req, res ) => {
+
+    const { emp_id } = req.body;
+
+    db.query(
+        "SELECT \
+        invtry_emp_approval_to_related_companies.company_code, \
+        employees.emp_id, \
+        employees.name, \
+        companies.company_name \
+        FROM invtry_emp_approval_to_related_companies \
+        LEFT OUTER JOIN employees ON employees.emp_id = invtry_emp_approval_to_related_companies.emp_id \
+        LEFT OUTER JOIN companies ON companies.company_code = invtry_emp_approval_to_related_companies.company_code \
+        WHERE invtry_emp_approval_to_related_companies.emp_id = ?;",
+        [ emp_id ],
+        ( err, rslt ) => {
+
+            if ( err )
+            {
+                console.log( err );
+            }else
+            {
+                res.send( rslt );
             }
 
         }

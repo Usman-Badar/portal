@@ -7,7 +7,7 @@
 .ViewPurchaseOrderContainer p,
 .ViewPurchaseOrderContainer button {
     margin-bottom: 0;
-    font-size: 13px;
+    font-size: 11px;
 }
 
 .ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer {
@@ -21,6 +21,19 @@
     margin: 15px 0;
     overflow-y: auto;
     max-height: 80vh;
+    position: relative;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Left.RequestsList .collapseBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 20px 0;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails {
+    height: 70vh;
+    overflow: auto;
 }
 
 .ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .PreviewWindow {
@@ -30,9 +43,45 @@
     overflow: auto;
 }
 
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .PreviewWindow .openBtn {
+    display: none;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
 .ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .POControls {
     padding-top: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .POControls .firstBtn {
+    background-color: var(--gray-text);
+    color: #fff;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .POControls .secondBtn {
+    background-color: var(--dark-black);
+    color: #fff;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .POControls .thirdBtn {
+    background-color: var(--c-green);
+    color: #fff;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .POControls .forthBtn {
+    background-color: var(--blue);
+    color: #fff;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .POControls .fifthBtn {
+    background-color: var(--orange);
+    color: #fff;
+}
+
+.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .POControls .sixthBtn {
+    background-color: var(--success);
+    color: #fff;
 }

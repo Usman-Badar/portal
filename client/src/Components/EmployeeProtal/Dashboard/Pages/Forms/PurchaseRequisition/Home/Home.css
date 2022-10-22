@@ -6,7 +6,7 @@
 }
 
 .Employee_Requisitions .Employee_Requisition_Left .Home .three {
-    grid-template-columns: 33.33fr 33.33fr 33.33fr;
+    grid-template-columns: 50fr 50fr;
     margin-bottom: 20px;
 }
 

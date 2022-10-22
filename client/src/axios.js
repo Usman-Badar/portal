@@ -5,9 +5,10 @@ import axios from 'axios';
 
 const instance = axios.create(
     {
-        baseURL: 'https://192.168.10.116:8888',
-        // baseURL: 'https://192.168.10.14:3443',
-        // baseURL: 'https://seaportals.herokuapp.com/',
+        baseURL: 'http://192.168.100.116:8888',
+        // baseURL: 'http://202.63.220.170:3443/',
+        // baseURL: 'http://' + window.location.host,
+        // baseURL: 'http://192.168.21.152:8888',
     }
 )
 

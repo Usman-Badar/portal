@@ -14,7 +14,7 @@
 }
 
 .PurchaseOrderContainer .PurchaseOrderGrid .Left.PreviousPurchaseOrders .PreviousPORequest i {
-    color: rgba(76, 184, 98, 255);
+    color: var(--orange);
     font-size: 25px;
     margin-right: 10px;
 }
@@ -30,7 +30,7 @@
 }
 
 .PurchaseOrderContainer .PurchaseOrderGrid .Left.PreviousPurchaseOrders .PreviousPORequest .ViewPrRequests_button button {
-    background-color: rgba(76, 184, 98, 255);
+    background-color: var(--orange);
     font-weight: bolder;
     color: white;
     width: 100%;

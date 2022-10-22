@@ -5,15 +5,15 @@ import { Link } from 'react-router-dom';
 
 const Requests = ( props ) => {
 
-    let bgColor = '#0eb8de';
+    let bgColor = 'var(--blue)';
     let txt = props.data.status;
 
     if (props.data.status === 'Approved' || props.data.status === 'Delivered') {
-        bgColor = '#307365';
+        bgColor = 'var(--success)';
         txt = "Approved By accounts";
     }
     if (props.data.status === 'Rejected') {
-        bgColor = '#d19399';
+        bgColor = 'var(--orange)';
         if ( props.data.forward_by === null )
         {
             txt = "Rejected by inventory";
@@ -24,7 +24,7 @@ const Requests = ( props ) => {
         }
     }
     if (props.data.status === 'Waiting For Approval') {
-        bgColor = '#fc9701';
+        bgColor = 'var(--c-green)';
         if ( props.EmpData.department_code !== 1 ) // DEPARTMENT IS NOT ACCOUNTS
         {
             txt = "Transferred to accounts";
@@ -56,31 +56,30 @@ const Requests = ( props ) => {
     return (
         <div className="ViewPrRequests_div" key={ props.key }>
             <div className="d-flex align-items-center justify-content-between">
-                <div className="d-flex align-items-center w-75">
+                <div className="d-flex align-items-center">
                     <img src={'images/employees/' + props.data.emp_image} alt="" />
                     <div>
                         <p className="font-weight-bolder"> {props.data.name} </p>
-                        <p> {props.data.designation_name + ' in ' + props.data.department_name + ' Department, ' + props.data.company_name} </p>
+                        <p style={ { backgroundColor: bgColor, fontSize: '10px' } } className="text-white text-center rounded-pill px-1">{ txt }</p>
                     </div>
                 </div>
-                <div className="w-25">
-                    <p className="font-weight-bolder">Total</p>
-                    <p> Rs {props.data.total.toLocaleString('en-US')}</p>
-                </div>
+                {/* <div className="">
+                    <p className="font-weight-bolder">Status</p>
+                </div> */}
             </div>
-            <div className="py-3">
+            <div className="py-2">
                 <div className="d-flex justify-content-between">
                     <div>
-                        <p className="font-weight-bolder">Date</p>
+                        <p className="font-weight-bolder">Request Date</p>
                         <p>{props.date.toDateString()}</p>
                     </div>
                     <div>
-                        <p className="font-weight-bolder">Status</p>
-                        <p style={ { backgroundColor: bgColor, fontSize: '10px' } } className="text-white text-center rounded-pill px-2">{ txt }</p>
+                        <p className="font-weight-bolder">Total</p>
+                        <p> Rs {props.data.total.toLocaleString('en-US')} </p>
                     </div>
                 </div>
             </div>
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center bg-light py-2 px-1 rounded">
                 <i class="las la-map-marker-alt"></i>
                 <div>
                     <p className="font-weight-bolder">{props.data.company_name}</p>

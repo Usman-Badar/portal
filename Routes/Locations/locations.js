@@ -136,38 +136,21 @@ router.post('/deletelocation', ( req, res ) => {
 
 router.get('/getalllocations', ( req, res ) => {
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        "SELECT * FROM locations",
+        ( err, rslt ) => {
 
-            if ( err )
+            if( err )
             {
-
-                res.status(503).send(err);
+                res.status(500).send(err);
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "SELECT * FROM locations",
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
-                            res.status(500).send(err);
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-                            
-                            res.send( rslt );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
-                    }
-                )
+                
+                res.send( rslt );
+                res.end();
+
             }
 
         }
@@ -175,41 +158,29 @@ router.get('/getalllocations', ( req, res ) => {
 
 } );
 
-router.get('/getalltablocations', ( req, res ) => {
+router.get('/getalltablocationsandmachines', ( req, res ) => {
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        "SELECT * FROM locations WHERE attendance_mode = 'tablet';" +
+        "SELECT \
+        tblthumbdevices.*, \
+        locations.location_name \
+        FROM tblthumbdevices \
+        LEFT OUTER JOIN locations ON tblthumbdevices.current_location = locations.location_code;",
+        ( err, rslt ) => {
 
-            if ( err )
+            if( err )
             {
 
-                res.status(503).send(err);
+                res.status(500).send(err);
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "SELECT * FROM locations WHERE attendance_mode = 'tablet'",
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
 
-                            res.status(500).send(err);
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-            
-                            res.send( rslt );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
-                    }
-                )
+                res.send( rslt );
+                res.end();
+
             }
 
         }
@@ -239,15 +210,15 @@ router.post('/getalllocationemployees', ( req, res ) => {
                         {
             
                             res.status(500).send(err);
-                            res.end();
                             connection.release();
+                            res.end();
             
                         }else 
                         {
 
                             connection.release();
-                            res.end();
                             res.send( rslt );
+                            res.end();
             
                         }
             

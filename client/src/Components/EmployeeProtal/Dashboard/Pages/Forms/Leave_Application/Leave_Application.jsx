@@ -270,7 +270,7 @@ const Leave_Application = () => {
                                 <h5 className="font-weight-bolder  mb-0">Purpose of Leave</h5>
                             </div>
                             <div className="Leave_Purpose_reason p-1">
-                                <textarea onChange={onChangeHandler} required name="ShortLeaveReason" minLength="30" style={{ height: '80px' }} placeholder="Discribe your reason in detail" className="form-control" ></textarea>
+                                <textarea onChange={onChangeHandler} required name="ShortLeaveReason" minLength="30" style={{ height: '80px' }} placeholder="Describe your reason in detail" className="form-control" ></textarea>
                             </div>
                         </div>
                         <div className="LeaveButton d-flex justify-content-end p-2">

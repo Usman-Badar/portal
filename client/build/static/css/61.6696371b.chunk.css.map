@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/Components/AdminModule/Components/Breadcrumbs/Breadcrumbs.css"],"names":[],"mappings":"AAAA,aACI,UAAW,CACX,iBAAkB,CAClB,eAAgB,CAChB,mBAAoB,CACpB,cACJ","file":"61.6696371b.chunk.css","sourcesContent":[".Breadcrumbs {\n    width: 100%;\n    padding: 10px 20px;\n    margin-top: 10px;\n    font-family: Poppins;\n    font-size: 12px;\n}"]}

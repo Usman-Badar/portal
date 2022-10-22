@@ -4,9 +4,9 @@ import './PreviousRequest.css';
 import axios from "../../../../../../../axios";
 
 
-import QFS from '../../../../../../../images/QFS-LOGO.PNG';
-import SBL from '../../../../../../../images/SBL-LOGO.PNG';
-import SBS from '../../../../../../../images/SEABOARD-SERVICES.PNG';
+// import QFS from '../../../../../../../images/QFS-LOGO.PNG';
+// import SBL from '../../../../../../../images/SBL-LOGO.PNG';
+// import SBS from '../../../../../../../images/SEABOARD-SERVICES.PNG';
 
 const PreviousRequest = () => {
 
@@ -47,6 +47,7 @@ const PreviousRequest = () => {
 
             })
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [ window.location.href ]
     )
     
@@ -64,12 +65,12 @@ const PreviousRequest = () => {
                             <>
                                 <div className="PR_printUI" key={ index }>
                                     <div className="PR_printUI_Div">
-                                            <h1 className=" font-weight-bolder text-center">Seaboard Group</h1>
+                                            {/* <h1 className=" font-weight-bolder text-center">Seaboard Group</h1>
                                             <div className="PR_printUI_Logos">
                                                 <div><img src={QFS} alt="QFS Logo" /></div>
                                                 <div><img src={SBS} alt="SBS Logo" /></div>
                                                 <div><img src={SBL} alt="SBL Logo" /></div>
-                                            </div>
+                                            </div> */}
                                             <h3 className="font-weight-bolder text-center" >Purchase Requisition</h3>
                                             <div className="PR_printUI_Top mt-5">
                                                 <div>
@@ -133,7 +134,7 @@ const PreviousRequest = () => {
                                             </div>
                                             <div className="w-100">
                                                 <div className="PR_printUI_Remarks mt-4" style={{ backgroundColor: "rgb(243, 243, 243)" }}>
-                                                    <div className="DIVS" ><p className="font-weight-bolder">Sumbitted By</p></div>
+                                                    <div className="DIVS" ><p className="font-weight-bolder">Requested By</p></div>
                                                     {
                                                         val.discard_emp_name === null
                                                         ?

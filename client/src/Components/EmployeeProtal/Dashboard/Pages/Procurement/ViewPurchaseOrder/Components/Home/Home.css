@@ -18,6 +18,7 @@
 .ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .Home .three .Calculate {
     width: 100%;
     background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px !important;
     padding: 10px;
     border-radius: 15px;
     font-family: Poppins;

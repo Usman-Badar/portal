@@ -362,6 +362,7 @@ router.post('/purchase_order/new', ( req, res ) => {
                                                     if( err )
                                                     {
                                         
+                                                        console.log( err );
                                                         res.status(500).send(err);
                                                         res.end();
                                                         connection.release();
@@ -379,20 +380,23 @@ router.post('/purchase_order/new', ( req, res ) => {
                                                                     if( err )
                                                                     {
                                                         
+                                                                        console.log( err );
                                                                         res.status(500).send(err);
                                                                         res.end();
                                                                         connection.release();
                                                         
                                                                     }else
                                                                     {
+
                                                                         connection.query(
                                                                             "INSERT INTO `invtry_purchase_order_venders`(po_id, vender_id) VALUES (?,?);",
-                                                                            [ rslt[0].po_id, result[0].vender_id ],
+                                                                            [ rslt[0].po_id, result[1][0].vender_id ],
                                                                             ( err ) => {
                                                                     
                                                                                 if( err )
                                                                                 {
                                                                     
+                                                                                    console.log( err );
                                                                                     res.status(500).send(err);
                                                                                     res.end();
                                                                                     connection.release();
@@ -415,6 +419,7 @@ router.post('/purchase_order/new', ( req, res ) => {
                                                                     if( err )
                                                                     {
                                                         
+                                                                        console.log( err );
                                                                         res.status(500).send(err);
                                                                         res.end();
                                                                         connection.release();
@@ -822,136 +827,121 @@ router.post('/getpurchaseorderdetails', ( req, res ) => {
 
     const { po_id, pr_id } = req.body;
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        "SELECT DISTINCT \
+        sender.name as sender_name, \
+        sender.gender as sender_gender, \
+        approve_emp.name as approve_emp_name, \
+        discard_emp.name as discard_emp_name, \
+        handle_emp.name as handle_emp_name, \
+        RequestLocations.location_name, \
+        RequestLocations.address as location_address, \
+        RequestLocations.location_phone, \
+        ShipToLocations.location_name as ShipToLocationName, \
+        ShipToLocations.address as ShipToLocationAddress, \
+        ShipToLocations.location_phone as ShipToLocationPhone, \
+        RequestCompanies.company_name as po_company_name, \
+        RequestCompanies.website as company_website, \
+        ShipToCompanies.company_name as po_shipto_company_name, \
+        ShipToCompanies.website as shipto_company_website, \
+        invtry_purchase_order.*, \
+        invtry_purchase_order.status as status  \
+        FROM invtry_purchase_order  \
+        RIGHT OUTER JOIN employees sender ON sender.emp_id = invtry_purchase_order.request_by  \
+        LEFT OUTER JOIN employees approve_emp ON approve_emp.emp_id = invtry_purchase_order.approve_by \
+        LEFT OUTER JOIN employees discard_emp ON discard_emp.emp_id = invtry_purchase_order.discard_by \
+        LEFT OUTER JOIN employees handle_emp ON handle_emp.emp_id = invtry_purchase_order.handle_by \
+        LEFT OUTER JOIN locations RequestLocations ON invtry_purchase_order.location_code = RequestLocations.location_code \
+        LEFT OUTER JOIN companies RequestCompanies ON invtry_purchase_order.company_code = RequestCompanies.company_code \
+        LEFT OUTER JOIN locations ShipToLocations ON invtry_purchase_order.shipto_location_code = ShipToLocations.location_code \
+        LEFT OUTER JOIN companies ShipToCompanies ON invtry_purchase_order.shipto_company_code = ShipToCompanies.company_code \
+        WHERE invtry_purchase_order.po_id = " + po_id + "; \
+        SELECT DISTINCT \
+        invtry_purchase_order_specifications.*  \
+        FROM invtry_purchase_order \
+        LEFT OUTER JOIN invtry_purchase_order_specifications ON invtry_purchase_order.po_id = 	invtry_purchase_order_specifications.po_id  \
+        WHERE invtry_purchase_order.po_id = " + po_id + "; \
+        SELECT DISTINCT \
+        invtry_purchase_order_bills.bill_id, \
+        invtry_purchase_order_bills.po_id, \
+        invtry_purchase_order_bills.image, \
+        invtry_purchase_order_bills.image_type \
+        FROM invtry_purchase_order \
+        LEFT OUTER JOIN invtry_purchase_order_bills ON invtry_purchase_order.po_id = 	invtry_purchase_order_bills.po_id  \
+        WHERE invtry_purchase_order.po_id = " + po_id + "; \
+        SELECT DISTINCT \
+        invtry_venders.vender_name,  \
+        invtry_venders.vender_phone,  \
+        invtry_venders.vender_address  \
+        FROM invtry_venders  \
+        RIGHT OUTER JOIN invtry_purchase_order_venders ON invtry_purchase_order_venders.vender_id = invtry_venders.vender_id  \
+        RIGHT OUTER JOIN invtry_purchase_order ON invtry_purchase_order_venders.po_id = invtry_purchase_order.po_id  \
+        WHERE invtry_purchase_order.po_id = " + po_id + "; \
+        SELECT DISTINCT \
+        sender.name as sender_name, \
+        sender.gender as sender_gender, \
+        approve_emp.name as approve_emp_name, \
+        discard_emp.name as discard_emp_name, \
+        handle_emp.name as handle_emp_name, \
+        locations.location_name, \
+        locations.address as location_address, \
+        locations.location_phone, \
+        companies.company_name as pr_company_name, \
+        companies.website as company_website, \
+        invtry_purchase_requests.*, \
+        invtry_purchase_requests.status as status  \
+        FROM invtry_purchase_requests  \
+        RIGHT OUTER JOIN employees sender ON sender.emp_id = invtry_purchase_requests.request_for  \
+        LEFT OUTER JOIN employees approve_emp ON approve_emp.emp_id = invtry_purchase_requests.approve_by \
+        LEFT OUTER JOIN employees discard_emp ON discard_emp.emp_id = invtry_purchase_requests.discard_by \
+        LEFT OUTER JOIN employees handle_emp ON handle_emp.emp_id = invtry_purchase_requests.handle_by \
+        LEFT OUTER JOIN locations ON invtry_purchase_requests.location_code = locations.location_code \
+        LEFT OUTER JOIN companies ON invtry_purchase_requests.company_code = companies.company_code \
+        WHERE invtry_purchase_requests.pr_id = " + pr_id + "; \
+        SELECT DISTINCT \
+        invtry_purchase_request_specifications.id, \
+        invtry_purchase_request_specifications.pr_id, \
+        invtry_purchase_request_specifications.description, \
+        invtry_purchase_request_specifications.reason, \
+        invtry_purchase_request_specifications.price, \
+        invtry_purchase_request_specifications.quantity, \
+        invtry_purchase_request_specifications.tax, \
+        invtry_purchase_request_specifications.tax_amount, \
+        invtry_purchase_request_specifications.amount \
+        FROM invtry_purchase_requests \
+        LEFT OUTER JOIN invtry_purchase_request_specifications ON invtry_purchase_requests.pr_id = invtry_purchase_request_specifications.pr_id  \
+        WHERE invtry_purchase_requests.pr_id = " + pr_id + "; \
+        SELECT DISTINCT \
+        invtry_purchase_request_quotations.quotation_id, \
+        invtry_purchase_request_quotations.pr_id, \
+        invtry_purchase_request_quotations.image, \
+        invtry_purchase_request_quotations.image_type \
+        FROM invtry_purchase_requests \
+        RIGHT OUTER JOIN invtry_purchase_request_quotations ON invtry_purchase_requests.pr_id = invtry_purchase_request_quotations.pr_id  \
+        WHERE invtry_purchase_requests.pr_id = " + pr_id + "; \
+        SELECT DISTINCT \
+        invtry_purchase_order_vouchers.id, \
+        invtry_purchase_order_vouchers.po_id, \
+        invtry_purchase_order_vouchers.voucher, \
+        invtry_purchase_order_vouchers.type \
+        FROM invtry_purchase_order \
+        RIght OUTER JOIN invtry_purchase_order_vouchers ON invtry_purchase_order.po_id = invtry_purchase_order_vouchers.po_id  \
+        WHERE invtry_purchase_order.po_id = " + po_id,
+        ( err, rslt ) => {
 
-            if ( err )
+            if( err )
             {
 
-                res.status(503).send(err);
+                res.status(500).send(err);
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "SELECT DISTINCT \
-                    sender.name as sender_name, \
-                    sender.gender as sender_gender, \
-                    approve_emp.name as approve_emp_name, \
-                    discard_emp.name as discard_emp_name, \
-                    handle_emp.name as handle_emp_name, \
-                    RequestLocations.location_name, \
-                    RequestLocations.address as location_address, \
-                    RequestLocations.location_phone, \
-                    ShipToLocations.location_name as ShipToLocationName, \
-                    ShipToLocations.address as ShipToLocationAddress, \
-                    ShipToLocations.location_phone as ShipToLocationPhone, \
-                    RequestCompanies.company_name as po_company_name, \
-                    RequestCompanies.website as company_website, \
-                    ShipToCompanies.company_name as po_shipto_company_name, \
-                    ShipToCompanies.website as shipto_company_website, \
-                    invtry_purchase_order.*, \
-                    invtry_purchase_order.status as status  \
-                    FROM invtry_purchase_order  \
-                    RIGHT OUTER JOIN employees sender ON sender.emp_id = invtry_purchase_order.request_by  \
-                    LEFT OUTER JOIN employees approve_emp ON approve_emp.emp_id = invtry_purchase_order.approve_by \
-                    LEFT OUTER JOIN employees discard_emp ON discard_emp.emp_id = invtry_purchase_order.discard_by \
-                    LEFT OUTER JOIN employees handle_emp ON handle_emp.emp_id = invtry_purchase_order.handle_by \
-                    LEFT OUTER JOIN locations RequestLocations ON invtry_purchase_order.location_code = RequestLocations.location_code \
-                    LEFT OUTER JOIN companies RequestCompanies ON invtry_purchase_order.company_code = RequestCompanies.company_code \
-                    LEFT OUTER JOIN locations ShipToLocations ON invtry_purchase_order.shipto_location_code = ShipToLocations.location_code \
-                    LEFT OUTER JOIN companies ShipToCompanies ON invtry_purchase_order.shipto_company_code = ShipToCompanies.company_code \
-                    WHERE invtry_purchase_order.po_id = " + po_id + "; \
-                    SELECT DISTINCT \
-                    invtry_purchase_order_specifications.*  \
-                    FROM invtry_purchase_order \
-                    LEFT OUTER JOIN invtry_purchase_order_specifications ON invtry_purchase_order.po_id = 	invtry_purchase_order_specifications.po_id  \
-                    WHERE invtry_purchase_order.po_id = " + po_id + "; \
-                    SELECT DISTINCT \
-                    invtry_purchase_order_bills.bill_id, \
-                    invtry_purchase_order_bills.po_id, \
-                    invtry_purchase_order_bills.image, \
-                    invtry_purchase_order_bills.image_type \
-                    FROM invtry_purchase_order \
-                    LEFT OUTER JOIN invtry_purchase_order_bills ON invtry_purchase_order.po_id = 	invtry_purchase_order_bills.po_id  \
-                    WHERE invtry_purchase_order.po_id = " + po_id + "; \
-                    SELECT DISTINCT \
-                    invtry_venders.vender_name,  \
-                    invtry_venders.vender_phone,  \
-                    invtry_venders.vender_address  \
-                    FROM invtry_venders  \
-                    RIGHT OUTER JOIN invtry_purchase_order_venders ON invtry_purchase_order_venders.vender_id = invtry_venders.vender_id  \
-                    RIGHT OUTER JOIN invtry_purchase_order ON invtry_purchase_order_venders.po_id = invtry_purchase_order.po_id  \
-                    WHERE invtry_purchase_order.po_id = " + po_id + "; \
-                    SELECT DISTINCT \
-                    sender.name as sender_name, \
-                    sender.gender as sender_gender, \
-                    approve_emp.name as approve_emp_name, \
-                    discard_emp.name as discard_emp_name, \
-                    handle_emp.name as handle_emp_name, \
-                    locations.location_name, \
-                    locations.address as location_address, \
-                    locations.location_phone, \
-                    companies.company_name as pr_company_name, \
-                    companies.website as company_website, \
-                    invtry_purchase_requests.*, \
-                    invtry_purchase_requests.status as status  \
-                    FROM invtry_purchase_requests  \
-                    RIGHT OUTER JOIN employees sender ON sender.emp_id = invtry_purchase_requests.request_for  \
-                    LEFT OUTER JOIN employees approve_emp ON approve_emp.emp_id = invtry_purchase_requests.approve_by \
-                    LEFT OUTER JOIN employees discard_emp ON discard_emp.emp_id = invtry_purchase_requests.discard_by \
-                    LEFT OUTER JOIN employees handle_emp ON handle_emp.emp_id = invtry_purchase_requests.handle_by \
-                    LEFT OUTER JOIN locations ON invtry_purchase_requests.location_code = locations.location_code \
-                    LEFT OUTER JOIN companies ON invtry_purchase_requests.company_code = companies.company_code \
-                    WHERE invtry_purchase_requests.pr_id = " + pr_id + "; \
-                    SELECT DISTINCT \
-                    invtry_purchase_request_specifications.id, \
-                    invtry_purchase_request_specifications.pr_id, \
-                    invtry_purchase_request_specifications.description, \
-                    invtry_purchase_request_specifications.reason, \
-                    invtry_purchase_request_specifications.price, \
-                    invtry_purchase_request_specifications.quantity, \
-                    invtry_purchase_request_specifications.tax, \
-                    invtry_purchase_request_specifications.amount \
-                    FROM invtry_purchase_requests \
-                    LEFT OUTER JOIN invtry_purchase_request_specifications ON invtry_purchase_requests.pr_id = invtry_purchase_request_specifications.pr_id  \
-                    WHERE invtry_purchase_requests.pr_id = " + pr_id + "; \
-                    SELECT DISTINCT \
-                    invtry_purchase_request_quotations.quotation_id, \
-                    invtry_purchase_request_quotations.pr_id, \
-                    invtry_purchase_request_quotations.image, \
-                    invtry_purchase_request_quotations.image_type \
-                    FROM invtry_purchase_requests \
-                    RIGHT OUTER JOIN invtry_purchase_request_quotations ON invtry_purchase_requests.pr_id = invtry_purchase_request_quotations.pr_id  \
-                    WHERE invtry_purchase_requests.pr_id = " + pr_id + "; \
-                    SELECT DISTINCT \
-                    invtry_purchase_order_vouchers.id, \
-                    invtry_purchase_order_vouchers.po_id, \
-                    invtry_purchase_order_vouchers.voucher, \
-                    invtry_purchase_order_vouchers.type \
-                    FROM invtry_purchase_order \
-                    RIght OUTER JOIN invtry_purchase_order_vouchers ON invtry_purchase_order.po_id = invtry_purchase_order_vouchers.po_id  \
-                    WHERE invtry_purchase_order.po_id = " + po_id,
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
-            
-                            res.status(500).send(err);
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-            
-                            res.send( rslt );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
-                    }
-                );
+
+                console.log( rslt[5] );
+                res.send( rslt );
+                res.end();
+
             }
 
         }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 // IMPORT CSS FILE
 import './SearchFilters.css';
@@ -11,6 +11,13 @@ const SearchFilters = React.memo(
     const [Companies, setCompanies] = useState([]);
     const [Locations, setLocations] = useState([]);
 
+    // const [ WindowSize, setWindowSize ] = useState(
+    //     {
+    //         width: 0,
+    //         height: 0
+    //     }
+    // );
+
     useEffect(
         () => {
 
@@ -20,7 +27,7 @@ const SearchFilters = React.memo(
             $('.closebutton').hide();
 
         }, [ props.Locations, props.Companies ]
-    )
+    );
 
     const showfilter = () =>{
 
@@ -110,7 +117,7 @@ const SearchFilters = React.memo(
                         </div>
                     </div>
                     <div className='filtericon' onClick={showfilter}>
-                            <i className="las la-filter"></i>
+                        <i className="las la-filter"></i>
                     </div>
                 </div>
     );

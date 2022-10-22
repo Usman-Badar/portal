@@ -1,46 +1,50 @@
-.Admin_login {
+.adminLoginContainer {
     width: 100%;
-    min-height: 100vh;
-    position: relative;
+    height: 100vh;
     display: flex;
-    justify-content: center;
     align-items: center;
-}
-
-.Admin_login .Admin_login-content {
-    width: 25%;
-    height: min-content;
-    text-align: center;
+    justify-content: center;
     font-family: Poppins;
+    background-color: var( --lightgray );
 }
 
-.Admin_login .Admin_login-content i {
-    font-size: 100px;
-    border: 1px solid #000;
-    border-radius: 50%;
-    padding: 10px;
-    margin-bottom: 30px;
+.adminLoginContainer .adminLoginContainerContent {
+    width: 50%;
+    padding: 30px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #fff;
 }
 
-.Admin_login .Admin_login-content .form-control {
-    border: 0;
-    border-bottom: 1px solid lightgray;
-    border-radius: 0;
-    margin-bottom: 50px;
+.adminLoginContainer .adminLoginContainerContent .logo {
+    width: 120px;
+    height: 120px;
 }
 
-.Admin_login .Admin_login-content .btn {
-    background: #57b846;
-    color: #fff;
+.adminLoginContainer .adminLoginContainerContent label {
+    margin-bottom: 0;
+    text-align: left;
     display: block;
-    width: 100%;
-    border-radius: 30px;
-    box-shadow: 0 10px 30px 0 rgb(87 184 70 / 50%);
-    padding: 10px;
-    transition: .5s;
+    font-size: 13px;
+    font-weight: bold;
 }
 
-.Admin_login .Admin_login-content .btn:hover {
-    background-color: #000;
-    box-shadow: 0 10px 30px 0 rgb(51 51 51 / 50%);
+.adminLoginContainer .adminLoginContainerContent input {
+    border: 0 !important;
+    background-color: var(--lightgray);
+    border-bottom: 1px solid rgb(128, 128, 128, .5) !important;
+    border-radius: 0;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.adminLoginContainer .adminLoginContainerContent .submit {
+    background-color: var( --orange );
+    color: #fff;
+    outline: none;
+    border: 0;
+    font-size: 13px;
+    border-radius: 20px;
+    padding: 8px 35px !important;
 }

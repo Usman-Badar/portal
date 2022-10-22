@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/no-distracting-elements */
 import React, { useEffect } from 'react';
 
 import './TopBar.css';
@@ -34,6 +36,29 @@ const TopBar = () => {
                 $('.emp_dropdown').toggle(300);
             });
 
+            $('.content').on('click', () => {
+                $('.emp_dropdown').hide(300);
+            });
+
+            $('.Dashboard_sideBar .links').on('click', () => {
+                $('.emp_dropdown').hide(300);
+            });
+
+            document.addEventListener(
+                'keypress',
+                ( e ) => {
+
+                    if ( e.shiftKey && e.keyCode === 43 )
+                    {
+                        dispatch( ShowSideBar( true ) );
+                    }else if ( e.shiftKey && e.keyCode === 45 )
+                    {
+                        dispatch( ShowSideBar( false ) );
+                    }
+
+                }
+            )
+
         }, []
     );
 
@@ -46,14 +71,9 @@ const TopBar = () => {
     return (
         <>
             <div className="Dashboard_topbar d-center">
-                <div className="topbar_news d-450-none">
-                    <p className="mb-0" style={{ "whiteSpace": 'nowrap' }}>
-                        {/* eslint-disable-next-line jsx-a11y/no-distracting-elements */}
-                        <marquee direction="left">
-                            Tesla is quickly responding to the NHTSA's investigation of in-dash gaming while cars are moving. The Guardian has learned Tesla will deliver an update disabling on-the-move Passenger Play. A spokeswoman for the regulator said Tesla promised the change after
-                        </marquee>
-                    </p>
-                </div>
+                <marquee direction="left" className="topbar_news d-450-none">
+                    Tesla is quickly responding to the NHTSA's investigation of in-dash gaming while cars are moving. The Guardian has learned Tesla will deliver an update disabling on-the-move Passenger Play. A spokeswoman for the regulator said Tesla promised the change after
+                </marquee>
                 <div className=" d-450-block"></div>
                 <div className="icons d-center">
                     <Notifications Data={ Data } />
@@ -61,13 +81,9 @@ const TopBar = () => {
                         <div className="emp_img" style={ { "backgroundImage" : "url('images/employees/" + Data.emp_image + "')" } }></div>
                         <div className="emp_dropdown">
                             <p className="pl-4 pb-2 mb-1 font-weight-bold border-bottom"> { encryptor.decrypt( Data.login_id ) } </p>
-                            <NavLink to="/empprofile" className="d-center links">
+                            <NavLink to="/profile/personal/info" className="d-center links">
                                 <div className="pr-3"><i className="las la-user"></i></div>
                                 <div className="links_txt">Profile</div>
-                            </NavLink>
-                            <NavLink to="/" className="d-center links">
-                                <div className="pr-3"><i className="las la-tasks"></i></div>
-                                <div className="links_txt">Settings</div>
                             </NavLink>
                             <NavLink to="/logout" className="d-center links">
                                 <div className="pr-3"><i className="las la-sign-out-alt"></i></div>
@@ -77,7 +93,7 @@ const TopBar = () => {
                     </div>
                     <div className="threeDots d-1400-block" onClick={ TrueOrFalse }>
                         <button className="btn p-0 m-0">
-                            <i className="las la-ellipsis-v la-2x"></i>
+                            <i className="las la-ellipsis-v" style={ { color: "var(--gray-text)" } }></i>
                         </button>
                     </div>
                 </div>

@@ -1,0 +1,4 @@
+11:07:07 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: q.sql is not a function
+

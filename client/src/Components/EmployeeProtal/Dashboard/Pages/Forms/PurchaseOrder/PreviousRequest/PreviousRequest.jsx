@@ -231,7 +231,7 @@ const PreviousRequest = ( props ) => {
                                         <div><p className="font-weight-bolder">No</p></div>
                                         <div><p className="font-weight-bolder">Description</p></div>
                                         <div><p className="font-weight-bolder">Quantity</p></div>
-                                        <div><p className="font-weight-bolder" >Estimated Cost</p></div>
+                                        <div><p className="font-weight-bolder" >Unit Price</p></div>
                                         <div><p className="font-weight-bolder" >Tax</p></div>
                                         <div><p className="font-weight-bolder">Total Cost</p></div>
                                     </div>

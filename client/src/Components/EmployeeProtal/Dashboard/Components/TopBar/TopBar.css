@@ -1,18 +1,16 @@
 .Dashboard_topbar {
-    width: 82vw;
-    height: min-content;
+    width: 100%;
+    height: 45px;
     justify-content: space-between !important;
-    padding: 10px 30px;
-    background-color: #fff;
-    position: fixed;
-    top: 0;
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-    z-index: 1;
+    padding: 5px 15px 5px 30px;
+    background-color: var(--dark-black);
+    color: var(--gray-text);
+    z-index: 100;
 }
 
 .Dashboard_topbar .topbar_news {
     overflow: hidden;
-    font-family: Quicksand;
+    font-family: Maersk-Head;
     font-size: 12px;
     padding: 0 50px 0 0;
 }
@@ -22,16 +20,20 @@
     cursor: pointer;
 }
 
+.Dashboard_topbar .icons .btn {
+    font-size: 25px;
+}
+
 .Dashboard_topbar .icons .emp_img_container {
     position: relative;
 }
 
 .Dashboard_topbar .icons .emp_img_container .emp_dropdown {
     position: absolute;
-    top: 100%;
-    left: -120px;
-    width: 180px;
-    padding: 20px 0;
+    top: 130%;
+    left: -100px;
+    width: 150px;
+    padding: 15px 0;
     background-color: #fff;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     font-size: 12px;
@@ -44,7 +46,7 @@
 .Dashboard_topbar .icons .emp_img_container .emp_dropdown .links {
     display: flex;
     justify-content: start;
-    padding: 5px 25px;
+    padding: 5px 20px;
     font-family: Poppins;
     color: #1A2226;
     transition: .5s;
@@ -137,11 +139,12 @@
     color: #ECF0F5;
 }
 
-@media only screen and (max-width: 1400px) {
+
+/* @media only screen and (max-width: 1400px) {
     .Dashboard_topbar {
         width: 100vw;
     }
-}
+} */
 
 @media only screen and (max-width: 450px) {
     .Dashboard_topbar {

@@ -1,0 +1,36 @@
+10:00:29 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read property '0' of undefined
+
+11:09:36 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: missing ) after argument list
+
+11:10:14 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: missing ) after argument list
+
+11:11:04 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: rslt[0].date.substring is not a function
+
+11:14:16 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: rslt[0].date.substring is not a function
+
+11:14:46 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: rslt[0].date.substring is not a function
+
+12:20:32 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read property 'device_id' of undefined
+
+12:21:24 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: current_location is not defined
+
+12:26:47 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: current_location is not defined
+

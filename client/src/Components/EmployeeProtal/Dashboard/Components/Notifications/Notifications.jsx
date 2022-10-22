@@ -5,11 +5,10 @@ import axios from '../../../../../axios';
 import { Link, useHistory } from 'react-router-dom';
 
 import socket from '../../../../../io';
-// import { getStore, newStore, deleteStore } from '../../../../../storage';
+import Icon from '../../../../../images/logo192.png';
 
 function Notifications( props ) {
 
-    let GetNotify;
     const history = useHistory();
     const [ Notificationss, setNotificationss ] = useState([]);
     const [ Permisstion, setPermisstion ] = useState( true );
@@ -17,23 +16,10 @@ function Notifications( props ) {
     useEffect(
         () => {
 
-            if (Notification.permission !== 'granted') {
-
-                Notification.requestPermission().then(permission => {
-
-                    if (permission === 'granted') {
-                        GetNotify();
-                    }else
-                    {
-                        setPermisstion( false );
-                    }
-
-                })
-
-            } else {
+            if ( props.Data.emp_id )
+            {
                 GetNotify();
             }
-
             socket.on(
                 'NotifyTheUser', ( notify_to ) => {
     
@@ -46,7 +32,8 @@ function Notifications( props ) {
                 }
             )
 
-        }, [ GetNotify, props.Data.emp_id ]
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [ props.Data.emp_id ]
     )
 
     const getOS = () => {
@@ -72,7 +59,7 @@ function Notifications( props ) {
         return os;
     }
 
-    GetNotify = () => {
+    const GetNotify = () => {
 
         const Data = new FormData();
         Data.append('EmpID', sessionStorage.getItem('EmpID'));
@@ -98,7 +85,11 @@ function Notifications( props ) {
                 {
                     axios.post('/notified', Data).then(res => {
     
-                        if (getOS() !== 'iOS' && getOS() !== 'Android') {
+                        if 
+                        (
+                            getOS() !== 'iOS' && getOS() !== 'Android'
+                        ) 
+                        {
                             Note(res.data.length, sender, txt);
                         }
                     
@@ -108,9 +99,6 @@ function Notifications( props ) {
                         console.log(err);
             
                     });
-                }else
-                {
-                    document.title = 'Employee Portal';
                 }
     
             }).catch(err => {
@@ -124,18 +112,35 @@ function Notifications( props ) {
 
     const Note = ( length, sender, body ) => {
 
-        if ( Permisstion )
-        {
-            document.title = 'Employee Portal Has (' + length + ') Notifications';
-            let notification = new Notification('Employee Portal', {
-                icon: 'https://p.kindpng.com/picc/s/12-120109_employee-self-service-icon-hd-png-download.png',
+        if (Notification.permission !== 'granted') {
+
+            Notification.requestPermission().then(permission => {
+
+                if (permission === 'granted') {
+                    let notification = new Notification('Web Portal', {
+                        icon: Icon,
+                        body: body,
+                    });
+                    notification.onclick = function () {
+                        window.open('https://192.168.10.14/');
+                    };
+                }else
+                {
+                    setPermisstion( false );
+                }
+
+            })
+
+        } else {
+            let notification = new Notification('Web Portal', {
+                icon: Icon,
                 body: body,
             });
             notification.onclick = function () {
                 window.open('https://192.168.10.14/');
             };
-            
         }
+        
 
     }
     const OnSeenNotifications = () => {
@@ -204,7 +209,7 @@ function Notifications( props ) {
     return ( 
         
         <>
-            <div className="px-3 notification" onMouseLeave={OnSeenNotifications}>
+            <div className="pl-3 pr-1 notification d-center" onMouseLeave={OnSeenNotifications}>
                 {
                     Notificationss.length > 0
                         ?
@@ -220,21 +225,15 @@ function Notifications( props ) {
                                 (val, index) => {
 
                                     return (
-                                        <Link to={ val.link } className="list" key={index}>
-                                            <p className="font-weight-bold mb-0" onClick={() => GotoLink(val.event_id)}> {val.notification_title} </p>
-                                            <p className="mb-0 text-secondary" onClick={() => GotoLink(val.event_id)}>
+                                        <div className="list" key={index}>
+                                            <p className="font-weight-bold mb-0 first" onClick={() => GotoLink(val.event_id)}> {val.notification_title} </p>
+                                            <p className="mb-0 py-1 text-secondary second" onClick={() => GotoLink(val.event_id)}>
+                                                "
                                                 {val.notification_body}
+                                                "
                                             </p>
-                                            <div className="d-flex justify-content-between font-weight-bold">
-                                                <p className="mb-0" onClick={() => GotoLink(val.event_id)}>
-                                                    {val.notification_date.toString().substring(0, 10)}
-                                                </p>
-                                                <p className="mb-0" onClick={() => GotoLink(val.event_id)}>
-                                                    {val.notification_time}
-                                                </p>
-                                            </div>
                                             <div className="cross" onClick={() => RemoveNotification(val.notification_id)}><i className="las la-times"></i></div>
-                                        </Link>
+                                        </div>
                                     )
                                 }
                             )

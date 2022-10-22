@@ -1,0 +1,144 @@
+10:23:15 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+10:24:43 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: app.use() requires a middleware function
+
+10:28:48 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+10:28:48 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+10:34:38 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+10:34:38 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+10:59:29 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+11:04:10 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'challan_id')
+
+11:05:17 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'challan_id')
+
+11:06:18 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'challan_id')
+
+11:06:18 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'challan_id')
+
+11:06:18 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'challan_id')
+
+11:08:13 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'challan_id')
+
+11:08:28 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'challan_id')
+
+11:19:00 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'challan_id')
+
+11:21:00 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'challan_id')
+
+11:21:26 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'challan_id')
+
+12:45:33 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'login_id')
+
+12:45:57 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'login_id')
+
+12:46:19 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: Unexpected token ']'
+
+12:46:38 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: Unexpected token ']'
+
+12:46:45 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'login_id')
+
+12:57:25 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: x is not defined
+
+12:57:25 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: x is not defined
+
+12:57:25 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: x is not defined
+
+12:57:25 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: x is not defined
+
+12:57:25 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: x is not defined
+
+13:00:35 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: x is not defined
+
+14:30:29 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: Malformed arrow function parameter list
+
+14:30:37 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: Malformed arrow function parameter list
+
+14:31:14 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: Malformed arrow function parameter list
+
+14:31:42 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: Malformed arrow function parameter list
+
+14:31:46 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: Malformed arrow function parameter list
+
+14:31:52 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: app.use() requires a middleware function
+
+14:31:56 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: app.use() requires a middleware function
+
+14:32:18 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: Malformed arrow function parameter list
+

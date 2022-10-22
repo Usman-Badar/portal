@@ -67,3 +67,23 @@
     font-family: Noto;
     src: url(./fonts/NotoSerif-Regular.ttf);
 }
+
+@font-face {
+    font-family: CourierPrime;
+    src: url(./fonts/CourierPrime-Regular.ttf);
+}
+
+@font-face {
+    font-family: Cinzel;
+    src: url(./fonts/Cinzel-Regular.ttf);
+}
+
+@font-face {
+    font-family: Maersk-Head;
+    src: url(./fonts/MaerskHeadline-Regular.woff2);
+}
+
+@font-face {
+    font-family: Maersk;
+    src: url(./fonts/MaerskText-Regular.woff2);
+}

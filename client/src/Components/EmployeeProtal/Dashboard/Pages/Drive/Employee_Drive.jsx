@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState, lazy, Suspense, useMemo } from 'react';
 import './Employee_Drive.css';
 
@@ -29,6 +30,14 @@ const Employee_Drive = () => {
         facingMode: 'environment'
     }
 
+    const options = {
+        onUploadProgress: (progressEvent) => {
+            const {loaded, total} = progressEvent
+            let percent = Math.floor(loaded * 100 / total)
+            setProgress(percent);
+        },
+    }
+
     const [ StartLoading, setStartLoading ] = useState( false );
     const [ Data, setData ] = useState([]);
     const [ Drive, setDrive ] = useState([]);
@@ -36,6 +45,7 @@ const Employee_Drive = () => {
     const [ ShowModal, setShowModal ] = useState(false);
     const [ Loading, setLoading ] = useState(<></>);
     const [ Content, setContent ] = useState();
+    const [ progress, setProgress ] = useState(0);
     const [ ImageData, setImageData ] = useState(
         {
             image: '',
@@ -472,6 +482,8 @@ const Employee_Drive = () => {
         onUpload(val);
 
     }
+    
+    console.log(progress)
 
     const onUpload = ( data ) => {
 

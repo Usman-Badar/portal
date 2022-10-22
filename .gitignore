@@ -1,5 +1,3 @@
-node_modules
-clients
-attendance
-routine.xlsx
-ReadMe.txt
+node_modules/
+client/public/css/line-awesome/
+build/css/line-awesome/

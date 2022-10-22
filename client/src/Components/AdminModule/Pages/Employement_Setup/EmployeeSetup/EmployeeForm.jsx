@@ -231,6 +231,7 @@ const EmployeeForm = () => {
     const takePhoto = () => {
 
         var screenshot = refs.current.getScreenshot();
+        console.log( screenshot );
         setEmployee( { ...Employee, Image: screenshot } );
         setempImages(screenshot);
         $('.close').trigger('click');
@@ -431,7 +432,9 @@ const EmployeeForm = () => {
 
         }
 
-        reader.readAsDataURL( event.target.files[0] );
+        if ( event.target.files[0] ) {
+            reader.readAsDataURL( event.target.files[0] );
+        }
 
     }
 

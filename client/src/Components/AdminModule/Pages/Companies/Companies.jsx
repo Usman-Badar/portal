@@ -1,214 +1,213 @@
 import React, { useEffect, useState } from 'react';
-
 import './Companies.css';
 
 import axios from '../../../../axios';
-import $ from 'jquery';
-
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const Companies = () => {
 
-    const [ Companies, setCompanies ] = useState([]);
-    const [ Company, setCompany ] = useState(
+    const [ Form, setForm ] = useState(
         {
-            company_code: '', company_name: ''
-        }
-    );
-    const [ AddComp, setAddComp ] = useState(
-        {
-            CompName: ''
+            company_code: "",
+            code: "",
+            company_name: "",
+            website: null,
+            logo: null
         }
     )
+    const [ Companies, setCompanies ] = useState([]);
+    const [ Details, setDetails ] = useState(
+        {
+            companyInfo: null,
+            logs: []
+        }
+    );
 
     useEffect(
         () => {
 
-            GetAllCompanies();
+            GetCompanies();
 
         }, []
     );
 
-    const GetAllCompanies = () => {
+    const OpenCompanyDetails = ( index ) => {
 
-        axios.get('/getallcompanies').then( response => {
-
-            setCompanies( response.data );
-
-        } ).catch( error => {
-
-            toast.dark(error, {
-                position: 'top-right',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-
-        } );
+        const data = Companies[index];
+        setDetails(
+            {
+                ...Details,
+                companyInfo: data
+            }
+        )
 
     }
 
-    // Function onchange which is called to store data into usestate()
+    const GetCompanies = () => {
+
+        axios.get(
+            '/getcompaniescodes'
+        ).then(
+            res => {
+
+                setCompanies( res.data );
+
+            }
+        ).catch(
+            err => {
+
+                console.log( err );
+
+            }
+        )
+
+    }
+
     const onChangeHandler = ( e ) => {
 
         const { name, value } = e.target;
-        const setVal = {
-            ...AddComp,
+        const val = {
+            ...Form,
             [name]: value
-        }
-        setAddComp( setVal );
+        };
+
+        setForm( val );
 
     }
 
-    const AddCompanies = ( e ) => {
+    const onImageUpload = (event) => {
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+
+            if (reader.readyState === 2) {
+
+                setForm(
+                    {
+                        ...Form,
+                        logo: reader.result
+                    }
+                );
+
+            }
+
+        }
+
+        reader.readAsDataURL(event.target.files[0]);
+
+    }
+
+    const AddNewCompany = ( e ) => {
 
         e.preventDefault();
-
-        const Data = new FormData();
-        Data.append('depart', AddComp.CompName);
-
-        axios.post('/adddepartment', Data).then( () => {
-
-            GetAllCompanies();
-            $("input[name='CompName']").val('');
-
-        } ).catch( err => {
-
-            toast.dark(err, {
-                position: 'top-right',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-
-        } );
-
-    }
-
-    const OnEdit = ( id, indexx ) => {
-
-        let company = Companies.filter(
-            (val, index, arr) => {
-                return index === indexx;
+        axios.post(
+            '/addnewcompany',
+            {
+                company_code: Form.company_code,
+                code: Form.code,
+                company_name: Form.company_name,
+                website: Form.website,
+                logo: Form.logo
             }
-        );
+        ).then(
+            res => {
 
-        const setValues = {
-            ...Company,
-            company_name: company[0].company_name,
-            company_code: id
-        }
+                if ( res.data === 'COMPANY EXISTS' )
+                {
+                    alert("Company With Company Code: " + Form.company_code + " Already Exists");
+                    return false;
+                }
+                alert("New Company " + Form.company_name + " Added");
+                GetCompanies();
+                setForm(
+                    {
+                        company_code: "",
+                        code: "",
+                        company_name: "",
+                        website: null,
+                        logo: null
+                    }
+                )
 
-        setCompany(setValues);
-        $('.editModalBtn').trigger('click');
+            }
+        ).catch(
+            err => {
+
+                console.log( err );
+
+            }
+        )
 
     }
 
-    const OnDelete = ( id ) => {
+    const Back = () => {
 
-        const Data = new FormData();
-        Data.append('departID', id);
-        axios.post('/deletedepartmentname', Data).then( () => {
+        setDetails(
+            {
+                companyInfo: null,
+                logs: []
+            }
+        )
 
-            GetAllCompanies();
-
-            setCompany(
-                {
-                    company_code: '', company_name: ''
-                }
-            );
-            toast.dark('Company Deleted', {
-                position: 'top-right',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-
-        } ).catch( err => {
-
-            toast.dark(err, {
-                position: 'top-right',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-
-        } );
-        
     }
 
     return (
         <>
-            <ToastContainer />
-            <div className="Admin_Companies d-center">
+            <div className='AdminCompanies'>
 
-                <div className="Admin_Companies-content">
-                    <h3>Add New Company</h3>
+                <div className='left'>
+                    <CompanyForm 
+                        Form={ Form }
+                        onImageUpload={ onImageUpload }
+                        onChangeHandler={ onChangeHandler }
+                        AddNewCompany={ AddNewCompany }
+                    />
+                </div>
 
-                    <form className="addCompanies btn-group" onSubmit={ AddCompanies }>
-                        <input onChange={ onChangeHandler } type="text" className="form-control" placeholder="Company Name" name="CompName" required />
-                        <button className="btn" type="submit">Add Company</button>
-                    </form>
+                {
+                    Details.companyInfo === null
+                    ?
+                    Companies.length > 0
+                    ?
+                    <div className='right'>
 
-                    <h3>All Companies</h3>
-                    <div className="companies">
                         {
-                            Companies.length === 0
-                                ?
-                                <h3 className="text-center mb-0">No Company Found</h3>
-                                :
-                                Companies.map(
-                                    (val, index) => {
-                                        return (
-                                            <div className="d-flex align-items-center border-bottom mb-2" key={index}>
-                                                <div className="index"> { index + 1 } </div>
-                                                <div>
-                                                    <span style={{ 'color': 'rgb(128, 128, 128, .5)' }}>Company Name</span>
-                                                    <h5> { val.company_name } </h5>
-                                                </div>
-                                                <div className="ml-auto d-flex align-items-center operations">
-                                                    <div className="px-3">
-                                                        <button className="btn" onClick={ () => OnEdit( val.company_code, index ) } style={{ 'backgroundColor': '#1EC916' }}><i className="las la-edit"></i> Edit</button>
-                                                    </div>
-                                                    <div className="px-3">
-                                                        <button className="btn" onClick={ () => OnDelete( val.company_code ) } style={{ 'backgroundColor': '#FEC400' }}><i className="las la-trash"></i> Remove</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
+                            Companies.map(
+                                ( val, index ) => {
+
+                                    let src;
+                                    if ( val.logo === null )
+                                    {
+                                        src = 'https://pbs.twimg.com/profile_images/578844000267816960/6cj6d4oZ_400x400.png';
+                                    }else
+                                    {
+                                        src = val.logo;
                                     }
-                                )
+
+                                    return (
+                                        <Company
+                                            val={ val }
+                                            src={ src }
+                                            index={ index }
+                                            OpenCompanyDetails={ OpenCompanyDetails }
+                                        />
+                                    )
+
+                                }
+                            )
                         }
-                    </div>
 
-                </div>
-
-                <button type="button" className="btn btn-primary d-none editModalBtn" data-toggle="modal" data-target="#departmentModal">
-                    Launch demo modal
-                </button>
-                <div className="modal fade" id="departmentModal" role="dialog" aria-labelledby="departmentModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered" role="document">
-                        <div className="modal-content">
-                            <div className="modal-body">
-                                <input type="text" value={Company.company_name} className="form-control mb-3" placeholder="Category Name" name="editCtgryName" onChange={ onChangeHandler } pattern="[a-zA-Z][a-zA-Z\s]*" minLength="3" required />
-                                <button data-dismiss="modal" className="btn d-block ml-auto">Update Company</button>
-                            </div>
-                        </div>
                     </div>
-                </div>
+                    :
+                    <h3 className='text-center'>No Company Found</h3>
+                    :
+                    <CompanyDetails
+                        data={ Details.companyInfo }
+                        Back={ Back }
+                        setDetails={ setDetails } 
+                        Details={ Details }
+                    />
+                }
 
             </div>
         </>
@@ -217,3 +216,178 @@ const Companies = () => {
 }
 
 export default Companies;
+
+const CompanyDetails = ( { data, setDetails, Details, Back } ) => {
+
+    useEffect(
+        () => {
+
+            axios.post(
+                '/getcompanylogs',
+                {
+                    company_code: data.company_code
+                }
+            ).then(
+                res => {
+    
+                    setDetails(
+                        {
+                            ...Details,
+                            logs: res.data
+                        }
+                    );
+    
+                }
+            ).catch(
+                err => {
+    
+                    console.log( err );
+    
+                }
+            )
+
+        }, []
+    )
+
+    return (
+        <div>
+            <div className='CompanyDetails'>
+                <i className="las la-arrow-alt-circle-left la-2x" onClick={ Back }></i>
+
+                <img src={ data.logo === null ? 'https://pbs.twimg.com/profile_images/578844000267816960/6cj6d4oZ_400x400.png' : data.logo } width="30%" height='auto' alt="Logo" />
+
+                <div className='rightSide w-100'>
+
+                    <div>
+                        <p className='font-weight-bold mb-0'>Company Code</p>
+                        <p className='mb-0'> { data.company_code } </p>
+                    </div>
+                    <div>
+                        <p className='font-weight-bold mb-0'>Company Name</p>
+                        <p className='mb-0'> { data.company_name } </p>
+                    </div>
+                    
+                    <div>
+                        <p className='font-weight-bold mb-0'>Short Code</p>
+                        <p className='mb-0'> { data.code === null ? "No Code" : data.code } </p>
+                    </div>
+                    <div>
+                        <p className='font-weight-bold mb-0'>Website</p>
+                        <p className='mb-0'> { data.website === null ? "No Website" : data.website } </p>
+                    </div>
+                    
+                    <div>
+                        <button className='btn submit btn-block'>
+                            Edit
+                        </button>
+                    </div>
+
+                    <div>
+                        <button className='btn cancle btn-block'>
+                            Delete
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <br />
+
+            <div className='CompanyDetails d-block'>
+
+                <h4>
+                    Logs
+                </h4>
+
+                <div className='logContainer mt-3'>
+
+                    {
+                        Details.logs.length === 0
+                        ?
+                        <p className='text-center mb-0'> No Log Found </p>
+                        :
+                        Details.logs.map(
+                            val => {
+
+                                return (
+                                    <div key={ val.log_id } className="log"> 
+                                        <span>{ val.log }</span>
+                                        <span>{ new Date( val.log_date ).toDateString() } at { val.log_time }</span>
+                                    </div>
+                                )
+
+                            }
+                        )
+                    }
+
+                </div>
+
+            </div>
+        </div>
+    )
+
+}
+
+const Company = ( { val, src, index, OpenCompanyDetails } ) => {
+
+    return (
+        <>
+            <div key={ val.company_code } className='companyDiv' onClick={ () => OpenCompanyDetails( index ) }>
+                <img src={ src } alt="logo" height="100" />
+                <p className='font-weight-bold mb-0'>
+                    { val.company_name }
+                </p>
+                <p className='mb-0'>
+                    { val.website === null ? "No Website" : val.website }
+                </p>
+                <p className='mb-0'>
+                    { val.code === null ? "No Code" : val.code }
+                </p>
+            </div>
+        </>
+    )
+
+}
+
+const CompanyForm = ( { AddNewCompany, onChangeHandler, onImageUpload, Form } ) => {
+
+    return (
+        <>
+            <form className='left' onSubmit={ AddNewCompany }>
+
+                <h6 className='mb-3 font-weight-bold'>Enter New Company</h6>
+
+                {
+                    Form.logo !== null
+                    ?
+                    <div className='text-center'>
+                        <img className='rounded-circle' src={ Form.logo } alt="Logo" width='100' height='100' />
+                    </div>
+                    :null
+                }
+
+                <br />
+                
+                <label className="mb-0"> Company Code </label>
+                <input required type="text" className="form-control form-control-sm mb-2" onChange={ onChangeHandler } value={ Form.company_code } name="company_code" />
+
+                <label className="mb-0"> Short Code </label>
+                <input type="text" className="form-control form-control-sm mb-2" onChange={ onChangeHandler } value={ Form.code } name="code" />
+
+                <label className="mb-0"> Company Name </label>
+                <input required type="text" className="form-control form-control-sm mb-2" onChange={ onChangeHandler } value={ Form.company_name } name="company_name" />
+                
+                <label className="mb-0"> Website </label>
+                <input type="text" className="form-control form-control-sm mb-2" onChange={ onChangeHandler } value={ Form.website } name="website" />
+
+                <label className="mb-0"> Logo </label>
+                <input type="file" className="form-control form-control-sm mb-2" onChange={ onImageUpload } name="logo" />
+
+                <button type='submit' className="btn btn-sm submit">add new company</button>
+
+            </form>
+        </>
+    )
+
+}

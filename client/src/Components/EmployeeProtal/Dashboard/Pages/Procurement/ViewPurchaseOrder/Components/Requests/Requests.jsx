@@ -5,19 +5,19 @@ import { Link } from 'react-router-dom';
 
 const Requests = ( props ) => {
 
-    let bgColor = '#0eb8de';
+    let bgColor = 'var(--blue)';
     let txt = props.data.status;
 
     if (props.data.status === 'Approved' || props.data.status === 'Delivered') {
-        bgColor = '#307365';
+        bgColor = 'var(--success)';
         txt = "Approved By accounts";
     }
     if (props.data.status === 'Rejected') {
-        bgColor = '#d19399';
+        bgColor = 'var(--orange)';
         txt = "Rejected by accounts";
     }
     if (props.data.status === 'Waiting For Approval') {
-        bgColor = '#fc9701';
+        bgColor = 'var(--c-green)';
         txt = "Received";
     }
     if ( props.data.status === "Sent" )

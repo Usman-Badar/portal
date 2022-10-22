@@ -1,0 +1,2 @@
+(this.webpackJsonpclient=this.webpackJsonpclient||[]).push([[106],{685:function(e,s,t){"use strict";t.r(s);t(1);var r=t(3),n=t(0);s.default=function(){var e=Object(r.g)();return sessionStorage.getItem("UserID")?(sessionStorage.removeItem("UserID"),sessionStorage.removeItem("userName"),sessionStorage.removeItem("UserImg"),e.replace("/admin_login")):e.replace("/admin_login"),Object(n.jsx)(n.Fragment,{})}}}]);
+//# sourceMappingURL=106.4813d3a8.chunk.js.map

@@ -8,8 +8,8 @@
 
 .Admin_Home .Admin_Home-content {
     width: 60%;
-    background: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    font-family: Poppins;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 50px 20px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }

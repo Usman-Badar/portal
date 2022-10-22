@@ -2,18 +2,21 @@
     width: 100%;
     height: calc( 100vh - 60px);
     margin-top: 10px;
-    /* background-color: #F9FBFC; */
-    padding: 20px;
+    padding: 10px 20px;
     display: grid;
     grid-template-columns: 25fr 50fr 25fr;
     grid-column-gap: 20px;
-    font-size: 13px;
+    font-size: 12px !important;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .EmployeeChat p {
     margin-bottom: 0;
+    font-size: 13px !important;
+    font-family: Maersk !important;
+    font-weight: lighter !important;
 }
 
 .EmployeeChat .Left {
@@ -21,13 +24,13 @@
 }
 
 .EmployeeChat .Left p:nth-child(2) {
-    color: #5b6d80;
+    color: var( --blue);
 }
 
 .EmployeeChat .Left .tabs {
     width: 100%;
     height: max-content;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 1px dotted lightgray;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -35,11 +38,11 @@
 }
 
 .EmployeeChat .Left .tabs button {
-    font-size: 12px;
+    font-size: 12px !important;
     border: 0;
     outline: 0;
-    background-color: #2D6BE6;
-    color: #e6feff;
+    background-color: var( --dark-c-green);
+    color: #fff;
     padding: 3px 10px;
 }
 
@@ -53,6 +56,7 @@
 
 .EmployeeChat .Center {
     width: 100%;
+    overflow: hidden;
 }
 
 .EmployeeChat .Center .NoChat {
@@ -70,17 +74,18 @@
 
 .EmployeeChat .Center .ChatContent {
     width: 100%;
-    height: calc( 100vh - 25vh);
+    height: calc( 100vh - 30vh);
     overflow: auto;
     border-radius: 10px;
     padding: 20px 30px;
-    background-color: #F3F5F9;
+    background-color: #fff;
+    border: 1px dotted lightgray;
     scroll-behavior: smooth;
     position: relative;
 }
 
 .EmployeeChat .Center .ChatContent .TweetBox {
-    background-color: #fff;
+    background-color: var(--lightgray);
     color: #000;
     font-weight: 500;
     padding: 10px 20px;
@@ -96,7 +101,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 20px;
+    /* padding: 0 20px; */
     margin-top: auto;
 }
 
@@ -115,8 +120,8 @@
     margin-left: 20px;
     font-size: 20px;
     border-radius: 10px;
-    background-color: #2D6BE6;
-    color: #e6feff;
+    background-color: var( --dark-c-green);
+    color: #fff;
 }
 
 .EmployeeChat .Center .NewTweet .form-control {
@@ -136,10 +141,31 @@
 .EmployeeChat .Right .react-calendar {
     background: none;
     border: 0;
-    font-family: Poppins;
+    font-family: Maersk;
     margin-bottom: 20px;
     width: 100%;
     margin-right: 0 !important;
+}
+
+.react-calendar__tile--now:enabled {
+    background: var( --orange) !important;
+    color: white !important;
+}
+
+.react-calendar__tile--active:enabled,
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+    background: var( --c-green) !important;
+    color: white !important;
+}
+
+.react-calendar__tile--active:enabled:hover {
+    background: var( --dark-c-green) !important;
+    color: white !important;
+}
+
+.react-calendar__month-view__days__day--weekend {
+    color: var( --dark-c-green) !important;
 }
 
 .EmployeeChat .RightCalender {
@@ -149,7 +175,7 @@
 .SecondDiv .RightCalender .react-calendar {
     background: none;
     border: 0;
-    font-family: Poppins;
+    font-family: Maersk;
     margin-bottom: 20px;
     width: 100%;
     margin-right: 0 !important;
@@ -157,6 +183,20 @@
 
 .EmployeeChat .Right .Details {
     margin-bottom: 20px;
+}
+
+.EmployeeChat .Right .Details .offline {
+    background-color: var( --orange);
+    color: #fff;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+
+.EmployeeChat .Right .Details .online {
+    background-color: var( --c-green);
+    color: #fff;
+    padding: 0 5px;
+    border-radius: 5px;
 }
 
 .EmployeeChat .Right .Details .lightColor {
@@ -170,7 +210,7 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background-color: #2D6BE6;
+    background-color: var( --dark-c-green);
     opacity: 0;
     display: flex;
     justify-content: center;
@@ -183,7 +223,6 @@
     .EmployeeChat {
         grid-template-columns: 40fr 60fr;
     }
-
     .EmployeeChat .Right {
         display: none;
     }
@@ -193,29 +232,34 @@
     .EmployeeChat {
         grid-template-columns: 100fr;
     }
-
     .EmployeeChat .Center {
         display: none;
     }
-    
     .EmployeeChat .Center .calenderdiv {
         opacity: 1;
     }
-
     .EmployeeChat .Center .ChatContent {
         height: calc( 100vh - 27vh);
     }
-
 }
 
 @media only screen and (max-width: 500px) {
     .EmployeeChat {
         padding: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .EmployeeChat p {
+        font-size: 15px !important;
+    }
+    .NoChat h3 {
+        font-size: 15px;
     }
     .EmployeeChat .Center .NewTweet {
         padding: 0;
     }
 }
+
 
 /* @media only screen and (max-height: 700px) {
     .EmployeeChat .Center .ChatContent {

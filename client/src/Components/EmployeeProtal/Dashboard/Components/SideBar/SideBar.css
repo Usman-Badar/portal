@@ -1,43 +1,55 @@
 .Dashboard_sideBar {
-    width: 18vw;
+    width: 15vw;
     height: 100vh;
-    background-color: #081c34;
-    color: #5b6d80;
-    overflow: auto;
-    position: fixed;
+    background-color: var(--dark-black);
+    color: #fff;
+    overflow: hidden;
     z-index: 1000;
     transition: .3s;
 }
 
 .Dashboard_sideBar .Dashboard_logo {
     width: 100%;
-    height: 50px;
+    height: 45px;
     justify-content: space-between !important;
-    padding: 10px 20px;
-    font-family: Oxygen;
-    margin-bottom: 20px;
+    padding: 0 20px;
+    font-family: Maersk-Head;
+    font-style: italic;
+    background-color: var( --c-green);
+    font-size: 12px !important;
 }
 
 .Dashboard_sideBar .Dashboard_logo button {
     font-size: 20px;
-    color: #5b6d80;
+    color: #fff;
+}
+
+.sideBar_bars {
+    display: none;
 }
 
 .Dashboard_sideBar .Dashboard_logo button:focus {
     box-shadow: none;
 }
 
+.Dashboard_sideBar .linksContainer {
+    height: calc( 100vh - 45px) !important;
+    overflow: auto;
+    padding-top: 20px;
+}
+
 .Dashboard_sideBar .links {
     justify-content: start !important;
-    padding: 10px 20px;
-    font-family: Poppins;
-    color: #5b6d80;
+    padding: 9px 20px;
+    font-family: Maersk;
+    color: var(--gray-text);
     margin-bottom: 10px;
-    border-left: 2px solid #1A2226;
+    border-left: 2px solid var(--dark-black);
     transition: .5s;
-    font-size: 12px;
+    font-size: 11px;
     cursor: pointer;
     white-space: nowrap;
+    font-weight: 550;
 }
 
 .Dashboard_sideBar .dropoptions {
@@ -49,7 +61,7 @@
 }
 
 .Dashboard_active {
-    /* background-color: #222D32; */
+    background-color: var(--black);
     color: #f1f9fb !important;
     border-left: 2px solid #f1f9fb !important;
 }
@@ -57,6 +69,7 @@
 .Dashboard_sideBar .links:hover {
     text-decoration: none;
     color: #f1f9fb;
+    background-color: var(--black);
 }
 
 @media only screen and (max-width: 1400px) {
@@ -64,7 +77,23 @@
         width: 0;
     }
     .ShowBar {
-        width: 300px !important;
+        width: 20vw !important;
+    }
+    .sideBar_bars {
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .ShowBar {
+        width: 25vw !important;
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    .ShowBar {
+        width: 30vw !important;
+        position: fixed;
     }
 }
 
@@ -72,10 +101,18 @@
     .Dashboard_sideBar {
         padding-bottom: 50px;
     }
+    .ShowBar {
+        width: 40vw !important;
+        position: fixed;
+    }
 }
 
 @media only screen and (max-width: 600px) {
+    .Dashboard_sideBar {
+        width: 0;
+    }
     .ShowBar {
-        width: 100% !important;
+        width: 100vw !important;
+        position: fixed;
     }
 }

@@ -5,9 +5,15 @@
     height: 100vh;
     position: relative;
     overflow: hidden;
-    font-family: Raleway;
+    font-family: Poppins;
     padding-top: 100px;
-    background-color: #ECF0F5;
+    background-color: var( --lightgray );
+}
+
+.Emp_Login2 p,
+.Emp_Login2 input,
+.Emp_Login2 button {
+    font-size: 12px;
 }
 
 .Emp_Login2 svg {
@@ -28,7 +34,7 @@
 
 .Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-    padding: 30px;
+    padding: 25px;
     border-radius: 10px;
     background-color: #fff;
 }
@@ -42,6 +48,7 @@
     position: relative;
     background-color: rgb(211, 211, 211, .2);
     border-radius: 30px;
+    text-transform: uppercase;
 }
 
 .Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .Emp_Login2_Grid div {
@@ -57,8 +64,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-color: rgb(26, 34, 38);
-    color: #fff;
+    background-color: var( --dark-black );
+    color: var( --gray-text );
     height: 100%;
     width: 50%;
     transition: .5s;

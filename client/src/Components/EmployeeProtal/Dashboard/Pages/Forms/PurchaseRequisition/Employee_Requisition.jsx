@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, lazy, Suspense } from "react";
 import './Employee_Requisition.css';
 import { useSelector } from 'react-redux';
@@ -110,6 +111,12 @@ const Employee_Requisition = () => {
                     [
                         {
                             icon: 'las la-hand-holding-usd',
+                            txt: 'Dashboard',
+                            link: true,
+                            href: "/purchaserequisition/view=home"
+                        },
+                        {
+                            icon: 'las la-hand-holding-usd',
                             txt: 'Purchase Requisition',
                             link: true,
                             href: "/purchaserequisition/view=form"
@@ -147,6 +154,12 @@ const Employee_Requisition = () => {
                     [
                         {
                             icon: 'las la-hand-holding-usd',
+                            txt: 'Dashboard',
+                            link: true,
+                            href: "/purchaserequisition/view=home"
+                        },
+                        {
+                            icon: 'las la-hand-holding-usd',
                             txt: 'Purchase Requisition',
                             link: true,
                             href: "/purchaserequisition/view=form"
@@ -168,6 +181,12 @@ const Employee_Requisition = () => {
 
                 setMenuData(
                     [
+                        {
+                            icon: 'las la-hand-holding-usd',
+                            txt: 'Dashboard',
+                            link: true,
+                            href: "/purchaserequisition/view=home"
+                        },
                         {
                             icon: 'las la-hand-holding-usd',
                             txt: 'Purchase Requisition',
@@ -194,6 +213,12 @@ const Employee_Requisition = () => {
             {
                 setMenuData(
                     [
+                        {
+                            icon: 'las la-hand-holding-usd',
+                            txt: 'Dashboard',
+                            link: true,
+                            href: "/purchaserequisition/view=home"
+                        },
                         {
                             icon: 'las la-hand-holding-usd',
                             txt: 'Purchase Requisition',
@@ -520,6 +545,9 @@ const Employee_Requisition = () => {
                     setEditMode(false);
                     $(".PR_printUI .PR_printUI_Middle .PR_printUI_Grid.MyItems").removeClass("d-none");
                 }
+                
+                $('textarea, input, select').blur();
+                $('textarea[name=description]').focus();
             }
 
         }
@@ -613,14 +641,25 @@ const Employee_Requisition = () => {
             }
         ).then(res => {
 
-            setCompanies(
-                [
-                    {
-                        company_code: Data.company_code,
-                        company_name: Data.company_name
-                    }
-                ]
-            )
+            axios.get('/getallcompanies').then(res => { //get all companies
+                
+                // set companies
+                setCompanies(res.data);
+    
+            }).catch(err => {
+    
+                ShowNotification(err);
+    
+            });
+
+            // setCompanies(
+            //     [
+            //         {
+            //             company_code: Data.company_code,
+            //             company_name: Data.company_name
+            //         }
+            //     ]
+            // )
 
             setRequestingPerson(
                 {
@@ -684,44 +723,34 @@ const Employee_Requisition = () => {
     const EmployeeSelected = (index) => {
 
         let employee = Employees[index];
-        axios.get('/getallcompanies').then(res => { //get all companies
+        const Data = new FormData();
+        Data.append('company_code', employee.company_code)
+        axios.post('/getcompanylocations', Data).then(response => { // get all locations regarding to company code
 
-            const Data = new FormData();
-            Data.append('company_code', employee.company_code)
-            axios.post('/getcompanylocations', Data).then(response => { // get all locations regarding to company code
+            // set modal to hide/show
+            HideModelFunction();
+            // set locations
+            setLocations(response.data);
 
-                // set modal to hide/show
-                HideModelFunction();
-                // set companies
-                setCompanies(res.data);
-                // set locations
-                setLocations(response.data);
-
-                // set data to request summary
-                setRequestingPerson(
-                    {
-                        emp_id: employee.emp_id,
-                        name: employee.name,
-                        company: {
-                            company_code: employee.company_code,
-                            company_name: employee.company_name
-                        },
-                        location: {
-                            location_code: employee.location_code,
-                            location_name: employee.location_name
-                        }
+            // set data to request summary
+            setRequestingPerson(
+                {
+                    emp_id: employee.emp_id,
+                    name: employee.name,
+                    company: {
+                        company_code: employee.company_code,
+                        company_name: employee.company_name
+                    },
+                    location: {
+                        location_code: employee.location_code,
+                        location_name: employee.location_name
                     }
-                );
+                }
+            );
 
-                setRequestedBy( employee.name );
+            setRequestedBy( employee.name );
 
-                createPRCode( employee.company_code );
-
-            }).catch(err => {
-
-                ShowNotification(err);
-
-            });
+            createPRCode( employee.company_code );
 
         }).catch(err => {
 
@@ -826,6 +855,7 @@ const Employee_Requisition = () => {
                         if ( res.data[0] ) {
                             for (let x = 0; x < res.data.length; x++) 
                             {
+                                socket.emit( 'NewNotification', res.data[x].emp_id);
 
                                 const Data2 = new FormData();
                                 Data2.append('eventID', 3);
@@ -838,7 +868,6 @@ const Employee_Requisition = () => {
 
                                     axios.post('/sendmail', Data2).then(() => {
 
-                                        socket.emit( 'NewNotification', res.data[x].emp_id);
 
                                     })
                                 });
@@ -869,6 +898,14 @@ const Employee_Requisition = () => {
 
         let e = document.createEvent('event');
         onTweet( e, txt, id );
+
+    }
+
+    const CollapseRequests = () => {
+
+        $('.Employee_Requisitions').toggleClass('d-block');
+        $('.openCollapseBtn').toggleClass('d-block');
+        $('.Employee_Requisitions .ViewPrRequests_Left').toggle('slow');
 
     }
 
@@ -925,6 +962,9 @@ const Employee_Requisition = () => {
             <div className="Employee_Requisitions">
                 <div>
                     <div className="ViewPrRequests_Left">
+                        <button className="btn btn-sm btn-dark" onClick={ CollapseRequests }>
+                            <i className="las la-compress"></i>
+                        </button>
                         {
                             ViewRequest.map(
                                 (val, index) => {
@@ -932,15 +972,15 @@ const Employee_Requisition = () => {
                                     const d = new Date(val.request_date);
                                     let txt = val.status;
 
-                                    let bgColor = '#0eb8de';
+                                    let bgColor = 'var(--blue)';
 
                                     if (val.status === 'Approved' || val.status === 'Delivered') {
-                                        bgColor = '#307365';
+                                        bgColor = 'var(--success)';
                                         txt = "Approved By accounts";
                                     }
 
                                     if (val.status === 'Rejected') {
-                                        bgColor = '#d19399';
+                                        bgColor = 'var(--orange)';
                                         if ( val.forward_by === null )
                                         {
                                             txt = "Rejected by inventory";
@@ -952,7 +992,7 @@ const Employee_Requisition = () => {
                                     }
 
                                     if (val.status === 'Waiting For Approval') {
-                                        bgColor = '#fc9701';
+                                        bgColor = 'var(--c-green)';
                                         txt = "Waiting for account's approval";
                                     }
 
@@ -960,31 +1000,30 @@ const Employee_Requisition = () => {
                                         <>
                                             <div className="ViewPrRequests_div" key={ index }>
                                                 <div className="d-flex align-items-center justify-content-between">
-                                                    <div className="d-flex align-items-center w-75">
-                                                        <img src={'images/employees/' + val.emp_image} alt="employeeImg" />
+                                                    <div className="d-flex align-items-center">
+                                                        <img src={'images/employees/' + val.emp_image} alt="" />
                                                         <div>
                                                             <p className="font-weight-bolder"> {val.name} </p>
-                                                            <p> {val.designation_name + ' in ' + val.department_name + ' Department, ' + val.company_name} </p>
+                                                            <p style={ { backgroundColor: bgColor, fontSize: '10px' } } className="text-white text-center rounded-pill px-1">{ txt }</p>
                                                         </div>
                                                     </div>
-                                                    <div className="w-25">
-                                                        <p className="font-weight-bolder">Total</p>
-                                                        <p> Rs {val.total.toLocaleString('en-US')}</p>
-                                                    </div>
+                                                    {/* <div className="">
+                                                        <p className="font-weight-bolder">Status</p>
+                                                    </div> */}
                                                 </div>
-                                                <div className="py-3">
+                                                <div className="py-2">
                                                     <div className="d-flex justify-content-between">
                                                         <div>
-                                                            <p className="font-weight-bolder">Date</p>
+                                                            <p className="font-weight-bolder">Request Date</p>
                                                             <p>{d.toDateString()}</p>
                                                         </div>
                                                         <div>
-                                                            <p className="font-weight-bolder">Status</p>
-                                                            <p style={ { backgroundColor: bgColor, fontSize: '10px' } } className="text-white text-center rounded-pill px-2">{ txt }</p>
+                                                            <p className="font-weight-bolder">Total</p>
+                                                            <p> Rs {val.total.toLocaleString('en-US')} </p>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="d-flex align-items-center">
+                                                <div className="d-flex align-items-center bg-light py-2 px-1 rounded">
                                                     <i className="las la-map-marker-alt"></i>
                                                     <div>
                                                         <p className="font-weight-bolder">{val.company_name}</p>
@@ -1005,6 +1044,9 @@ const Employee_Requisition = () => {
                     </div>
                 </div>
                 <div className="Employee_Requisition_Left">
+                    <button className="btn btn-sm btn-dark d-none openCollapseBtn" onClick={ CollapseRequests }>
+                        <i className="las la-external-link-alt"></i>
+                    </button>
 
                     <Suspense>
 
@@ -1081,7 +1123,7 @@ const Employee_Requisition = () => {
                     {
                         window.location.href.split('/').pop() === 'view=form'
                         ?
-                        <button className="btn btn-primary d-block ml-auto" onClick={ SubmitPR }>Submit</button>
+                        <button className="btn btn-primary d-block mx-auto mt-3 px-5" onClick={ SubmitPR }>Submit</button>
                         :
                         null
                     }

@@ -7,18 +7,20 @@
 .Descussion .previous_descussions {
     width: 50%;
     display: block;
-    margin: 20px auto;
+    margin: auto;
+    margin-top: 40px;
     background-color: #ffffff;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    /* border: lightgray 1px solid; */
     font-size: 12px;
-    font-family: Quicksand;
+    font-family: Maersk;
 }
 
 .Descussion .previous_descussions .emp_img {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-size: cover;
 }
@@ -45,7 +47,7 @@
 }
 
 .Descussion .previous_descussions .UX div.w-50:hover {
-    color: #00A5E7;
+    color: var( --c-green);
 }
 
 .Descussion .previous_descussions .UX i {

@@ -1,0 +1,2 @@
+(this.webpackJsonpclient=this.webpackJsonpclient||[]).push([[99],{651:function(e,t,n){"use strict";n.r(t);n(1),n(652);var c=n(0);t.default=function(){return Object(c.jsxs)("div",{className:"InventoryDashboard",children:[Object(c.jsx)("h3",{className:"text-center",children:"Inventory Dashboard"}),Object(c.jsx)("h6",{className:"text-center",children:"Under Construction"})]})}},652:function(e,t,n){}}]);
+//# sourceMappingURL=99.1df4e31c.chunk.js.map

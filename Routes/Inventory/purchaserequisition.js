@@ -5,6 +5,8 @@ const fs = require('fs');
 const moment = require('moment');
 const io = require('../../server');
 
+const CreateLogs = require('../Employee/logs').CreateLog;
+
 io.on('connection', ( socket ) => {
 
     socket.on(
@@ -483,19 +485,15 @@ router.post('/getallpr', ( req, res ) => {
                                             employees.name, \
                                             locations.location_name,  \
                                             companies.company_name, \
-                                            departments.department_name, \
-                                            designations.designation_name,  \
                                             emp_app_profile.emp_image,  \
                                             invtry_purchase_requests.*, \
                                             invtry_purchase_requests.location_code as pr_location, \
                                             invtry_purchase_requests.status as status \
                                             FROM employees  \
-                                            LEFT OUTER JOIN companies ON employees.company_code = companies.company_code  \
-                                            LEFT OUTER JOIN departments ON employees.department_code = departments.department_code  \
-                                            LEFT OUTER JOIN locations ON employees.location_code = locations.location_code  \
-                                            LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code  \
                                             RIGHT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id  \
                                             RIGHT OUTER JOIN invtry_purchase_requests ON employees.emp_id = invtry_purchase_requests.request_for \
+                                            LEFT OUTER JOIN companies ON invtry_purchase_requests.company_code = companies.company_code  \
+                                            LEFT OUTER JOIN locations ON invtry_purchase_requests.location_code = locations.location_code  \
                                             WHERE invtry_purchase_requests.total < " + parseFloat( rslt[0] ? rslt[0].approval_limit : 0.00 );
                 
                                             if ( result[0] )
@@ -523,7 +521,7 @@ router.post('/getallpr', ( req, res ) => {
                                         
                                                     }else 
                                                     {
-                                        
+                                                        
                                                         res.set("Connection", "close");
                                                         res.send( rslt );
                                                         res.end();
@@ -617,19 +615,15 @@ router.post('/getallprsorted', ( req, res ) => {
                                             employees.name, \
                                             locations.location_name,  \
                                             companies.company_name, \
-                                            departments.department_name, \
-                                            designations.designation_name,  \
                                             emp_app_profile.emp_image,  \
                                             invtry_purchase_requests.*, \
                                             invtry_purchase_requests.location_code as pr_location, \
                                             invtry_purchase_requests.status as status \
                                             FROM employees  \
-                                            LEFT OUTER JOIN companies ON employees.company_code = companies.company_code  \
-                                            LEFT OUTER JOIN departments ON employees.department_code = departments.department_code  \
-                                            LEFT OUTER JOIN locations ON employees.location_code = locations.location_code  \
-                                            LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code  \
                                             RIGHT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id  \
                                             RIGHT OUTER JOIN invtry_purchase_requests ON employees.emp_id = invtry_purchase_requests.request_for \
+                                            LEFT OUTER JOIN companies ON invtry_purchase_requests.company_code = companies.company_code  \
+                                            LEFT OUTER JOIN locations ON invtry_purchase_requests.location_code = locations.location_code  \
                                             WHERE " + filteredQuery + " invtry_purchase_requests.total < " + parseFloat( rslt[0] ? rslt[0].approval_limit : 0.00 );
                 
                                             if ( result[0] )
@@ -757,16 +751,12 @@ router.post('/getthatempinvtryrequests', ( req, res ) => {
     emp_app_profile.emp_image, \
     invtry_purchase_requests.*, \
     locations.location_name,                              \
-    companies.company_name,                              \
-    departments.department_name,                              \
-    designations.designation_name  \
+    companies.company_name       \
     FROM employees  \
     LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id  \
     LEFT OUTER JOIN invtry_purchase_requests ON employees.emp_id = invtry_purchase_requests.request_by  \
-    LEFT OUTER JOIN locations ON employees.location_code = locations.location_code                              \
-    LEFT OUTER JOIN companies ON employees.company_code = companies.company_code                              \
-    LEFT OUTER JOIN departments ON employees.department_code = departments.department_code                              \
-    LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code ";
+    RIGHT OUTER JOIN locations ON invtry_purchase_requests.location_code = locations.location_code                              \
+    RIGHT OUTER JOIN companies ON invtry_purchase_requests.company_code = companies.company_code ";
 
     if ( colunms )
     {
@@ -794,52 +784,36 @@ router.post('/getthatempinvtryrequests', ( req, res ) => {
         }
     }
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        q,
+        ( err, rslt ) => {
 
-            if ( err )
+            if( err )
             {
 
-                res.status(503).send(err);
+                console.log( err );
+                res.send( err );
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    q,
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
-            
-                            res.send( err );
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-            
-                            let arr = [];
-                            if ( rslt[0] )
-                            {
-                                for ( let x= 0; x < rslt.length; x++ )
-                                {
 
-                                    if ( rslt[x].request_for === parseInt( empID ) )
-                                    {
-                                        arr.push( rslt[x] );
-                                    }
-                                
-                                }
-                            }
-                            res.send( arr );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
-                    }
-                );
+                // let arr = [];
+                // if ( rslt[0] )
+                // {
+                //     for ( let x= 0; x < rslt.length; x++ )
+                //     {
+
+                //         if ( rslt[x].request_for === parseInt( empID ) )
+                //         {
+                //             arr.push( rslt[x] );
+                //         }
+                    
+                //     }
+                // }
+                res.send( rslt );
+                res.end();
+
             }
 
         }
@@ -953,9 +927,9 @@ db.getConnection(
 
 router.post('/setprtofinal', ( req, res ) => {
 
-    const { Items, deletedItems, prID, Total } = req.body;
+    const { Items, deletedItems, prID, Total, TaxMode, Tax, TaxAmount, NetTotal } = req.body;
     
-    let q = "UPDATE invtry_purchase_requests SET total = '" + Total + "' WHERE pr_id = " + prID + ";";
+    let q = "UPDATE invtry_purchase_requests SET total = '" + Total + "', tax_mode = '" + TaxMode + "', tax_per = '" + Tax + "', tax_amt = '" + TaxAmount + "', net_amt = '" + NetTotal + "' WHERE pr_id = " + prID + ";";
     let items = JSON.parse( Items );
     let deleteItems = JSON.parse( deletedItems );
     
@@ -967,7 +941,10 @@ router.post('/setprtofinal', ( req, res ) => {
             q = q.concat( Object.keys(items[0])[0] + " = " + Object.entries(items[0])[0][1] );
             for ( let y = 0; y < Object.keys(items[x]).length; y++ )
             {
-                q = q.concat(' ,', Object.keys(items[x])[y] + " = '" + Object.entries(items[x])[y][1] + "'" );
+                if ( Object.keys(items[x])[y] !== 'taxRequired' )
+                {
+                    q = q.concat(' ,', Object.keys(items[x])[y] + " = '" + Object.entries(items[x])[y][1] + "'" );
+                }
             }
 
             q = q.concat(' WHERE invtry_purchase_request_specifications.id = ' + items[x].id);
@@ -975,7 +952,7 @@ router.post('/setprtofinal', ( req, res ) => {
             q = q.concat(';');
         }else
         {
-            q = q.concat("INSERT INTO `invtry_purchase_request_specifications`(`pr_id`, `description`, `reason`, `price`, `quantity`, `tax`, `amount`) VALUES ('" + prID + "','" + items[x].description + "','" + items[x].reason + "','" + items[x].price + "','" + items[x].quantity + "', '" + items[x].tax + "','" + items[x].amount + "')");
+            q = q.concat("INSERT INTO `invtry_purchase_request_specifications`(`pr_id`, `description`, `reason`, `price`, `quantity`, `tax`, `amount`, `tax_amount`) VALUES ('" + prID + "','" + items[x].description + "','" + items[x].reason + "','" + items[x].price + "','" + items[x].quantity + "', '" + items[x].tax + "','" + items[x].amount + "','" + items[x].tax_amount + "')");
             q = q.concat(";");
         }
     }
@@ -987,39 +964,22 @@ router.post('/setprtofinal', ( req, res ) => {
         q = q.concat(";");
     }
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        q,
+        ( err ) => {
 
-            if ( err )
+            if( err )
             {
 
-                res.status(503).send(err);
+                res.send( err );
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    q,
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
-            
-                            res.send( err );
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-            
-                            res.send( rslt );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
-                    }
-                );
+
+                res.send('success');
+                res.end();
+
             }
 
         }
@@ -1080,111 +1040,100 @@ router.post('/setprtowaitforapproval', ( req, res ) => {
 
     let day = moment(d).format('ddd');
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        "UPDATE invtry_purchase_requests SET status = 'Waiting For Approval', forward_by = ?, forward_date = ?, forward_time = ? WHERE pr_id = ? AND status = 'Viewed'",
+        [ empID, d, d.toTimeString(), prID ],
+        ( err ) => {
 
-            if ( err )
+            if( err )
             {
 
-                res.status(503).send(err);
+                res.send( err );
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "UPDATE invtry_purchase_requests SET status = 'Waiting For Approval', forward_by = ?, forward_date = ?, forward_time = ? WHERE pr_id = ? AND status = 'Viewed'",
-                    [ empID, d, d.toTimeString(), prID ],
-                    ( err ) => {
-            
-                        if( err )
-                        {
-            
-                            res.send( err );
-                            connection.release();
-            
-                        }else 
-                        {
-                            
-                            // IF THERE ARE SOME FILES ATTACHED
-                            if ( req.files )
-                            {
-                                const { Attachments } = req.files;
+                
+                // IF THERE ARE SOME FILES ATTACHED
+                if ( req.files )
+                {
+                    const { Attachments } = req.files;
 
-                                let arr;
-                                if ( Attachments.name )
-                                {
-                                    arr = [Attachments];
-                                }else
-                                {
-                                    arr = Attachments;
-                                }
+                    let arr;
+                    if ( Attachments.name )
+                    {
+                        arr = [Attachments];
+                    }else
+                    {
+                        arr = Attachments;
+                    }
 
-                                for ( let x= 0; x < arr.length; x++ )
+                    for ( let x= 0; x < arr.length; x++ )
+                    {
+                        let folderName = prID + "_" + day + " " + moment(d).format("Do MMM YYYY") + ' at ' + d.getHours() + d.getMinutes() + d.getSeconds();
+                        db.query(
+                            "INSERT INTO invtry_purchase_request_quotations (pr_id, image, image_type) VALUES (?,?,?)",
+                            [ prID, folderName + '/' + arr[x].name, arr[x].mimetype.split('/')[1] ],
+                            ( err ) => {
+                    
+                                if( err )
                                 {
-                                    let folderName = prID + "_" + day + " " + moment(d).format("Do MMM YYYY") + ' at ' + d.getHours() + d.getMinutes() + d.getSeconds();
-                                    connection.query(
-                                        "INSERT INTO invtry_purchase_request_quotations (pr_id, image, image_type) VALUES (?,?,?)",
-                                        [ prID, folderName + '/' + arr[x].name, arr[x].mimetype.split('/')[1] ],
-                                        ( err ) => {
-                                
-                                            if( err )
-                                            {
-                                
+                    
+                                    console.log( err );
+                                    res.send( err );
+                                    res.end();
+                    
+                                }else 
+                                {
+                    
+                                    fs.mkdir('client/public/images/Inventory/pr_attachments/' + folderName,
+                                        { recursive: true },
+                                        (err) => {
+                                            if (err) {
+
                                                 console.log( err );
-                                                res.send( err );
-                                                connection.release();
-                                
-                                            }else 
-                                            {
-                                
-                                                fs.mkdir('client/public/images/Inventory/pr_attachments/' + folderName,
-                                                    { recursive: true },
+                                                res.send(err);
+                                                res.end();
+
+                                            }
+                                            else {
+
+                                                arr[x].mv('client/public/images/Inventory/pr_attachments/' + folderName + '/' + arr[x].name, 
                                                     (err) => {
+
                                                         if (err) {
-    
+
                                                             console.log( err );
                                                             res.send(err);
-                                                            connection.release();
-    
+                                                            res.end();
+
                                                         }
-                                                        else {
-    
-                                                            arr[x].mv('client/public/images/Inventory/pr_attachments/' + folderName + '/' + arr[x].name, 
-                                                                (err) => {
-    
-                                                                    if (err) {
-        
-                                                                        console.log( err );
-                                                                        res.send(err);
-                                                                        connection.release();
-        
-                                                                    }
-                                                                
-                                                                }
-                                                            )
-    
-                                                        }
+                                                    
                                                     }
                                                 )
-                                
-                                            }
-                                
-                                        }
-                                    );
-        
-                                    if ( ( x + 1 ) === arr.length )
-                                    {
-                                        res.send( 'success' );
-                                        connection.release();
-                                    }
-                                        
-                                }
-                            }
 
+                                            }
+                                        }
+                                    )
+                    
+                                }
+                    
+                            }
+                        );
+
+                        if ( ( x + 1 ) === arr.length )
+                        {
+                            res.send( 'success' );
+                            connection.release();
                         }
-            
+                            
                     }
-                );
+                }else
+                {
+                    res.send( 'success' );
+                    connection.release();
+                }
+
             }
 
         }
@@ -1528,6 +1477,229 @@ router.post('/getprcode', ( req, res ) => {
 
         }
     );
+
+} );
+
+router.post('/generatepronitemrequest', ( req, res ) => {
+
+    const { request, specifications, itemRequest, logs, itemsDetails } = req.body;
+
+    let requestData = JSON.parse( request );
+    let specificationsData = JSON.parse( specifications );
+    let details = JSON.parse( itemRequest );
+    let requestLogs = JSON.parse( logs );
+    let itemsSpecificationsDetials = JSON.parse( itemsDetails );
+    const d = new Date();
+    const total = 0.00;
+
+    for ( let i = 0; i < requestLogs.length; i++ )
+    {
+        CreateLogs( 
+            'tbl_item_requests', 
+            details.id,
+            requestLogs[i],
+            'info'
+        );
+    }
+
+    db.query(
+        "SELECT code FROM companies WHERE company_code = ?",
+        [ requestData.company_code ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+
+                let code = '';
+                if ( rslt.length > 0 )
+                {
+                    code = rslt[0].code;
+                }
+                db.query(
+                    "SELECT pr_code FROM invtry_purchase_requests WHERE company_code = ? ORDER BY pr_id DESC LIMIT 1",
+                    [ requestData.company_code ],
+                    ( err, rslt ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+            
+                        }else 
+                        {
+
+                            let lastPR = '';
+                            if ( rslt.length > 0 )
+                            {
+                                let getCode = (parseInt(rslt[0].pr_code.split('-')[1]) + 1).toString();
+                                if (getCode.length === 1) {
+                                    getCode = '0' + getCode;
+                                }
+                                lastPR = getCode;
+                            }else
+                            {
+                                lastPR = '01';
+                            }
+
+                            let Year = '';
+                            if ( d.getMonth() > 6 )
+                            {
+                                Year = d.getFullYear().toString().substring(2,4) + '/' + ( d.getFullYear() + 1 ).toString().substring(2,4);
+                            }else
+                            {
+                                Year = ( d.getFullYear() - 1 ).toString().substring(2,4) + '/' + d.getFullYear().toString().substring(2,4);
+                            }
+                            
+                            db.query(
+                                "INSERT INTO `invtry_purchase_requests`(`pr_code`, `item_request_id`, `location_code`, `company_code`, `request_by`, `request_for`, `request_date`, `request_time`, `status`, `total`) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                                [ code + '-' + lastPR + '-' + Year, details.id, requestData.location_code, requestData.company_code, requestData.request_by, details.request_by, d, d.toTimeString(), 'Sent', total ],
+                                ( err ) => {
+                                    
+                                    if( err )
+                                    {
+                        
+                                        console.log( err );
+                                        res.send( err );
+                        
+                                    }else 
+                                    {
+            
+                                        db.query(
+                                            "SELECT pr_id FROM invtry_purchase_requests WHERE pr_code = ?",
+                                            [ code + '-' + lastPR + '-' + Year ],
+                                            ( err, rslt ) => {
+                                                
+                                                if( err )
+                                                {
+                                                    
+                                                    console.log( err );
+                                                    res.send( err );
+                                                    
+                                                }else 
+                                                {
+                                                    
+                                                    db.query(
+                                                        "DELETE FROM `tbl_item_requests_specifications` WHERE request_id = ?;" +
+                                                        "UPDATE `tbl_item_requests` SET company_code = ?, location_code = ? WHERE id = ?;",
+                                                        [ details.id, requestData.company_code, requestData.location_code, details.id ],
+                                                        ( err ) => {
+
+                                                            if( err )
+                                                            {
+
+                                                                console.log( err );
+                                                                res.status(500).send(err);
+                                                                res.end();
+
+                                                            }else 
+                                                            {
+                                                                
+                                                                for ( let x = 0; x < specificationsData.length; x++ )
+                                                                {
+                                                                    let availability = 0;
+                                                                    if ( itemsSpecificationsDetials[x] )
+                                                                    {
+                                                                        if ( parseInt( itemsSpecificationsDetials[x].availble_quantity ) > parseInt( specificationsData[x].required_quantity ) )
+                                                                        {
+                                                                            availability = 1;
+                                                                        }
+                                                                    }
+                                                                    db.query(
+                                                                        "INSERT INTO `tbl_item_requests_specifications`(`request_id`, `item_id`, `reason`, `required_quantity`, edited, new_added, availability) VALUES (?,?,?,?,?,?,?);",
+                                                                        [ details.id, specificationsData[x].item_id ? specificationsData[x].item_id : specificationsData[x].id, specificationsData[x].reason, specificationsData[x].required_quantity, specificationsData[x].edited ? 1 : 0, specificationsData[x].new_added ? 1 : 0, availability ],
+                                                                        ( err ) => {
+                                                                
+                                                                            if( err )
+                                                                            {
+                                                                
+                                                                                console.log( err );
+                                                                                res.status(500).send(err);
+                                                                                res.end();
+                                                                
+                                                                            }
+                                                                
+                                                                        }
+                                                                    )
+                                                                }
+
+                                                            }
+
+                                                        }
+                                                    )
+                                                    for( let x = 0; x < specificationsData.length; x++ )
+                                                    {
+                                                        db.query(
+                                                            "INSERT INTO `invtry_purchase_request_specifications`(`pr_id`, `description`, `reason`, `price`, `quantity`, `tax`, `amount`) VALUES (?,?,?,?,?,?,?)",
+                                                            [ rslt[0].pr_id, specificationsData[x].item_name, specificationsData[x].reason, 0, parseInt(specificationsData[x].required_quantity), 0, 0 ],
+                                                            ( err ) => {
+                                                    
+                                                                if( err )
+                                                                {
+                                                    
+                                                                    console.log( err );
+                                                                    res.send( err );
+                                                    
+                                                                }
+                                                    
+                                                            }
+                                                        );
+            
+                                                        if ( ( x + 1 ) === specificationsData.length )
+                                                        {
+                                                            db.query(
+                                                                "UPDATE tbl_item_requests SET status = 'proceed to purchase requisition', pr_request_generate_date = ?, pr_request_generate_time = ?, pr_request_generate_by = ? WHERE id = ?",
+                                                                [ new Date(), new Date().toTimeString(), requestData.request_by, details.id ],
+                                                                ( err ) => {
+                                                        
+                                                                    if( err )
+                                                                    {
+                                                        
+                                                                        console.log( err );
+                                                                        res.send( err );
+                                                        
+                                                                    }else
+                                                                    {
+                                                                        CreateLogs( 
+                                                                            'tbl_item_requests', 
+                                                                            details.id,
+                                                                            "Request has proceed to purchase requisition",
+                                                                            'info'
+                                                                        );
+                                                                        console.log("**************************************SUCCESS**************************************");
+                                                                        res.send( rslt );
+                                                                    }
+                                                        
+                                                                }
+                                                            );
+        
+                                                        }
+                                                    }
+                                    
+                                                }
+                                    
+                                            }
+                                        );
+                        
+                                    }
+                        
+                                }
+                            );
+                        }
+            
+                    }
+                );
+            }
+
+        }
+    )
 
 } );
 

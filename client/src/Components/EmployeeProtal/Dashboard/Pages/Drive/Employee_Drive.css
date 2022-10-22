@@ -1,6 +1,6 @@
 .Employee_Drive {
     padding: 20px;
-    max-height: calc( 100vh - 70px);
+    max-height: calc( 100vh - 110px);
     overflow: auto;
 }
 
@@ -47,10 +47,17 @@
 }
 
 .Employee_Drive .Employee_Drive_Grid .Div1 .Employee_Drive_Text {
-    padding: 20px 20px 10px 20px;
+    padding: 10px 20px;
     display: flex;
     align-items: center;
     word-break: break-all;
+    background-color: var( --dark-black );
+    border-radius: 0 0 10px 10px;
+}
+
+.Employee_Drive .Employee_Drive_Grid .Div1 .Employee_Drive_Text p:first-child,
+.Employee_Drive .Employee_Drive_Grid .Div1 .Employee_Drive_Text i {
+    color: var( --lightgray );
 }
 
 .Employee_Drive .Drive_Icon {
@@ -81,6 +88,10 @@
     padding: 10px 0;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     display: none;
+}
+
+.Employee_Drive .Employee_Drive_Grid .Div1 .Show_Changes_Menu i {
+    color: #000;
 }
 
 .Employee_Drive .Drive_Icon .Show_Changes_Menu .DropDown_Drive_Menu div {

@@ -4,6 +4,7 @@ import React, { Suspense, lazy, useEffect, useState, useMemo } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Modal from "../../../../../UI/Modal/Modal";
 import axios from "../../../../../../axios";
+import $ from 'jquery';
 
 // LOADING IMAGE
 import Loader from '../../../../../../images/loadingIcons/icons8-iphone-spinner.gif';
@@ -857,10 +858,21 @@ const ViewPurchaseOrder = () => {
     // IF EMPLOYEE PRINTS THE REQUEST
     const Print = ( id ) => {
 
-        let pr = PurchaseRequisitionDetails.info[0] ? PurchaseRequisitionDetails.info[0].pr_id : 0;
+        // let pr = PurchaseRequisitionDetails.info[0] ? PurchaseRequisitionDetails.info[0].pr_id : 0;
         let iframe = document.getElementById('po');
-        iframe.src = 'https://' + window.location.host + '/#/view=purchase_order/' + pr + '/' + id
+        // iframe.src = 'https://' + window.location.host + '/#/view=purchase_order/' + id + '/' + pr
         iframe.contentWindow.print();
+        setTimeout(() => {
+            iframe.contentWindow.print();
+        }, 500);
+
+    }
+
+    const CollapseRequests = () => {
+
+        $('.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer').toggleClass('d-block');
+        $('.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Right.RequestDetails .PreviewWindow .openBtn').toggleClass('d-block');
+        $('.ViewPurchaseOrderContainer .ViewPurchaseOrderGridContainer .Left.RequestsList').toggle('slow');
 
     }
 
@@ -879,7 +891,7 @@ const ViewPurchaseOrder = () => {
                 title="po" 
                 id="po" 
                 className="d-none w-100"
-                src={ 'https://' + window.location.host + '/#/view=purchase_order/' + POID }
+                src={ 'https://' + window.location.host + '/#/view=purchase_order/' + POID + '/' + ( PurchaseRequisitionDetails.info[0] ? PurchaseRequisitionDetails.info[0].pr_id : 0 ) }
             >
             </iframe>
 
@@ -936,6 +948,7 @@ const ViewPurchaseOrder = () => {
                     {/* REQUESTS LIST */}
                     {/* IN DESCENDING ORDER */}
                     <div className="Left RequestsList">
+                        <button onClick={ CollapseRequests } className="btn btn-sm collapseBtn btn-dark"><i className="las la-chevron-left"></i></button>
                             {/* MAPPING THE REQUESTS */}
                             {/* ALL REQUESTS ARE LISTED HERE */}
                             {/* LIST CONTAINER */}
@@ -975,6 +988,7 @@ const ViewPurchaseOrder = () => {
                     {/* PREVIEW WINDOW */}
                     {/* ROUTES */}
                     <div className="PreviewWindow">
+                            <button onClick={ CollapseRequests } className="btn btn-sm openBtn btn-dark mb-2"><i className="las la-chevron-down"></i></button>
 
                             {/* HOME ROUTE */}
                             <Route
@@ -1148,25 +1162,25 @@ const ViewPurchaseOrder = () => {
                             window.location.href.split('/').pop() !== 'home'
                                 ?
                                 <div className="btn-group">
-                                    <button className="btn btn-dark" onClick={() => history.replace('/purchaseorder/window=purchaseorder&&id=' + POID)}>Purchase Order</button>
+                                    <button className="btn firstBtn" onClick={() => history.replace('/purchaseorder/window=purchaseorder&&id=' + POID)}>Purchase Order</button>
                                     {
                                         PurchaseRequisitionDetails.info[0]
                                         ?
-                                        <button className="btn btn-primary" onClick={() => history.replace('/purchaseorder/window=purchaserequisition&&id=' + POID)}>Purchase Requisition</button>
+                                        <button className="btn secondBtn" onClick={() => history.replace('/purchaseorder/window=purchaserequisition&&id=' + POID)}>Purchase Requisition</button>
                                         :
                                         null
                                     }
                                     {
                                         AttachQuotations.length > 0
                                         ?
-                                        <button className="btn btn-info" onClick={() => history.replace('/purchaseorder/window=quotations&&id=' + POID)}>Quotations</button>
+                                        <button className="btn thirdBtn" onClick={() => history.replace('/purchaseorder/window=quotations&&id=' + POID)}>Quotations</button>
                                         :
                                         null
                                     }
-                                    <button className="btn btn-light" onClick={() => history.replace('/purchaseorder/window=bills&&id=' + POID)}>Bills</button>
-                                    <button className="btn btn-danger" onClick={() => history.replace('/purchaseorder/window=vouchers&&id=' + POID)}>Vouchers</button>
+                                    <button className="btn forthBtn" onClick={() => history.replace('/purchaseorder/window=bills&&id=' + POID)}>Bills</button>
+                                    <button className="btn firstBtn" onClick={() => history.replace('/purchaseorder/window=vouchers&&id=' + POID)}>Vouchers</button>
                                     <button 
-                                        className="btn btn-warning" 
+                                        className="btn secondBtn" 
                                         onClick={() => Print( POID )}
                                     >
                                         Print
@@ -1184,13 +1198,13 @@ const ViewPurchaseOrder = () => {
                                                         ?
                                                         <>
                                                             <button
-                                                                className="btn btn-sm btn-danger"
+                                                                className="btn btn-sm fifthBtn"
                                                                 onClick={ () => onDiscard( window.location.href.split('/').pop().split('id=').pop() ) }
                                                             >
                                                                 Discard
                                                             </button>
                                                             <button
-                                                                className="btn btn-sm btn-success"
+                                                                className="btn btn-sm sixthBtn"
                                                                 onClick={ () => onApprove( window.location.href.split('/').pop().split('id=').pop() ) }
                                                             >
                                                                 Approve

@@ -1,0 +1,54 @@
+.LeaveModuleDashboard{
+    padding: 30px;
+}
+
+.LeaveModuleDashboard .gridContainer {
+    display: grid;
+    grid-template-columns: 33.33fr 33.33fr 33.33fr;
+    grid-gap: 30px;
+}
+
+.LeaveModuleDashboard .gridContainer .column {
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.LeaveModuleDashboard .gridContainer .LeaveItem {
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    font-size: 12px;
+    position: relative;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.LeaveModuleDashboard .gridContainer .LeaveItem:hover {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.LeaveModuleDashboard .gridContainer .LeaveItem img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.LeaveModuleDashboard .gridContainer .LeaveItem .statusDiv {
+    padding: 5px 10px;
+    border-radius: 5px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgb(211, 211, 211, .3);
+}
+
+.LeaveModuleDashboard .gridContainer .LeaveItem .statusDiv.success {
+    color: var(--success);
+}
+
+.LeaveModuleDashboard .gridContainer .LeaveItem .statusDiv.danger {
+    color: var(--orange);
+}

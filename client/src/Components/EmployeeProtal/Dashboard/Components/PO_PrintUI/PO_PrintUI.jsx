@@ -12,14 +12,15 @@ const PO_PrintUI = (props) => {
         {
             info: [],
             specifications: [],
-            venders: []
+            venders: [],
+            pr_id: null
         }
     )
 
     useEffect(
         () => {
 
-            let po_id = window.location.href.split('/')[ window.location.href.split('/').length - 2 ]; // RETURNS AN ID ( PR ID ) FROM THE URL
+            let po_id = window.location.href.split('/')[ window.location.href.split('/').length - 2 ]; // RETURNS AN ID ( PO ID ) FROM THE URL
             let pr_id = window.location.href.split('/').pop(); // RETURNS AN ID ( PR ID ) FROM THE URL
 
             axios.post(
@@ -36,7 +37,7 @@ const PO_PrintUI = (props) => {
                             info: res.data[0],
                             specifications: res.data[1],
                             venders: res.data[3],
-                            pr_id: res.data[4].length > 0 ? res.data[4].pr_id : null
+                            pr_id: res.data[4].length > 0 ? res.data[4][0].pr_code : null
                         }
                     )
 
@@ -47,7 +48,7 @@ const PO_PrintUI = (props) => {
 
             })
 
-        }, []
+        }, [ window.location.href.split('/').pop() ]
     )
 
 
@@ -58,13 +59,15 @@ const PO_PrintUI = (props) => {
         arr.push(x * num);
     }
 
-    const d = new Date();
-
     return (
         <>
             {
                 ListDetails.info.map(
                     (val, index) => {
+
+                        const d1 = new Date( val.approve_date );
+                        const d2 = new Date( val.discard_date );
+                        const d3 = new Date( val.request_date );
 
                         return (
                             <div key={index} id="PrintDiv" style={{ width: "100%", height: "100vh" }} className="PO_PrintUI">
@@ -90,11 +93,11 @@ const PO_PrintUI = (props) => {
                                                     <div className="text-center w-50"><p>{ ListDetails.pr_id === null ? 'NO PURCHASE REQUISITION' : ListDetails.pr_id }</p></div>
                                                 </div><div className="d-flex border">
                                                     <div className="border-right w-50 text-center"><p className="font-weight-bolder"> Date  </p></div>
-                                                    <div className="text-center w-50"><p>{d.toDateString()}</p></div>
+                                                    <div className="text-center w-50"><p>{d3.toDateString()}</p></div>
                                                 </div>
                                                 <div className="d-flex border">
                                                     <div className="border-right w-50 text-center"><p className="font-weight-bolder">PO Number  </p></div>
-                                                    <div className="text-center w-50"><p> {val.po_id} </p></div>
+                                                    <div className="text-center w-50"><p> {val.po_code} </p></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,8 +147,8 @@ const PO_PrintUI = (props) => {
                                                                     <div><p>{index + 1}</p></div>
                                                                     <div><p>{val.description}</p></div>
                                                                     <div><p>{val.quantity}</p></div>
-                                                                    <div><p>{val.price}</p></div>
-                                                                    <div><p>{val.amount}</p></div>
+                                                                    <div><p>Rs {val.price.toLocaleString('en-US')}</p></div>
+                                                                    <div><p>Rs {val.amount.toLocaleString('en-US')}</p></div>
                                                                 </div>
                                                                 {
                                                                     arr.includes(index)
@@ -186,11 +189,11 @@ const PO_PrintUI = (props) => {
                                                     <div className="Total"><p>Total</p></div>
                                                 </div>
                                                 <div>
-                                                    <div className="Total"><p> {val.total} </p></div>
+                                                    <div className="Total"><p> Rs { val.total.toLocaleString('en-US') } </p></div>
                                                     <div className="Total"><p>-</p></div>
-                                                    <div className="Total"><p>-</p></div>
-                                                    <div className="Total"><p>-</p></div>
-                                                    <div className="Total"><p> {val.total} </p></div>
+                                                    <div className="Total"><p> Rs { val.cartage.toLocaleString('en-US') } </p></div>
+                                                    <div className="Total"><p> Rs { val.others.toLocaleString('en-US') } </p></div>
+                                                    <div className="Total"><p> Rs { val.total.toLocaleString('en-US') } </p></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -205,16 +208,16 @@ const PO_PrintUI = (props) => {
                                         <div className="w-100">
                                             <div className="PO_PrintUI_Remarks PR_printUI_Remark" style={{ backgroundColor: "rgb(243, 243, 243)" }}>
                                                 <div className="DIVS" ><p className="font-weight-bolder">Sumbitted By</p></div>
-                                                <div className="DIVS" ><p className="font-weight-bolder">Approved By</p></div>
+                                                <div className="DIVS" ><p className="font-weight-bolder"> { val.discard_by === null ? "Approved By" : "Discard By" } </p></div>
                                             </div>
                                             <div className="PO_PrintUI_Remarks">
                                                 <div >
                                                     <div className="DIVS" ><p className="font-weight-bolder mr-3">Name : </p><p> {val.sender_name} </p></div>
-                                                    <div className="DIVS" ><p className="font-weight-bolder mr-3">Date : </p><p>{d.toDateString()}</p></div>
+                                                    <div className="DIVS" ><p className="font-weight-bolder mr-3">Date : </p><p>{d3.toDateString()}</p></div>
                                                 </div>
                                                 <div >
-                                                    <div className="DIVS" ><p className="font-weight-bolder mr-3">Name : </p><p> {val.approve_emp_name} </p></div>
-                                                    <div className="DIVS" ><p className="font-weight-bolder mr-3">Date : </p><p>{d.toDateString()}</p></div>
+                                                    <div className="DIVS" ><p className="font-weight-bolder mr-3">Name : </p><p> { val.discard_by === null ? val.approve_emp_name : val.discard_emp_name } </p></div>
+                                                    <div className="DIVS" ><p className="font-weight-bolder mr-3">Date : </p><p> { val.discard_by === null ? d1.toDateString() : d2.toDateString() } </p></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -226,7 +229,6 @@ const PO_PrintUI = (props) => {
                     }
                 )
             }
-
         </>
     )
 }

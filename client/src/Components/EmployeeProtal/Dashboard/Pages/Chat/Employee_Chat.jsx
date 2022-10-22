@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 
 import './Employee_Chat.css';
@@ -31,6 +32,7 @@ const Employee_Chat = () => {
     const encryptor = require('simple-encryptor')(key);
 
     const [Employees, setEmployees] = useState([]);
+    const [EmployeesLastChat, setEmployeesLastChat] = useState([]);
     const [LoadingState, setLoadingState] = useState(false);
     const [EmployeeStatus, setEmployeeStatus] = useState('');
     const [Chat, setChat] = useState([]);
@@ -108,8 +110,27 @@ const Employee_Chat = () => {
             Data.append('currentEmp', sessionStorage.getItem('EmpID'));
 
             axios.post('/getchatemployees', Data).then(res => {
+                
+                let arr = [];
+                for( let x = 0; x < res.data[0].length; x++ )
+                {
+                    if ( res.data[0][x].emp_id !== parseInt(sessionStorage.getItem('EmpID')) )
+                    {
+                        arr.push( res.data[0][x] );
+                    }
+                }
 
-                setEmployees(res.data);
+                let arr1 = [];
+                for( let y = 0; y < res.data[1].length; y++ )
+                {
+                    if ( res.data[1][y] !== null )
+                    {
+                        arr1.push( res.data[1][y] );
+                    }
+                }
+                
+                setEmployees(arr);
+                setEmployeesLastChat(arr1);
 
             }).catch(err => {
 
@@ -147,7 +168,9 @@ const Employee_Chat = () => {
 
             axios.post('/getallemployees', Data).then(res => {
 
-                setEmployees(res.data);
+                
+                setEmployees(res.data[0]);
+                setEmployeesLastChat(res.data[1]);
 
             }).catch(err => {
 
@@ -197,9 +220,10 @@ const Employee_Chat = () => {
             )
 
             setEmpIndex(index);
+
             if (res.data.length !== Chat.length) {
 
-                setChat([]);
+                // setChat([]);
                 setChat(res.data);
                 setTimeout(() => {
                     var objDiv = document.getElementById("ChatContainer");
@@ -235,13 +259,14 @@ const Employee_Chat = () => {
             // $('.List').show();
         }
 
-
-
-
     }
 
-    const OnChat = () => {
+    const OnChat = ( e ) => {
 
+        if ( e )
+        {
+            e.preventDefault()
+        }
 
         if ($('#Sendtext').val() !== '') {
 
@@ -252,9 +277,11 @@ const Employee_Chat = () => {
             Data.append('ChatBody', encryptor.encrypt($('#Sendtext').val()));
             Data.append('NotificationBody', $('#Sendtext').val());
             Data.append('Title', CurrentEmployeeData.name);
+            Data.append('whatsapp', true);
             axios.post('/insertchat', Data).then(() => {
 
                 GetThatEmpChat(ChatEmployee.emp_id, EmpIndex);
+                EmployeesLastChat[EmpIndex].chat_body = encryptor.encrypt($('#Sendtext').val());
 
                 $('#Sendtext').val('');
                 setTimeout(() => {
@@ -294,6 +321,17 @@ const Employee_Chat = () => {
                 });
             });
 
+        }else
+        {
+            toast.dark("Enter at least a single word", {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
 
     }
@@ -373,12 +411,12 @@ const Employee_Chat = () => {
                 <div className="Left">
 
                     <div className='chatcount'>
-                        <p className='font-weight-bold'>Chat Members</p>
+                        <p className='color-c-green'>Chat Members</p>
                         <p>
                             {
                                 Employees.length > 0
                                     ?
-                                    (Employees.length - 1)
+                                    (Employees.length - 1) + ' '
                                     :
                                     Employees.length
                             }
@@ -411,11 +449,11 @@ const Employee_Chat = () => {
                                             </div>
                                         }
                                     >
-                                        <EmployeesList Employees={Employees} GetThatEmpChat={GetThatEmpChat} />
+                                        <EmployeesList encryptor={encryptor} EmployeesLastChat={EmployeesLastChat} Employees={Employees} GetThatEmpChat={GetThatEmpChat} />
                                     </Suspense>
                                 )
 
-                            }, [Employees]
+                            }, [Employees, EmployeesLastChat, encryptor]
                         )
                     }
 
@@ -431,11 +469,11 @@ const Employee_Chat = () => {
                                         ShowChat
                                             ?
                                             <>
-                                                <div className="ChatEmployee">
+                                                <div className="ChatEmployee popUps">
                                                     <img
                                                         src={'images/employees/' + ChatEmployee.emp_image}
-                                                        width='50'
-                                                        height='50'
+                                                        width='40'
+                                                        height='40'
                                                         alt="chat employee img"
                                                         className='rounded-circle'
                                                     />
@@ -445,7 +483,7 @@ const Employee_Chat = () => {
                                                     </div>
                                                 </div>
 
-                                                <div className="ChatContent" id="ChatContainer">
+                                                <div className="ChatContent popUps" id="ChatContainer">
 
                                                     {
                                                         Calender.toDateString() !== new Date().toDateString()
@@ -461,8 +499,8 @@ const Employee_Chat = () => {
                                                                     <img
                                                                         src={loading}
                                                                         alt="Please wait....."
-                                                                        width="50"
-                                                                        height="50"
+                                                                        width="40"
+                                                                        height="40"
                                                                         className="rounded-circle"
                                                                     />
                                                                 </div>
@@ -484,7 +522,7 @@ const Employee_Chat = () => {
 
                                                 </div>
 
-                                                <div className="NewTweet">
+                                                <form className="NewTweet popUps" onSubmit={OnChat}>
                                                     <div
                                                         className="d-flex align-content-center w-100 bg-white border"
                                                         style={
@@ -499,16 +537,16 @@ const Employee_Chat = () => {
                                                             placeholder="Type something here..."
                                                             id="Sendtext"
                                                         />
-                                                        <i className="las la-paperclip" onClick={OpenDriveModal}></i>
+                                                        <i className="las la-paperclip" title="Attachment From Drive" onClick={OpenDriveModal}></i>
                                                     </div>
-                                                    <button onClick={OnChat}>
+                                                    <button type="submit">
                                                         <i className="las la-arrow-up"></i>
                                                     </button>
-                                                    <button className="btn text-white refresh d-none" onClick={() => GetThatEmpChat(ChatEmployee.emp_id, EmpIndex)}><i className="las la-redo-alt"></i></button>
-                                                </div>
+                                                    <button type="button" className="btn text-white refresh d-none" onClick={() => GetThatEmpChat(ChatEmployee.emp_id, EmpIndex)}><i className="las la-redo-alt"></i></button>
+                                                </form>
                                             </>
                                             :
-                                            <div className="NoChat">
+                                            <div className="NoChat popUps">
 
                                                 <img
                                                     src={NoCHat}
@@ -517,7 +555,7 @@ const Employee_Chat = () => {
                                                     alt="No CHat Img"
                                                 />
 
-                                                <h3 className='font-weight-bold'>NO EMPLOYEE SELECTED</h3>
+                                                <h3 className='font-weight-bold mt-3'>NO EMPLOYEE SELECTED</h3>
 
                                             </div>
                                     }
@@ -534,7 +572,7 @@ const Employee_Chat = () => {
                     )
                 }
 
-                <div className='Right'>
+                <div className='Right popUps'>
 
                     <div className='RightDiv'>
                         <Calendar
@@ -553,24 +591,21 @@ const Employee_Chat = () => {
                             >
                                 {
                                     ShowChat
-                                        ?
-                                        ChatEmployee.name + ' is ' + (EmployeeStatus === '' ? 'offline' : 'online')
-                                        :
-                                        'No Employee Selected'
+                                    ?
+                                    ChatEmployee.name + ' is '
+                                    :
+                                    'No Employee Selected'
                                 }
-                            </p>
-                        </div>
-                        <div className="Details">
-                            <p className="lightColor">You are online from</p>
-                            <p
-                                style={
-                                    {
-                                        fontWeight: 500
-                                    }
-                                }
-                            >
                                 {
-                                    new Date().toTimeString()
+                                    ShowChat
+                                    ?
+                                    EmployeeStatus === '' 
+                                    ? 
+                                    <span className="offline">offline</span> 
+                                    : 
+                                    <span className="online">online</span>
+                                    :
+                                    null
                                 }
                             </p>
                         </div>

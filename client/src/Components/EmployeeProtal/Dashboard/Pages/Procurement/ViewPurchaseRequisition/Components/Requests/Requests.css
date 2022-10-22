@@ -1,6 +1,6 @@
 .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Left .ViewPrRequests_div {
     border-radius: 10px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     padding: 20px;
     background-color: white;
     margin-bottom: 15px;
@@ -14,7 +14,7 @@
 }
 
 .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Left .ViewPrRequests_div i {
-    color: rgba(76, 184, 98, 255);
+    color: var(--orange);
     font-size: 25px;
     margin-right: 10px;
 }
@@ -31,10 +31,11 @@
     color: rgb(182, 181, 181);
     width: 100%;
     margin-right: 10px;
+    font-size: 12px;
 }
 
 .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Left .ViewPrRequests_div .ViewPrRequests_button .btn:last-child {
-    background-color: rgba(76, 184, 98, 255);
+    background-color: var(--orange);
     font-weight: bolder;
     color: rgb(255, 255, 255);
     width: 100%;

@@ -1,0 +1,60 @@
+.LeaveRequests {
+    padding: 30px;
+    width: 100%;
+    font-style: italic;
+    font-size: 12px;
+}
+
+.LeaveRequests .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.LeaveRequests .table tbody tr {
+    cursor: pointer;
+}
+
+.LeaveRequests .RecordContainer {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 30fr 70fr;
+    grid-column-gap: 20px;
+}
+
+.LeaveRequests .RecordContainer .LeaveInfo {
+    padding: 20px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.LeaveRequests .RecordContainer .LeaveInfo .EmployeeInfo,
+.LeaveRequests .RecordContainer .LeaveInfo .requestInfo,
+.LeaveRequests .RecordContainer .LeaveInfo .reviews {
+    width: 100%;
+    background-color: #fff;
+    display: grid;
+    grid-template-columns: 30fr 70fr;
+    grid-column-gap: 30px;
+    font-family: Poppins;
+    font-size: 13px;
+}
+
+.LeaveRequests .RecordContainer .LeaveInfo .requestInfo,
+.LeaveRequests .RecordContainer .LeaveInfo .reviews {
+    display: block;
+}
+
+.LeaveRequests .RecordContainer .LeaveInfo .info {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+}
+
+.LeaveRequests .RecordContainer .LeaveInfo .info2 {
+    grid-template-columns: 25fr 85fr;
+}
+
+.LeaveRequests .RecordContainer .LeaveInfo .info div {
+    word-break: break-all;
+}

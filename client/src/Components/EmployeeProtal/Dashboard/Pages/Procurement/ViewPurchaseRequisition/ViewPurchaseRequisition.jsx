@@ -30,6 +30,7 @@ const PurchaseRequisition = () => {
     
     const [ModalContent, setModalContent] = useState(<></>);
     const [ModalShow, setModalShow] = useState( false );
+    // const [Change, setChange] = useState( false );
 
     const [ViewRequest, setViewRequest] = useState([]);
     const [CountStatus, setCountStatus] = useState([]);
@@ -44,13 +45,13 @@ const PurchaseRequisition = () => {
     );
     const [Company, setCompany] = useState(
         {
-            column: 'companies.company_code',
+            column: 'invtry_purchase_requests.company_code',
             value: ''
         }
     );
     const [Location, setLocation] = useState(
         {
-            column: 'locations.location_code',
+            column: 'invtry_purchase_requests.location_code',
             value: ''
         }
     );
@@ -75,17 +76,20 @@ const PurchaseRequisition = () => {
     const [Total, setTotal] = useState(0.0);
     const [Index, setIndex] = useState();
 
-    const [EditMode, setEditMode] = useState(false);
+    const [EditMode, setEditMode] = useState(true);
 
     const [Item, setItem] = useState({
         description: "",
         reason: "",
         price: 0,
-        taxRequired: "NO",
         tax: '',
         quantity: 1,
     });
 
+    const [TaxMode, setTaxMode] = useState('inclusive');
+    const [Tax, setTax] = useState(0.00);
+    const [TaxAmount, setTaxAmount] = useState(0.00);
+    const [NetTotal, setNetTotal] = useState(0.00);
     
     const [PRID, setPRID] = useState(0); // FOR THE CURRENT PR ID
     const [ AttachQuotations, setAttachQuotations ] = useState([]); // FOR QUOTATION ATTACHMENTS
@@ -102,7 +106,6 @@ const PurchaseRequisition = () => {
     // MENU ITEMS
     const [Data, setData] = useState( [] );
     
-
     // Current Employee Data
     const EmpData = useSelector((state) => state.EmpAuth.EmployeeData);
     // HISTORY FOR REACT ROUTING
@@ -133,30 +136,37 @@ const PurchaseRequisition = () => {
                 ).then(
                     (res) => {
                         
+                        setTax( parseFloat( res.data[4][0].tax_per ) );
+                        setTotal( parseFloat( res.data[4][0].total ) );
+                        if ( res.data[4][0].tax_mode !== null )
+                        {
+                            setTaxMode( res.data[4][0].tax_mode );
+                        }
+                        setTaxAmount( res.data[4][0].tax_amt );
+                        setNetTotal( res.data[4][0].net_amt );
                         setItems( res.data[5] );
                         setList( res.data[4] );
-                        setTotal( res.data[4][0].total );
+                        // setTotal( parseFloat( res.data[4][0].total ) );
     
                         if ( res.data[4][0].status !== 'Approved' || res.data[4][0].status !== 'Delivered' || res.data[4][0].status !== 'Waiting For Approval' )
                         {
                             setAttachQuotations( res.data[6] ); // QUOTATIONS
                         }
-    
+
+                        $('.action').prop('disabled', false);
                         setEditMode(false);
                         setIndex(0);
     
                         setAmount(0.00);
-                        $('select').val('NO');
                         setItem({
                             description: '',
                             reason: '',
                             price: 0,
-                            taxRequired: "NO",
                             tax: '',
                             quantity: 1,
                         });
     
-                        $(".ViewPrRequests .PR_printUI_Middle .PR_printUI_Grid.MyItems").removeClass("d-none");
+                        $(".ViewPrRequests .PR_printUI_Middle .table .MyItems").removeClass("d-none");
                         setPRID( parseInt( pr_id ) );
                         GetDiscussions( parseInt( pr_id ) );
     
@@ -178,6 +188,61 @@ const PurchaseRequisition = () => {
             SortedPr();
 
         }, [ Key, Company, Location, Status, MyDate ]
+    )
+
+    useEffect(
+        () => {
+
+            let items = Items;
+            let tx_amount = 0.00;
+            let item_amount = 0.00;
+            let total = 0.00;
+            let total_tax_amount = 0.00;
+
+            for ( let x = 0; x < items.length; x++ )
+            {
+                if ( TaxMode === 'exclusive' )
+                {
+                    let reverse_tax = 100 - parseFloat( Tax );
+                    let amount = ( parseFloat( items[x].price ) * parseFloat( items[x].quantity ) );
+                    let amount_with_tax = amount / reverse_tax;
+                    amount_with_tax = amount_with_tax * 100; 
+                    let tax_amount = amount_with_tax - amount;
+                    tx_amount = tax_amount.toFixed(3);
+                    item_amount = parseFloat( amount ) + parseFloat( tx_amount );
+                    total = total + amount;
+                    total_tax_amount = total_tax_amount + tax_amount;
+    
+                }else
+                if ( TaxMode === 'inclusive' )
+                {
+                    let amount = ( parseFloat( items[x].price ) * parseFloat( items[x].quantity ) );
+                    let tax_amount = ( amount / 100 ) * parseFloat( Tax );
+                    tx_amount = tax_amount.toFixed(3);
+                    item_amount = parseFloat( amount ).toFixed(3);
+                    total = total + amount;
+                    total_tax_amount = total_tax_amount + parseFloat( tx_amount );
+                }
+
+                items[x].tax = Tax;
+                items[x].tax_amount = tx_amount;
+                items[x].amount = item_amount;
+            }
+
+            setItems( items );
+            setTotal( total );
+            setTaxAmount( parseFloat( total_tax_amount ).toFixed(3) );
+
+            if ( TaxMode === 'exclusive' )
+            {
+                let netTotal = parseFloat( total ) + parseFloat( total_tax_amount );
+                setNetTotal( parseFloat( netTotal ).toFixed(3) );
+            }else
+            {
+                setNetTotal( parseFloat( total ) );
+            }
+
+        }, [ TaxMode, Tax, Items, EditMode ]
     )
     
     useEffect(
@@ -217,6 +282,48 @@ const PurchaseRequisition = () => {
 
         }, []
     )
+
+    useEffect(
+        () => {
+            
+            // IMPORTANT VARIABLES
+            let price = parseFloat( Item.price );
+            let quantity = parseInt( Item.quantity );
+
+            if ( isNaN( price ) || price < 0 )
+            {
+                price = 0;
+                setItem(
+                    {
+                        ...Item,
+                        price: 0
+                    }
+                )
+            }
+            
+            if ( isNaN( quantity ) || quantity < 0 )
+            {
+                quantity = 0;
+                setItem(
+                    {
+                        ...Item,
+                        quantity: 0
+                    }
+                )
+            }
+    
+
+        }, [ Item.quantity, Item.price ]
+    )
+
+    // WHEN INDIVIDUAL TAX MODE CHANGE FROM
+    // ! EXCLUSIVE/INCLUSIVE
+    const IndividualTaxMode = ( e ) => {
+
+        const { value } = e.target;
+        setTaxMode(value);
+
+    }
 
     const GetDiscussions = ( pr_id ) => {
 
@@ -475,67 +582,62 @@ const PurchaseRequisition = () => {
             List[0].status === 'Sent'
         )
         {
+            $('.action').prop('disabled', true);
             setEditMode(true);
             setIndex(index);
     
             setAmount(Items[index].amount);
             setItem(Items[index]);
     
-            $(".ViewPrRequests .PR_printUI_Middle .PR_printUI_Grid.MyItems" + index).toggleClass("d-none");
+            $(".ViewPrRequests .PR_printUI_Middle .table .MyItems" + index).toggleClass("d-none");
         }
     };
 
-    const onChangeHandler = ( e ) => {
-
-        // console.log( e.target.name );
+    // WHEN EMPLOYEE ENTERING THE DETAILS IN THE FIELDS AND THE DATA IS STORE TO STATE
+    const onChangeHandler = (e) => {
         const { name, value } = e.target;
 
-        const val = {
-          ...Item,
-          [name]: value,
-        };
-    
-        setItem(val);
-    
-        if (name === "price") {
-          let amount = value * Item.quantity;
-          setAmount(amount);
-        }
-    
-        if (name === "quantity") {
-          let amount = value * Item.price;
-          setAmount(amount);
-        }
-
-        if (name === "taxRequired") {
-            let input = document.getElementById('TAX');
-            if ( value === 'YES' )
+        let pass = true;
+        if ( name === 'quantity' || name === 'price' || name === 'tax' )
+        {
+            if ( value < 0 || value === -0 || value === '-0' )
             {
-                input.disabled = false;
-            }else
-            {
-                setItem(
-                    {
-                        ...Item,
-                        tax: ''
-                    }
-                )
-                input.disabled = true;
+                ShowNotification( "value should be greater than 0", 'top-center' );
+                pass = false;
             }
         }
 
-        if (name === "tax") {
-
-            let amount = ( ( Item.price * Item.quantity ) / 100 ) * value;
-            setAmount( amount + ( Item.price * Item.quantity ) );
+        if ( pass )
+        {
+            const val = {
+              ...Item,
+              [name]: value,
+            };
+        
+            setItem(val);
         }
+
+    };
+
+    // SHOW POP-UP ALERT
+    const ShowNotification = ( note , position) => {
+
+        toast.dark(note.toString(), {
+            position: position,
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
 
     }
 
-    const AddItem = ( e ) => {
-
+    // WHEN EMPLOYEE WANT TO ADD AN ITEM TO THE ENTERED ITEMS LIST
+    const AddItem = (e) => {
         if (
-            e.keyCode === 13 && Item.description !== '' && Item.reason !== '' && Item.quantity > 0
+            e.keyCode === 13 && Item.description !== '' && Item.reason !== '' && Item.quantity > 0 && Item.price > 0
         ) {
 
             if (Item.reason.length < 20) {
@@ -564,93 +666,79 @@ const PurchaseRequisition = () => {
 
             } else {
 
-                if (Item.taxRequired === "YES" && Item.tax.toString() === '0') {
-                    alert('tax required');
+                if (!EditMode) {
+
+                    let cart = {
+                        description: Item.description,
+                        reason: Item.reason,
+                        price: Item.price,
+                        quantity: Item.quantity,
+                    };
+                    setItems([...Items, cart]);
+
+                    setAmount(0.0);
+                    setItem({
+                        description: "",
+                        reason: "",
+                        price: 0,
+                        tax: '',
+                        quantity: 1,
+                    });
+
+                    var objDiv = document.getElementById("ItemsLIst");
+                    if (objDiv !== null) {
+                        objDiv.scrollTop = objDiv.scrollHeight;
+                    }
+
                 } else {
-                    if (!EditMode) {
-                        let cart = {
+                    let arr = Items;
+                    let cart = {};
+
+                    if (Item.id) {
+                        cart = {
+                            id: Item.id,
+                            pr_id: Item.pr_id,
                             description: Item.description,
                             reason: Item.reason,
                             price: Item.price,
                             quantity: Item.quantity,
-                            tax: Item.tax,
-                            amount: Amount,
                         };
-                        setItems([...Items, cart]);
-
-                        setAmount(0.0);
-                        $('select').val('NO');
-                        setItem({
-                            description: "",
-                            reason: "",
-                            price: 0,
-                            taxRequired: "NO",
-                            tax: '',
-                            quantity: 1,
-                        });
-
-                        let t = Total;
-                        t = t + Amount;
-
-                        setTotal(t);
-
-                        var objDiv = document.getElementById("ItemsLIst");
-                        if (objDiv !== null) {
-                            objDiv.scrollTop = objDiv.scrollHeight;
-                        }
-
                     } else {
-                        let arr = Items;
-                        let cart = {};
-                        if (Item.id) {
-                            cart = {
-                                id: Item.id,
-                                pr_id: Item.pr_id,
-                                description: Item.description,
-                                reason: Item.reason,
-                                price: Item.price,
-                                quantity: Item.quantity,
-                                tax: Item.tax,
-                                amount: Amount,
-                            };
-                        } else {
-                            cart = {
-                                description: Item.description,
-                                reason: Item.reason,
-                                price: Item.price,
-                                quantity: Item.quantity,
-                                tax: Item.tax,
-                                amount: Amount,
-                            };
-                        }
-                        setTotal(Total - arr[Index].amount + Amount);
-
-                        arr[Index] = cart;
-                        setItems(arr);
-
-                        setAmount(0.0);
-                        $('select').val('NO');
-                        setItem({
-                            description: "",
-                            reason: "",
-                            price: 0,
-                            taxRequired: "NO",
-                            tax: '',
-                            quantity: 1,
-                        });
-                        setEditMode(false);
-                        setIndex();
-                        $(".ViewPrRequests .PR_printUI_Middle .PR_printUI_Grid.MyItems").removeClass("d-none");
-
-
+                        cart = {
+                            description: Item.description,
+                            reason: Item.reason,
+                            price: Item.price,
+                            quantity: Item.quantity,
+                        };
                     }
+
+                    arr[Index] = cart;
+                    setItems(arr);
+
+                    setAmount(0.0);
+                    setItem({
+                        description: "",
+                        reason: "",
+                        price: 0,
+                        tax: '',
+                        quantity: 1,
+                    });
+                    setEditMode(false);
+                    $('.action').prop('disabled', false);
+                    setIndex();
+                    $(".ViewPrRequests .PR_printUI_Middle .table .MyItems").removeClass("d-none");
+
+
                 }
+
+                $('textarea, input, select').blur();
+                $('textarea[name=description]').focus();
 
             }
 
         }
 
-    }
+    };
 
     const onDelete = (id) => {
         if ( 
@@ -659,6 +747,7 @@ const PurchaseRequisition = () => {
             List[0].status === 'Sent'
         )
         {
+            // let total_tax = parseFloat( TotalTax );
             let arr = Items.filter((val, index) => {
                 return index === id;
             })
@@ -670,8 +759,6 @@ const PurchaseRequisition = () => {
                     return index !== id;
                 })
             );
-    
-            setTotal(Total - Items[id].amount);
 
         }
     };
@@ -891,6 +978,7 @@ const PurchaseRequisition = () => {
         axios.post('/setprtodiscard', Data).then(
             () => {
 
+                socket.emit('newpurchaserequision');
                 const Data2 = new FormData();
                 Data2.append('eventID', 3);
                 Data2.append('link', '/purchaserequisition/view=previousrequests/' + prID);
@@ -902,7 +990,6 @@ const PurchaseRequisition = () => {
 
                     axios.post('/sendmail', Data2).then(() => {
 
-                        socket.emit('newpurchaserequision');
                         history.replace('/purchaserequisition/view=purchase_requisition&&id=' + ( prID - 1 ) );
                         setTimeout(() => {
                             history.replace('/purchaserequisition/view=purchase_requisition&&id=' + prID );
@@ -997,6 +1084,7 @@ const PurchaseRequisition = () => {
                     progress: undefined,
                 });
 
+                socket.emit('newpurchaserequision');
                 const Data2 = new FormData();
                 Data2.append('eventID', 3);
                 Data2.append('receiverID', List[0].request_by);
@@ -1007,7 +1095,6 @@ const PurchaseRequisition = () => {
 
                     axios.post('/sendmail', Data2).then(() => {
 
-                        socket.emit('newpurchaserequision');
                         history.replace('/purchaserequisition/view=purchase_requisition&&id=' + ( prID - 1 ) );
                         setTimeout(() => {
                             history.replace('/purchaserequisition/view=purchase_requisition&&id=' + prID );
@@ -1054,20 +1141,20 @@ const PurchaseRequisition = () => {
             }
         }
 
-        if ( AttachQuotations.length === 0 )
-        {
-            toast.dark('Please attach at least 1 quotation', {
-                position: 'top-center',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-            pass = false;
-            HideModelFunction();
-        }
+        // if ( AttachQuotations.length === 0 )
+        // {
+        //     toast.dark('Please attach at least 1 quotation', {
+        //         position: 'top-center',
+        //         autoClose: 5000,
+        //         hideProgressBar: false,
+        //         closeOnClick: true,
+        //         pauseOnHover: true,
+        //         draggable: true,
+        //         progress: undefined,
+        //     });
+        //     pass = false;
+        //     HideModelFunction();
+        // }
 
         if ( pass )
         {
@@ -1081,6 +1168,10 @@ const PurchaseRequisition = () => {
                 d.append('Items', JSON.stringify( Items ));
                 d.append('deletedItems', JSON.stringify( DeletedItems ));
                 d.append('Total', Total);
+                d.append('TaxMode', TaxMode);
+                d.append('Tax', Tax);
+                d.append('TaxAmount', TaxAmount);
+                d.append('NetTotal', NetTotal);
         
                 axios.post('/setprtofinal', d).then(
                     () => {
@@ -1111,8 +1202,11 @@ const PurchaseRequisition = () => {
         
                                 setIndex()
                                 setEditMode(false)
+                                $('.action').prop('disabled', false);
                                 setTotal(0.00)
                                 setAmount(0.00)
+                                socket.emit( 'NewNotification', List[0].request_by);
+                                socket.emit('newpurchaserequision');
                                 
                                 const Data2 = new FormData();
                                 Data2.append('eventID', 3);
@@ -1124,14 +1218,9 @@ const PurchaseRequisition = () => {
         
                                     axios.post('/sendmail', Data2).then(() => {
 
-                                        socket.emit( 'NewNotification', List[0].request_by);
-                                        socket.emit('newpurchaserequision');
         
                                     })
                                 })
-
-                                
-                                socket.emit('newpurchaserequision');
         
                                 let list = JSON.stringify([513, 514, 515]);
                                 const Data3 = new FormData();
@@ -1224,6 +1313,23 @@ const PurchaseRequisition = () => {
         let iframe = document.getElementById('pr');
         iframe.src = 'https://' + window.location.host + '/#/view=purchase_requisition/' + id
         iframe.contentWindow.print();
+        setTimeout(() => {
+            iframe.contentWindow.print();
+        }, 500);
+
+    }
+
+    const CollapseRequests = () => {
+
+        $('.ViewPrRequests_grid').toggleClass('d-block');
+        $('.ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .previewWindow .openBtn').toggleClass('d-block');
+        $('.ViewPrRequests_grid .ViewPrRequests_Left').toggle('slow');
+
+    }
+
+    const onChangeTax = ( e ) => {
+
+        setTax( e.target.value );
 
     }
 
@@ -1265,6 +1371,7 @@ const PurchaseRequisition = () => {
                 
                 <div className="ViewPrRequests_grid">
                     <div className="ViewPrRequests_Left">
+                        <button onClick={ CollapseRequests } className="btn btn-sm collapseBtn"><i className="las la-chevron-left"></i></button>
                         <Suspense fallback={
                             <div className="w-100 d-flex justify-content-center mt-5">
                                 <div>
@@ -1298,6 +1405,7 @@ const PurchaseRequisition = () => {
                     </div>
                     <div className="ViewPrRequests_Right">
                         <div className='previewWindow'>
+                            <button onClick={ CollapseRequests } className="btn btn-sm openBtn mb-2"><i className="las la-chevron-down"></i></button>
                             <Route
                                 exact
                                 path="/purchaserequisition/home"
@@ -1345,11 +1453,18 @@ const PurchaseRequisition = () => {
                                                 Item={Item}
                                                 Total={Total}
                                                 Amount={Amount}
+                                                Index={ Index }
+                                                TaxMode={ TaxMode }
+                                                Tax={ Tax }
+                                                TaxAmount={ TaxAmount }
+                                                NetTotal={ NetTotal }
 
-                                                onChnageHandler={onChangeHandler}
+                                                IndividualTaxMode={ IndividualTaxMode }
+                                                OnChangeHandler={onChangeHandler}
                                                 AddItem={AddItem}
                                                 OnEdit={OnEdit}
                                                 onDelete={onDelete}
+                                                onChangeTax={ onChangeTax }
                                             />
                                         </Suspense>
                                 }
@@ -1416,11 +1531,13 @@ const PurchaseRequisition = () => {
                                 window.location.href.split('/').pop() !== 'home'
                                 ?
                                 <div className="btn-group">
-                                    <button className="btn btn-primary" onClick={() => history.replace('/purchaserequisition/view=purchase_requisition&&id=' + PRID)}>Purchase Requisition</button>
-                                    <button className="btn btn-info" onClick={() => history.replace('/purchaserequisition/view=quotations&&id=' + PRID)}>Quotations</button>
-                                    <button className="btn btn-light" onClick={() => history.replace('/purchaserequisition/view=discussions&&id=' + PRID)}>Discussions</button>
-                                    <button className="btn btn-warning" onClick={ () => Print(PRID) }>Print</button>
+                                    <button className="btn firstBtn" onClick={() => history.replace('/purchaserequisition/view=purchase_requisition&&id=' + PRID)}>Purchase Requisition</button>
+                                    <button className="btn secondBtn" onClick={() => history.replace('/purchaserequisition/view=quotations&&id=' + PRID)}>Quotations</button>
+                                    <button className="btn thirdBtn" onClick={() => history.replace('/purchaserequisition/view=discussions&&id=' + PRID)}>Discussions</button>
+                                    <button className="btn forthBtn" onClick={ () => Print(PRID) }>Print</button>
                                         {
+                                            EmpData.access
+                                            ?
                                             JSON.parse(EmpData.access).includes(513) || JSON.parse(EmpData.access).includes(515)
                                                 ?
                                                 List[0]
@@ -1429,13 +1546,13 @@ const PurchaseRequisition = () => {
                                                         ?
                                                         <>
                                                                 <button
-                                                                    className="btn btn-sm btn-danger"
+                                                                    className="btn btn-sm fifthBtn"
                                                                     onClick={() => onDiscard( window.location.href.split('/').pop().split('id=').pop() )}
                                                                 >
                                                                     Discard
                                                                 </button>
                                                                 <button
-                                                                    className="btn btn-sm btn-success"
+                                                                    className="btn btn-sm sixthBtn"
                                                                     onClick={() => onApprove( window.location.href.split('/').pop().split('id=').pop() )}
                                                                 >
                                                                     Approve
@@ -1446,6 +1563,8 @@ const PurchaseRequisition = () => {
                                                     :
                                                     null
                                                 :
+                                            null
+                                            :
                                             null
                                         }
                                         {
@@ -1461,13 +1580,13 @@ const PurchaseRequisition = () => {
                                             ?
                                             <>
                                                 <button
-                                                    className="btn btn-success"
+                                                    className="btn sixthBtn"
                                                     onClick={() => onForward( window.location.href.split('/').pop().split('id=').pop() )}
                                                 >
                                                     Forward
                                                 </button>
                                                 <button
-                                                    className="btn btn-danger"
+                                                    className="btn fifthBtn"
                                                     style={{ backgroundColor: 'red', color: 'white' }}
                                                     onClick={() => onDiscard( window.location.href.split('/').pop().split('id=').pop() )}
                                                 >

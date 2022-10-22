@@ -18,6 +18,7 @@
 .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .Home .three .Calculate {
     width: 100%;
     background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     padding: 10px;
     border-radius: 15px;
     font-family: Poppins;
@@ -26,9 +27,9 @@
     word-break: break-all;
 }
 
-.ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .Home .three .RequestStatusChart canvas {
+/* .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .Home .three .RequestStatusChart canvas {
     height: 100px;
-}
+} */
 
 .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .Home .three .Calculate small {
     font-size: 12px;
@@ -124,9 +125,9 @@
     .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .Home .three {
         grid-template-columns: 33.33fr 33.33fr 33.33fr;
     }
-    .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .Home .three .RequestStatusChart canvas {
+    /* .ViewPrRequests .ViewPrRequests_grid .ViewPrRequests_Right .Home .three .RequestStatusChart canvas {
         height: 100px;
-    }
+    } */
 }
 
 @media only screen and (max-width: 1200px) {

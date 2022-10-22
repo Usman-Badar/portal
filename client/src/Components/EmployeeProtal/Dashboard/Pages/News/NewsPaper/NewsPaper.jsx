@@ -1,10 +1,11 @@
+/* eslint-disable jsx-a11y/iframe-has-title */
 import React, { useEffect, useState } from 'react'
 import './NewsPaper.css';
 
 import axios from '../../../../../../axios';
 
 
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const NewsPaper = () => {

@@ -147,7 +147,7 @@
 .POForm .PO_printUI_Middle .PO_printUI_Grid {
     display: grid;
     grid-template-columns: minmax(20px, 5fr) minmax(150px, 25fr) minmax(200px, 30fr) minmax(50px, 8.33fr) minmax(50px, 8.33fr) minmax(75px, 7.5fr) minmax(75px, 7.5fr) minmax(50px, 8.33fr);
-    width: 1200px;
+    min-width: 1200px;
     overflow: auto;
 }
 
@@ -236,4 +236,9 @@
 .POForm .Footer .Left.RequestedBy,
 .POForm .Footer .Right.ApprovedBy {
     width: 100%;
+}
+
+.submitPO {
+    background-color: var(--blue);
+    color: #fff;
 }

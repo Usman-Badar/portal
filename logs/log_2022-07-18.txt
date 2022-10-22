@@ -1,0 +1,16 @@
+09:58:10 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: missing ) after argument list
+
+16:25:35 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: CreateLogs is not defined
+
+16:33:58 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: CreateLogs is not defined
+
+16:37:40 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
