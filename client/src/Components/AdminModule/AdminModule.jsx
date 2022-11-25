@@ -11,6 +11,10 @@ const Sidebar = lazy( () => import('./Components/SideBar/SideBar') );
 const TopBar = lazy( () => import('./Components/TopBar/TopBar') );
 const Breadcrumbs = lazy( () => import('./Components/Breadcrumbs/Breadcrumbs') );
 const Home = lazy( () => import('./Pages/Home/Home') );
+const EmployeeForm = lazy( () => import('./Pages/Employement_Setup/EmployeeSetup/EmployeeForm') );
+const EmploymentRequests = lazy( () => import('./Pages/Employement_Setup/Employement_Requests/Employement_Requests') );
+const ViewTempEmployees = lazy( () => import('./Pages/Employement_Setup/Employement_Requests/ViewTempEmployee/ViewTempEmployee') );
+const ConfirmApproval = lazy( () => import('./Pages/Employement_Setup/Employement_Requests/ViewTempEmployee/ConfirmApproval/ConfirmApproval') );
 const Admin_View_Employees = lazy( () => import('./Pages/Employement_Setup/Employement_Requests/Admin_View_Employees/Admin_View_Employees') );
 const Departments = lazy( () => import('./Pages/Departments/Departments') );
 const Designations = lazy( () => import('./Pages/Departments/Designations/Designations') );
@@ -65,6 +69,14 @@ const AdminModule = () => {
             <NavLink activeClassName="Admin_Dashboard_active" to="/admin_module" className="d-center links">
                 <div className="pr-3"><i className="las la-home"></i></div>
                 <div className="links_txt">Home</div>
+            </NavLink>
+            <NavLink activeClassName="Admin_Dashboard_active" to="/admin_employement_requests" className="d-center links">
+                <div className="pr-3"><i class="las la-building"></i></div>
+                <div className="links_txt">Employment Requests</div>
+            </NavLink>
+            <NavLink activeClassName="Admin_Dashboard_active" to="/admin_employement_requests/admin_employement_setup" className="d-center links">
+                <div className="pr-3"><i class="las la-building"></i></div>
+                <div className="links_txt">Employee Form</div>
             </NavLink>
             <NavLink activeClassName="Admin_Dashboard_active" to="/admin_companies" className="d-center links">
                 <div className="pr-3"><i class="las la-building"></i></div>
@@ -121,6 +133,10 @@ const AdminModule = () => {
                     <div className="content">
                         {/* <Breadcrumbs /> */}
                         <Route exact path='/admin_module' render={ () => <Suspense fallback={ <div>Loading....</div> }><Home /></Suspense> } />
+                        <Route exact path='/admin_employement_requests' render={ () => <Suspense fallback={ <div>Loading....</div> }><EmploymentRequests /></Suspense> } />
+                        <Route exact path='/admin_employement_requests/admin_employement_setup' render={ () => <Suspense fallback={ <div>Loading....</div> }><EmployeeForm /></Suspense> } />
+                        <Route exact path='/admin_employement_requests/admin_view_temp_employee/:id' render={ () => <Suspense fallback={ <div>Loading....</div> }><ViewTempEmployees /></Suspense> } />
+                        <Route exact path='/admin_employement_requests/confirmapproval/:id' render={ () => <Suspense fallback={ <div>Loading....</div> }><ConfirmApproval /></Suspense> } />
                         <Route exact path='/admin_view_employees' render={ () => <Suspense fallback={ <div>Loading....</div> }><Admin_View_Employees /></Suspense> } />
                         <Route exact path='/admin_companies' render={ () => <Suspense fallback={ <div>Loading....</div> }><Companies /></Suspense> } />
                         <Route exact path='/admin_locations' render={ () => <Suspense fallback={ <div>Loading....</div> }><Locations /></Suspense> } />

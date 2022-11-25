@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../db/connection');
-const fs =  require('fs');
 
 router.post('/timein', ( req, res ) => {
 
@@ -25,7 +24,8 @@ router.post('/timein', ( req, res ) => {
                 if ( !rslt[0] )
                 {
                     db.query(
-                        'SELECT time_in, time_out FROM employees WHERE emp_id = ' + empID,
+                        'SELECT name, time_in, time_out FROM employees WHERE emp_id = ' + empID + ";" +
+                        "SELECT * FROM `tbl_holidays`;",
                         ( err, rslt ) => {
                 
                             if( err )
@@ -37,16 +37,33 @@ router.post('/timein', ( req, res ) => {
                             }else 
                             {
                                 
-                                let time1 = rslt[0].time_in.substring(3, 5);
+                                let time1 = rslt[0][0].time_in.substring(3, 5);
                                 let time2 = d.toTimeString();
                                 time1 = parseInt(time1) + 16;
-                                time1 = rslt[0].time_in.substring(0, 3) + time1.toString() + ':00';
+                                time1 = rslt[0][0].time_in.substring(0, 3) + time1.toString() + ':00';
+                                var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                                var d2 = new Date(d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate());
+                                var dayName = days[d2.getDay()];
                 
                                 let status = 'Present';
                                 
                                 if ( time2 > time1 )
                                 {
                                     status = 'Late';
+                                }
+
+                                if ( dayName === 'Sunday' )
+                                {
+                                    status = 'OFF';
+                                }
+
+                                for ( let x = 0; x < rslt[1].length; x++ )
+                                {
+                                    const h_d = new Date(rslt[1][x].day);
+                                    if ( ( h_d.getFullYear() + '-' + (h_d.getMonth() + 1) + '-' + h_d.getDate() ) === ( d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() ) )
+                                    {
+                                        status = rslt[1][x].status;
+                                    }
                                 }
                 
                                 db.query(
@@ -63,7 +80,7 @@ router.post('/timein', ( req, res ) => {
                                         }else 
                                         {
 
-                                            res.send( 'success' );
+                                            res.send( rslt[0][0].name );
                                             res.end();
                             
                                         }

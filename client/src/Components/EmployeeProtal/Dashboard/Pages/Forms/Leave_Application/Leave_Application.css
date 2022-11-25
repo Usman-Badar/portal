@@ -76,33 +76,81 @@
     }
 }
 
+.down {
+    display: none;
+}
+
 .Short_Leave_Form,
 .Filters {
     width: 100%;
     padding-top: 20px;
 }
 
-.Short_Leave_Form .Application_Form,
-.History .histories,
-.Filters .inner {
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+.history_content {
+    width: 70%;
+    border: 1px solid lightgray;
     background-color: #ffff;
-    border-radius: 10px;
-    width: 30%;
     padding: 20px;
     margin: auto;
     transition: .5s;
     animation: popups .2s linear 1 forwards alternate;
     opacity: 0;
     transform: scale(0.8);
+    border-radius: 10px;
+    font-family: 'Oxygen', sans-serif;
+}
+
+.history_content h3 {
+    font-family: Cinzel !important;
+}
+
+.history_content .signatures {
+    transform: rotate(-10deg) translate(20px, 40px);
+    font-family: "Tangerine", serif;
+}
+
+.history_content .form-control#leave_type_select {
+    width: fit-content !important;
+}
+
+.history_content .div_item {
+    display: flex;
+    grid-template-columns: 20fr 80fr;
+    grid-column-gap: 10px;
+}
+
+.Application_Form {
+    border-radius: 10px;
+    width: 30%;
+    padding: 20px;
+    margin: auto;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    background-color: #ffff;
+    transition: .5s;
+    animation: popups .2s linear 1 forwards alternate;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.history_content .div_item div:first-child {
+    font-weight: bold;
+}
+
+.history_content .div_item div:last-child {
+    border-bottom: 1px solid;
+    padding: 0 15px;
+}
+
+.history_content .table {
+    font-size: 13px;
 }
 
 .Short_Leave_Form p {
     margin-bottom: 0;
 }
 
-.Short_Leave_Form .Application_Form .Leave_Duration .Leave_Duration_Time input,
-.Short_Leave_Form .Application_Form .Leave_Duration .Leave_Duration_Time select {
+.Short_Leave_Form .Application_Form input,
+.Short_Leave_Form .Application_Form select {
     border: 1px solid rgb(212, 212, 212) !important;
     border-radius: 5px !important;
     box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;

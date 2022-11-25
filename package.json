@@ -30,10 +30,11 @@
         "node-notifier": "^10.0.0",
         "nodejs-nodemailer-outlook": "^1.2.4",
         "nodemailer": "^6.7.0",
+        "qrcode-terminal": "^0.12.0",
         "redis-server": "^1.2.2",
         "simple-encryptor": "^4.0.0",
         "socket.io": "^4.4.0",
         "wbm": "^1.1.16",
-        "whatsapp-web.js": "^1.17.1"
+        "whatsapp-web.js": "^1.18.2"
     }
 }

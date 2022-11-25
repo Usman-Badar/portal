@@ -23,37 +23,77 @@ router.post('/initializeemployee', ( req, res ) => {
 
     const d = new Date();
     
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        "INSERT INTO employees (name, father_name, date_of_birth, place_of_birth, residential_address, permanent_address, emergency_person_name, emergency_person_number, landline, cell, gender, emp_status, email, children, marital_status, created_at, user_id, cnic, cnic_date_of_issue, cnic_date_of_expiry, cnic_place_of_issue, cnic_front_image, cnic_back_image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        [ Name, FatherName, Dob, PoB, RsdtAddress, PrmtAddress, Emergency_contact_person, Emergency_contact_number, landlineHome, personal_no, gender, 'Waiting For Approval', Email, children, maritalStatus, d, isNaN( userID ) ? null : parseInt( userID ), cnic, cnic_DoI, cnic_DoE, cnic_PoI, cnic_f_name, cnic_b_name ],
+        ( err ) => {
 
-            if ( err )
+            if( err )
             {
 
                 console.log( err );
-                res.status(503).send(err);
+                res.status(500).send( err );
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "INSERT INTO employees (name, father_name, date_of_birth, place_of_birth, residential_address, permanent_address, emergency_person_name, emergency_person_number, landline, cell, gender, emp_status, email, children, marital_status, created_at, user_id, cnic, cnic_date_of_issue, cnic_date_of_expiry, cnic_place_of_issue, cnic_front_image, cnic_back_image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                    [ Name, FatherName, Dob, PoB, RsdtAddress, PrmtAddress, Emergency_contact_person, Emergency_contact_number, landlineHome, personal_no, gender, 'Waiting For Approval', Email, children, maritalStatus, d, isNaN( userID ) ? null : parseInt( userID ), cnic, cnic_DoI, cnic_DoE, cnic_PoI, cnic_f_name, cnic_b_name ],
-                    ( err ) => {
-            
-                        if( err )
+
+                db.query(
+                    "SELECT emp_id FROM employees WHERE name = '" + Name + "' AND father_name = '" + FatherName + "' AND created_at = '" + d.getFullYear() + '-' + parseInt(d.getMonth() + 1) + '-' + d.getDate() + "' AND emp_status = 'Waiting For Approval' AND cell = '" + personal_no + "'",
+                    ( err, rslt ) => {
+
+                        if ( err )
                         {
-            
+
                             console.log( err );
                             res.status(500).send( err );
                             res.end();
-                            connection.release();
-            
-                        }else 
+
+                        }else
                         {
-            
-                            connection.query(
-                                "SELECT emp_id FROM employees WHERE name = '" + Name + "' AND father_name = '" + FatherName + "' AND created_at = '" + d.getFullYear() + '-' + parseInt(d.getMonth() + 1) + '-' + d.getDate() + "' AND emp_status = 'Waiting For Approval' AND cell = '" + personal_no + "'",
-                                ( err, rslt ) => {
+
+                            if ( DrivingLicense )
+                            {
+                                db.query(
+                                    "INSERT INTO emp_driving_license (emp_id, driving_license, status) VALUES (?,?,?)",
+                                    [ rslt[0].emp_id, drvLicName, 'Active' ],
+                                    ( err, rslt ) => {
+                
+                                        if ( err )
+                                        {
+                
+                                            console.log( err );
+                                            res.status(500).send( err );
+                                            res.end();
+                
+                                        }
+                                    }
+                                )
+                            }
+
+                            if ( ArmedLicense )
+                            {
+                                db.query(
+                                    "INSERT INTO emp_armed_license (emp_id, armed_license, status) VALUES (?,?,?)",
+                                    [ rslt[0].emp_id, armdLicName, 'Active' ],
+                                    ( err, rslt ) => {
+                
+                                        if ( err )
+                                        {
+                
+                                            console.log( err );
+                                            res.status(500).send( err );
+                                            res.end();
+                
+                                        }
+                                    }
+                                )
+                            }
+
+                            db.query(
+                                "INSERT INTO emp_cv (emp_id, cv, status) VALUES (?,?,?)",
+                                [ rslt[0].emp_id, cvimgName, 'Active' ],
+                                ( err, rsltcv ) => {
             
                                     if ( err )
                                     {
@@ -61,218 +101,147 @@ router.post('/initializeemployee', ( req, res ) => {
                                         console.log( err );
                                         res.status(500).send( err );
                                         res.end();
-                                        connection.release();
             
                                     }else
                                     {
-            
-                                        if ( DrivingLicense )
-                                        {
-                                            connection.query(
-                                                "INSERT INTO emp_driving_license (emp_id, driving_license, status) VALUES (?,?,?)",
-                                                [ rslt[0].emp_id, drvLicName, 'Active' ],
-                                                ( err, rslt ) => {
-                            
-                                                    if ( err )
-                                                    {
-                            
-                                                        console.log( err );
-                                                        res.status(500).send( err );
-                                                        res.end();
-                                                        connection.release();
-                            
-                                                    }
-                                                }
-                                            )
-                                        }
-            
-                                        if ( ArmedLicense )
-                                        {
-                                            connection.query(
-                                                "INSERT INTO emp_armed_license (emp_id, armed_license, status) VALUES (?,?,?)",
-                                                [ rslt[0].emp_id, armdLicName, 'Active' ],
-                                                ( err, rslt ) => {
-                            
-                                                    if ( err )
-                                                    {
-                            
-                                                        console.log( err );
-                                                        res.status(500).send( err );
-                                                        res.end();
-                                                        connection.release();
-                            
-                                                    }
-                                                }
-                                            )
-                                        }
-            
-                                        connection.query(
-                                            "INSERT INTO emp_cv (emp_id, cv, status) VALUES (?,?,?)",
-                                            [ rslt[0].emp_id, cvimgName, 'Active' ],
-                                            ( err, rsltcv ) => {
+                                        db.query(
+                                            "INSERT INTO emp_prf_address (emp_id, proof_of_address, status) VALUES (?,?,?)",
+                                            [ rslt[0].emp_id, addressimgName, 'Active' ],
+                                            ( err, rsltadd ) => {
                         
                                                 if ( err )
                                                 {
                         
                                                     console.log( err );
-                                                    res.status(500).send( err );
+                                                    res.status(500).send(err);
                                                     res.end();
-                                                    connection.release();
                         
                                                 }else
                                                 {
-                                                    connection.query(
-                                                        "INSERT INTO emp_prf_address (emp_id, proof_of_address, status) VALUES (?,?,?)",
-                                                        [ rslt[0].emp_id, addressimgName, 'Active' ],
-                                                        ( err, rsltadd ) => {
+                                                    
+                                                    Image.mv('client/public/images/employees/' + imgName, (err) => {
+
+                                                        if (err) {
+                                                
+                                                            console.log( err );
+                                                            res.status(500).send(err);
+                                                            res.end();
+                                                
+                                                        }
+                                                
+                                                    });
+                                                
+                                                    CNICFrontImage.mv('client/public/images/documents/cnic/front/' + cnic_f_name, (err) => {
+                                                
+                                                        if (err) {
+                                                
+                                                            console.log( err );
+                                                            res.status(500).send(err);
+                                                            res.end();
+                                                
+                                                        }
+                                                
+                                                    });
+                                                
+                                                    CNICBackImage.mv('client/public/images/documents/cnic/back/' + cnic_b_name, (err) => {
+                                                
+                                                        if (err) {
+                                                
+                                                            console.log( err );
+                                                            res.status(500).send(err);
+                                                            res.end();
+                                                
+                                                        }
+                                                
+                                                    });
+                                                
+                                                    CVImage.mv('client/public/images/documents/cv/' + cvimgName, (err) => {
+                                                
+                                                        if (err) {
+                                                
+                                                            console.log( err );
+                                                            res.status(500).send(err);
+                                                            res.end();
+                                                
+                                                        }
+                                                
+                                                    });
+                                                
+                                                    AddressImage.mv('client/public/images/documents/address/' + addressimgName, (err) => {
+                                                
+                                                        if (err) {
+                                                
+                                                            console.log( err );
+                                                            res.status(500).send(err);
+                                                            res.end();
+                                                
+                                                        }
+                                                
+                                                    });
+                                                
+                                                    if (DrivingLicense)
+                                                    {
+                                                        DrivingLicense.mv('client/public/images/documents/licenses/driving/' + drvLicName, (err) => {
+                                                
+                                                            if (err) {
+                                                
+                                                                console.log( err );
+                                                                res.status(500).send(err);
+                                                                res.end();
+                                                    
+                                                            }
+                                                    
+                                                        });
+                                                    }
+                                                
+                                                    if (ArmedLicense)
+                                                    {
+                                                        ArmedLicense.mv('client/public/images/documents/licenses/armed/' + armdLicName, (err) => {
+                                                
+                                                            if (err) {
+                                                
+                                                                console.log( err );
+                                                                res.status(500).send(err);
+                                                                res.end();
+                                                    
+                                                            }
+                                                    
+                                                        });
+                                                    }
+                        
+                                                    db.query(
+                                                        "INSERT INTO emp_app_profile (emp_id, emp_image) VALUES (?,?)",
+                                                        [ rslt[0].emp_id, imgName ],
+                                                        ( err, rslt ) => {
                                     
                                                             if ( err )
                                                             {
-                                    
-                                                                        console.log( err );
+                                                
+                                                                console.log( err );
                                                                 res.status(500).send(err);
                                                                 res.end();
-                                                                connection.release();
                                     
                                                             }else
                                                             {
-                                                                
-                                                                Image.mv('client/public/images/employees/' + imgName, (err) => {
-            
-                                                                    if (err) {
-                                                            
-                                                                        console.log( err );
-                                                                        res.status(500).send(err);
-                                                                        res.end();
-                                                                        connection.release();
-                                                            
-                                                                    }
-                                                            
-                                                                });
-                                                            
-                                                                CNICFrontImage.mv('client/public/images/documents/cnic/front/' + cnic_f_name, (err) => {
-                                                            
-                                                                    if (err) {
-                                                            
-                                                                        console.log( err );
-                                                                        res.status(500).send(err);
-                                                                        res.end();
-                                                                        connection.release();
-                                                            
-                                                                    }
-                                                            
-                                                                });
-                                                            
-                                                                CNICBackImage.mv('client/public/images/documents/cnic/back/' + cnic_b_name, (err) => {
-                                                            
-                                                                    if (err) {
-                                                            
-                                                                        console.log( err );
-                                                                        res.status(500).send(err);
-                                                                        res.end();
-                                                                        connection.release();
-                                                            
-                                                                    }
-                                                            
-                                                                });
-                                                            
-                                                                CVImage.mv('client/public/images/documents/cv/' + cvimgName, (err) => {
-                                                            
-                                                                    if (err) {
-                                                            
-                                                                        console.log( err );
-                                                                        res.status(500).send(err);
-                                                                        res.end();
-                                                                        connection.release();
-                                                            
-                                                                    }
-                                                            
-                                                                });
-                                                            
-                                                                AddressImage.mv('client/public/images/documents/address/' + addressimgName, (err) => {
-                                                            
-                                                                    if (err) {
-                                                            
-                                                                            console.log( err );
-                                                                        res.status(500).send(err);
-                                                                        res.end();
-                                                                        connection.release();
-                                                            
-                                                                    }
-                                                            
-                                                                });
-                                                            
-                                                                if (DrivingLicense)
-                                                                {
-                                                                    DrivingLicense.mv('client/public/images/documents/licenses/driving/' + drvLicName, (err) => {
-                                                            
-                                                                        if (err) {
-                                                            
-                                                                            console.log( err );
-                                                                            res.status(500).send(err);
-                                                                            res.end();
-                                                                            connection.release();
-                                                                
-                                                                        }
-                                                                
-                                                                    });
-                                                                }
-                                                            
-                                                                if (ArmedLicense)
-                                                                {
-                                                                    ArmedLicense.mv('client/public/images/documents/licenses/armed/' + armdLicName, (err) => {
-                                                            
-                                                                        if (err) {
-                                                            
-                                                                            console.log( err );
-                                                                            res.status(500).send(err);
-                                                                            res.end();
-                                                                            connection.release();
-                                                                
-                                                                        }
-                                                                
-                                                                    });
-                                                                }
-                                    
-                                                                connection.query(
-                                                                    "INSERT INTO emp_app_profile (emp_id, emp_image) VALUES (?,?)",
-                                                                    [ rslt[0].emp_id, imgName ],
-                                                                    ( err, rslt ) => {
-                                                
-                                                                        if ( err )
-                                                                        {
-                                                            
-                                                                            console.log( err );
-                                                                            res.status(500).send(err);
-                                                                            res.end();
-                                                                            connection.release();
-                                                
-                                                                        }else
-                                                                        {
-                                                                            res.send('Done!!');
-                                                                            res.end();
-                                                                            connection.release();
-                                                                        }
-            
-                                                                    }
-                                                                )
-                                    
+                                                                res.send('Done!!');
+                                                                res.end();
                                                             }
+
                                                         }
                                                     )
+                        
                                                 }
                                             }
                                         )
-            
                                     }
-            
                                 }
                             )
-            
+
                         }
-            
+
                     }
-                );
+                )
+
             }
 
         }
@@ -361,7 +330,9 @@ router.post('/getemployee', ( req, res ) => {
         "SELECT \
         tbl_er.sr, \
         tbl_er.category, \
-        employees.name \
+        employees.name, \
+        employees.email, \
+        employees.gender \
         FROM tbl_er \
         LEFT OUTER JOIN employees ON employees.emp_id = tbl_er.sr \
         WHERE tbl_er.jr = ?;" +
@@ -709,55 +680,99 @@ router.post('/createemployee', ( req, res ) => {
     const additionalOFFDays = req.body[2];
     const EmpID = req.body[3];
     const EmpAccess = req.body[4];
+    const boxes = JSON.parse(req.body[5]);
 
     const d = new Date();
 
-    db.getConnection(
-        ( err, connection ) => {
+    let q = "INSERT INTO `emp_props`(`emp_id`, ";
+    for ( let x = 0; x < boxes.length; x++ )
+    {
+        if ( ( x + 1 ) === boxes.length )
+        {
+            q = q.concat("`" + boxes[x].field + "`) VALUES (" + parseInt( EmpID ) + ", ")
+        }else
+        {
+            q = q.concat("`" + boxes[x].field + "`, ")
+        }
+    }
+
+    for ( let y = 0; y < boxes.length; y++ )
+    {
+        if ( ( y + 1 ) === boxes.length )
+        {
+            q = q.concat( ( boxes[y].value ? boxes[y].value : boxes[y].checked ? 1 : 0 ) + ');' )
+        }else
+        {
+            q = q.concat( ( boxes[y].value ? boxes[y].value : boxes[y].checked ? 1 : 0 ) + ', ' )
+        }
+    }
+
+    db.query(
+        "UPDATE employees SET emp_id = " + parseInt( EmpID ) + ", time_in = '" + TimeIN + "', time_out = '" + TimeOUT + "', salary = '" + salary + "', date_of_join = '" + doj + "', additional_off = '" + additionalOFFDays + "', emp_status = 'Active', app_status = '', access = '" + EmpAccess + "', company_code = '" + parseInt( CompanyName ) + "', department_code = '" + parseInt( departments ) + "', location_code = '" + parseInt( Location ) + "', designation_code = '" + parseInt( Designations ) + "', grade_code = '" + parseInt( EmpGrade ) + "', updated_at = '" + d + "' WHERE employees.emp_id = " + emp_id,
+        ( err, rslt ) => {
 
             if ( err )
             {
-
-                res.status(503).send(err);
+                res.status(500).send(err);
                 res.end();
-
             }else
             {
-                connection.query(
-                    "UPDATE employees SET emp_id = " + parseInt( EmpID ) + ", time_in = '" + TimeIN + "', time_out = '" + TimeOUT + "', salary = '" + salary + "', date_of_join = '" + doj + "', additional_off = '" + additionalOFFDays + "', emp_status = 'Active', access = '" + EmpAccess + "', company_code = '" + parseInt( CompanyName ) + "', department_code = '" + parseInt( departments ) + "', location_code = '" + parseInt( Location ) + "', designation_code = '" + parseInt( Designations ) + "', grade_code = '" + parseInt( EmpGrade ) + "', updated_at = '" + d + "' WHERE employees.emp_id = " + emp_id,
+
+                db.query(
+                    "UPDATE emp_app_profile SET login_id = '" + LoginID + "', emp_password = '" + EmpPassword + "' WHERE emp_app_profile.emp_id = " + parseInt( EmpID ),
                     ( err, rslt ) => {
             
                         if ( err )
                         {
                             res.status(500).send(err);
                             res.end();
-                            connection.release();
                         }else
                         {
-            
-                            connection.query(
-                                "UPDATE emp_app_profile SET login_id = '" + LoginID + "', emp_password = '" + EmpPassword + "' WHERE emp_app_profile.emp_id = " + parseInt( EmpID ),
+                            db.query(
+                                q,
                                 ( err, rslt ) => {
                         
                                     if ( err )
                                     {
                                         res.status(500).send(err);
                                         res.end();
-                                        connection.release();
                                     }else
                                     {
                                         res.send('Done!');
                                         res.end();
-                                        connection.release();
                                     }
                         
                                 }
                             )
-            
                         }
             
                     }
                 )
+
+            }
+
+        }
+    )
+
+} );
+
+router.get('/getempprops', ( req, res ) => {
+
+    db.query(
+        "SHOW COLUMNS FROM seaboard.emp_props;",
+        ( err, rslt ) => {
+
+            if( err )
+            {
+                res.status(500).send(err);
+                res.end();
+
+            }else 
+            {
+
+                res.send( rslt );
+                res.end();
+
             }
 
         }

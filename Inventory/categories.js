@@ -30,7 +30,7 @@ router.get('/inventory/get_categories', ( req, res ) => {
 
 router.post('/inventory/add_new_category', ( req, res ) => {
 
-    const { category, icon } = req.body;
+    const { category, icon, type } = req.body;
 
     db.query(
         "SELECT category_id, LOWER(`tbl_inventory_categories`.`name`), status FROM tbl_inventory_categories WHERE name = ?;",
@@ -54,8 +54,8 @@ router.post('/inventory/add_new_category', ( req, res ) => {
                     }else if ( rslt[0].status === 'removed' )
                     {
                         db.query(
-                            "UPDATE `tbl_inventory_categories` SET status = ?, icon = ? WHERE category_id = ?;",
-                            [ 'active', icon, rslt[0].category_id ],
+                            "UPDATE `tbl_inventory_categories` SET status = ?, icon = ?, type = ? WHERE category_id = ?;",
+                            [ 'active', icon, type, rslt[0].category_id ],
                             ( err ) => {
                     
                                 if( err )
@@ -84,9 +84,9 @@ router.post('/inventory/add_new_category', ( req, res ) => {
                 }else
                 {
                     db.query(
-                        "INSERT INTO `tbl_inventory_categories`(`name`, `icon`) VALUES (?,?);" +
-                        "SELECT category_id FROM tbl_inventory_categories WHERE name = ? AND icon = ?",
-                        [ category, icon, category, icon ],
+                        "INSERT INTO `tbl_inventory_categories`(`name`, `icon`, `type`) VALUES (?,?,?);" +
+                        "SELECT category_id FROM tbl_inventory_categories WHERE name = ? AND icon = ? AND type = ?;",
+                        [ category, icon, type, category, icon, type ],
                         ( err, rslt ) => {
                 
                             if( err )
@@ -121,7 +121,7 @@ router.post('/inventory/add_new_category', ( req, res ) => {
 
 router.post('/inventory/edit_category', ( req, res ) => {
 
-    const { category, category_id, icon } = req.body;
+    const { category, category_id, icon, type, labeling } = req.body;
 
     db.query(
         "SELECT LOWER(name) FROM `tbl_inventory_categories` WHERE name = ? AND category_id != ?;",
@@ -144,8 +144,8 @@ router.post('/inventory/edit_category', ( req, res ) => {
                 }else
                 {
                     db.query(
-                        "UPDATE `tbl_inventory_categories` SET name = ?, icon = ? WHERE category_id = ?;",
-                        [ category, icon, category_id ],
+                        "UPDATE `tbl_inventory_categories` SET name = ?, icon = ?, type = ?, labeling = ? WHERE category_id = ?;",
+                        [ category, icon, type, labeling ? 1 : 0, category_id ],
                         ( err ) => {
                 
                             if( err )
@@ -237,7 +237,7 @@ router.post('/inventory/get_sub_categories', ( req, res ) => {
 
 router.post('/inventory/add_new_sub_category', ( req, res ) => {
 
-    const { category_id, sub_category, icon } = req.body;
+    const { category_id, sub_category, labeling, icon } = req.body;
 
     db.query(
         "SELECT id, LOWER(`tbl_inventory_sub_categories`.`name`), status FROM tbl_inventory_sub_categories WHERE name = ? AND category_id = ?;",
@@ -261,8 +261,8 @@ router.post('/inventory/add_new_sub_category', ( req, res ) => {
                     }else if ( rslt[0].status === 'removed' )
                     {
                         db.query(
-                            "UPDATE `tbl_inventory_sub_categories` SET status = ?, icon = ? WHERE id = ?;",
-                            [ 'active', icon, rslt[0].id ],
+                            "UPDATE `tbl_inventory_sub_categories` SET status = ?, icon = ?, labeling = ? WHERE id = ?;",
+                            [ 'active', icon, labeling ? 1 : 0, rslt[0].id ],
                             ( err ) => {
                     
                                 if( err )
@@ -291,8 +291,8 @@ router.post('/inventory/add_new_sub_category', ( req, res ) => {
                 }else
                 {
                     db.query(
-                        "INSERT INTO `tbl_inventory_sub_categories`(`category_id`, `name`, `icon`) VALUES (?,?,?);",
-                        [ category_id, sub_category, icon ],
+                        "INSERT INTO `tbl_inventory_sub_categories`(`category_id`, `name`, `icon`, `labeling`) VALUES (?,?,?,?);",
+                        [ category_id, sub_category, icon, labeling ? 1 : 0 ],
                         ( err, rslt ) => {
                 
                             if( err )
@@ -349,7 +349,7 @@ router.post('/inventory/remove_sub_category', ( req, res ) => {
 
 router.post('/inventory/edit_sub_category', ( req, res ) => {
 
-    const { category, id, icon, category_id } = req.body;
+    const { category, id, icon, labeling, category_id } = req.body;
 
     db.query(
         "SELECT LOWER(name) FROM `tbl_inventory_sub_categories` WHERE name = ? AND id != ? AND category_id = ?;",
@@ -372,8 +372,9 @@ router.post('/inventory/edit_sub_category', ( req, res ) => {
                 }else
                 {
                     db.query(
-                        "UPDATE `tbl_inventory_sub_categories` SET name = ?, icon = ? WHERE id = ?;",
-                        [ category, icon, id ],
+                        "UPDATE `tbl_inventory_sub_categories` SET name = ?, icon = ?, labeling = ? WHERE id = ?;" +
+                        "UPDATE `tbl_inventory_products` SET labeling = ? WHERE sub_category_id = ?;",
+                        [ category, icon, labeling ? 1 : 0, id, 1, id ],
                         ( err ) => {
                 
                             if( err )

@@ -6,7 +6,6 @@ const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const compression = require('compression')
 const fs = require('fs');
-// const wbm = require('wbm');
 
 const d = new Date();
 
@@ -259,6 +258,12 @@ app.use( require('./Routes/Whatsapp/whatsapp').router );
 
 
 
+
+
+
+// MANAGEMENT - ADMIN DASHBOARD SYSTEM
+app.use( require('./Management/auth') );
+app.use( require('./Management/attendance') );
 
 
 

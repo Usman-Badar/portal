@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import $ from 'jquery';
 import './Employee_Leave_Application_Form.css';
@@ -5,13 +6,23 @@ import axios from '../../../../../../../../axios';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Mail from '../../../../../../../UI/Mail/Mail';
 
 const Employee_Leave_Application_Form = ( props ) => {
 
     const [ LeaveData, setLeaveData ] = useState(
         {
             leaveType: '', leaveFrom: '', leaveTo: '',
-            NoOfDays: 0, Purpose: '', leaveDate: ''
+            NoOfDays: 0, Purpose: '', leaveDate: '', submit_to: ''
+        }
+    );
+    const [MailData, setMailData] = useState(
+        {
+            subject: "",
+            send_to: "",
+            gender: "",
+            receiver: "",
+            message: ""
         }
     );
 
@@ -23,12 +34,34 @@ const Employee_Leave_Application_Form = ( props ) => {
 
     useEffect(
         () => {
-
+            
             $('.Medical_Prove').hide(0);
             $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration .Leave_Duration_Date2').slideUp(0);
 
         }, []
     );
+
+    useEffect(
+        () => {
+
+            for ( let x = 0; x < props.Relations.length; x++ )
+            {
+                if ( parseInt(props.Relations[x].sr) === parseInt(LeaveData.submit_to) )
+                {
+                    setMailData(
+                        {
+                            subject: "New Leave",
+                            send_to: props.Relations[x].email,
+                            gender: props.Relations[x].gender === 'FeMale' ? "Madam" : "Sir",
+                            receiver: props.Relations[x].name,
+                            message: sessionStorage.getItem('name') + ' apply for a leave on the portal'
+                        }
+                    );
+                }
+            }
+            
+        }, [ LeaveData.submit_to ]
+    )
 
     const onChangeHandler = ( e ) => {
 
@@ -200,6 +233,7 @@ const Employee_Leave_Application_Form = ( props ) => {
         {
             const Data = new FormData();
             Data.append('RequestedBy', sessionStorage.getItem('EmpID'));
+            Data.append('RequestedTo', LeaveData.submit_to);
             Data.append('leaveType', LeaveData.leaveType);
             Data.append('leaveFrom', LeaveData.leaveFrom);
             Data.append('leaveTo', LeaveData.leaveTo);
@@ -215,10 +249,11 @@ const Employee_Leave_Application_Form = ( props ) => {
     
                 $('button[type=reset]').trigger('click');
                 $('.Medical_Prove').hide(500);
+                $('#mail_form').trigger('click');
                 setLeaveData(
                     {
                         leaveType: '', leaveFrom: '', leaveTo: '',
-                        NoOfDays: 0, Purpose: '', leaveDate: ''
+                        NoOfDays: 0, Purpose: '', leaveDate: '', submit_to: ''
                     }
                 );
                 if ($('input[name=OnDayLeave]').prop('checked')) {
@@ -236,17 +271,14 @@ const Employee_Leave_Application_Form = ( props ) => {
 
                 const Data2 = new FormData();
                 Data2.append('eventID', 2);
-                Data2.append('receiverID', 2004);
+                Data2.append('whatsapp', true);
+                Data2.append('receiverID', LeaveData.submit_to);
                 Data2.append('senderID', sessionStorage.getItem('EmpID'));
                 Data2.append('Title', sessionStorage.getItem('name'));
                 Data2.append('NotificationBody', sessionStorage.getItem('name') + ' apply for a leave on the portal');
                 axios.post('/newnotification', Data2).then(() => {
                     
-                    axios.post('/sendmail', Data2).then(() => {
-    
-                    })
                 })
-    
     
                 toast.dark( 'Request Submitted' , {
                     position: 'top-right',
@@ -308,13 +340,16 @@ const Employee_Leave_Application_Form = ( props ) => {
 
     return (
         <>
+            <Mail
+                data={ MailData }
+            />
             <div className={ props.LeaveForm ? "Employee_Leave_Application_Form" : "Employee_Leave_Application_Form availedform" }>
                 <div className="Application_Form" style={ { animationDelay: ( 0 + '.' + 1 ).toString() + 's' } }>
                     <form onSubmit={ onTakeLeave }>
                         <h4 className="text-center border-bottom font-weight-bolder pb-3 headings">{props.Mainheading}</h4>
                         <div className="Check_Box  p-1">
                             <div className="Check_Box_Heading text-center p-1" >
-                                <h5 className="font-weight-bolder">Please tick ( <i class="las la-check"></i> ) in Application Box</h5>
+                                <h5 className="font-weight-bolder">Please tick ( <i className="las la-check"></i> ) in Application Box</h5>
                             </div>
                             <div className="d-flex justify-content-center align-items-center ">
                                 <div className="Check_Box_select" >
@@ -359,7 +394,7 @@ const Employee_Leave_Application_Form = ( props ) => {
                                 <div className="mb-1"><p>To : </p></div>
                                 <div><input type="date" className="form-control mb-2" name="leaveTo" onChange={ DaysAndDate } /></div>
                                 <div className="mb-1"><p>No. of Days : </p></div>
-                                <div><input value={ LeaveData.NoOfDays + 1 } disabled type="text" className="form-control" /></div>
+                                <div><input defaultValue={ LeaveData.NoOfDays + 1 } disabled type="text" className="form-control" /></div>
                             </div>
                             <div className="Leave_Duration_Date Leave_Duration_Date2 p-1" >
                                 <div className="mb-1"><p >Date : </p></div>
@@ -376,16 +411,39 @@ const Employee_Leave_Application_Form = ( props ) => {
                         </div>
                         <div className="Medical_Prove p-1">
                             <div className="Leave_Purpose_Heading p-1" >
-                                <h5 className="font-weight-bolder mb-0">Medical Attachment <sub>(Optional)</sub> </h5>
+                                <h5 className="font-weight-bolder mb-0">Medical Attachment </h5>
                             </div>
                             <div className="Leave_Purpose_reason p-1">
                                 <input name="attachement" onChange={ onAttachement } type="file" className="form-control" />
-                                <input type="number" value={ props.availed } className="d-none form-control" />
+                                <input type="number" defaultValue={ props.availed } className="d-none form-control" />
                             </div>
                         </div>
-                        <div className="d-flex justify-content-end p-2">
-                            <button type="reset" className="btn mr-3">Cancel</button>
-                            <button type="submit" className="btn">Submit</button>
+                        <div className="d-flex justify-content-end align-items-center p-2">
+                            <select name="submit_to" onChange={onChangeHandler} id="" className="form-control form-control-sm" required>
+                                <option value=''> submit to </option>
+                                {
+                                    props.Relations.map(
+                                        (val, index) => {
+                                            let option;
+                                            if ( val.category === 'all' || val.category.includes('leave_request') )
+                                            {
+                                                option = <option value={val.sr} key={index}> {val.name} </option>;
+                                            }
+
+                                            return option;
+                                        }
+                                    )
+                                }
+                            </select>
+                            <button type="reset" className="btn mr-3 d-none">Cancel</button>
+                            {
+                                LeaveData.leaveType === '' || 
+                                LeaveData.Purpose === '' || 
+                                LeaveData.submit_to === ''
+                                ?null
+                                :
+                                <button type="submit" className="btn ml-2">Submit</button>
+                            }
                         </div>
                     </form>
                 </div>

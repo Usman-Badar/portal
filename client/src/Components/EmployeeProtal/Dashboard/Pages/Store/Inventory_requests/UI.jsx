@@ -172,7 +172,7 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
                                                 <td>{ index + 1 }</td>
                                                 <td>
                                                     <div className="preview_tbl">
-                                                        <img src={ val.preview ? `http://192.168.100.116:8888/assets/inventory/assets/images/${val.preview}` : 'https://media.istockphoto.com/vectors/image-preview-icon-picture-placeholder-for-website-or-uiux-design-vector-id1222357475?k=20&m=1222357475&s=170667a&w=0&h=YGycIDbBRAWkZaSvdyUFvotdGfnKhkutJhMOZtIoUKY=' } alt='preview' />
+                                                        <img src={ val.preview ? `assets/inventory/assets/images/${val.preview}` : 'https://media.istockphoto.com/vectors/image-preview-icon-picture-placeholder-for-website-or-uiux-design-vector-id1222357475?k=20&m=1222357475&s=170667a&w=0&h=YGycIDbBRAWkZaSvdyUFvotdGfnKhkutJhMOZtIoUKY=' } alt='preview' />
                                                     </div>
                                                 </td>
                                                 <td>{ val.name }</td>

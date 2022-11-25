@@ -39,6 +39,7 @@ const Menu = (props) => {
                                                 return (
                                                     <>
                                                         {
+                                                            val?
                                                             val.txt
                                                             ?
                                                             val.link ?
@@ -47,6 +48,8 @@ const Menu = (props) => {
                                                                 </Link>
                                                             :
                                                                 <button onClick={ () => val.func() }><p className="font-weight-bolder mb-0">{val.txt}</p></button>
+                                                            :
+                                                            null
                                                             :
                                                             null
                                                         }
@@ -68,6 +71,7 @@ const Menu = (props) => {
                                                 return (
                                                     <>
                                                         {
+                                                            val?
                                                             val.txt
                                                             ?
                                                             val.link ?
@@ -82,6 +86,8 @@ const Menu = (props) => {
                                                                     <div className={ "mb-1 Speeddail_Grid1 divs" + index }><i className={val.icon}></i></div>
                                                                     <p>{val.txt}</p>
                                                                 </div>
+                                                            :
+                                                            null
                                                             :
                                                             null
                                                         }

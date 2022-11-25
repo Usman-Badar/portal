@@ -336,6 +336,11 @@ const Dashboard = () => {
                         <Route exact path='/drive' render={ () => <Sus content={ <Drive /> } /> } />
 
                         <Route exact path='/leave_form' render={ () => <Sus content={ <LeaveApplication /> } /> } />
+                        <Route exact path='/avail_leave_form' render={ () => <Sus content={ <LeaveApplication /> } /> } />
+                        <Route exact path='/short_leave_form' render={ () => <Sus content={ <LeaveApplication /> } /> } />
+                        <Route exact path='/leave_history' render={ () => <Sus content={ <LeaveApplication /> } /> } />
+                        <Route exact path='/leave_request/:id' render={ () => <Sus content={ <LeaveApplication /> } /> } />
+
                         <Route exact path='/view_leave_requests' render={ () => <Sus content={ <LeaveRequests /> } /> } />
 
                         <Route exact path='/attendance_request' render={ () => <Sus content={ <AttendanceRequest /> } /> } />

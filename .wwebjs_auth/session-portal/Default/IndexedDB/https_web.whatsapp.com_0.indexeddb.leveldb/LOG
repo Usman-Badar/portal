@@ -1,0 +1,24 @@
+2022/11/25-11:57:22.004 4558 Reusing MANIFEST E:\IT\React\Employee_Portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2022/11/25-11:57:22.004 4558 Recovering log #865
+2022/11/25-11:57:22.101 4558 Reusing old log E:\IT\React\Employee_Portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000865.log 
+2022/11/25-12:06:44.607 23bc Level-0 table #876: started
+2022/11/25-12:06:44.701 23bc Level-0 table #876: 1278845 bytes OK
+2022/11/25-12:06:44.722 23bc Delete type=0 #865
+2022/11/25-12:06:45.081 23bc Compacting 1@1 + 7@2 files
+2022/11/25-12:06:45.484 23bc Generated table #877@1: 29568 keys, 2255980 bytes
+2022/11/25-12:06:45.579 23bc Generated table #878@1: 23158 keys, 2272569 bytes
+2022/11/25-12:06:45.700 23bc Generated table #879@1: 23205 keys, 2269855 bytes
+2022/11/25-12:06:45.812 23bc Generated table #880@1: 23160 keys, 2274036 bytes
+2022/11/25-12:06:45.917 23bc Generated table #881@1: 23228 keys, 2271413 bytes
+2022/11/25-12:06:46.107 23bc Generated table #882@1: 82862 keys, 2258977 bytes
+2022/11/25-12:06:46.195 23bc Generated table #883@1: 54910 keys, 1537471 bytes
+2022/11/25-12:06:46.195 23bc Compacted 1@1 + 7@2 files => 15140301 bytes
+2022/11/25-12:06:46.196 23bc compacted to: files[ 0 0 7 0 0 0 0 ]
+2022/11/25-12:06:46.197 23bc Delete type=2 #867
+2022/11/25-12:06:46.197 23bc Delete type=2 #868
+2022/11/25-12:06:46.197 23bc Delete type=2 #869
+2022/11/25-12:06:46.197 23bc Delete type=2 #870
+2022/11/25-12:06:46.197 23bc Delete type=2 #871
+2022/11/25-12:06:46.197 23bc Delete type=2 #872
+2022/11/25-12:06:46.198 23bc Delete type=2 #873
+2022/11/25-12:06:46.198 23bc Delete type=2 #876

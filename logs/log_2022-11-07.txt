@@ -1,0 +1,109 @@
+10:16:49 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+10:29:28 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: num.shift is not a function
+
+10:30:29 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: num.shift is not a function
+
+10:36:25 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: num.shift is not a function
+
+10:36:50 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: Error: wid error: invalid wid: 92422618990
+    at new u (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:45528)
+    at Object.s [as createWid] (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:50298)
+    at __puppeteer_evaluation_script__:2:53
+
+10:36:50 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: Error: wid error: invalid wid: 92422618990
+    at new u (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:45528)
+    at Object.s [as createWid] (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:50298)
+    at __puppeteer_evaluation_script__:2:53
+
+10:36:50 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: Error: wid error: invalid wid: 92422618990
+    at new u (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:45528)
+    at Object.s [as createWid] (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:50298)
+    at __puppeteer_evaluation_script__:2:53
+
+10:46:12 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: Error: wid error: invalid wid: 92422618990
+    at new u (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:45528)
+    at Object.s [as createWid] (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:50298)
+    at __puppeteer_evaluation_script__:2:53
+
+10:46:12 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: Error: wid error: invalid wid: 92422618990
+    at new u (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:45528)
+    at Object.s [as createWid] (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:50298)
+    at __puppeteer_evaluation_script__:2:53
+
+10:46:12 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: Error: wid error: invalid wid: 92422618990
+    at new u (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:45528)
+    at Object.s [as createWid] (https://web.whatsapp.com/bootstrap_qr.3bfad085c8a35574c4db.js:71:50298)
+    at __puppeteer_evaluation_script__:2:53
+
+11:03:51 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+11:03:51 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+11:03:51 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+11:52:28 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+11:52:43 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Navigation failed because browser has disconnected!
+
+12:08:30 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+12:16:27 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+12:17:43 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+12:24:56 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'id')
+
+12:24:56 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'id')
+
+12:24:56 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'id')
+
+16:00:37 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Page.navigate): Target closed.
+

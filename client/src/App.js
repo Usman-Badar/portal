@@ -30,7 +30,7 @@ const OutOfLocation = lazy( () => import( './Components/EmployeeProtal/OutOfLoca
 
 const InventoryDashboard = lazy( () => import( './Components/Inventory/Inventory' ) );
 
-const Leave = lazy( () => import( './Components/Leave/Leave' ) );
+// const Leave = lazy( () => import( './Components/Leave/Leave' ) );
 
 const App = () => {
 
@@ -97,15 +97,19 @@ const App = () => {
 
                     {/* LEAVE MODULE */}
                     
-                    <Route exact path='/leave/dashboard' render={ () => <Sus content={ <Leave /> } /> } />
+                    {/* <Route exact path='/leave/dashboard' render={ () => <Sus content={ <Leave /> } /> } />
                     <Route exact path='/leave/leave_form' render={ () => <Sus content={ <Leave /> } /> } />
                     <Route exact path='/leave/availed_leave_form' render={ () => <Sus content={ <Leave /> } /> } />
                     <Route exact path='/leave/short_leave_form' render={ () => <Sus content={ <Leave /> } /> } />
                     <Route exact path='/leave/requests' render={ () => <Sus content={ <Leave /> } /> } />
-                    <Route exact path='/leave/requests/:id' render={ () => <Sus content={ <Leave /> } /> } />
+                    <Route exact path='/leave/requests/:id' render={ () => <Sus content={ <Leave /> } /> } /> */}
 
 
                     <Route exact path='/leave_form' render={ () => <Sus content={ <Dashboard /> } /> } />
+                    <Route exact path='/avail_leave_form' render={ () => <Sus content={ <Dashboard /> } /> } />
+                    <Route exact path='/short_leave_form' render={ () => <Sus content={ <Dashboard /> } /> } />
+                    <Route exact path='/leave_history' render={ () => <Sus content={ <Dashboard /> } /> } />
+                    <Route exact path='/leave_request/:id' render={ () => <Sus content={ <Dashboard /> } /> } />
                     <Route exact path='/view_leave_requests' render={ () => <Sus content={ <Dashboard /> } /> } />
 
                     <Route exact path='/attendance_request' render={ () => <Sus content={ <Dashboard /> } /> } />

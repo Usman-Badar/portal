@@ -17,6 +17,7 @@ const ConfirmApproval = () => {
     const encryptor = require('simple-encryptor')(key);
 
     const [ Employee, setEmployee ] = useState([]);
+    const [ Props, setProps ] = useState([]);
     const [ Departments, setDepartments ] = useState([]);
     const [ Designations, setDesignations ] = useState([]);
     const [ Companies, setCompanies ] = useState([]);
@@ -43,6 +44,11 @@ const ConfirmApproval = () => {
             axios.post('/gettempemployeedetails', Data).then( response => {
 
                 setEmployee( response.data );
+                axios.get('/getempprops').then( response => {
+
+                    setProps( response.data );
+    
+                } )
 
             } ).catch( err => {
 
@@ -189,7 +195,7 @@ const ConfirmApproval = () => {
                     setEmployeeCode( empID.toString() );
                 }else
                 {
-                    setEmployeeCode( value + '00' );
+                    setEmployeeCode( value + '001' );
                 }
     
             }).catch(err => {
@@ -301,12 +307,37 @@ const ConfirmApproval = () => {
 
         if ( encryptor.decrypt( EmpData.EmpPassword ) === encryptor.decrypt( EmpData.CnfPassword ) )
         {
+            let boxes = [];
+            for ( let x = 0; x < Props.length; x++ )
+            {
+                if ( Props[x].Field !== 'id' && Props[x].Field !== 'emp_id' )
+                {
+                    if ( Props[x].Type === "tinyint(1)" )
+                    {
+                        boxes.push(
+                            {
+                                field: e.target[Props[x].Field].name,
+                                checked: e.target[Props[x].Field].checked
+                            }
+                        )
+                    }else
+                    {
+                        boxes.push(
+                            {
+                                field: e.target[Props[x].Field].name,
+                                value: e.target[Props[x].Field].value
+                            }
+                        )
+                    }
+                }
+            }
             let arr = [];
             arr.push( EmpData );
             arr.push( Employee[0] );
             arr.push( JSON.stringify( AdditionalOffDays ) );
             arr.push( EmployeeCode );
             arr.push( JSON.stringify( AccessAssigned ) );
+            arr.push( JSON.stringify( boxes ) );
         
             axios.post('/createemployee', arr).then( () => {
 
@@ -322,7 +353,7 @@ const ConfirmApproval = () => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                });;
+                });
 
             } );
         }
@@ -555,6 +586,41 @@ const ConfirmApproval = () => {
                                 :
                                 null
                             }
+                            <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                <b>Employee Props</b>
+                                {
+                                    Props.map(
+                                        val => {
+                                            let content = <></>;
+
+                                            if ( val.Field !== 'id' && val.Field !== 'emp_id' )
+                                            {
+                                                content = <div className='d-flex align-items-center'>
+                                                    {
+                                                        val.Type === "tinyint(1)"
+                                                        ?
+                                                        <input type="checkbox" name={ val.Field } />
+                                                        :
+                                                        val.Type === "int(11)" || val.Type === "float"
+                                                        ?
+                                                        <input type="number" defaultValue={0} name={ val.Field } />
+                                                        :
+                                                        <input type="text" name={ val.Field } />
+                                                    }
+                                                    <span className='ml-2'>
+                                                        {
+                                                            val.Field
+                                                        }
+                                                    </span>
+                                                </div>
+                                            }
+
+                                            return content;
+
+                                        }
+                                    )
+                                }
+                            </div>
                             <div className="col-lg-12 col-md-12 col-sm-12 mb-3">
                                 <div className="d-flex justify-content-between">
                                     <div>

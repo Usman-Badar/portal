@@ -1,7 +1,10 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/img-redundant-alt */
+import React, { useState } from 'react';
 import './Style.css';
 
-const UI = ( { Locations, RequestsList, newRequest } ) => {
+import Modal from '../../../../../UI/Modal/Modal';
+
+const UI = ( { ListAttachments, Files, Locations, RequestsList, newRequest, onAttachFiles } ) => {
     
     return (
         <>
@@ -13,11 +16,14 @@ const UI = ( { Locations, RequestsList, newRequest } ) => {
 
                     <Form 
                         Locations={ Locations }
+                        Files={ Files }
 
                         newRequest={ newRequest }
+                        onAttachFiles={ onAttachFiles }
                     />
                     <Requests 
                         RequestsList={ RequestsList }
+                        ListAttachments={ ListAttachments }
                     />
 
                 </div>
@@ -29,7 +35,7 @@ const UI = ( { Locations, RequestsList, newRequest } ) => {
 
 export default UI;
 
-const Form = ( { Locations, newRequest } ) =>{
+const Form = ( { Files, Locations, newRequest, onAttachFiles } ) =>{
 
     return (
         <>
@@ -55,13 +61,35 @@ const Form = ( { Locations, newRequest } ) =>{
                         }
                     </select>
                     <small className="d-block mb-2">Select the location of item to be repaired.</small>
-                    <label className="mb-0">Subject</label>
+
+                    <label className="mb-0">Subject *</label>
                     <input type="text" name="subject" className="form-control form-control-sm" required />
                     <small className="d-block mb-2">Enter a suitable subject.</small>
 
-                    <label className="mb-0">Description</label>
+                    <label className="mb-0">Description *</label>
                     <textarea name="description" className="form-control form-control-sm" required minLength={15} />
                     <small className="d-block mb-2">Describe the problem in the item to be repaired.</small>
+                    
+                    <label className="mb-0">Attachments *</label>
+                    <input type="file" multiple accept="image/png, image/gif, image/jpeg" onChange={ onAttachFiles } name="attachments" className="form-control form-control-sm" style={ { fontSize: '10px' } } required />
+                    <small className="d-block mb-2">Attach a cover photo.</small>
+                    {
+                        Files.length > 0
+                        ?
+                        Files.map(
+                            val => {
+
+                                return (
+                                    <span className="attached_files">
+                                        { val.name }
+                                    </span>
+                                )
+
+                            }
+                        )
+                        :null
+                    }
+                    {/* <img src={ URL.createObjectURL(val.file) } style={ { border: '1px solid lightgray', borderRadius: '5px', margin: '10px', cursor: 'pointer' } } alt="attachment" width="100" height="100" /> */}
 
                     <button className="btn d-block ml-auto btn-danger">
                         Submit
@@ -73,10 +101,18 @@ const Form = ( { Locations, newRequest } ) =>{
 
 }
 
-const Requests = ( { RequestsList } ) => {
+const Requests = ( { RequestsList, ListAttachments } ) => {
+
+    const [ Content, setContent ] = useState();
 
     return (
         <>
+            {
+                Content
+                ?
+                <Modal show={ true } Hide={ () => setContent() } content={Content} />
+                :null
+            }
             <div className='repair_request_list'>
 
                 {
@@ -107,7 +143,25 @@ const Requests = ( { RequestsList } ) => {
 
                                                 <td>{ val.request_id }</td>
                                                 <td>{ val.subject }</td>
-                                                <td>{ val.description }</td>
+                                                <td>
+                                                    { val.description }
+                                                    <hr className='m-0 my-1' />
+                                                    {
+                                                        ListAttachments.map(
+                                                            val2 => {
+
+                                                                let content = <div></div>;
+                                                                if ( val.request_id === val2.request_id )
+                                                                {
+                                                                    content = <div onClick={ () => setContent(<img src={ 'assets/portal/assets/images/repair/' + val2.attachment.split('/').pop() } width="100%" alt="photo" />) } style={ { cursor: 'pointer', color: "blue" } }> {val2.attachment.split('/').pop()} </div>;
+                                                                }
+
+                                                                return content;
+
+                                                            }
+                                                        )
+                                                    }
+                                                </td>
                                                 <td>{ val.location_name }</td>
                                                 <td>{ new Date(val.request_date).toDateString() }</td>
                                                 <td>

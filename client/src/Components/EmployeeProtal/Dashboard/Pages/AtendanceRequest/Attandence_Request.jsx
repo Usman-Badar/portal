@@ -14,6 +14,7 @@ import socket from '../../../../../io';
 
 import { useSelector } from 'react-redux';
 import Modal from '../../../../UI/Modal/Modal';
+import Mail from '../../../../UI/Mail/Mail';
 
 const Attandence_Request = () => {
 
@@ -37,6 +38,15 @@ const Attandence_Request = () => {
         // current_time: '',
         // new_time: '',
     });
+    const [MailData, setMailData] = useState(
+        {
+            subject: "",
+            send_to: "",
+            gender: "",
+            receiver: "",
+            message: ""
+        }
+    );
 
 
     const [DetailsView, setDetailsView] = useState(false);
@@ -351,6 +361,17 @@ const Attandence_Request = () => {
         }, [ RequestDetails.reviews.length ]
     )
 
+    useEffect(
+        () => {
+            
+            if ( MailData.subject !== '' && MailData.send_to !== '' && MailData.gender !== '' && MailData.receiver !== '' && MailData.message !== '' )
+            {
+                $('#mail_form').trigger('click');
+            }
+
+        }, [ MailData.subject, MailData.send_to, MailData.gender, MailData.receiver, MailData.message ]
+    );
+
     const showrequest = (id) => {
 
         axios.post(
@@ -580,14 +601,22 @@ const Attandence_Request = () => {
                             break_out_check: false 
                         }
                     );
-    
+                    setMailData(
+                        {
+                            ...MailData,
+                            subject: "New Attendance Request",
+                            gender: "Sir",
+                            message: sessionStorage.getItem('name') + ' has sent a new repair request.'
+                        }
+                    )
                     $('a[type=reset]').trigger('click');
                     const Data2 = new FormData();
                     Data2.append('eventID', 4);
+                    Data2.append('whatsapp', true);
                     Data2.append('receiverID', Form.submit_to);
                     Data2.append('senderID', sessionStorage.getItem('EmpID'));
                     Data2.append('Title', sessionStorage.getItem('name'));
-                    Data2.append('NotificationBody', sessionStorage.getItem('name') + ' sent an attendance request on the portal.');
+                    Data2.append('NotificationBody', sessionStorage.getItem('name') + ' has sent an attendance request on the portal.');
                     axios.post('/newnotification', Data2).then(() => {
     
                         axios.post('/sendmail', Data2).then(() => {
@@ -648,6 +677,26 @@ const Attandence_Request = () => {
             }
         }
 
+        if ( name === 'request_send_to' )
+        {
+            let email;
+            let name;
+            for ( let x = 0; x < Relations.length; x++ )
+            {
+                if ( parseInt(Relations[x].sr) === parseInt(value) )
+                {
+                    email = Relations[x].email;
+                    name = Relations[x].name;
+                }
+            }
+            setMailData(
+                {
+                    ...MailData,
+                    send_to: email,
+                    receiver: name
+                }
+            );
+        }
 
         setRequestAction(val);
     }
@@ -831,6 +880,9 @@ const Attandence_Request = () => {
 
     return (
         <>
+            <Mail
+                data={ MailData }
+            />
             <Modal show={ ShowModal } Hide={ onCLose } content={ Content } />
             <div className="Attandence_Request">
                 <div className="Attandence_Request_Top" >

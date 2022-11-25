@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const instance = axios.create(
     {
-        baseURL: 'http://192.168.100.116:8888',
+        baseURL: process.env.REACT_APP_SERVER,
         // baseURL: 'http://202.63.220.170:3443/',
         // baseURL: 'http://' + window.location.host,
         // baseURL: 'http://192.168.21.152:8888',

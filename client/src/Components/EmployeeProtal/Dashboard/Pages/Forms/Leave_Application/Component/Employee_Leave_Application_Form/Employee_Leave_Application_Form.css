@@ -33,21 +33,22 @@
     margin-bottom: 0;
 }
 
-.Employee_Leave_Application_Form .Application_Form .Leave_Duration .Leave_Duration_Date input {
+.Employee_Leave_Application_Form input,
+.Employee_Leave_Application_Form select {
     border: 1px solid rgb(212, 212, 212) !important;
     border-radius: 5px !important;
     box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;
     background-color: rgb(240, 240, 240, 0.5);
 }
 
-.Employee_Leave_Application_Form .Application_Form .Leave_Purpose textarea {
+.Employee_Leave_Application_Form textarea {
     border: 1px solid rgb(212, 212, 212) !important;
     border-radius: 5px !important;
     box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;
     background-color: rgb(240, 240, 240, 0.5);
 }
 
-.Employee_Leave_Application_Form .Application_Form .Medical_Prove input {
+.Employee_Leave_Application_Form .Medical_Prove input {
     border: 1px solid rgb(212, 212, 212) !important;
     border-radius: 5px !important;
     box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;

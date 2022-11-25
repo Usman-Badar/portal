@@ -122,7 +122,7 @@ function Notifications( props ) {
                         body: body,
                     });
                     notification.onclick = function () {
-                        window.open('https://192.168.10.14/');
+                        window.open('http://202.63.220.170:3443');
                     };
                 }else
                 {
@@ -137,7 +137,7 @@ function Notifications( props ) {
                 body: body,
             });
             notification.onclick = function () {
-                window.open('https://192.168.10.14/');
+                window.open('http://202.63.220.170:3443');
             };
         }
         

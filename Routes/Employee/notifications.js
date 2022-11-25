@@ -327,6 +327,7 @@ router.post('/newnotification', ( req, res ) => {
                         }else 
                         {
             
+                            console.log( whatsapp, rslt[1][0].cell );
                             if ( whatsapp )
                             {
                                 SendWhatsappNotification( receiverID, senderID, Title, NotificationBody, rslt[1][0].cell );
