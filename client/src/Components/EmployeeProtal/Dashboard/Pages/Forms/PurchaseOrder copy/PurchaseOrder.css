@@ -1,0 +1,127 @@
+.PurchaseOrder {
+    width: 100%;
+    margin-top: 50px;
+}
+
+.PurchaseOrder .PurchaseOrder-content {
+    width: 65%;
+    background-color: #fff;
+    padding: 50px 20px 30px 20px;
+    font-family: Poppins;
+    color: #222D32;
+    font-size: 12px;
+    margin-bottom: 50px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    position: relative;
+    overflow: hidden;
+}
+
+.PurchaseOrder .PurchaseOrder-content .table {
+    min-width: 700px;
+    margin-bottom: 30px;
+}
+
+.PurchaseOrder .PurchaseOrder-content .leftRight {
+    width: 50%;
+}
+
+.PurchaseOrder .PurchaseOrder-content .qfs {
+    width: 33.33%;
+}
+
+.PurchaseOrder .PurchaseOrder-content .sbl {
+    width: 33.33%;
+}
+
+.PurchaseOrder .PurchaseOrder-content .sbs {
+    width: 33.33%;
+}
+
+.PurchaseOrder .PurchaseOrder-content .form-control {
+    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid #222D32;
+    height: 30px;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.PurchaseOrder .PurchaseOrder-content .plus_specifications {
+    background-color: #0DB8DE;
+    color: #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-left: auto;
+}
+
+.PurchaseOrder .PurchaseOrder-content .plus_specifications:hover {
+    background-color: #fff;
+    color: #0DB8DE;
+    border: #0DB8DE 1px solid;
+}
+
+.modal .add_vender,
+.modal .shipTo {
+    font-size: 12px;
+    margin-bottom: 50px;
+}
+
+.modal .add_vender .form-control,
+.modal .shipTo .form-control {
+    background: none;
+}
+
+.modal .add_vender .btn,
+.modal .shipTo .btn {
+    font-size: 12px;
+}
+
+.PurchaseOrder .PurchaseOrder-content .specifications .specifications-items.SrNo,
+.PurchaseOrder .PurchaseOrder-content .specifications .specifications-items.qty,
+.PurchaseOrder .PurchaseOrder-content .specifications .specifications-items.estCost,
+.PurchaseOrder .PurchaseOrder-content .specifications .specifications-items.tCost {
+    width: 15%;
+}
+
+.PurchaseOrder .PurchaseOrder-content .specifications .specifications-items.Desc {
+    width: 40%;
+}
+
+.PurchaseOrder .PurchaseOrder-content .specifications .specifications-items b {
+    background-color: lightgrey;
+    display: block;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.PurchaseOrder .PurchaseOrder-content .footer .sections {
+    width: 33.33%;
+}
+
+@media only screen and (max-width: 991px) {
+    .PurchaseOrder .PurchaseOrder-content .leftRight {
+        width: 100%;
+        margin: 0 !important;
+    }
+    .PurchaseOrder .PurchaseOrder-content {
+        width: 75%;
+    }
+    .PurchaseOrder .PurchaseOrder-content .footer .sections {
+        width: 100%;
+    }
+    .PurchaseOrder .PurchaseOrder-content .footer .sections:last-child {
+        margin-bottom: 20px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .PurchaseOrder .PurchaseOrder-content {
+        width: 95%;
+    }
+}

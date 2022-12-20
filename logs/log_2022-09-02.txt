@@ -1,0 +1,12 @@
+19:27:01 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+19:31:24 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+19:31:24 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: rslt is not defined
+

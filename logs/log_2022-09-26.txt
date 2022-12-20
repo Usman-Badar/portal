@@ -1,0 +1,8 @@
+11:17:27 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: app.use() requires a middleware function
+
+11:37:23 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: cateogry_id is not defined
+

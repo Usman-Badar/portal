@@ -1,0 +1,49 @@
+.ViewGuests {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ViewGuests .ViewGuests-content {
+    width: 50%;
+    max-height: 75vh;
+    overflow: auto;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    transition: .5s;
+    cursor: pointer;
+    color: #000;
+    font-family: Poppins;
+}
+
+.ViewGuests .ViewGuests-content .gests {
+    border-bottom: 1px solid gray;
+    margin-bottom: 20px;
+}
+
+.ViewGuests .ViewGuests-content .gests .colum {
+    width: 33.333%
+}
+
+.ViewGuests .ViewGuests-content .gests .index {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.ViewGuests .ViewGuests-content .gests .colum span {
+    color: rgb(128, 128, 128, .5);
+}
+
+.ViewGuests div#viewGuestDetails .modal-body span {
+    color: rgb(128, 128, 128, .5);
+}

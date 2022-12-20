@@ -1,0 +1,20 @@
+14:57:13 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: tbl_inventory_venders is not defined
+
+14:57:13 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: tbl_inventory_venders is not defined
+
+15:36:02 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: Unexpected token ','
+
+20:10:56 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+20:15:31 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+

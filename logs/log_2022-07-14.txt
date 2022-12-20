@@ -1,0 +1,68 @@
+09:42:33 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read property '0' of undefined
+
+16:11:03 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:11:28 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:11:48 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:12:37 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:13:30 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: x is not defined
+
+16:13:40 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:13:57 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:15:02 GMT+0500 (Pakistan Standard Time)
+type: error
+SyntaxError: missing ) after argument list
+
+16:15:11 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:15:28 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:15:36 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:16:43 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:17:07 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:17:19 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:18:05 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+
+16:18:34 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: dayName is not defined
+

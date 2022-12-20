@@ -1,0 +1,758 @@
+.NewProfile_Header {
+    width: 100%;
+    padding: 20px;
+    font-size: 12px;
+    font-family: Poppins;
+}
+
+.NewProfile_Header .NewProfile_Grid {
+    display: grid;
+    grid-template-columns: 20fr 80fr;
+    grid-column-gap: 20px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Display_Picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.NewProfile_Header .NewProfile_Grid .Display_Picture .Edit_DP {
+    position: absolute;
+    background-color: black;
+    bottom: 30px;
+    right: 45px;
+    background-color: black;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.NewProfile_Header .NewProfile_Grid .Display_Picture .Edit_DP:hover {
+    background-color: white;
+    color: black;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Emp_Time {
+    margin: 20px 0;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Emp_Time div {
+    background-color: white;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 10px 0;
+    position: relative;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Emp_Time h4 {
+    font-weight: bolder;
+    font-family: Roboto;
+    font-style: italic;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Emp_Time div span {
+    position: absolute;
+    left: 20px;
+    top: -8px;
+    font-weight: bolder;
+    font-family: Roboto;
+    text-transform: uppercase;
+    font-style: italic;
+    text-shadow: 4px 4px 1px rgba(211, 211, 211, 1);
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 button {
+    background-color: #2196f3;
+    color: white;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .EmpTodayAtt {
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-style: italic;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .EmpTodayAtt h4 {
+    font-family: Roboto;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .EmpTodayAtt .Divs {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .EmpTodayAtt div p {
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .EmpTodayAtt .EmpAttBar {
+    height: 3px;
+    background-color: lightgray;
+    position: relative;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .EmpTodayAtt .EmpAttBar .EmpAttBar1 {
+    height: 3px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 p {
+    margin-bottom: 0;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_upper {
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    font-family: Roboto;
+    font-style: italic;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_upper h5 {
+    color: lightgray;
+    margin-bottom: 0;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower {
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px 0;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    font-family: Roboto;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .editdiv {
+    position: absolute;
+    right: 100px;
+    display: flex;
+    right: 30px;
+    top: 0;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .editdiv .editbotton {
+    width: 50px;
+    height: 50px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .editdiv .edittooltip {
+    width: 100px;
+    height: 30px;
+    background-color: black;
+    margin: auto 0;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .editdiv .edittooltip::before {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    right: 0;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .About_Tabs {
+    display: flex;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .About_Tabs div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 100px;
+    color: white;
+    font-family: Roboto;
+    font-style: italic;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .infoTitle {
+    font-style: italic;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs {
+    height: 62vh;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .Tab1Div {
+    padding: 0 50px;
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 {
+    font-family: Roboto;
+    font-style: italic;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .Tab1Div .AboutTabsGrid {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .AboutInfoDiv {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+/* .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .AboutInfoDiv .EditBox input {
+    border: 1px solid rgb(212, 212, 212) !important;
+    border-radius: 5px !important;
+    box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;
+    background-color: rgb(240, 240, 240, 0.5);
+    font-size: 12px!important;
+} */
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .AboutInfoDiv .Edit_Icon {
+    display: none;
+    cursor: pointer;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .AboutInfoDiv:hover .Edit_Icon,
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .AboutInfoDiv .save_Icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .Aboutleft p {
+    font-size: 13px;
+    font-family: Noto;
+    white-space: nowrap;
+}
+
+.b1-bottom-none {
+    text-decoration: underline;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs2 {
+    display: grid;
+    grid-template-columns: 80fr 20fr;
+    grid-column-gap: 20px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs2 .Recordsdivleft {
+    border: 1px solid lightgray;
+    overflow: auto;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs2 .Recordsdivright {
+    overflow-y: auto;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs2 .Records_Grid .Div1 {
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs2 .Records_Grid .Div1 .InfoText {
+    display: none;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs2 .Records_Grid .Div1:hover .InfoText {
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.5);
+    width: 100%;
+    top: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_GridShow {
+    display: none;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_upperShow {
+    display: none;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs2 .Records_Grid img {
+    width: 100%;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Roboto;
+    font-style: italic;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar {
+    width: 100%;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .month {
+    width: 100%;
+    height: 120px;
+    background-color: #0db8de;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    text-align: center;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .month i {
+    font-size: 2.5rem;
+    cursor: pointer;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .month h1 {
+    font-weight: bolder;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .month p {
+    font-size: 18px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .weekdays {
+    width: 100%;
+    height: 3rem;
+    display: grid;
+    grid-template-columns: 14.5fr 14.5fr 14.5fr 14.5fr 14.5fr 14.5fr 14.5fr;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .weekdays div {
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid lightgray;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 14.5fr 14.5fr 14.5fr 14.5fr 14.5fr 14.5fr 14.5fr;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days .alldays {
+    font-size: 1.4rem;
+    height: 5rem;
+    transition: background-color 0.2s;
+    border: 1px solid lightgray;
+    position: relative;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days .alldays i {
+    display: none;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days .alldays:hover,
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days .prev-date:hover,
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days .next-date:hover {
+    background-color: lightblue;
+    cursor: pointer;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .prev-date,
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .next-date {
+    color: rgb(175, 175, 175);
+    font-size: 1.4rem;
+    height: 5rem;
+    transition: background-color 0.2s;
+    border: 1px solid lightgray;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days .today {
+    background-color: #0db8de;
+    color: #fff;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days .today:hover {
+    background-color: #0db8de;
+    color: #fff;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days .alldays .meetingdetial,
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days .today .meetingdetial {
+    position: absolute;
+    width: 100%;
+    left: 35px;
+    background-color: white;
+    color: black;
+    z-index: 2;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    border-radius: 5px;
+    display: none;
+    border: 0 !important;
+    height: max-content;
+    opacity: 0;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days .today .meetingdetial div,
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .container .calendar .days .alldays .meetingdetial div {
+    font-size: 12px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .Calender .CalenderMonth {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 50px;
+    border: 1px solid lightgray;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .Calender .CalenderMonth i {
+    font-size: 25px;
+    color: white;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .Calender .Calendergrid {
+    display: grid;
+    grid-template-columns: 14.5fr 14.5fr 14.5fr 14.5fr 14.5fr 14.5fr 14.5fr;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .Calender .Calenderweeks div {
+    height: 80px;
+    border: 1px solid lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .Calender .Calenderdays .Days {
+    height: 80px;
+    border: 1px solid lightgray;
+    position: relative;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .Calender .Calenderdays .Days .meetingdetials {
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    z-index: 2;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    border-radius: 5px;
+}
+
+.NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs .Calender .Calenderdays .Days i {
+    font-size: 18px;
+}
+
+.AboutTabs1::-webkit-scrollbar,
+.AboutTabs2::-webkit-scrollbar {
+    width: 10px;
+    display: none;
+}
+
+
+/* Track */
+
+.AboutTabs1::-webkit-scrollbar-track,
+.AboutTabs2::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+
+/* Handle */
+
+.AboutTabs1::-webkit-scrollbar-thumb,
+.AboutTabs2::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+
+/* Handle on hover */
+
+.AboutTabs1::-webkit-scrollbar-thumb:hover,
+.AboutTabs2::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.NewProfile_Header .Menu {
+    display: none;
+}
+
+.ModalDiv .ModalGrid {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    margin: 5px 0;
+}
+
+.ModalDiv .ModalGrid .modalcontentleft {
+    display: flex;
+    align-items: center;
+}
+
+.ModalDiv .ModalGrid .modalcontentright {
+    display: flex;
+    align-items: center;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.ModalDiv .ModalGrid .modalcontentright input,
+.ModalDiv .ModalGrid .modalcontentright select {
+    width: 100%;
+    border: 0 !important;
+}
+
+.ModalDiv .Modalbutton {
+    display: flex;
+    justify-content: end;
+    margin-top: 30px;
+}
+
+.ModalDiv .Modalbutton button:first-child {
+    background-color: black;
+    color: white;
+    margin-right: 10px;
+}
+
+.ModalDiv .Modalbutton button:last-child {
+    background-color: #2d6be6;
+    color: white;
+}
+
+.ModalDiv p,
+.ModalDiv input,
+.ModalDiv button,
+.ModalDiv select {
+    font-size: 13px !important;
+}
+
+@media only screen and (max-width: 1500px) {
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .Tab1Div {
+        padding: 0 30px;
+    }
+}
+
+@media only screen and (max-width: 1300px) {
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .Aboutleft {
+        width: 25%;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .AboutInfoDiv {
+        width: 30%;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs2 {
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .Aboutleft {
+        width: 35%;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .AboutInfoDiv {
+        width: 40%;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .Tab1Div {
+        padding: 0;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .Aboutleft {
+        width: 45%;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .editdiv {
+        right: 50px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .AboutInfoDiv {
+        width: 50%;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1 .Tab1Div {
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .EmpTodayAtt h4 {
+        font-size: 20px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .editdiv {
+        right: 20px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 img {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .NewProfile_Header {
+        height: max-content;
+        padding: 15px 0;
+    }
+    .NewProfile_Header .Menu {
+        display: block;
+    }
+    .NewProfile_Header .Menu .Menu_Grid {
+        display: none;
+    }
+    .NewProfile_Header h3 {
+        font-size: 20px;
+    }
+    .NewProfile_Header .NewProfile_Grid {
+        display: block;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 {
+        display: none;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_upper {
+        display: none;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow {
+        display: block;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Grid2_upperShow {
+        display: block;
+        margin-top: 20px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Grid2_upperShow .Grid2_upper {
+        background-color: white;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 0 20px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Grid2_upperShow .Grid2_upper h5 {
+        font-weight: bolder;
+        color: lightgray;
+        margin-bottom: 0;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Display_Picture {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 20px;
+        background-color: white;
+        border-radius: 5px;
+        margin: 0 20px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Display_Picture img {
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+    }
+    .NewProfile_Header .NewProfile_GridShow .Display_Picture .Edit_DP {
+        position: absolute;
+        background-color: black;
+        bottom: 25px;
+        right: 15%;
+        background-color: black;
+        color: white;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    /* .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Display_Picture .Edit_DP div:hover {
+        background-color: white;
+        color: black;
+    } */
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow img {
+        width: 150px;
+        height: 150px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Emp_Time {
+        margin: 20px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Emp_Time div {
+        background-color: white;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        padding: 10px 0;
+        position: relative;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Emp_Time div span {
+        position: absolute;
+        left: 30px;
+        top: -8px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow button {
+        background-color: #2196f3;
+        color: white;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower {
+        margin: 0 20px;
+        padding: 20px 10px;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs1,
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .AboutTabs2 {
+        padding: 20px 0;
+        margin: 20px 0;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .About_Tabs {
+        display: none;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 {
+        grid-template-rows: 100fr;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid1 .Emp_Time {
+        padding: 0;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Tabs.Tabs2 {
+        padding: 30px 0 50px 0;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    .NewProfile_Header .NewProfile_Grid .NewProfile_Grid2 .Grid2_lower .Emp_About .editdiv {
+        right: 0;
+        top: 50px;
+    }
+    .ModalDiv .ModalGrid {
+        display: block;
+        margin: 10px 0;
+    }
+    .NewProfile_Header .NewProfile_Grid .NewProfile_GridShow .Grid2_upperShow .Grid2_upper h5 {
+        font-size: 15px;
+    }
+}

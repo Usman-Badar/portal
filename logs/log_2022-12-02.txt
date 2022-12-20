@@ -1,0 +1,31 @@
+12:55:14 GMT-0800 (Pacific Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+14:05:33 GMT-0800 (Pacific Standard Time)
+type: error
+Error: Navigation failed because browser has disconnected!
+
+14:33:01 GMT-0800 (Pacific Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+14:35:58 GMT-0800 (Pacific Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+14:41:23 GMT-0800 (Pacific Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+14:42:05 GMT-0800 (Pacific Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'canSend')
+    at Object.t.canReplyMsg (https://web.whatsapp.com/app.77ee8aa7a4c593101105.js:75:798123)
+    at Object.window.WWebJS.sendMessage (__puppeteer_evaluation_script__:36:41)
+    at __puppeteer_evaluation_script__:10:45
+
+14:45:22 GMT-0800 (Pacific Standard Time)
+type: error
+Error: listen EADDRINUSE: address already in use :::8888
+

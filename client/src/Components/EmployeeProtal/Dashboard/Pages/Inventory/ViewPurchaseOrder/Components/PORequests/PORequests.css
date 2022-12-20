@@ -1,0 +1,61 @@
+.PoEmpRequests {
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    grid-column-gap: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: .5s;
+    margin-bottom: 15px;
+}
+
+.PoEmpRequests:hover {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.PoEmpRequests .RequestStatus {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 0 15px 15px 0;
+    width: 15px;
+    height: 100%;
+    text-align: center;
+    font-size: 10px;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    color: #fff;
+}
+
+.PoEmpRequests .status.approved,
+.PoEmpRequests .status.delivered {
+    background-color: #307365;
+}
+
+.PoEmpRequests .status.rejected {
+    background-color: #d19399;
+}
+
+.PoEmpRequests .status.waiting {
+    background-color: #fc9701;
+}
+
+.PoEmpRequests .status.sent,
+.PoEmpRequests .status.viewed {
+    background-color: #0eb8de;
+}
+
+.PoEmpRequests p:first-child {
+    font-weight: bold;
+    margin-right: 5px;
+    color: gray;
+}
+
+.PoEmpRequests p {
+    margin-bottom: 0;
+    font-size: 12px;
+}

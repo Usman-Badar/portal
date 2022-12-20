@@ -1,0 +1,41 @@
+.Dashboard {
+    width: 100%;
+    min-height: 100vh;
+    font-family: Poppins;
+}
+
+.topBar {
+    width: 100%;
+    min-height: 50px;
+    background-color: #222222;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 25px;
+    font-family: Poppins;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+}
+
+.Dashboard .container-fluid .row .col-lg-4 .divs {
+    width: 100%;
+    padding: 50px 30px;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    text-align: center;
+    transition: .5s;
+    cursor: pointer;
+    color: #000;
+}
+
+.Dashboard .container-fluid .row .col-lg-4 .divs:hover {
+    background-color: rgb(236, 240, 245, .5);
+}
+
+.Dashboard .container-fluid .row .col-lg-4 .divs i {
+    font-size: 50px;
+    margin-bottom: 20px;
+}

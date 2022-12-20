@@ -1,0 +1,158 @@
+.Guest_Meetings {
+    padding: 20px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 30fr 70fr;
+    grid-column-gap: 20px;
+    font-family: Quicksand;
+}
+
+.Guest_Meetings .Grid1 .list {
+    max-height: 78vh;
+    overflow: auto;
+}
+
+.Guest_Meetings .Grid1 .SearchBar {
+    width: 100%;
+    box-shadow: 0 2px 2px rgb(0 0 0 / 10%);
+    font-family: Quicksand;
+}
+
+.Guest_Meetings .Grid1 .SearchBar input {
+    font-family: Quicksand;
+}
+
+.Guest_Meetings .Grid1 .SearchBar button:focus {
+    outline: none;
+}
+
+.Guest_Meetings .Grid1 .DIV1 {
+    box-shadow: 0 2px 2px rgb(0 0 0 / 10%);
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.Guest_Meetings .Grid1 .gstlist {
+    font-size: 12px;
+    background-color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.Guest_Meetings .Grid1 .gstlist:hover {
+    background: rgb(211, 211, 211, .1);
+}
+
+.Guest_Meetings .Grid1 .gstlist .gstImgs {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.Guest_Meetings .Grid1 .gstlist p {
+    margin-bottom: 0;
+}
+
+.Guest_Meetings .Grid2 {
+    width: 100%;
+}
+
+.Guest_Meetings .Grid2 .DIV2 {
+    display: grid;
+    grid-template-columns: 33.33fr 33.33fr 33.33fr;
+    grid-column-gap: 20px;
+    max-height: 75vh;
+    overflow: auto;
+}
+
+.Guest_Meetings .Grid2 .GuestHeader {
+    width: 100%;
+    padding: 10px 30px;
+    background-color: #0DB8DE;
+    color: #fff;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-family: Quicksand;
+    font-size: 12px;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 20px;
+}
+
+.Guest_Meetings .Grid2 .GuestHeader p {
+    margin-bottom: 0;
+}
+
+.Guest_Meetings .Grid2 .GuestHeader img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 1px solid #fff;
+}
+.Guest_Meetings .Grid2 .DIV2 .EmpDetails-Content {
+    width: 100%;
+    background-color: #fff;
+    padding: 15px;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 12px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+
+.Guest_Meetings .Grid2 .DIV2 .EmpDetails-Content p {
+    margin-bottom: 0;
+}
+
+.Guest_Meetings .Grid2 .DIV2 .EmpDetails-Content .EmployeeImg {
+    margin: 0 auto 20px auto;
+}
+
+.Guest_Meetings .Grid2 .DIV2 .EmpDetails-Content .EmployeeImg img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.Guest_Meetings .Grid2 .DIV2 .EmpDetails-Content .CDetails {
+    display: grid;
+    grid-template-columns: 33.33fr 33.33fr 33.33fr;
+    margin-bottom: 30px;
+}
+
+.Guest_Meetings .Grid2 .Meeting_Time {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+}
+
+.Guest_Meetings .Grid2 .Meeting_Time div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@media only screen and (max-width: 1000px) {
+    .Guest_Meetings {
+        display: block;
+    }
+}
+@media only screen and (max-width: 950px) {
+    .Guest_Meetings .Grid2 .DIV2 {
+        grid-template-columns: 50fr 50fr;
+    }
+}
+@media only screen and (max-width: 700px) {
+    .Guest_Meetings {
+        grid-template-columns: 50fr 50fr;
+    }
+    .Guest_Meetings .Grid2 .DIV2 {
+        grid-template-columns: 100fr;
+    }
+}
+@media only screen and (max-width: 570px) {
+    .Guest_Meetings {
+        display: block;
+    }
+}

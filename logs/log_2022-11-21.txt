@@ -1,0 +1,159 @@
+08:49:57 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+08:49:57 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+
+08:49:57 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+
+08:49:57 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+
+09:06:09 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+09:10:50 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+09:13:12 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+09:16:01 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+09:19:06 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+09:29:50 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+11:35:12 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+11:38:59 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+11:39:51 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+11:42:14 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+11:43:29 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:08:48 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:10:32 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:12:34 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:13:17 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+12:13:34 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:14:20 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:15:38 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:16:31 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+12:17:08 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:19:33 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:19:55 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+12:20:07 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:23:21 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:34:36 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+12:58:55 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+14:21:27 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+14:30:25 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+
+15:09:50 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+

@@ -1,0 +1,168 @@
+.Operations {
+    width: 100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 40fr 60fr;
+    grid-column-gap: 50px;
+    background-color: rgb(211, 211, 211, 0.20);
+    padding: 50px;
+    font-family: Poppins;
+}
+
+.Operations .EmpDetails .EmpDetails-Content {
+    width: 100%;
+    background-color: #fff;
+    padding: 30px;
+    text-align: center;
+}
+
+.Operations .EmpDetails .EmpDetails-Content .EmployeeImg {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: block;
+    margin: 0 auto 20px auto;
+}
+
+.Operations .EmpDetails .EmpDetails-Content .CDetails {
+    display: grid;
+    grid-template-columns: 33.33fr 33.33fr 33.33fr;
+    margin-bottom: 30px;
+}
+
+.Operations .EmpDetails .EmpDetails-Content .CDetails span {
+    font-size: 12px;
+}
+
+.Operations .EmpDetails .EmpDetails-Content .Logoutbtn {
+    padding: 5px 50px;
+    background-color: #423198;
+    color: #ffffff;
+    border-radius: 30px;
+}
+
+.Operations .OperationContents .OperationContents-Content {
+    width: 100%;
+    background-color: #fff;
+    padding: 30px;
+}
+
+.Operations .OperationContents .OperationContents-Content .DateTime {
+    background-color: #fbfaff;
+    width: 100%;
+    padding: 30px 10px !important;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.Operations .OperationContents .OperationContents-Content .DateTime span {
+    color: #000;
+    font-size: 50px;
+    font-family: Quicksand;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.Operations .OperationContents .OperationContents-Content .DateTime p {
+    font-family: JosefinSans;
+    font-size: 20px;
+    margin-bottom: 0;
+}
+
+.Operations .OperationContents .OperationContents-Content .actionBtns {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    grid-column-gap: 50px;
+}
+
+.Operations .OperationContents .OperationContents-Content .startShift {
+    display: block;
+    width: 100%;
+    color: #ffffff;
+    background-color: #423198;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: Poppins;
+    font-weight: bold;
+}
+
+.Operations .OperationContents .OperationContents-Content .startBreak {
+    display: block;
+    width: 100%;
+    color: #423198;
+    background-color: #faf7ff;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: Poppins;
+    font-weight: bold;
+}
+
+.Operations .OperationContents .OperationContents-Content .endBreak {
+    display: block;
+    width: 100%;
+    color: #ffffff;
+    background-color: #3c3856;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: Poppins;
+    font-weight: bold;
+}
+
+.Operations .OperationContents .OperationContents-Content .endShift {
+    display: block;
+    width: 100%;
+    color: #ffffff;
+    background-color: #bf0000;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: Poppins;
+    font-weight: bold;
+}
+
+@media only screen and (max-width: 1200px) {
+    .Operations {
+        grid-column-gap: 30px;
+        padding: 30px;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .Operations .EmpDetails .EmpDetails-Content .CDetails {
+        display: block;
+        margin-bottom: 30px;
+    }
+    .Operations .EmpDetails .EmpDetails-Content .CDetails div {
+        border: 0 !important;
+        text-align: left !important;
+    }
+    .Operations .OperationContents .OperationContents-Content .actionBtns {
+        display: block;
+    }
+    .Operations .OperationContents .OperationContents-Content .startBreak {
+        margin-bottom: 20px;
+    }
+    .Operations .OperationContents .OperationContents-Content .endBreak {
+        margin-bottom: 20px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .Operations {
+        display: block;
+    }
+    .Operations .EmpDetails .EmpDetails-Content {
+        margin-bottom: 30px;
+    }
+    .Operations .EmpDetails .EmpDetails-Content .CDetails {
+        display: none;
+    }
+    .Operations .OperationContents .OperationContents-Content .DateTime {
+        padding: 10px !important;
+    }
+    .Operations .OperationContents .OperationContents-Content .DateTime span {
+        font-size: 35px;
+    }
+}

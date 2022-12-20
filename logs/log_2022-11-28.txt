@@ -1,0 +1,9 @@
+11:34:25 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+11:34:41 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'default')
+    at __puppeteer_evaluation_script__:14:123
+

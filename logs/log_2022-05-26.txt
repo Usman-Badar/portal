@@ -1,0 +1,12 @@
+08:59:41 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read property '0' of undefined
+
+11:57:25 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: connection is not defined
+
+12:07:47 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: connection is not defined
+

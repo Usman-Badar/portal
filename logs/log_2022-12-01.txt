@@ -1,0 +1,18 @@
+10:14:23 GMT-0800 (Pacific Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+12:01:59 GMT-0800 (Pacific Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'canSend')
+    at Object.t.canReplyMsg (https://web.whatsapp.com/app.77ee8aa7a4c593101105.js:75:798123)
+    at Object.window.WWebJS.sendMessage (__puppeteer_evaluation_script__:36:41)
+    at __puppeteer_evaluation_script__:10:45
+
+15:15:36 GMT-0800 (Pacific Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'canSend')
+    at Object.t.canReplyMsg (https://web.whatsapp.com/app.77ee8aa7a4c593101105.js:75:798123)
+    at Object.window.WWebJS.sendMessage (__puppeteer_evaluation_script__:36:41)
+    at __puppeteer_evaluation_script__:10:45
+

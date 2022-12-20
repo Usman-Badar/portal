@@ -1,0 +1,73 @@
+.PR_Requests_Box {
+    background-color: rgba(242, 243, 247, 255);
+    padding: 30px;
+    font-family: Quicksand;
+}
+
+.PR_Requests_Box h1,
+.PR_Requests_Box h2,
+.PR_Requests_Box h3,
+.PR_Requests_Box h4,
+.PR_Requests_Box h5 {
+    font-weight: bold;
+}
+
+.PR_Requests_Box .PR_Requests_Upper {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 30fr 70fr;
+    grid-column-gap: 30px;
+}
+
+.PR_Requests_Box .PR_Requests_Upper .Search {
+    background-color: #fff;
+    padding: 20px;
+}
+
+.PR_Requests_Box .PR_Requests_Upper .Search .form-control {
+    border-radius: 0;
+}
+
+.PR_Requests_Box .PR_Requests_Lower .PR_Requests_Details2 {
+    padding: 20px;
+    background-color: white;
+    width: 100%;
+}
+
+.PR_Requests_Box .PR_Requests_Lower .PR_Requests_Details2 .one {
+    display: grid;
+    grid-template-columns: 10fr 40fr 30fr 30fr;
+}
+
+.PR_Requests_Box .PR_Requests_Lower .PR_Requests_Details2 .one .index {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.PR_Requests_Box .PR_Requests_Lower .PR_Requests_Details2 .one .index span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+}
+
+.PR_Requests_Box .PR_Requests_Lower .PR_Requests_Details2 .one img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.PR_Requests_Box .PR_Requests_Lower .PR_Requests_Details2 .one button {
+    width: 50%;
+    color: white;
+    background-color: rgba(254, 196, 0, 255);
+}
+
+.Line {
+    border-bottom: 1px solid;
+    color: rgba(242, 243, 247, 255);
+}
