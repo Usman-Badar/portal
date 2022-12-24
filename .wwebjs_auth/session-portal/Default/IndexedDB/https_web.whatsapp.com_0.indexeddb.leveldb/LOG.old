@@ -1,0 +1,14 @@
+2022/12/24-14:58:52.111 24c8 Reusing MANIFEST H:\IT\React\Employee_Portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2022/12/24-14:58:52.113 24c8 Recovering log #1071
+2022/12/24-14:58:52.114 24c8 Reusing old log H:\IT\React\Employee_Portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/001071.log 
+2022/12/24-14:58:52.114 24c8 Delete type=2 #1070
+2022/12/24-14:58:52.196 1680 Level-0 table #1076: started
+2022/12/24-14:58:52.200 1680 Level-0 table #1076: 14216 bytes OK
+2022/12/24-14:58:52.201 1680 Delete type=0 #1071
+2022/12/24-14:58:52.202 934 Manual compaction at level-0 from '\x00\xe7\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\xe8\x00\x00\x00' @ 0 : 0; will stop at '\x00\xe7\x06 \x03\x00\x00\x00\x00\x00\x80V@\x00\x01\x0b\x00I\x00d\x00T\x00t\x00l\x009\x000\x00D\x00a\x00y\x00s' @ 3701572 : 1
+2022/12/24-14:58:52.203 934 Compacting 1@0 + 1@1 files
+2022/12/24-14:58:52.210 934 Generated table #1077@0: 3677 keys, 41354 bytes
+2022/12/24-14:58:52.210 934 Compacted 1@0 + 1@1 files => 41354 bytes
+2022/12/24-14:58:52.212 934 compacted to: files[ 0 1 1 0 0 0 0 ]
+2022/12/24-14:58:52.212 934 Delete type=2 #1076
+2022/12/24-14:58:52.212 934 Manual compaction at level-0 from '\x00\xe7\x06 \x03\x00\x00\x00\x00\x00\x80V@\x00\x01\x0b\x00I\x00d\x00T\x00t\x00l\x009\x000\x00D\x00a\x00y\x00s' @ 3701572 : 1 .. '\x00\xe8\x00\x00\x00' @ 0 : 0; will stop at (end)

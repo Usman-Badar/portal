@@ -1,15 +1,3 @@
-2022/12/24-10:07:22.515 844 Reusing MANIFEST E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/MANIFEST-000001
-2022/12/24-10:07:22.517 844 Recovering log #16
-2022/12/24-10:07:22.518 844 Reusing old log E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/000016.log 
-2022/12/24-10:32:25.815 700 Level-0 table #20: started
-2022/12/24-10:32:25.913 700 Level-0 table #20: 19364 bytes OK
-2022/12/24-10:32:25.956 700 Delete type=0 #16
-2022/12/24-10:32:25.957 700 Compacting 4@0 + 1@1 files
-2022/12/24-10:32:26.133 700 Generated table #21@0: 13 keys, 693 bytes
-2022/12/24-10:32:26.133 700 Compacted 4@0 + 1@1 files => 693 bytes
-2022/12/24-10:32:26.151 700 compacted to: files[ 0 1 1 0 0 0 0 ]
-2022/12/24-10:32:26.157 700 Delete type=2 #8
-2022/12/24-10:32:26.157 700 Delete type=2 #10
-2022/12/24-10:32:26.157 700 Delete type=2 #14
-2022/12/24-10:32:26.157 700 Delete type=2 #17
-2022/12/24-10:32:26.157 700 Delete type=2 #20
+2022/12/24-15:01:57.779 1edc Reusing MANIFEST H:\IT\React\Employee_Portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/MANIFEST-000001
+2022/12/24-15:01:57.781 1edc Recovering log #19
+2022/12/24-15:01:57.781 1edc Reusing old log H:\IT\React\Employee_Portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/000019.log 
