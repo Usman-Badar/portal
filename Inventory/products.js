@@ -119,7 +119,7 @@ router.post('/inventory/get_products', ( req, res ) => {
     `tbl_inventory_products`   \
     LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id  \
     LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id  \
-    WHERE tbl_inventory_products.status = 'active' AND tbl_inventory_categories.type = ? \
+    WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_categories.type = ? \
     GROUP BY tbl_inventory_products.sub_category_id";
     let params = [ type ];
 
@@ -150,7 +150,7 @@ router.post('/inventory/get_products', ( req, res ) => {
 
 router.post('/inventory/get_product_details', ( req, res ) => {
 
-    const { mode, sub_category_id, product_id, entry_code, company_code, location_code, sub_location_code } = req.body;
+    const { sub_category_id, product_id, entry_code, company_code, location_code, sub_location_code } = req.body;
 
     let q;
     let params;
@@ -170,7 +170,7 @@ router.post('/inventory/get_product_details', ( req, res ) => {
         LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
         LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
         LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id \
-        WHERE tbl_inventory_products.status = 'active' AND tbl_inventory_products.entering_code = ?;";
+        WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.entering_code = ?;";
         params = [ entry_code ];
     }else if ( product_id )
     {
@@ -187,19 +187,19 @@ router.post('/inventory/get_product_details', ( req, res ) => {
         LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
         LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
         LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id \
-        WHERE tbl_inventory_products.status = 'active' AND tbl_inventory_products.product_id = ?;";
+        WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.product_id = ?;";
         params = [ product_id ];
     }else if ( sub_category_id )
     {
-        if ( mode.toLowerCase() === 'compare' )
+        if ( "A".toLowerCase() === 'compare' )
         {
             q = "SELECT tbl_inventory_products.*, \
+            tbl_inventory_products.quantity as stocked_quantity, \
             tbl_inventory_categories.name as category_name,  \
             locations.location_name as location_name,  \
             tbl_inventory_sub_locations.sub_location_name as sub_location_name,  \
             companies.company_name as company_name,  \
-            tbl_inventory_sub_categories.name as sub_category_name,  \
-            issued_to.name as issued_to_emp  \
+            tbl_inventory_sub_categories.name as sub_category_name  \
             FROM  \
             `tbl_inventory_products`  \
             LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id \
@@ -207,29 +207,25 @@ router.post('/inventory/get_product_details', ( req, res ) => {
             LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
             LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
             LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id \
-            LEFT OUTER JOIN employees issued_to ON tbl_inventory_products.employee = issued_to.emp_id \
-            WHERE tbl_inventory_products.status = 'active' AND tbl_inventory_products.sub_category_id = ?";
+            WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.sub_category_id = ?";
             params = [ sub_category_id ];    
-        }else
-        {
-            q = "SELECT tbl_inventory_products.*, \
-            tbl_inventory_categories.name as category_name,  \
-            locations.location_name as location_name,  \
-            tbl_inventory_sub_locations.sub_location_name as sub_location_name,  \
-            companies.company_name as company_name,  \
-            tbl_inventory_sub_categories.name as sub_category_name,  \
-            issued_to.name as issued_to_emp  \
-            FROM  \
-            `tbl_inventory_products`  \
-            LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id \
-            LEFT OUTER JOIN locations ON tbl_inventory_products.location_code = locations.location_code \
-            LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
-            LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
-            LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id \
-            LEFT OUTER JOIN employees issued_to ON tbl_inventory_products.employee = issued_to.emp_id \
-            WHERE tbl_inventory_products.status = 'active' AND tbl_inventory_products.sub_category_id = ? AND tbl_inventory_products.entry = ?";
-            params = [ sub_category_id, mode.toLowerCase() ];
         }
+        q = "SELECT tbl_inventory_products.*,  \
+        tbl_inventory_products.quantity as stocked_quantity, \
+        tbl_inventory_categories.name as category_name,   \
+        locations.location_name as location_name,   \
+        tbl_inventory_sub_locations.sub_location_name as sub_location_name,   \
+        companies.company_name as company_name,   \
+        tbl_inventory_sub_categories.name as sub_category_name    \
+        FROM   \
+        `tbl_inventory_products`   \
+        LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id  \
+        LEFT OUTER JOIN locations ON tbl_inventory_products.location_code = locations.location_code  \
+        LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code  \
+        LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code  \
+        LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id  \
+        WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.sub_category_id = ?";
+        params = [ sub_category_id ];
 
         if ( company_code !== '' )
         {
@@ -246,6 +242,25 @@ router.post('/inventory/get_product_details', ( req, res ) => {
             q = q.concat(" AND tbl_inventory_products.sub_location_code = ?");
             params.push( sub_location_code );
         }
+
+        q = q.concat(";");
+        
+        q = q.concat(" \
+            SELECT \
+            tbl_inventory_products.unit_price, \
+            tbl_inventory_product_transactions.*,   \
+            issued_to.name as issued_to_emp,   \
+            recorded.name as recorded_emp   \
+            FROM   \
+            `tbl_inventory_products`   \
+            LEFT OUTER JOIN tbl_inventory_product_transactions ON tbl_inventory_products.product_id = tbl_inventory_product_transactions.product_id   \
+            LEFT OUTER JOIN employees issued_to ON tbl_inventory_product_transactions.employee = issued_to.emp_id    \
+            LEFT OUTER JOIN employees recorded ON tbl_inventory_product_transactions.recorded_by = recorded.emp_id    \
+            WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.sub_category_id = ? \
+        ");
+
+        params.push( sub_category_id );
+        
     }
 
     db.query(
@@ -384,7 +399,7 @@ router.get('/inventory/product/get_attributes', ( req, res ) => {
 
 router.post('/inventory/products/create', ( req, res ) => {
 
-    const { labeling, company, name, product_acquisition_date, physical_condition, product_type, product_note, delivery_challan, challan_generate_date, location, sub_location, category, sub_category, quantity, unit_price, description, attributes, extension } = req.body;
+    const { recorded_by, labeling, company, name, product_acquisition_date, physical_condition, product_type, product_note, delivery_challan, challan_generate_date, location, sub_location, category, sub_category, quantity, unit_price, description, attributes, extension } = req.body;
 
     const product_attributes = JSON.parse(attributes);
     const deliveryChallanDate = challan_generate_date === 'null' ? new Date(product_acquisition_date) : new Date(challan_generate_date);
@@ -424,8 +439,15 @@ router.post('/inventory/products/create', ( req, res ) => {
             }else 
             {
 
-                let attr_query = "SELECT 1;";
+                let attr_query = "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `quantity`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?);";
                 let params = [];
+
+                params.push(rslt[1][0].product_id);
+                params.push(quantity);
+                params.push(recorded_by);
+                params.push(new Date());
+                params.push(new Date().toTimeString());
+
                 for ( let x = 0; x < product_attributes.length; x++ )
                 {
                     attr_query = attr_query.concat("INSERT INTO `tbl_inventory_product_attributes`(`product_id`, `description`, `value_str`, `value_int`, `value_float`, `value_date`, `value_time`) VALUES (?,?,?,?,?,?,?);");

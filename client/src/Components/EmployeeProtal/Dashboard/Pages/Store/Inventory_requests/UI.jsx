@@ -135,13 +135,13 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
                             <tr>
                                 
                                 <th className="bg-light">Accepted By</th>
-                                <td>{ details.receiver_name }</td>
+                                <td>{ !details.receiver_name ? "N" : details.receiver_name }</td>
 
                             </tr>
                             <tr>
                                 
                                 <th className="bg-light">Accept Date/Time</th>
-                                <td>{ new Date(details.accept_date).toDateString() + " at " + details.accept_time }</td>
+                                <td>{ !details.accept_date ? "N" : new Date(details.accept_date).toDateString() + " at " + details.accept_time }</td>
 
                             </tr>
                         </tbody>
