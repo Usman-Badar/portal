@@ -1,3 +1,9 @@
-2022/12/13-16:11:16.725 1dc Reusing MANIFEST H:\IT\React\Employee_Portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/MANIFEST-000001
-2022/12/13-16:11:16.725 1dc Recovering log #19
-2022/12/13-16:11:16.725 1dc Reusing old log H:\IT\React\Employee_Portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/000019.log 
+2022/12/28-11:42:23.396 3368 Reusing MANIFEST E:\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/MANIFEST-000001
+2022/12/28-11:42:23.416 3368 Recovering log #31
+2022/12/28-11:42:23.416 3368 Reusing old log E:\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/000031.log 
+2022/12/28-14:09:26.513 514 Level-0 table #35: started
+2022/12/28-14:09:26.525 514 Level-0 table #35: 19009 bytes OK
+2022/12/28-14:09:26.527 514 Delete type=0 #31
+2022/12/28-17:16:26.512 1c18 Level-0 table #37: started
+2022/12/28-17:16:26.519 1c18 Level-0 table #37: 19027 bytes OK
+2022/12/28-17:16:26.521 1c18 Delete type=0 #34

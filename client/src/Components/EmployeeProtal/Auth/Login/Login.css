@@ -94,6 +94,25 @@
     font-family: Quicksand !important;
 }
 
+.Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .PassDiv .passDiv_input{
+    border-radius: 0.25rem !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff !important;
+}
+
+.Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .PassDiv input{
+    border: 0 !important;
+}
+
+.Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .PassDiv .passDiv_input i{
+    margin: 0 5px;
+    color: gray;
+    font-size: 20px;
+    cursor: pointer;
+}
+
 @media only screen and (max-width: 1600px) {
     .Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .LoginDiv,
     .Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .PassDiv {

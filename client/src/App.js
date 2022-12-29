@@ -95,6 +95,8 @@ const App = () => {
                     <Route exact path='/help' render={ () => <Sus content={ <Dashboard /> } /> } />
                     <Route exact path='/drive' render={ () => <Sus content={ <Dashboard /> } /> } />
 
+                    <Route exact path="/employeestickets" render={ () => <Sus content={ <Dashboard /> } /> } />
+
                     {/* LEAVE MODULE */}
                     
                     {/* <Route exact path='/leave/dashboard' render={ () => <Sus content={ <Leave /> } /> } />
@@ -231,6 +233,8 @@ const App = () => {
 
                     {/* REPAIR REQUEST */}
                     <Route exact path="/repair_request" render={ () => <Sus content={ <Dashboard /> } /> } />
+
+                    
                 </Switch>
             </>
         )

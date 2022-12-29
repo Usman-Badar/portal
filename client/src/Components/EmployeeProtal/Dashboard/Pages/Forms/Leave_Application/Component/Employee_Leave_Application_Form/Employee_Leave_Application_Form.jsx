@@ -385,7 +385,7 @@ const Employee_Leave_Application_Form = ( props ) => {
                                 <h5 className="font-weight-bolder">Duration Of Leave</h5>
                             </div>
                             <div className="p-1 d-flex align-items-center">
-                                <p className="mb-0 mr-2">I want 1 day leave</p>
+                                <p className="mb-0 mr-2" style={{ fontSize: '16px' }} >I want <b>1 day</b> leave</p>
                                 <input className="d-block" type='checkbox' value="true" name='OnDayLeave' onChange={ onDayLeave } />
                             </div>
                             <div className="Leave_Duration_Date p-1" >

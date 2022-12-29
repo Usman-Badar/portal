@@ -958,8 +958,8 @@ router.post('/authorize_leave', (req, res) => {
 
     db.query(
         q,
-        [ null, null, null, null, 'Accepted', leave_id ],
-        // [ emp_id, d, d.toTimeString(), remarks, 'Authorized', leave_id ], prev
+        // [ null, null, null, null, 'Accepted', leave_id ],
+        [ emp_id, d, d.toTimeString(), remarks, 'Authorized', leave_id ],
         (err, rslt) => {
 
             if (err) {

@@ -1,3 +1,42 @@
+.Leave_container{
+    width: 80%;
+    border: 1px solid lightgray;
+    background-color: #ffff;
+    margin: auto;
+    transition: .5s;
+    /* animation: popups .2s linear 1 forwards alternate;
+    opacity: 0;
+    transform: scale(0.8); */
+    border-radius: 10px;
+    font-family: 'Oxygen', sans-serif;
+}
+
+.Leave_container .Topbar_menu{
+    display: flex;
+    width: 100%;
+}
+
+.Leave_container .Topbar_menu div{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bolder;
+}
+
+.Leave_container .Topbar_menu .tabs.active {
+    background-color: #fff;
+    border-radius: 10px 0 0 0;
+    border-bottom: 0 !important;
+}
+
+.b-bottom-none {
+    border-bottom: 0 !important;
+    /* background-color: white !important; */
+}
+
 .History .checkmark__circle {
     stroke-dasharray: 166;
     stroke-dashoffset: 166;
@@ -83,16 +122,11 @@
 .Short_Leave_Form,
 .Filters {
     width: 100%;
-    padding-top: 20px;
 }
 
 .history_content {
-    width: 70%;
-    border: 1px solid lightgray;
-    background-color: #ffff;
-    padding: 20px;
-    margin: auto;
     transition: .5s;
+    padding: 20px;
     animation: popups .2s linear 1 forwards alternate;
     opacity: 0;
     transform: scale(0.8);
@@ -109,6 +143,27 @@
     font-family: "Tangerine", serif;
 }
 
+.history_content .accepted_div {
+    display: block;
+    margin-left: auto;
+    margin-right: 10px;
+    width: 200px;
+    padding: 30px 0;
+    background: none;
+    border: 1px dashed gray;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.history_content .accepted_div:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+.history_content .accepted_div:focus {
+    outline: 0;
+    /* outline: 5px auto -webkit-focus-ring-color; */
+}
+
 .history_content .form-control#leave_type_select {
     width: fit-content !important;
 }
@@ -119,13 +174,18 @@
     grid-column-gap: 10px;
 }
 
+.history_content .status_div {
+    border-radius: 20px;
+    padding: 2px 15px 1px;
+    width: max-content;
+    font-size: 13px;
+    text-transform: capitalize;
+    font-family: 'Cinzel';
+}
+
 .Application_Form {
     border-radius: 10px;
-    width: 30%;
     padding: 20px;
-    margin: auto;
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-    background-color: #ffff;
     transition: .5s;
     animation: popups .2s linear 1 forwards alternate;
     opacity: 0;
@@ -143,6 +203,13 @@
 
 .history_content .table {
     font-size: 13px;
+}
+
+.history_content .Print_button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .Short_Leave_Form p {
@@ -175,58 +242,114 @@
 .Short_Leave_Form .Application_Form form textarea,
 .Short_Leave_Form .Application_Form form button,
 .Short_Leave_Form .Application_Form form p {
-    font-size: 12px;
+    font-size: 13px;
 }
 
-@media only screen and (max-width: 1460px) {
-    .Short_Leave_Form .Application_Form,
-    .Filters .inner {
-        width: 40%;
+.showSmallScreen{
+    display: none;
+}
+.showSmallerScreen{
+    display: none;
+}
+
+.ShowSmallTable{
+    display: none;
+}
+
+@media only screen and (max-width: 1250px) {
+    .showBigScreen{
+        display: none;
+    }
+    .showSmallScreen{
+        display: block;
     }
 }
 
-@media only screen and (max-width: 1100px) {
-    .Short_Leave_Form .Application_Form,
-    .Filters .inner {
-        width: 50%;
+@media only screen and (max-width: 992px) {
+    .ShowBigTable{
+        display: none;
     }
-}
-
-@media only screen and (max-width: 880px) {
-    .Short_Leave_Form .Application_Form,
-    .Filters .inner {
-        width: 60%;
+    .ShowSmallTable{
+        display: block;
     }
 }
 
 @media only screen and (max-width: 730px) {
-    .Short_Leave_Form .Application_Form,
-    .Filters .inner {
-        width: 70%;
+    .Leave_container{
+        width: 90%;
+    }
+    .history_content h5{
+        font-size: 18px;
+    }
+    .history_content .form-control#leave_type_select {
+        /* width: 30% !important; */
+        font-size: 18px;
     }
 }
 
-@media only screen and (max-width: 630px) {
-    .Short_Leave_Form .Application_Form,
-    .Filters .inner {
-        width: 80%;
+@media only screen and (max-width: 650px) {
+    .Leave_container .Topbar_menu div{
+        font-size: 13px;
+    }
+    .Application_Form h4{
+        font-size: 20px;
+    }
+    .history_content h5{
+        font-size: 15px;
+    }
+    .history_content .form-control#leave_type_select {
+        /* width: 30% !important; */
+        font-size: 15px;
+    }
+    .table td{
+        font-size: 10px;
+    }
+    .history_content .status_div {
+        font-size: 10px;
+    }
+    .table th{
+        font-size: 10px;
+    }
+
+    .history_content h3{
+        font-size: 18px;
+    }
+    .history_content h2{
+        font-size: 20px;
+    }
+    .history_content .signatures {
+        transform: rotate(-12deg) translate(30px, 10px);
+        font-family: "Tangerine", serif;
+    }
+
+    .history_content {
+        padding: 5px;
     }
 }
 
 @media only screen and (max-width: 550px) {
-    .Short_Leave_Form .Application_Form,
-    .Filters .inner {
-        width: 90%;
+    .Leave_container{
+        width: 95%;
     }
-    .Short_Leave_Form .Application_Form form button {
-        width: 50%;
-        margin-bottom: 10px;
+    .Leave_container .Topbar_menu div{
+        font-size: 10px;
     }
-    .Short_Leave_Form .Application_Form {
-        padding: 5px;
+    .history_content .form-control#leave_type_select {
+        /* width: 30% !important; */
+        font-size: 12px;
     }
-    .Short_Leave_Form .Application_Form form h3 {
-        font-size: 25px;
-        padding-top: 10px;
+    .showSmallerScreen{
+        display: block;
+    }
+    .showSmallScreen{
+        display: none;
+    }
+}
+
+
+@media only screen and (max-width: 550px) {
+    .history_content .form-control#leave_type_select {
+        /* width: 40% !important; */
+        font-size: 12px;
     }
 }
