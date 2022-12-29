@@ -137,11 +137,9 @@ router.post('/inventory/get_item_request/details', ( req, res ) => {
                                 db.query(
                                     "SELECT  \
                                     tbl_inventory_request_to_store_assigned_items.*, \
-                                    tbl_inventory_products.name, \
-                                    companies.company_name \
+                                    tbl_inventory_products.name \
                                     FROM `tbl_inventory_request_to_store_assigned_items`  \
                                     LEFT OUTER JOIN tbl_inventory_products ON tbl_inventory_request_to_store_assigned_items.product_id = tbl_inventory_products.product_id \
-                                    LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
                                     WHERE tbl_inventory_request_to_store_assigned_items.request_id = ?;",
                                     [ result[0].id ],
                                     ( err, result2 ) => {
@@ -190,15 +188,8 @@ router.post('/inventory/get_item_request/get_sub_category_items', ( req, res ) =
     const { sub_category_id } = req.body;
 
     db.query(
-        "SELECT  \
-        tbl_inventory_products.*, \
-        locations.location_name, \
-        companies.company_name  \
-        FROM  \
-        `tbl_inventory_products`  \
-        LEFT OUTER JOIN locations ON tbl_inventory_products.location_code = locations.location_code \
-        LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
-        WHERE tbl_inventory_products.sub_category_id = ? AND tbl_inventory_products.quantity != 0;",
+        "SELECT product_id, name, description, quantity FROM `tbl_inventory_products` \
+        WHERE tbl_inventory_products.sub_category_id = ?;",
         [ sub_category_id ],
         ( err, rslt ) => {
 
@@ -348,6 +339,7 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
                 let productsQuery = "SELECT * FROM tbl_inventory_products WHERE ";
                 let params = [];
                 let productsQueryParams = [];
+                
                 for ( let x = 0; x < products.length; x++ )
                 {
                     itemRequestDescriptionQuery = itemRequestDescriptionQuery.concat(

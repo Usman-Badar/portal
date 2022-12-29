@@ -3,6 +3,32 @@ const router = express.Router();
 const db = require('../db/connection');
 const CreateLogs = require('../Routes/Employee/logs').CreateLog;
 
+router.get('/delivery_challan/all', ( req, res ) => {
+
+    db.query(
+        "SELECT * FROM `tbl_inventory_delivery_challan`;",
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send(err);
+                res.end();
+
+            }else 
+            {
+                
+                res.send(rslt);
+                res.end();
+                
+            }
+            
+        }
+    )
+
+} );
+
 router.post('/delivery_challan', ( req, res ) => {
 
     const { name, number, invoice_number, items, vender, date_time, received_by } = req.body;
@@ -175,16 +201,10 @@ router.post('/inventory/get_product_details', ( req, res ) => {
     {
         q = "SELECT tbl_inventory_products.*, \
         tbl_inventory_categories.name as category_name,  \
-        locations.location_name as location_name,  \
-        tbl_inventory_sub_locations.sub_location_name as sub_location_name,  \
-        companies.company_name as company_name,  \
         tbl_inventory_sub_categories.name as sub_category_name  \
         FROM  \
         `tbl_inventory_products`  \
         LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id \
-        LEFT OUTER JOIN locations ON tbl_inventory_products.location_code = locations.location_code \
-        LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
-        LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
         LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id \
         WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.product_id = ?;";
         params = [ product_id ];
@@ -240,7 +260,9 @@ router.post('/inventory/get_product_details', ( req, res ) => {
         
         q = q.concat(" \
             SELECT \
-            tbl_inventory_product_transactions.*,   \
+            tbl_inventory_product_transactions.*, \
+            companies.company_name, \
+            locations.location_name, \
             issued_to.name as issued_to_emp,   \
             recorded.name as recorded_emp   \
             FROM   \
@@ -248,6 +270,8 @@ router.post('/inventory/get_product_details', ( req, res ) => {
             LEFT OUTER JOIN tbl_inventory_product_transactions ON tbl_inventory_products.product_id = tbl_inventory_product_transactions.product_id   \
             LEFT OUTER JOIN employees issued_to ON tbl_inventory_product_transactions.employee = issued_to.emp_id    \
             LEFT OUTER JOIN employees recorded ON tbl_inventory_product_transactions.recorded_by = recorded.emp_id    \
+            LEFT OUTER JOIN companies ON tbl_inventory_product_transactions.company_code = companies.company_code    \
+            LEFT OUTER JOIN locations ON tbl_inventory_product_transactions.location_code = locations.location_code    \
             WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.sub_category_id = ? \
         ");
 
@@ -442,9 +466,9 @@ router.post('/inventory/products/create', ( req, res ) => {
                     }
                 
                     db.query(
-                        "INSERT INTO `tbl_inventory_products`(`company_code`, `name`, `physical_condition`, `product_type`, `note`, `delivery_challan`, `location_code`, `entering_code`, `sub_location_code`, `category_id`, `sub_category_id`, `preview`, `description`, `quantity`, `unit_price`, `recording_date`, `acquisition_date`, `labeling`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);" +
+                        "INSERT INTO `tbl_inventory_products`(`name`, `product_type`, `entering_code`, `category_id`, `sub_category_id`, `description`, `quantity`, `recording_date`, `labeling`) VALUES (?,?,?,?,?,?,?,?,?);" +
                         "SELECT product_id FROM tbl_inventory_products WHERE entering_code = ?",
-                        [ company, name, physical_condition, product_type, product_note, delivery_challan === 'null' ? null : delivery_challan, location, code, sub_location, category, sub_category, file_name ? (file_name + extension) : null, description, quantity, unit_price, new Date(), deliveryChallanDate, labeling, code ],
+                        [ name, product_type, code, category, sub_category, description, quantity, new Date(), labeling, code ],
                         ( err, rslt ) => {
                 
                             if( err )
@@ -457,11 +481,21 @@ router.post('/inventory/products/create', ( req, res ) => {
                             }else 
                             {
                 
-                                let attr_query = "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `quantity`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?);";
+                                let attr_query = "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `quantity`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `acquisition_date`, `note`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
                                 let params = [];
-                
+
                                 params.push(rslt[1][0].product_id);
                                 params.push(quantity);
+                                params.push(unit_price);
+                                params.push(parseFloat(unit_price)*parseInt(quantity));
+                                params.push(delivery_challan === 'null' || delivery_challan === null ? null : delivery_challan);
+                                params.push(company);
+                                params.push(location);
+                                params.push(sub_location);
+                                params.push(file_name ? (file_name + extension) : null);
+                                params.push(physical_condition);
+                                params.push(deliveryChallanDate);
+                                params.push(product_note);
                                 params.push(recorded_by);
                                 params.push(new Date());
                                 params.push(new Date().toTimeString());
@@ -517,6 +551,117 @@ router.post('/inventory/products/create', ( req, res ) => {
         }
     )
 
+
+} );
+
+router.post('/inventory/products/create/inward', ( req, res ) => {
+
+    const { recorded_by, product_id, product_company, product_location, product_sub_location, product_quantity, product_unit_price, product_total_amount, product_physical_condition, product_acquisition_date, product_note, delivery_challan, extension } = req.body;
+
+    let query = "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `quantity`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `acquisition_date`, `note`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+    let params = [];
+    let file_name;
+
+    if ( req.files )
+    {
+
+        const { Attachment } = req.files;
+        file_name = "products/" + Attachment.name.split('.').shift() + '.';
+        Attachment.mv('assets/inventory/assets/images/' + file_name + extension, (err) => {
+            
+            if (err) {
+    
+                console.log( err );
+    
+            }
+    
+        });
+
+    }
+
+    params.push(product_id);
+    params.push(product_quantity);
+    params.push(product_unit_price);
+    params.push(product_total_amount);
+    params.push(delivery_challan === 'null' || delivery_challan === null ? null : delivery_challan);
+    params.push(product_company);
+    params.push(product_location);
+    params.push(product_sub_location);
+    params.push(file_name ? (file_name + extension) : null);
+    params.push(product_physical_condition);
+    params.push(product_acquisition_date);
+    params.push(product_note);
+    params.push(recorded_by);
+    params.push(new Date());
+    params.push(new Date().toTimeString());
+
+    query = query.concat("UPDATE tbl_inventory_products SET quantity = quantity + ? WHERE product_id = ?;");
+    
+    params.push(product_quantity);
+    params.push(product_id);
+
+    db.query(
+        query,
+        params,
+        ( err ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send(err);
+                res.end();
+
+            }else 
+            {
+
+                res.send('success');
+                res.end();
+                
+            }
+            
+        }
+    )
+
+} );
+
+router.post('/inventory/products/create/get/product', ( req, res ) => {
+
+    const { product_id } = req.body;
+
+    db.query(
+        "SELECT name, description, quantity FROM `tbl_inventory_products` WHERE product_id = ?;" +
+        "SELECT tbl_inventory_product_transactions.quantity, \
+        tbl_inventory_product_transactions.entry, \
+        tbl_inventory_product_transactions.record_date, \
+        companies.company_name, \
+        locations.location_name, \
+        tbl_inventory_sub_locations.sub_location_name \
+        FROM `tbl_inventory_product_transactions` \
+        LEFT OUTER JOIN companies ON tbl_inventory_product_transactions.company_code = companies.company_code \
+        LEFT OUTER JOIN locations ON tbl_inventory_product_transactions.location_code = locations.location_code \
+        LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_product_transactions.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
+        WHERE product_id = ? ORDER BY record_date DESC;",
+        [ product_id, product_id ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send(err);
+                res.end();
+
+            }else 
+            {
+
+                res.send(rslt);
+                res.end();
+                
+            }
+            
+        }
+    )
 
 } );
 

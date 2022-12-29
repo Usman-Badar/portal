@@ -154,7 +154,6 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
                             <tr>
 
                                 <th>Sr.No</th>
-                                <th>Preview</th>
                                 <th>Product</th>
                                 <th>Description</th>
                                 <th>Required Quantity</th>
@@ -170,11 +169,6 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
                                             <tr key={ index }>
 
                                                 <td>{ index + 1 }</td>
-                                                <td>
-                                                    <div className="preview_tbl">
-                                                        <img src={ val.preview ? `assets/inventory/assets/images/${val.preview}` : 'https://media.istockphoto.com/vectors/image-preview-icon-picture-placeholder-for-website-or-uiux-design-vector-id1222357475?k=20&m=1222357475&s=170667a&w=0&h=YGycIDbBRAWkZaSvdyUFvotdGfnKhkutJhMOZtIoUKY=' } alt='preview' />
-                                                    </div>
-                                                </td>
                                                 <td>{ val.name }</td>
                                                 <td>{ val.description }</td>
                                                 <td>{ val.assigned_quantity }</td>
