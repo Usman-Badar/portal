@@ -357,12 +357,9 @@ router.post('/store/inventory_request/details', ( req, res ) => {
         "SELECT  \
         tbl_inventory_request_to_store_assigned_items.*, \
         tbl_inventory_products.name, \
-        tbl_inventory_products.description, \
-        tbl_inventory_products.preview, \
-        companies.company_name \
+        tbl_inventory_products.description \
         FROM `tbl_inventory_request_to_store_assigned_items`  \
         LEFT OUTER JOIN tbl_inventory_products ON tbl_inventory_request_to_store_assigned_items.product_id = tbl_inventory_products.product_id \
-        LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
         WHERE tbl_inventory_request_to_store_assigned_items.request_id = ?;",
         [ request_id, request_id ],
         ( err, rslt ) => {

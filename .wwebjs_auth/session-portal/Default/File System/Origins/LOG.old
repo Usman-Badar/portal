@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2022/12/28-11:42:26.727 152c Reusing MANIFEST E:\portal\.wwebjs_auth\session-portal\Default\File System\Origins/MANIFEST-000001
 2022/12/28-11:42:26.727 152c Recovering log #6
 2022/12/28-11:42:26.727 152c Reusing old log E:\portal\.wwebjs_auth\session-portal\Default\File System\Origins/000006.log 
+=======
+2022/12/29-09:49:47.848 3d0 Reusing MANIFEST E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\File System\Origins/MANIFEST-000001
+2022/12/29-09:49:47.848 3d0 Recovering log #6
+2022/12/29-09:49:47.848 3d0 Reusing old log E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\File System\Origins/000006.log 
+>>>>>>> cd8fbb4e609554ec3216a17a905c947b6418b318

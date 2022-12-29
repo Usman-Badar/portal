@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2022/12/28-11:42:23.396 3368 Reusing MANIFEST E:\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/MANIFEST-000001
 2022/12/28-11:42:23.416 3368 Recovering log #31
 2022/12/28-11:42:23.416 3368 Reusing old log E:\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/000031.log 
@@ -7,3 +8,8 @@
 2022/12/28-17:16:26.512 1c18 Level-0 table #37: started
 2022/12/28-17:16:26.519 1c18 Level-0 table #37: 19027 bytes OK
 2022/12/28-17:16:26.521 1c18 Delete type=0 #34
+=======
+2022/12/29-09:49:46.950 3d54 Reusing MANIFEST E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/MANIFEST-000001
+2022/12/29-09:49:46.950 3d54 Recovering log #36
+2022/12/29-09:49:46.951 3d54 Reusing old log E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/000036.log 
+>>>>>>> cd8fbb4e609554ec3216a17a905c947b6418b318

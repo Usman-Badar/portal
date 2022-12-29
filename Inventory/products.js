@@ -3,6 +3,32 @@ const router = express.Router();
 const db = require('../db/connection');
 const CreateLogs = require('../Routes/Employee/logs').CreateLog;
 
+router.get('/delivery_challan/all', ( req, res ) => {
+
+    db.query(
+        "SELECT * FROM `tbl_inventory_delivery_challan`;",
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send(err);
+                res.end();
+
+            }else 
+            {
+                
+                res.send(rslt);
+                res.end();
+                
+            }
+            
+        }
+    )
+
+} );
+
 router.post('/delivery_challan', ( req, res ) => {
 
     const { name, number, invoice_number, items, vender, date_time, received_by } = req.body;
@@ -113,13 +139,12 @@ router.post('/inventory/get_products', ( req, res ) => {
     tbl_inventory_sub_categories.id as sub_category_id, \
     tbl_inventory_sub_categories.name as sub_category_name, \
     tbl_inventory_categories.category_id as category_id, \
-    SUM(tbl_inventory_products.unit_price) AS product_unit_price, \
     SUM(tbl_inventory_products.quantity) AS product_physical_quantity  \
     FROM   \
     `tbl_inventory_products`   \
     LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id  \
     LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id  \
-    WHERE tbl_inventory_products.status = 'active' AND tbl_inventory_categories.type = ? \
+    WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_categories.type = ? \
     GROUP BY tbl_inventory_products.sub_category_id";
     let params = [ type ];
 
@@ -150,7 +175,7 @@ router.post('/inventory/get_products', ( req, res ) => {
 
 router.post('/inventory/get_product_details', ( req, res ) => {
 
-    const { mode, sub_category_id, product_id, entry_code, company_code, location_code, sub_location_code } = req.body;
+    const { sub_category_id, product_id, entry_code, company_code, location_code, sub_location_code } = req.body;
 
     let q;
     let params;
@@ -170,36 +195,30 @@ router.post('/inventory/get_product_details', ( req, res ) => {
         LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
         LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
         LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id \
-        WHERE tbl_inventory_products.status = 'active' AND tbl_inventory_products.entering_code = ?;";
+        WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.entering_code = ?;";
         params = [ entry_code ];
     }else if ( product_id )
     {
         q = "SELECT tbl_inventory_products.*, \
         tbl_inventory_categories.name as category_name,  \
-        locations.location_name as location_name,  \
-        tbl_inventory_sub_locations.sub_location_name as sub_location_name,  \
-        companies.company_name as company_name,  \
         tbl_inventory_sub_categories.name as sub_category_name  \
         FROM  \
         `tbl_inventory_products`  \
         LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id \
-        LEFT OUTER JOIN locations ON tbl_inventory_products.location_code = locations.location_code \
-        LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
-        LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
         LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id \
-        WHERE tbl_inventory_products.status = 'active' AND tbl_inventory_products.product_id = ?;";
+        WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.product_id = ?;";
         params = [ product_id ];
     }else if ( sub_category_id )
     {
-        if ( mode.toLowerCase() === 'compare' )
+        if ( "A".toLowerCase() === 'compare' )
         {
             q = "SELECT tbl_inventory_products.*, \
+            tbl_inventory_products.quantity as stocked_quantity, \
             tbl_inventory_categories.name as category_name,  \
             locations.location_name as location_name,  \
             tbl_inventory_sub_locations.sub_location_name as sub_location_name,  \
             companies.company_name as company_name,  \
-            tbl_inventory_sub_categories.name as sub_category_name,  \
-            issued_to.name as issued_to_emp  \
+            tbl_inventory_sub_categories.name as sub_category_name  \
             FROM  \
             `tbl_inventory_products`  \
             LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id \
@@ -207,45 +226,57 @@ router.post('/inventory/get_product_details', ( req, res ) => {
             LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
             LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
             LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id \
-            LEFT OUTER JOIN employees issued_to ON tbl_inventory_products.employee = issued_to.emp_id \
-            WHERE tbl_inventory_products.status = 'active' AND tbl_inventory_products.sub_category_id = ?";
+            WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.sub_category_id = ?";
             params = [ sub_category_id ];    
-        }else
-        {
-            q = "SELECT tbl_inventory_products.*, \
-            tbl_inventory_categories.name as category_name,  \
-            locations.location_name as location_name,  \
-            tbl_inventory_sub_locations.sub_location_name as sub_location_name,  \
-            companies.company_name as company_name,  \
-            tbl_inventory_sub_categories.name as sub_category_name,  \
-            issued_to.name as issued_to_emp  \
-            FROM  \
-            `tbl_inventory_products`  \
-            LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id \
-            LEFT OUTER JOIN locations ON tbl_inventory_products.location_code = locations.location_code \
-            LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
-            LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
-            LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id \
-            LEFT OUTER JOIN employees issued_to ON tbl_inventory_products.employee = issued_to.emp_id \
-            WHERE tbl_inventory_products.status = 'active' AND tbl_inventory_products.sub_category_id = ? AND tbl_inventory_products.entry = ?";
-            params = [ sub_category_id, mode.toLowerCase() ];
         }
+        q = "SELECT tbl_inventory_products.*,  \
+        tbl_inventory_products.quantity as stocked_quantity, \
+        tbl_inventory_categories.name as category_name,   \
+        tbl_inventory_sub_categories.name as sub_category_name    \
+        FROM   \
+        `tbl_inventory_products`   \
+        LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id  \
+        LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id  \
+        WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.sub_category_id = ?";
+        params = [ sub_category_id ];
 
-        if ( company_code !== '' )
-        {
-            q = q.concat(" AND tbl_inventory_products.company_code = ?");
-            params.push( company_code );
-        }
-        if ( location_code !== '' )
-        {
-            q = q.concat(" AND tbl_inventory_products.location_code = ?");
-            params.push( location_code );
-        }
-        if ( sub_location_code !== '' )
-        {
-            q = q.concat(" AND tbl_inventory_products.sub_location_code = ?");
-            params.push( sub_location_code );
-        }
+        // if ( company_code !== '' )
+        // {
+        //     q = q.concat(" AND tbl_inventory_products.company_code = ?");
+        //     params.push( company_code );
+        // }
+        // if ( location_code !== '' )
+        // {
+        //     q = q.concat(" AND tbl_inventory_products.location_code = ?");
+        //     params.push( location_code );
+        // }
+        // if ( sub_location_code !== '' )
+        // {
+        //     q = q.concat(" AND tbl_inventory_products.sub_location_code = ?");
+        //     params.push( sub_location_code );
+        // }
+
+        q = q.concat(";");
+        
+        q = q.concat(" \
+            SELECT \
+            tbl_inventory_product_transactions.*, \
+            companies.company_name, \
+            locations.location_name, \
+            issued_to.name as issued_to_emp,   \
+            recorded.name as recorded_emp   \
+            FROM   \
+            `tbl_inventory_products`   \
+            LEFT OUTER JOIN tbl_inventory_product_transactions ON tbl_inventory_products.product_id = tbl_inventory_product_transactions.product_id   \
+            LEFT OUTER JOIN employees issued_to ON tbl_inventory_product_transactions.employee = issued_to.emp_id    \
+            LEFT OUTER JOIN employees recorded ON tbl_inventory_product_transactions.recorded_by = recorded.emp_id    \
+            LEFT OUTER JOIN companies ON tbl_inventory_product_transactions.company_code = companies.company_code    \
+            LEFT OUTER JOIN locations ON tbl_inventory_product_transactions.location_code = locations.location_code    \
+            WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.sub_category_id = ? \
+        ");
+
+        params.push( sub_category_id );
+        
     }
 
     db.query(
@@ -384,11 +415,151 @@ router.get('/inventory/product/get_attributes', ( req, res ) => {
 
 router.post('/inventory/products/create', ( req, res ) => {
 
-    const { labeling, company, name, product_acquisition_date, physical_condition, product_type, product_note, delivery_challan, challan_generate_date, location, sub_location, category, sub_category, quantity, unit_price, description, attributes, extension } = req.body;
+    const { recorded_by, labeling, company, name, product_acquisition_date, physical_condition, product_type, product_note, delivery_challan, challan_generate_date, location, sub_location, category, sub_category, quantity, unit_price, description, attributes, extension } = req.body;
 
-    const product_attributes = JSON.parse(attributes);
-    const deliveryChallanDate = challan_generate_date === 'null' ? new Date(product_acquisition_date) : new Date(challan_generate_date);
-    const code = new Date().getTime() + '_' + new Date().getDate() + (new Date().getMonth() + 1) + new Date().getFullYear();
+    db.query(
+        "SELECT * FROM `tbl_inventory_products` WHERE sub_category_id = ?;",
+        [sub_category],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send(err);
+                res.end();
+
+            }else 
+            {
+                
+                if ( rslt.length > 0 )
+                {
+                    res.send(
+                        {
+                            title: 'exists',
+                            product_id: rslt[0].product_id
+                        }
+                    );
+                    res.end();
+                }else
+                {
+                    const product_attributes = JSON.parse(attributes);
+                    const deliveryChallanDate = challan_generate_date === 'null' ? new Date(product_acquisition_date) : new Date(challan_generate_date);
+                    const code = new Date().getTime() + '_' + new Date().getDate() + (new Date().getMonth() + 1) + new Date().getFullYear();
+                    let file_name;
+                
+                    if ( req.files )
+                    {
+                
+                        const { Attachment } = req.files;
+                        file_name = "products/" + Attachment.name.split('.').shift() + '.';
+                        Attachment.mv('assets/inventory/assets/images/' + file_name + extension, (err) => {
+                            
+                            if (err) {
+                    
+                                console.log( err );
+                    
+                            }
+                    
+                        });
+                
+                    }
+                
+                    db.query(
+                        "INSERT INTO `tbl_inventory_products`(`name`, `product_type`, `entering_code`, `category_id`, `sub_category_id`, `description`, `quantity`, `recording_date`, `labeling`) VALUES (?,?,?,?,?,?,?,?,?);" +
+                        "SELECT product_id FROM tbl_inventory_products WHERE entering_code = ?",
+                        [ name, product_type, code, category, sub_category, description, quantity, new Date(), labeling, code ],
+                        ( err, rslt ) => {
+                
+                            if( err )
+                            {
+                
+                                console.log( err );
+                                res.send(err);
+                                res.end();
+                
+                            }else 
+                            {
+                
+                                let attr_query = "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `quantity`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `acquisition_date`, `note`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                                let params = [];
+
+                                params.push(rslt[1][0].product_id);
+                                params.push(quantity);
+                                params.push(unit_price);
+                                params.push(parseFloat(unit_price)*parseInt(quantity));
+                                params.push(delivery_challan === 'null' || delivery_challan === null ? null : delivery_challan);
+                                params.push(company);
+                                params.push(location);
+                                params.push(sub_location);
+                                params.push(file_name ? (file_name + extension) : null);
+                                params.push(physical_condition);
+                                params.push(deliveryChallanDate);
+                                params.push(product_note);
+                                params.push(recorded_by);
+                                params.push(new Date());
+                                params.push(new Date().toTimeString());
+                
+                                for ( let x = 0; x < product_attributes.length; x++ )
+                                {
+                                    attr_query = attr_query.concat("INSERT INTO `tbl_inventory_product_attributes`(`product_id`, `description`, `value_str`, `value_int`, `value_float`, `value_date`, `value_time`) VALUES (?,?,?,?,?,?,?);");
+                                    params.push(rslt[1][0].product_id);
+                                    params.push(product_attributes[x].description.toLowerCase());
+                                    params.push(product_attributes[x].type.toLowerCase() === 'value_str' ? product_attributes[x].value.toLowerCase() : null);
+                                    params.push(product_attributes[x].type.toLowerCase() === 'value_int' ? product_attributes[x].value.toLowerCase() : null);
+                                    params.push(product_attributes[x].type.toLowerCase() === 'value_float' ? product_attributes[x].value.toLowerCase() : null);
+                                    params.push(product_attributes[x].type.toLowerCase() === 'value_date' ? product_attributes[x].value.toLowerCase() : null);
+                                    params.push(product_attributes[x].type.toLowerCase() === 'value_time' ? product_attributes[x].value.toLowerCase() : null);
+                                }
+                                
+                                db.query(
+                                    attr_query,
+                                    params,
+                                    ( err ) => {
+                            
+                                        if( err )
+                                        {
+                            
+                                            console.log( err );
+                                            res.send(err);
+                                            res.end();
+                            
+                                        }else 
+                                        {
+                                            CreateLogs( 
+                                                'tbl_inventory_products', 
+                                                rslt[1][0].product_id,
+                                                "Product '" + name + "' has created",
+                                                'info'
+                                            );
+                                            res.send("success");
+                                            res.end();
+                                            
+                                        }
+                                        
+                                    }
+                                )
+                                
+                            }
+                            
+                        }
+                    )
+                }
+                
+            }
+            
+        }
+    )
+
+
+} );
+
+router.post('/inventory/products/create/inward', ( req, res ) => {
+
+    const { recorded_by, product_id, product_company, product_location, product_sub_location, product_quantity, product_unit_price, product_total_amount, product_physical_condition, product_acquisition_date, product_note, delivery_challan, extension } = req.body;
+
+    let query = "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `quantity`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `acquisition_date`, `note`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+    let params = [];
     let file_name;
 
     if ( req.files )
@@ -408,10 +579,70 @@ router.post('/inventory/products/create', ( req, res ) => {
 
     }
 
+    params.push(product_id);
+    params.push(product_quantity);
+    params.push(product_unit_price);
+    params.push(product_total_amount);
+    params.push(delivery_challan === 'null' || delivery_challan === null ? null : delivery_challan);
+    params.push(product_company);
+    params.push(product_location);
+    params.push(product_sub_location);
+    params.push(file_name ? (file_name + extension) : null);
+    params.push(product_physical_condition);
+    params.push(product_acquisition_date);
+    params.push(product_note);
+    params.push(recorded_by);
+    params.push(new Date());
+    params.push(new Date().toTimeString());
+
+    query = query.concat("UPDATE tbl_inventory_products SET quantity = quantity + ? WHERE product_id = ?;");
+    
+    params.push(product_quantity);
+    params.push(product_id);
+
     db.query(
-        "INSERT INTO `tbl_inventory_products`(`company_code`, `name`, `physical_condition`, `product_type`, `note`, `delivery_challan`, `location_code`, `entering_code`, `sub_location_code`, `category_id`, `sub_category_id`, `preview`, `description`, `quantity`, `unit_price`, `recording_date`, `acquisition_date`, `labeling`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);" +
-        "SELECT product_id FROM tbl_inventory_products WHERE entering_code = ?",
-        [ company, name, physical_condition, product_type, product_note, delivery_challan === 'null' ? null : delivery_challan, location, code, sub_location, category, sub_category, file_name ? (file_name + extension) : null, description, quantity, unit_price, new Date(), deliveryChallanDate, labeling, code ],
+        query,
+        params,
+        ( err ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send(err);
+                res.end();
+
+            }else 
+            {
+
+                res.send('success');
+                res.end();
+                
+            }
+            
+        }
+    )
+
+} );
+
+router.post('/inventory/products/create/get/product', ( req, res ) => {
+
+    const { product_id } = req.body;
+
+    db.query(
+        "SELECT name, description, quantity FROM `tbl_inventory_products` WHERE product_id = ?;" +
+        "SELECT tbl_inventory_product_transactions.quantity, \
+        tbl_inventory_product_transactions.entry, \
+        tbl_inventory_product_transactions.record_date, \
+        companies.company_name, \
+        locations.location_name, \
+        tbl_inventory_sub_locations.sub_location_name \
+        FROM `tbl_inventory_product_transactions` \
+        LEFT OUTER JOIN companies ON tbl_inventory_product_transactions.company_code = companies.company_code \
+        LEFT OUTER JOIN locations ON tbl_inventory_product_transactions.location_code = locations.location_code \
+        LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_product_transactions.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
+        WHERE product_id = ? ORDER BY record_date DESC;",
+        [ product_id, product_id ],
         ( err, rslt ) => {
 
             if( err )
@@ -424,47 +655,8 @@ router.post('/inventory/products/create', ( req, res ) => {
             }else 
             {
 
-                let attr_query = "SELECT 1;";
-                let params = [];
-                for ( let x = 0; x < product_attributes.length; x++ )
-                {
-                    attr_query = attr_query.concat("INSERT INTO `tbl_inventory_product_attributes`(`product_id`, `description`, `value_str`, `value_int`, `value_float`, `value_date`, `value_time`) VALUES (?,?,?,?,?,?,?);");
-                    params.push(rslt[1][0].product_id);
-                    params.push(product_attributes[x].description.toLowerCase());
-                    params.push(product_attributes[x].type.toLowerCase() === 'value_str' ? product_attributes[x].value.toLowerCase() : null);
-                    params.push(product_attributes[x].type.toLowerCase() === 'value_int' ? product_attributes[x].value.toLowerCase() : null);
-                    params.push(product_attributes[x].type.toLowerCase() === 'value_float' ? product_attributes[x].value.toLowerCase() : null);
-                    params.push(product_attributes[x].type.toLowerCase() === 'value_date' ? product_attributes[x].value.toLowerCase() : null);
-                    params.push(product_attributes[x].type.toLowerCase() === 'value_time' ? product_attributes[x].value.toLowerCase() : null);
-                }
-                
-                db.query(
-                    attr_query,
-                    params,
-                    ( err ) => {
-            
-                        if( err )
-                        {
-            
-                            console.log( err );
-                            res.send(err);
-                            res.end();
-            
-                        }else 
-                        {
-                            CreateLogs( 
-                                'tbl_inventory_products', 
-                                rslt[1][0].product_id,
-                                "Product '" + name + "' has created",
-                                'info'
-                            );
-                            res.send("success");
-                            res.end();
-                            
-                        }
-                        
-                    }
-                )
+                res.send(rslt);
+                res.end();
                 
             }
             

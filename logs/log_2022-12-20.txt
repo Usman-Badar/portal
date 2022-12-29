@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 12:47:44 GMT+0500 (Pakistan Standard Time)
 type: error
 ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
@@ -6,3 +7,9 @@ ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
 type: error
 Error: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
 
+=======
+19:10:42 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+>>>>>>> cd8fbb4e609554ec3216a17a905c947b6418b318

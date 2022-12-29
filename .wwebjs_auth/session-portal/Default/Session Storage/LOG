@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2022/12/29-10:39:44.554 39f8 Reusing MANIFEST E:\portal\.wwebjs_auth\session-portal\Default\Session Storage/MANIFEST-000001
 2022/12/29-10:39:44.563 39f8 Recovering log #3
 2022/12/29-10:39:44.564 39f8 Reusing old log E:\portal\.wwebjs_auth\session-portal\Default\Session Storage/000003.log 
+=======
+2022/12/29-09:52:01.683 1244 Reusing MANIFEST E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Session Storage/MANIFEST-000001
+2022/12/29-09:52:01.683 1244 Recovering log #3
+2022/12/29-09:52:01.684 1244 Reusing old log E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Session Storage/000003.log 
+>>>>>>> cd8fbb4e609554ec3216a17a905c947b6418b318

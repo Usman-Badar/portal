@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 11:42:21 GMT+0500 (Pakistan Standard Time)
 type: error
 TypeError: Cannot read properties of undefined (reading '0')
@@ -23,6 +24,9 @@ Error: Evaluation failed: TypeError: Cannot read properties of undefined (readin
     at __puppeteer_evaluation_script__:2:42
 
 11:42:21 GMT+0500 (Pakistan Standard Time)
+=======
+11:29:17 GMT+0500 (Pakistan Standard Time)
+>>>>>>> cd8fbb4e609554ec3216a17a905c947b6418b318
 type: error
 ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
 

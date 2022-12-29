@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const CreateLogs = require('../Routes/Employee/logs').CreateLog;
-const AssignProduct = require('./products').AssignProduct;
+// const AssignProduct = require('./products').AssignProduct;
 
 router.get('/inventory/get_item_requests', ( req, res ) => {
 
@@ -137,11 +137,9 @@ router.post('/inventory/get_item_request/details', ( req, res ) => {
                                 db.query(
                                     "SELECT  \
                                     tbl_inventory_request_to_store_assigned_items.*, \
-                                    tbl_inventory_products.name, \
-                                    companies.company_name \
+                                    tbl_inventory_products.name \
                                     FROM `tbl_inventory_request_to_store_assigned_items`  \
                                     LEFT OUTER JOIN tbl_inventory_products ON tbl_inventory_request_to_store_assigned_items.product_id = tbl_inventory_products.product_id \
-                                    LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
                                     WHERE tbl_inventory_request_to_store_assigned_items.request_id = ?;",
                                     [ result[0].id ],
                                     ( err, result2 ) => {
@@ -190,15 +188,8 @@ router.post('/inventory/get_item_request/get_sub_category_items', ( req, res ) =
     const { sub_category_id } = req.body;
 
     db.query(
-        "SELECT  \
-        tbl_inventory_products.*, \
-        locations.location_name, \
-        companies.company_name  \
-        FROM  \
-        `tbl_inventory_products`  \
-        LEFT OUTER JOIN locations ON tbl_inventory_products.location_code = locations.location_code \
-        LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
-        WHERE tbl_inventory_products.sub_category_id = ? AND tbl_inventory_products.quantity != 0 AND tbl_inventory_products.employee IS NULL;",
+        "SELECT product_id, name, description, quantity FROM `tbl_inventory_products` \
+        WHERE tbl_inventory_products.sub_category_id = ?;",
         [ sub_category_id ],
         ( err, rslt ) => {
 
@@ -348,13 +339,25 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
                 let productsQuery = "SELECT * FROM tbl_inventory_products WHERE ";
                 let params = [];
                 let productsQueryParams = [];
+                
                 for ( let x = 0; x < products.length; x++ )
                 {
                     itemRequestDescriptionQuery = itemRequestDescriptionQuery.concat(
-                        "UPDATE `tbl_inventory_products` SET tbl_inventory_products.quantity = tbl_inventory_products.quantity - ? WHERE tbl_inventory_products.product_id = ?;"
+                        "UPDATE `tbl_inventory_products` SET tbl_inventory_products.quantity = tbl_inventory_products.quantity - ? WHERE tbl_inventory_products.product_id = ?;" +
+                        "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `entry`, `quantity`, `recorded_by`, `record_date`, `record_time`, `employee`, `request_id`, `status`) VALUES (?,?,?,?,?,?,?,?,?);"
                     );
                     params.push( products[x].assigned_quantity );
                     params.push( products[x].product_id );
+
+                    params.push( products[x].product_id );
+                    params.push( 'outward' );
+                    params.push( products[x].assigned_quantity );
+                    params.push( issued_by );
+                    params.push( new Date() );
+                    params.push( new Date().toTimeString() );
+                    params.push( requested_by );
+                    params.push( request_id );
+                    params.push( "issued" );
 
                     if( x == 0 )
                     {
@@ -395,39 +398,8 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
                                     }else 
                                     {
 
-                                        for ( let x = 0; x < result.length; x++ )
-                                        {
-                                            let attributes = [];
-                                            db.query(
-                                                "SELECT * FROM `tbl_inventory_product_attributes` WHERE product_id = ?",
-                                                [ result[x].product_id ],
-                                                ( err, result2 ) => {
-                                        
-                                                    if( err )
-                                                    {
-                                        
-                                                        console.log(err)
-                                                        res.send(err);
-                                                        res.end();
-                                        
-                                                    }else 
-                                                    {
-                                                    
-                                                        attributes = result2;
-                                                        AssignProduct( result[x].company_code, result[x].name, result[x].physical_condition, result[x].product_type, result[x].note, result[x].delivery_challan, result[x].acquisition_date, result[x].location_code, result[x].sub_location_code, result[x].category_id, result[x].sub_category_id, products[x].assigned_quantity, result[x].unit_price, result[x].description, attributes, result[x].preview, requested_by, request_id, res )
-
-                                                        if ( ( x + 1 ) === result.length )
-                                                        {
-                                                            
-                                                            res.send(err);
-                                                            res.end();
-                                                        }
-                                                        
-                                                    }
-                                                    
-                                                }
-                                            )
-                                        }
+                                        res.send(err);
+                                        res.end();
                                     }
                                     
                                 }
