@@ -1,6 +1,28 @@
 import React from 'react';
+import $ from 'jquery';
 
 function frmLogin(props) {
+
+    const showPass = () => {
+
+        if($('#eye').hasClass('las la-eye-slash')){
+           
+            $('#eye').removeClass('las la-eye-slash');
+            
+            $('#eye').addClass('las la-eye');
+            
+            $('#password').attr('type','text');
+              
+          }else{
+           
+            $('#eye').removeClass('las la-eye');
+            
+            $('#eye').addClass('las la-eye-slash');  
+            
+            $('#password').attr('type','password');
+          }
+    }
+
     return (
         <>
 
@@ -31,12 +53,15 @@ function frmLogin(props) {
                         <div className="PassDiv">
                             {
                                 props.Employee.emp_id
-                                ?
-                                <form onSubmit={props.OnUserLogin}>
-                                    <input autoFocus className="w-100 mb-3 form-control border bg-light" value={props.UserData.LoginPass} onChange={props.OnChangeHandler} name="LoginPass" required label="Password" type="password" autoComplete="current-password" variant="standard" />
-                                    <div className="w-100 text-right py-3"><button type="submit" variant="contained" className="w-100 btn" style={{ backgroundColor: "var(--c-green)", color: "white" }}>Login</button></div>
-                                </form>
-                                :null
+                                    ?
+                                    <form onSubmit={props.OnUserLogin}>
+                                        <div className="w-100 mb-3 border bg-light passDiv_input">
+                                            <input autoFocus className="w-100 form-control" value={props.UserData.LoginPass} onChange={props.OnChangeHandler} name="LoginPass" id="password" required label="Password" type="password" autoComplete="current-password" variant="standard" />
+                                            <i className="las la-eye-slash" id="eye" onClick={showPass} ></i>
+                                        </div>
+                                        <div className="w-100 text-right py-3"><button type="submit" variant="contained" className="w-100 btn" style={{ backgroundColor: "var(--c-green)", color: "white" }}>Login</button></div>
+                                    </form>
+                                    : null
                             }
                         </div>
                     </div>

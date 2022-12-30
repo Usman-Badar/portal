@@ -1,3 +1,15 @@
+<<<<<<< HEAD
 2022/12/30-17:04:00.793 2b14 Reusing MANIFEST E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/MANIFEST-000001
 2022/12/30-17:04:00.951 2b14 Recovering log #39
 2022/12/30-17:04:00.953 2b14 Reusing old log E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/000039.log 
+=======
+<<<<<<< HEAD
+2022/12/29-10:39:41.458 39f8 Reusing MANIFEST E:\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/MANIFEST-000001
+2022/12/29-10:39:41.471 39f8 Recovering log #36
+2022/12/29-10:39:41.471 39f8 Reusing old log E:\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/000036.log 
+=======
+2022/12/29-09:52:01.149 4444 Reusing MANIFEST E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/MANIFEST-000001
+2022/12/29-09:52:01.150 4444 Recovering log #36
+2022/12/29-09:52:01.150 4444 Reusing old log E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Local Storage\leveldb/000036.log 
+>>>>>>> cd8fbb4e609554ec3216a17a905c947b6418b318
+>>>>>>> 5cdee32d7fd898202be97bf5720f9c42a6d12330

@@ -82,6 +82,8 @@ const Inward = lazy( () => import('./Pages/Store/Inward/Inward') );
 const ItemRequest = lazy( () => import('./Pages/Forms/ItemRequest/ItemRequest') );
 const RepairRequest = lazy( () => import('./Pages/Forms/RepairRequest/RepairRequest') );
 
+const EmpTickets = lazy( () => import('./Pages/EmpTickets/EmpTickets') );
+
 const Dashboard = () => {
     
     const AccessControls = useSelector( ( state ) => state.EmpAuth.EmployeeData );
@@ -351,6 +353,8 @@ const Dashboard = () => {
 
                         <Route exact path='/profile/:path/:link' render={ () => <Sus content={ <EmployeeProfile /> } /> } />
                         <Route exact path='/empdailyattendance' render={ () => <Sus content={ <DailyAttendance /> } /> } />
+
+                        <Route exact path='/employeestickets' render={ () => <Sus content={ <EmpTickets /> } /> } />
 
 
                         {/* <Route exact path="/invtry" component={ Assets } />

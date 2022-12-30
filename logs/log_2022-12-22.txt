@@ -1,8 +1,20 @@
+<<<<<<< HEAD
+10:16:46 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+10:16:46 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+14:23:42 GMT+0500 (Pakistan Standard Time)
+=======
 14:47:02 GMT+0500 (Pakistan Standard Time)
 type: error
 TypeError: Cannot read properties of undefined (reading '0')
 
 17:45:22 GMT+0500 (Pakistan Standard Time)
+>>>>>>> cd8fbb4e609554ec3216a17a905c947b6418b318
 type: error
 ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
 

@@ -1,15 +1,8 @@
 .Employee_Leave_Application_Form {
     width: 100%;
-    padding-top: 20px;
 }
 
 .Employee_Leave_Application_Form .Application_Form {
-    border-radius: 10px;
-    width: 30%;
-    padding: 20px;
-    margin: auto;
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-    background-color: #ffff;
     transition: .5s;
     animation: popups .2s linear 1 forwards alternate;
     opacity: 0;
@@ -39,6 +32,7 @@
     border-radius: 5px !important;
     box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;
     background-color: rgb(240, 240, 240, 0.5);
+    padding: 18px 15px;
 }
 
 .Employee_Leave_Application_Form textarea {
@@ -65,9 +59,9 @@
 .Employee_Leave_Application_Form .Application_Form form textarea,
 .Employee_Leave_Application_Form .Application_Form form button,
 .Employee_Leave_Application_Form .Application_Form form p {
-    font-size: 12px;
+    font-size: 13px;
 }
-
+/* 
 @media only screen and (max-width: 1460px) {
     .Employee_Leave_Application_Form .Application_Form {
         width: 40%;
@@ -113,4 +107,4 @@
         font-size: 20px;
         padding-top: 10px;
     }
-}
+} */
