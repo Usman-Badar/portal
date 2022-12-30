@@ -1,3 +1,2 @@
-2022/12/29-09:52:01.144 1f8c Reusing MANIFEST E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Service Worker\Database/MANIFEST-000001
-2022/12/29-09:52:01.144 1f8c Recovering log #3
-2022/12/29-09:52:01.157 1f8c Reusing old log E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Service Worker\Database/000003.log 
+2022/12/30-17:04:09.116 261c Creating DB E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Service Worker\Database since it was missing.
+2022/12/30-17:04:09.122 261c Reusing MANIFEST E:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\Service Worker\Database/MANIFEST-000001

@@ -344,12 +344,12 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
                 {
                     itemRequestDescriptionQuery = itemRequestDescriptionQuery.concat(
                         "UPDATE `tbl_inventory_products` SET tbl_inventory_products.quantity = tbl_inventory_products.quantity - ? WHERE tbl_inventory_products.product_id = ?;" +
-                        "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `entry`, `quantity`, `recorded_by`, `record_date`, `record_time`, `employee`, `request_id`, `status`) VALUES (?,?,?,?,?,?,?,?,?);"
+                        "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `entry`, `quantity`, `recorded_by`, `record_date`, `record_time`, `employee`, `request_id`, `status`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `note`, `acquisition_date`) \
+                        SELECT product_id, ?, ?, ?, ?, ?, ?, ?, ?, unit_price, ? * unit_price, delivery_challan, company_code, location_code, sub_location_code, preview, physical_condition, note, acquisition_date FROM `tbl_inventory_product_transactions`;"
                     );
                     params.push( products[x].assigned_quantity );
                     params.push( products[x].product_id );
 
-                    params.push( products[x].product_id );
                     params.push( 'outward' );
                     params.push( products[x].assigned_quantity );
                     params.push( issued_by );
@@ -358,6 +358,7 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
                     params.push( requested_by );
                     params.push( request_id );
                     params.push( "issued" );
+                    params.push( products[x].assigned_quantity );
 
                     if( x == 0 )
                     {

@@ -210,25 +210,7 @@ router.post('/inventory/get_product_details', ( req, res ) => {
         params = [ product_id ];
     }else if ( sub_category_id )
     {
-        if ( "A".toLowerCase() === 'compare' )
-        {
-            q = "SELECT tbl_inventory_products.*, \
-            tbl_inventory_products.quantity as stocked_quantity, \
-            tbl_inventory_categories.name as category_name,  \
-            locations.location_name as location_name,  \
-            tbl_inventory_sub_locations.sub_location_name as sub_location_name,  \
-            companies.company_name as company_name,  \
-            tbl_inventory_sub_categories.name as sub_category_name  \
-            FROM  \
-            `tbl_inventory_products`  \
-            LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id \
-            LEFT OUTER JOIN locations ON tbl_inventory_products.location_code = locations.location_code \
-            LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
-            LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
-            LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id \
-            WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.sub_category_id = ?";
-            params = [ sub_category_id ];    
-        }
+
         q = "SELECT tbl_inventory_products.*,  \
         tbl_inventory_products.quantity as stocked_quantity, \
         tbl_inventory_categories.name as category_name,   \
@@ -263,6 +245,7 @@ router.post('/inventory/get_product_details', ( req, res ) => {
             tbl_inventory_product_transactions.*, \
             companies.company_name, \
             locations.location_name, \
+            tbl_inventory_sub_locations.sub_location_name, \
             issued_to.name as issued_to_emp,   \
             recorded.name as recorded_emp   \
             FROM   \
@@ -272,6 +255,7 @@ router.post('/inventory/get_product_details', ( req, res ) => {
             LEFT OUTER JOIN employees recorded ON tbl_inventory_product_transactions.recorded_by = recorded.emp_id    \
             LEFT OUTER JOIN companies ON tbl_inventory_product_transactions.company_code = companies.company_code    \
             LEFT OUTER JOIN locations ON tbl_inventory_product_transactions.location_code = locations.location_code    \
+            LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_product_transactions.sub_location_code = tbl_inventory_sub_locations.sub_location_code    \
             WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.sub_category_id = ? \
         ");
 
