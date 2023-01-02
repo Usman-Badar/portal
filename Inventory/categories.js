@@ -373,7 +373,9 @@ router.post('/inventory/edit_sub_category', ( req, res ) => {
                 {
                     db.query(
                         "UPDATE `tbl_inventory_sub_categories` SET name = ?, icon = ?, labeling = ? WHERE id = ?;" +
-                        "UPDATE `tbl_inventory_products` SET labeling = ? WHERE sub_category_id = ?;",
+                        "UPDATE tbl_inventory_product_transactions a \
+                        JOIN tbl_inventory_products b ON a.product_id = b.product_id \
+                        SET a.labeling = ? WHERE b.sub_category_id = ?;",
                         [ category, icon, labeling ? 1 : 0, id, labeling ? 1 : 0, id ],
                         ( err ) => {
                 

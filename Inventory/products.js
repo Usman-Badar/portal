@@ -175,28 +175,32 @@ router.post('/inventory/get_products', ( req, res ) => {
 
 router.post('/inventory/get_product_details', ( req, res ) => {
 
-    const { sub_category_id, product_id, entry_code, company_code, location_code, sub_location_code } = req.body;
+    const { sub_category_id, product_id, transaction_id, company_code, location_code, sub_location_code } = req.body;
 
     let q;
     let params;
 
-    if ( entry_code )
+    if ( transaction_id )
     {
-        q = "SELECT tbl_inventory_products.*, \
-        tbl_inventory_categories.name as category_name,  \
-        locations.location_name as location_name,  \
-        tbl_inventory_sub_locations.sub_location_name as sub_location_name,  \
-        companies.company_name as company_name,  \
-        tbl_inventory_sub_categories.name as sub_category_name  \
-        FROM  \
-        `tbl_inventory_products`  \
+
+        q = "SELECT \
+        tbl_inventory_product_transactions.*, \
+        tbl_inventory_products.name , \
+        tbl_inventory_products.description , \
+        companies.company_name , \
+        locations.location_name , \
+        tbl_inventory_sub_locations.sub_location_name, \
+        tbl_inventory_categories.name AS category_name, \
+        tbl_inventory_sub_categories.name AS sub_category_name \
+        FROM `tbl_inventory_product_transactions` \
+        LEFT OUTER JOIN tbl_inventory_products ON tbl_inventory_product_transactions.product_id = tbl_inventory_products.product_id \
         LEFT OUTER JOIN tbl_inventory_categories ON tbl_inventory_products.category_id = tbl_inventory_categories.category_id \
-        LEFT OUTER JOIN locations ON tbl_inventory_products.location_code = locations.location_code \
-        LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_products.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
-        LEFT OUTER JOIN companies ON tbl_inventory_products.company_code = companies.company_code \
         LEFT OUTER JOIN tbl_inventory_sub_categories ON tbl_inventory_products.sub_category_id = tbl_inventory_sub_categories.id \
-        WHERE tbl_inventory_products.status = 'in_stock' AND tbl_inventory_products.entering_code = ?;";
-        params = [ entry_code ];
+        LEFT OUTER JOIN companies ON tbl_inventory_product_transactions.company_code = companies.company_code \
+        LEFT OUTER JOIN locations ON tbl_inventory_product_transactions.location_code = locations.location_code \
+        LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_product_transactions.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
+        WHERE tbl_inventory_product_transactions.transaction_id = ?;";
+        params = [ transaction_id ];
     }else if ( product_id )
     {
         q = "SELECT tbl_inventory_products.*, \
@@ -450,9 +454,9 @@ router.post('/inventory/products/create', ( req, res ) => {
                     }
                 
                     db.query(
-                        "INSERT INTO `tbl_inventory_products`(`name`, `product_type`, `entering_code`, `category_id`, `sub_category_id`, `description`, `quantity`, `recording_date`, `labeling`) VALUES (?,?,?,?,?,?,?,?,?);" +
+                        "INSERT INTO `tbl_inventory_products`(`name`, `product_type`, `entering_code`, `category_id`, `sub_category_id`, `description`, `quantity`, `recording_date`) VALUES (?,?,?,?,?,?,?,?);" +
                         "SELECT product_id FROM tbl_inventory_products WHERE entering_code = ?",
-                        [ name, product_type, code, category, sub_category, description, quantity, new Date(), labeling, code ],
+                        [ name, product_type, code, category, sub_category, description, quantity, new Date(), code ],
                         ( err, rslt ) => {
                 
                             if( err )
@@ -465,9 +469,10 @@ router.post('/inventory/products/create', ( req, res ) => {
                             }else 
                             {
                 
-                                let attr_query = "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `quantity`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `acquisition_date`, `note`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                                let attr_query = "INSERT INTO `tbl_inventory_product_transactions`(`labeling`,`product_id`, `quantity`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `acquisition_date`, `note`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
                                 let params = [];
 
+                                params.push(labeling);
                                 params.push(rslt[1][0].product_id);
                                 params.push(quantity);
                                 params.push(unit_price);
@@ -653,12 +658,15 @@ router.post('/inventory/products/scan/verify', ( req, res ) => {
 
     const { code } = req.body;
     let arr = code.split('_');
+
     if ( arr[1] )
     {
-        const entering_code = code;
+        arr.shift();
+        arr.shift();
+        const transaction_id = arr[0];
         db.query(
-            "SELECT labeling, labeled FROM `tbl_inventory_products` WHERE entering_code = ?;",
-            [ entering_code ],
+            "SELECT labeling, labeled FROM `tbl_inventory_product_transactions` WHERE transaction_id = ?;",
+            [ transaction_id ],
             ( err, rslt ) => {
     
                 if( err )
@@ -683,8 +691,8 @@ router.post('/inventory/products/scan/verify', ( req, res ) => {
                             }else
                             {
                                 db.query(
-                                    "UPDATE `tbl_inventory_products` SET labeled = ?, label_date = ? WHERE entering_code = ?;",
-                                    [ 1, new Date(), entering_code ],
+                                    "UPDATE `tbl_inventory_product_transactions` SET labeled = ?, label_date = ? WHERE transaction_id = ?;",
+                                    [ 1, new Date(), transaction_id ],
                                     ( err ) => {
                             
                                         if( err )
