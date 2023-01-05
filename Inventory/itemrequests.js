@@ -202,13 +202,33 @@ router.post('/inventory/get_item_request/get_sub_category_items', ( req, res ) =
             }else 
             {
                 
-                res.send( rslt );
-                res.end();
+                db.query(
+                    "SELECT tbl_inventory_product_transactions.product_id, tbl_inventory_product_transactions.company_code, tbl_inventory_product_transactions.quantity, tbl_inventory_product_transactions.stored_quantity, companies.company_name FROM `tbl_inventory_product_transactions` \
+                    LEFT OUTER JOIN companies ON companies.company_code = tbl_inventory_product_transactions.company_code WHERE product_id = ? AND entry = 'inward' GROUP BY company_code;",
+                    [ rslt[0].product_id ],
+                    ( err, rslt2 ) => {
+            
+                        if( err )
+                        {
+            
+                            res.send(err);
+                            res.end();
+            
+                        }else 
+                        {
+                            
+                            res.send( [rslt, rslt2] );
+                            res.end();
+                            
+                        }
+                        
+                    }
+                );
                 
             }
             
         }
-    )
+    );
 
 } );
 
@@ -238,8 +258,9 @@ router.post('/inventory/item_request/request_to_store', ( req, res ) => {
                 let params = [];
                 for ( let x = 0; x < assigned_products.length; x++ )
                 {
-                    attr_query = attr_query.concat("INSERT INTO `tbl_inventory_request_to_store_assigned_items`(`request_id`, `product_id`, `assigned_quantity`) VALUES (?,?,?);");
+                    attr_query = attr_query.concat("INSERT INTO `tbl_inventory_request_to_store_assigned_items`(`request_id`, `transaction_id`, `product_id`, `assigned_quantity`) VALUES (?,?,?,?);");
                     params.push(rslt[1][0].id);
+                    params.push(assigned_products[x].transaction_id);
                     params.push(assigned_products[x].product_id);
                     params.push(assigned_products[x].assigned_quantity);
                 }
@@ -344,11 +365,15 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
                 {
                     itemRequestDescriptionQuery = itemRequestDescriptionQuery.concat(
                         "UPDATE `tbl_inventory_products` SET tbl_inventory_products.quantity = tbl_inventory_products.quantity - ? WHERE tbl_inventory_products.product_id = ?;" +
+                        "UPDATE `tbl_inventory_product_transactions` SET tbl_inventory_product_transactions.stored_quantity = tbl_inventory_product_transactions.stored_quantity - ? WHERE tbl_inventory_product_transactions.transaction_id = ?;" +
                         "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `entry`, `quantity`, `recorded_by`, `record_date`, `record_time`, `employee`, `request_id`, `status`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `note`, `acquisition_date`) \
                         SELECT product_id, ?, ?, ?, ?, ?, ?, ?, ?, unit_price, ? * unit_price, delivery_challan, company_code, location_code, sub_location_code, preview, physical_condition, note, acquisition_date FROM `tbl_inventory_product_transactions`;"
                     );
                     params.push( products[x].assigned_quantity );
                     params.push( products[x].product_id );
+                    
+                    params.push( products[x].assigned_quantity );
+                    params.push( products[x].transaction_id );
 
                     params.push( 'outward' );
                     params.push( products[x].assigned_quantity );
@@ -409,6 +434,34 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
                         
                     }
                 )
+                
+            }
+            
+        }
+    )
+
+} );
+
+router.post('/inventory/get/product/inwards', ( req, res ) => {
+
+    const { product_id } = req.body;
+
+    db.query(
+        "SELECT * FROM `tbl_inventory_product_transactions` WHERE product_id = ? AND entry = 'inward';",
+        [ product_id ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                res.send(err);
+                res.end();
+
+            }else 
+            {
+                
+                res.send( rslt );
+                res.end();
                 
             }
             

@@ -97,6 +97,70 @@ router.post('/getallleaves', (req, res) => {
 
 });
 
+router.post('/getallrecentleaves', (req, res) => {
+
+    const { empID } = req.body;
+
+    db.query(
+        "SELECT \
+        employees.emp_id, \
+        employees.name, \
+        emp_leave_application_refs.*, \
+        emp_leave_applications.*  \
+        FROM employees \
+        RIGHT OUTER JOIN emp_leave_application_refs ON emp_leave_application_refs.requested_by = employees.emp_id \
+        LEFT OUTER JOIN emp_leave_applications ON emp_leave_applications.leave_id = emp_leave_application_refs.leave_id \
+        WHERE emp_leave_application_refs.received_by = " + empID + " OR emp_leave_application_refs.authorized_to = " + empID + " ORDER BY emp_leave_applications.leave_id DESC LIMIT 10",
+        (err, rslt) => {
+
+            if (err) {
+
+                res.status(500).send(err);
+                res.end();
+
+            } else {
+
+                if ( rslt.length === 0 )
+                {
+                    db.query(
+                        "SELECT \
+                        employees.emp_id, \
+                        employees.name, \
+                        emp_leave_application_refs.*, \
+                        emp_leave_applications.*  \
+                        FROM employees \
+                        RIGHT OUTER JOIN emp_leave_application_refs ON emp_leave_application_refs.requested_by = employees.emp_id \
+                        LEFT OUTER JOIN emp_leave_applications ON emp_leave_applications.leave_id = emp_leave_application_refs.leave_id \
+                        WHERE emp_leave_application_refs.requested_by = " + empID + " OR emp_leave_application_refs.received_by = " + empID + " OR emp_leave_application_refs.authorized_to = " + empID + " ORDER BY emp_leave_applications.leave_id DESC LIMIT 5",
+                        (err, rslt) => {
+                
+                            if (err) {
+                
+                                res.status(500).send(err);
+                                res.end();
+                
+                            } else {
+                
+                                res.send(rslt);
+                                res.end();
+                
+                            }
+                
+                        }
+                    )
+                }else
+                {
+                    res.send(rslt);
+                    res.end();
+                }
+
+            }
+
+        }
+    )
+
+});
+
 router.post('/getallavailedleaves', (req, res) => {
 
     const { empID } = req.body;
@@ -385,6 +449,34 @@ router.post('/getempleavescount', (req, res) => {
 
         }
     );
+
+});
+
+router.post('/leave/total_days_count', (req, res) => {
+
+    const { emp_id } = req.body;
+
+    db.query(
+        "SELECT emp_id, COUNT(id) as total_leaves FROM emp_attendance \
+        WHERE status = 'leave' AND emp_id = ? AND time_in IS null \
+        AND emp_date BETWEEN CONCAT(YEAR(CURRENT_DATE)-1,'-07-01') AND CONCAT(YEAR(CURRENT_DATE),'-06-30');",
+        [ emp_id ],
+        (err, rslt) => {
+
+            if (err) {
+
+                res.status(500).send(err);
+                res.end();
+
+            } else {
+
+                res.send(rslt);
+                res.end();
+
+            }
+
+        }
+    )
 
 });
 

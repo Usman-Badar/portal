@@ -36,7 +36,8 @@ const Leave_Application = () => {
             message: ""
         }
     );
-    const [Leaves, setLeaves] = useState([]);
+    const [Leaves, setLeaves] = useState();
+    const [Recent, setRecent] = useState([]);
     const [PrevLeave, setPrevLeave] = useState();
     const [StartLoading, setStartLoading] = useState(true); // For show Loading page or hide
     const [Content, setContent] = useState(true)
@@ -49,11 +50,14 @@ const Leave_Application = () => {
     useEffect(
         () => {
 
-            $(".tabs").on(
-                'click', (e) => {
+            $('button[type="reset"]').on(
+                'click', () => {
 
-                    $('.tabs').removeClass('active');
-                    $('#' + e.target.id).addClass('active');
+                    setShortLeaveData(
+                        {
+                            ShortLeaveTime: '', ShortLeaveDate: '', ShortLeaveReason: '', submit_to: ''
+                        }
+                    )
 
                 }
             )
@@ -92,16 +96,19 @@ const Leave_Application = () => {
             } else
                 if (history.location.pathname === '/leave_form') {
                     $('.Employee_Leave_App_Form').show();
-                    setContent(<EmployeeLeaveApplicationForm Relations={Relations} availed='0' type='LeaveForm' Mainheading='Leave Application' heading='Purpose of Leave' />);
+                    setContent(<EmployeeLeaveApplicationForm Relations={Relations} availed='0' type='LeaveForm' Mainheading='Leave Request' heading='Purpose of Leave' />);
                 } else
                     if (history.location.pathname === '/avail_leave_form') {
                         $('.Employee_Leave_App_Form').show();
-                        setContent(<EmployeeLeaveApplicationForm Relations={Relations} availed='1' type='AvailLeaveForm' Mainheading='Leave Application Already Availed' heading="Reason" />);
+                        setContent(<EmployeeLeaveApplicationForm Relations={Relations} availed='1' type='AvailLeaveForm' Mainheading='Availed Leave Request' heading="Reason" />);
                     } else
                         if (history.location.pathname === '/leave_history' || history.location.pathname.includes('/leave_request/')) {
                             $('.History').show();
                             if (history.location.pathname.includes('/leave_request/')) {
                                 getDetails(history.location.pathname.split('/').pop());
+                            }else
+                            {
+                                GetRecentLeave('/getallrecentleaves', { empID: sessionStorage.getItem('EmpID') })
                             }
                         }
 
@@ -233,6 +240,29 @@ const Leave_Application = () => {
 
     }
 
+    const GetRecentLeave = (Url, Data) => {
+
+        axios.post(Url, Data).then(res => {
+
+            setRecent(res.data);
+
+        }).catch(err => {
+
+            toast.dark(err.toString(), {
+                position: 'bottom-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            console.log(err);
+
+        });
+
+    }
+
     const GetLeave = (Url, Data) => {
 
         axios.post(Url, Data).then(res => {
@@ -256,9 +286,11 @@ const Leave_Application = () => {
 
     }
 
-    const openLeave = (index, type) => {
+    const openLeave = (index, type, leaves) => {
 
-        history.replace('/leave_request/' + Leaves[index].leave_id + '_' + type);
+        let leave_id = leaves === 'recent' ? Recent[index].leave_id : Leaves[index].leave_id
+
+        history.replace('/leave_request/' + leave_id + '_' + type);
 
     }
 
@@ -690,7 +722,7 @@ const Leave_Application = () => {
     }
 
     const backtoleave = () => {
-        // window.location.href('/leave_history');
+        history.replace('/leave_history');
     }
 
     return (
@@ -703,49 +735,51 @@ const Leave_Application = () => {
             <div className='Leave_container'>
 
                 <div className='Topbar_menu'>
-                    <div className='border-bottom border-right tabs active' id="tab1" onClick={() => ShowShortLeaveForm()} >
-                        Short Leave Form
+                    <div className={ window.location.href.split('/').pop() === 'short_leave_form' ? 'tabs active' : 'tabs' } id="tab1" onClick={() => ShowShortLeaveForm()} >
+                        Short Leave
                     </div>
-                    <div className='border-bottom border-right tabs' id="tab2" onClick={() => ShowLeaveForm()}>
-                        Leave Form
+                    <div className={ window.location.href.split('/').pop() === 'leave_form' ? 'tabs active' : 'tabs' } id="tab2" onClick={() => ShowLeaveForm()}>
+                        Leave
                     </div>
-                    <div className='border-bottom border-right tabs' id="tab3" onClick={() => ShowAvailLeaveForm()}>
-                        Avail Leave Form
+                    <div className={ window.location.href.split('/').pop() === 'avail_leave_form' ? 'tabs active' : 'tabs' } id="tab3" onClick={() => ShowAvailLeaveForm()}>
+                        Availed Leave
                     </div>
-                    <div className='border-bottom tabs' id="tab4" onClick={() => ShowHistory()}>
+                    <div className={ window.location.href.split('/').pop() === 'leave_history' ? 'tabs active' : 'tabs' } id="tab4" onClick={() => ShowHistory()}>
                         Requests
                     </div>
                 </div>
 
-                <div className="Short_Leave_Form divs">
-                    <div className="Application_Form" style={{ animationDelay: (0 + '.' + 1).toString() + 's' }}>
-                        <form onSubmit={OnTakeShortLeave}>
-                            <h4 className="text-center border-bottom font-weight-bolder pb-3"> Short Leave Application Form </h4>
-                            <div className="Leave_Duration p-1">
-                                <div className="Leave_Duration_Heading text-center p-1" >
-                                    <h5 className="font-weight-bolder">Time Duration Of Leave </h5>
-                                </div>
-                                <div className="Leave_Duration_Time p-1" >
-                                    <div className="mb-1"><p >Leave Time : </p></div>
-                                    <div>
-                                        <div><input onChange={onChangeHandler} required name="ShortLeaveTime" type="time" className="form-control mb-2" /></div>
-                                    </div>
+                {
+                    window.location.href.split('/').pop() === 'short_leave_form'
+                    ?
+                    <div className="bg-white Short_Leave_Form divs">
+                        <div className="Application_Form" style={{ animationDelay: (0 + '.' + 1).toString() + 's' }}>
+                            <form onSubmit={OnTakeShortLeave}>
+                                <h3 className="heading">
+                                    Short Leave
+                                    <sub>Application Form</sub>
+                                </h3>
 
-                                    <div className="mb-1"><p>Date : </p></div>
-                                    <div><input onChange={onChangeHandler} required name="ShortLeaveDate" type="Date" className="form-control mb-2" /></div>
+                                <hr />
+
+                                <div className="grid_container">
+                                    <div>
+                                        <label className='mb-0'>Leave Time</label>
+                                        <input onChange={onChangeHandler} required name="ShortLeaveTime" type="time" className="form-control mb-2" />
+                                    </div>
+                                    <div>
+                                        <label className='mb-0'>Leave Date</label>
+                                        <input onChange={onChangeHandler} required name="ShortLeaveDate" type="Date" className="form-control mb-2" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="Leave_Purpose p-1">
-                                <div className="Leave_Purpose_Heading p-1" >
-                                    <h5 className="font-weight-bolder  mb-0">Purpose of Leave</h5>
+                                <div>
+                                    <label className='mb-0'>Reason For Leave</label>
+                                    <textarea onChange={onChangeHandler} required name="ShortLeaveReason" minLength="30" style={{ height: '80px' }} placeholder="Describe your reason in detail" className="form-control mb-2" />
                                 </div>
-                                <div className="Leave_Purpose_reason p-1">
-                                    <textarea onChange={onChangeHandler} required name="ShortLeaveReason" minLength="30" style={{ height: '80px' }} placeholder="Describe your reason in detail" className="form-control" ></textarea>
-                                </div>
-                            </div>
-                            <div className="LeaveButton d-flex justify-content-end align-items-center p-2">
+                                
+                                <label className='mb-0'>Submit Application To</label>
                                 <select name="submit_to" onChange={onChangeHandler} id="" className="form-control" required>
-                                    <option value=''> submit to </option>
+                                    <option value=''>select the option</option>
                                     {
                                         Relations.map(
                                             (val, index) => {
@@ -759,21 +793,35 @@ const Leave_Application = () => {
                                         )
                                     }
                                 </select>
-                                <button type="reset" className="btn mr-3 d-none">Cancel</button>
-                                {
-                                    ShortLeaveData.ShortLeaveTime === '' ||
+                                <div className="d-flex justify-content-end align-items-center mt-3">
+                                    <button type="reset" className="btn green">Cancel</button>
+                                    {
+                                        ShortLeaveData.ShortLeaveTime === '' ||
                                         ShortLeaveData.ShortLeaveDate === '' ||
                                         ShortLeaveData.ShortLeaveReason === '' ||
                                         ShortLeaveData.submit_to === ''
                                         ? null
                                         :
-                                        <button type="submit" className="btn ml-2">Submit</button>
-                                }
-                            </div>
-                        </form>
+                                        <button type="submit" className="btn submit ml-3">Submit</button>
+                                    }
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <div className="History divs">
+                    :null
+                }
+                {
+                    window.location.href.split('/').pop() === 'leave_form' || window.location.href.split('/').pop() === 'avail_leave_form'
+                    ?
+                    <div className="bg-white Employee_Leave_App_Form divs">
+                        {
+                            Content
+                        }
+                    </div>
+                    :null
+                }
+
+                <div className="bg-white History divs">
 
                     <div className="history_content">
 
@@ -795,17 +843,13 @@ const Leave_Application = () => {
                                 :
                                 <List
                                     Leaves={Leaves}
+                                    Recent={ Recent }
                                     GetHistorySorted={GetHistorySorted}
                                     openLeave={openLeave}
                                 />
                         }
 
                     </div>
-                </div>
-                <div className="Employee_Leave_App_Form divs">
-                    {
-                        Content
-                    }
                 </div>
 
             </div>
@@ -1225,14 +1269,15 @@ const PrevLeaveApp = ({ Type, PrevLeave, printLeave, cancelLeave, approveLeave, 
 
 }
 
-const List = ({ Leaves, GetHistorySorted, openLeave }) => {
+const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
 
     return (
         <>
 
             <div className="d-flex justify-content-between align-items-center">
-                <h5 className='mb-0'>
-                    Previous Leave Applications
+                <h5 className="heading">
+                    Recent Leaves
+                    <sub>Requests</sub>
                 </h5>
                 <select onChange={(e) => GetHistorySorted(e.target.value)} id="leave_type_select" className='form-control'>
                     <option value="">Select Type</option>
@@ -1246,133 +1291,250 @@ const List = ({ Leaves, GetHistorySorted, openLeave }) => {
 
             <div className='showBigScreen'>
                 {
-                    Leaves.length === 0 ? <h5 className="text-center">Please Wait... <br /> Or Select...</h5> :
-                        <>
-                            <table className='table'>
-                                <thead>
-                                    <tr>
+                    Recent && !Leaves
+                    ?
+                    Recent.length === 0 ? <h6 className="text-center">No Recent Leave Found</h6> :
+                    <>
+                        <table className='table'>
+                            <thead>
+                                <tr>
 
-                                        <th>Sr.No</th>
-                                        <th>Description</th>
-                                        <th>Request Date & Time</th>
-                                        <th>Leave Date & Time</th>
-                                        <th>Status</th>
+                                    <th>Sr.No</th>
+                                    <th>Description</th>
+                                    <th>Request Date & Time</th>
+                                    <th>Leave Date</th>
+                                    <th>Status</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        Leaves.map(
-                                            (val, index) => {
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    Recent.map(
+                                        (val, index) => {
 
-                                                console.log(val)
+                                            return (
+                                                <tr title='Double Click' onDoubleClick={() => openLeave(index, val.date ? "short" : 'leave', 'recent')}>
 
-                                                return (
-                                                    <tr title='Double Click' onDoubleClick={() => openLeave(index, val.date ? "short" : 'leave')}>
+                                                    <td>{index + 1}</td>
+                                                    <td style={{ width: "40%" }}>
+                                                        {
+                                                            parseInt(val.requested_by) !== parseInt(sessionStorage.getItem('EmpID'))
+                                                                ?
+                                                                <>
+                                                                    <b>{val.name}</b>
+                                                                    <br />
+                                                                </>
+                                                                : null
+                                                        }
+                                                        {val.leave_purpose}
+                                                    </td>
+                                                    <td>
+                                                        {new Date(val.requested_date).toDateString()} <br />
+                                                        at {val.requested_time}
+                                                    </td>
+                                                    {
+                                                        val.date
+                                                            ?
+                                                            <td>
+                                                                {new Date(val.date).toDateString()} <br />
+                                                                at {val.leave_time}
+                                                            </td>
+                                                            :
+                                                            <td>
+                                                                {new Date(val.leave_from).toDateString()}
+                                                                <br />
+                                                                {
+                                                                    val.leave_to
+                                                                        ?
+                                                                        <>
+                                                                            To
+                                                                            <br />
+                                                                        </>
+                                                                        : null
+                                                                }
+                                                                {val.leave_to ? new Date(val.leave_to).toDateString() : ''}
+                                                            </td>
+                                                    }
 
-                                                        <td>{index + 1}</td>
-                                                        <td style={{ width: "50%" }}>
+
+                                                    {
+                                                        val.request_status === 'Accepted'
+                                                        ?
+                                                        <td>
+                                                            <div className='status_div text-white' style={{ backgroundColor: ' #2BACB1' }} >
+                                                                { val.authorized_to == sessionStorage.getItem('EmpID') ? "Pending For Authorization" : val.request_status }
+                                                            </div>
+                                                        </td>
+                                                        :
+                                                        val.request_status === 'sent'
+                                                        ?
+                                                        <td>
+                                                            <div className='status_div text-white' style={{ backgroundColor: ' #3A3D44' }}   >
+                                                                { val.received_by == sessionStorage.getItem('EmpID') ? "Pending For Approval" : val.request_status }
+                                                            </div>
+                                                        </td>
+                                                        :
+                                                        val.request_status === 'rejected'
+                                                        ?
+                                                        <td>
+                                                            <div className='status_div text-white' style={{ backgroundColor: '#E7604A' }} >
+                                                                {val.request_status}
+                                                            </div>
+                                                        </td>
+                                                        :
+                                                        val.request_status === 'Authorized'
+                                                        ?
+                                                        <td>
+                                                            <div className='status_div bg-success text-white' >
+                                                                {val.request_status}
+                                                            </div>
+                                                        </td>
+                                                        :
+                                                        val.request_status === 'canceled'
+                                                        ?
+                                                        <td>
+                                                            <div className='status_div bg-warning text-dark'>
+                                                                {val.request_status}
+                                                            </div>
+                                                        </td>
+                                                        :
+                                                        null
+                                                    }
+                                                </tr>
+                                            )
+
+                                        }
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                    </>
+                    :null
+                }
+                {
+                    Leaves
+                    ?
+                    Leaves.length === 0 ? <h6 className="text-center">No Leave Found</h6> :
+                    <>
+                        <table className='table'>
+                            <thead>
+                                <tr>
+
+                                    <th>Sr.No</th>
+                                    <th>Description</th>
+                                    <th>Request Date & Time</th>
+                                    <th>Leave Date</th>
+                                    <th>Status</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    Leaves.map(
+                                        (val, index) => {
+
+                                            return (
+                                                <tr title='Double Click' onDoubleClick={() => openLeave(index, val.date ? "short" : 'leave')}>
+
+                                                    <td>{index + 1}</td>
+                                                    <td style={{ width: "40%" }}>
+                                                        {
+                                                            parseInt(val.requested_by) !== parseInt(sessionStorage.getItem('EmpID'))
+                                                                ?
+                                                                <>
+                                                                    <b className='text-primary'>{val.name}</b>
+                                                                    <br />
+                                                                </>
+                                                                : null
+                                                        }
+                                                        {val.leave_purpose}
+                                                    </td>
+                                                    <td>
+                                                        {new Date(val.requested_date).toDateString()} <br />
+                                                        at {val.requested_time}
+                                                    </td>
+                                                    {
+                                                        val.date
+                                                        ?
+                                                        <td>
+                                                            {new Date(val.date).toDateString()} <br />
+                                                            at {val.leave_time}
+                                                        </td>
+                                                        :
+                                                        <td>
+                                                            {new Date(val.leave_from).toDateString()}
+                                                            <br />
                                                             {
-                                                                parseInt(val.requested_by) !== parseInt(sessionStorage.getItem('EmpID'))
+                                                                val.leave_to
                                                                     ?
                                                                     <>
-                                                                        <b className='text-primary'>{val.name}</b>
+                                                                        To
                                                                         <br />
                                                                     </>
                                                                     : null
                                                             }
-                                                            {val.leave_purpose}
+                                                            {val.leave_to ? new Date(val.leave_to).toDateString() : ''}
                                                         </td>
+                                                    }
+
+
+                                                    {
+                                                        val.request_status === 'Accepted'
+                                                        ?
                                                         <td>
-                                                            {new Date(val.requested_date).toDateString()} <br />
-                                                            at {val.requested_time}
+                                                            <div className='status_div text-white' style={{ backgroundColor: ' #2BACB1' }} >
+                                                                { val.authorized_to == sessionStorage.getItem('EmpID') ? "Pending For Authorization" : val.request_status }
+                                                            </div>
                                                         </td>
-                                                        {
-                                                            val.date
-                                                                ?
-                                                                <td>
-                                                                    {new Date(val.date).toDateString()} <br />
-                                                                    at {val.leave_time}
-                                                                </td>
-                                                                :
-                                                                <td>
-                                                                    {new Date(val.leave_from).toDateString()}
-                                                                    <br />
-                                                                    {
-                                                                        val.leave_to
-                                                                            ?
-                                                                            <>
-                                                                                To
-                                                                                <br />
-                                                                            </>
-                                                                            : null
-                                                                    }
-                                                                    {val.leave_to ? new Date(val.leave_to).toDateString() : ''}
-                                                                </td>
-                                                        }
+                                                        :
+                                                        val.request_status === 'sent'
+                                                        ?
+                                                        <td>
+                                                            <div className='status_div text-white' style={{ backgroundColor: ' #3A3D44' }}   >
+                                                                { val.received_by == sessionStorage.getItem('EmpID') ? "Pending For Approval" : val.request_status }
+                                                            </div>
+                                                        </td>
+                                                        :
+                                                        val.request_status === 'rejected'
+                                                        ?
+                                                        <td>
+                                                            <div className='status_div text-white' style={{ backgroundColor: '#E7604A' }} >
+                                                                {val.request_status}
+                                                            </div>
+                                                        </td>
+                                                        :
+                                                        val.request_status === 'Authorized'
+                                                        ?
+                                                        <td>
+                                                            <div className='status_div bg-success text-white' >
+                                                                {val.request_status}
+                                                            </div>
+                                                        </td>
+                                                        :
+                                                        val.request_status === 'canceled'
+                                                        ?
+                                                        <td>
+                                                            <div className='status_div bg-warning text-dark"' >
+                                                                {val.request_status}
+                                                            </div>
+                                                        </td>
+                                                        :
+                                                        null
+                                                    }
+                                                </tr>
+                                            )
 
-
-                                                        {
-                                                            val.request_status === 'Accepted'
-                                                                ?
-                                                                <td>
-                                                                    <div className='status_div text-white' style={{ backgroundColor: ' #2BACB1' }} >
-                                                                        {val.request_status}
-                                                                    </div>
-                                                                </td>
-                                                                :
-                                                                val.request_status === 'sent'
-                                                                    ?
-                                                                    <td>
-                                                                        <div className='status_div text-white' style={{ backgroundColor: ' #3A3D44' }}   >
-                                                                            {val.request_status}
-                                                                        </div>
-                                                                    </td>
-                                                                    :
-                                                                    val.request_status === 'rejected'
-                                                                        ?
-                                                                        <td>
-                                                                            <div className='status_div text-white' style={{ backgroundColor: '#E7604A' }} >
-                                                                                {val.request_status}
-                                                                            </div>
-                                                                        </td>
-                                                                        :
-                                                                        val.request_status === 'Authorized'
-                                                                            ?
-                                                                            <td>
-                                                                                <div className='status_div bg-success text-white' >
-                                                                                    {val.request_status}
-                                                                                </div>
-                                                                            </td>
-                                                                            :
-                                                                            val.request_status === 'canceled'
-                                                                                ?
-                                                                                <td>
-                                                                                    <div className='status_div bg-warning text-dark"' >
-                                                                                        {val.request_status}
-                                                                                    </div>
-                                                                                </td>
-                                                                                :
-                                                                                null
-
-
-                                                        }
-
-
-
-                                                    </tr>
-                                                )
-
-                                            }
-                                        )
-                                    }
-                                </tbody>
-                            </table>
-                        </>
+                                        }
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                    </>
+                    :null    
                 }
             </div>
 
-            <div className='showSmallScreen' >
+            {/* <div className='showSmallScreen' >
                 {
                     Leaves.length === 0 ? <h5 className="text-center">Please Wait... <br /> Or Select...</h5> :
                         <>
@@ -1579,7 +1741,7 @@ const List = ({ Leaves, GetHistorySorted, openLeave }) => {
                             </table>
                         </>
                 }
-            </div>
+            </div> */}
 
         </>
     )

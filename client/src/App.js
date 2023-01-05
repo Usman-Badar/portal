@@ -20,12 +20,6 @@ const AdminModule = lazy( () => import( './Components/AdminModule/AdminModule' )
 const AdminLogin = lazy( () => import( './Components/AdminModule/Admin_login/Admin_login' ) );
 const AdminLogout = lazy( () => import( './Components/AdminModule/Admin_Logout/Admin_Logout' ) );
 
-// Attendance
-const Home = lazy( () => import( './Components/Attendance/Pages/Home/Home' ) );
-const AttDashboard = lazy( () => import( './Components/Attendance/Pages/Dashboard/Dashboard' ) );
-const AttLogin = lazy( () => import( './Components/Attendance/Pages/Login/Login' ) );
-const Operations = lazy( () => import( './Components/Attendance/Pages/Operations/Operations' ) );
-
 const OutOfLocation = lazy( () => import( './Components/EmployeeProtal/OutOfLocation/OutOfLocation' ) );
 
 const InventoryDashboard = lazy( () => import( './Components/Inventory/Inventory' ) );
@@ -144,23 +138,6 @@ const App = () => {
                     <Route exact path='/menu_setup' render={ () => <Sus content={ <AdminModule /> } /> } />
                     <Route exact path='/misc_setup' render={ () => <Sus content={ <AdminModule /> } /> } />
                     <Route exact path='/configure_attendance_request' render={ () => <Sus content={ <AdminModule /> } /> } />
-
-                    {/* 
-                        For Attendance
-                    */}
-                    <Route exact path='/atthome' render={ () => <Sus content={ <Home /> } /> } />
-                    <Route exact path='/attdashboard' render={ () => <Sus content={ <AttDashboard /> } /> } />
-                    <Route exact path='/attdevicesetup' render={ () => <Sus content={ <AttDashboard /> } /> } />
-                    <Route exact path='/setattendance' render={ () => <Sus content={ <AttDashboard /> } /> } />
-                    <Route exact path='/attviewemps' render={ () => <Sus content={ <AttDashboard /> } /> } />
-                    <Route exact path='/attrviewguest' render={ () => <Sus content={ <AttDashboard /> } /> } />
-                    <Route exact path='/arrivedemp' render={ () => <Sus content={ < AttDashboard /> } />  } />
-                    <Route exact path='/attrgstrguest' render={ () => <Sus content={ <AttDashboard /> } /> } />
-                    <Route exact path='/empdetails/:id' render={ () => <Sus content={ <AttDashboard /> } /> } />
-                    <Route exact path='/notifications' render={ () => <Sus content={ <AttDashboard /> } /> } />
-                    <Route exact path='/operations' render={ () => <Sus content={ <Operations /> } /> } />
-
-                    <Route exact path='/attlogin' render={ () => <Sus content={ <AttLogin /> } /> } />
 
                     {/* FOR INVENTORY MODULE */}
                     

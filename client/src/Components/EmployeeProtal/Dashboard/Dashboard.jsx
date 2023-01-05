@@ -170,9 +170,12 @@ const Dashboard = () => {
                                 {
                                     for ( let x = 0; x < access.length; x++ )
                                     {
-                                        if ( JSON.parse(AccessControls.access).includes( access[x] ) )
+                                        for ( let y = 0; y < JSON.parse(AccessControls.access).length; y++ )
                                         {
-                                            accessKey = true;
+                                            if ( parseInt(JSON.parse(AccessControls.access)[y]) === parseInt(access[x]) )
+                                            {
+                                                accessKey = true;
+                                            }
                                         }
                                     }
 

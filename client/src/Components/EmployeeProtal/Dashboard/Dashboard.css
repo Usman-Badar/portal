@@ -8,7 +8,7 @@
 
 .Dashboard .Dashboard_main_content {
     width: 100%;
-    /* background-color: var( --lightgray); */
+    background-color: var( --lightgray);
     transition: .3s;
 }
 

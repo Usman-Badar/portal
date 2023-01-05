@@ -1,22 +1,24 @@
 .Leave_container{
-    width: 80%;
-    border: 1px solid lightgray;
-    background-color: #ffff;
+    width: 90%;
     margin: auto;
     transition: .5s;
-    /* animation: popups .2s linear 1 forwards alternate;
-    opacity: 0;
-    transform: scale(0.8); */
-    border-radius: 10px;
-    font-family: 'Oxygen', sans-serif;
+    font-family: Roboto-Light;
+}
+
+.Leave_container .grid_container {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    grid-gap: 20px;
 }
 
 .Leave_container .Topbar_menu{
     display: flex;
     width: 100%;
+    letter-spacing: 3px;
+    border-bottom: 5px solid var(--c-green);
 }
 
-.Leave_container .Topbar_menu div{
+.Leave_container .Topbar_menu div {
     width: 100%;
     display: flex;
     align-items: center;
@@ -24,17 +26,28 @@
     padding: 10px;
     cursor: pointer;
     font-weight: bolder;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 10px 10px 0 0 !important;
 }
 
 .Leave_container .Topbar_menu .tabs.active {
     background-color: #fff;
-    border-radius: 10px 0 0 0;
-    border-bottom: 0 !important;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
-.b-bottom-none {
-    border-bottom: 0 !important;
-    /* background-color: white !important; */
+.History {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+
+.History .table td,
+.History .table th {
+    font-size: 12px;
+}
+
+.History .table td b {
+    font-family: Roboto;
 }
 
 .History .checkmark__circle {
@@ -119,6 +132,11 @@
     display: none;
 }
 
+.Short_Leave_Form {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    border-radius: 0 0 10px 10px;
+}
+
 .Short_Leave_Form,
 .Filters {
     width: 100%;
@@ -127,15 +145,9 @@
 .history_content {
     transition: .5s;
     padding: 20px;
-    animation: popups .2s linear 1 forwards alternate;
+    animation: popups 1s linear 1 forwards alternate;
     opacity: 0;
-    transform: scale(0.8);
     border-radius: 10px;
-    font-family: 'Oxygen', sans-serif;
-}
-
-.history_content h3 {
-    font-family: Cinzel !important;
 }
 
 .history_content .signatures {
@@ -178,18 +190,15 @@
     border-radius: 20px;
     padding: 2px 15px 1px;
     width: max-content;
-    font-size: 13px;
-    text-transform: capitalize;
-    font-family: 'Cinzel';
+    font-size: 10px;
 }
 
 .Application_Form {
     border-radius: 10px;
     padding: 20px;
     transition: .5s;
-    animation: popups .2s linear 1 forwards alternate;
+    animation: popups 1s linear 1 forwards alternate;
     opacity: 0;
-    transform: scale(0.8);
 }
 
 .history_content .div_item div:first-child {
@@ -216,61 +225,27 @@
     margin-bottom: 0;
 }
 
-.Short_Leave_Form .Application_Form input,
-.Short_Leave_Form .Application_Form select {
-    border: 1px solid rgb(212, 212, 212) !important;
-    border-radius: 5px !important;
-    box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;
-    background-color: rgb(240, 240, 240, 0.5);
-}
-
-.Short_Leave_Form .Application_Form .Leave_Purpose textarea {
-    border: 1px solid rgb(212, 212, 212) !important;
-    border-radius: 5px !important;
-    box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;
-    background-color: rgb(240, 240, 240, 0.5);
-}
-
-.Short_Leave_Form .Application_Form form button {
-    background-color: black;
-    color: white;
-}
-
-.Short_Leave_Form .Application_Form form h5,
 .Short_Leave_Form .Application_Form form input,
 .Short_Leave_Form .Application_Form form select,
 .Short_Leave_Form .Application_Form form textarea,
-.Short_Leave_Form .Application_Form form button,
 .Short_Leave_Form .Application_Form form p {
     font-size: 13px;
 }
 
-.showSmallScreen{
-    display: none;
-}
-.showSmallerScreen{
-    display: none;
-}
-
-.ShowSmallTable{
-    display: none;
-}
-
-@media only screen and (max-width: 1250px) {
-    .showBigScreen{
-        display: none;
-    }
-    .showSmallScreen{
-        display: block;
-    }
+.Leave_container label {
+    font-family: Roboto;
 }
 
 @media only screen and (max-width: 992px) {
-    .ShowBigTable{
-        display: none;
+    .History .table td:nth-child(2) {
+        width: 30% !important;
     }
-    .ShowSmallTable{
-        display: block;
+}
+
+@media only screen and (max-width: 786px) {
+    .Leave_container .Topbar_menu div {
+        font-size: 13px;
+        padding: 10px 0;
     }
 }
 
@@ -278,12 +253,12 @@
     .Leave_container{
         width: 90%;
     }
-    .history_content h5{
-        font-size: 18px;
-    }
     .history_content .form-control#leave_type_select {
-        /* width: 30% !important; */
-        font-size: 18px;
+        font-size: 13px;
+    }
+    .History .table td:nth-child(1),
+    .History .table th:nth-child(1) {
+        display: none;
     }
 }
 
@@ -294,20 +269,14 @@
     .Application_Form h4{
         font-size: 20px;
     }
-    .history_content h5{
-        font-size: 15px;
-    }
     .history_content .form-control#leave_type_select {
         /* width: 30% !important; */
         font-size: 15px;
     }
-    .table td{
-        font-size: 10px;
-    }
     .history_content .status_div {
         font-size: 10px;
     }
-    .table th{
+    .history_content .table th{
         font-size: 10px;
     }
 
@@ -323,33 +292,53 @@
     }
 
     .history_content {
-        padding: 5px;
+        padding: 20px 10px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .Leave_container{
+        width: 95%;
+    }
+
+    .History .table td,
+    .History .table th {
+        font-size: 10px;
+    }
+
+    .Leave_container .Topbar_menu div {
+        font-size: 12px;
     }
 }
 
 @media only screen and (max-width: 550px) {
-    .Leave_container{
-        width: 95%;
+    .Leave_container .Topbar_menu {
+        display: grid;
+        grid-template-columns: 50fr 50fr;
+        padding-bottom: 10px;
     }
-    .Leave_container .Topbar_menu div{
-        font-size: 10px;
+
+    .Leave_container .Topbar_menu .tabs.active {
+        border-radius: 10px !important;
     }
     .history_content .form-control#leave_type_select {
         /* width: 30% !important; */
         font-size: 12px;
     }
-    .showSmallerScreen{
-        display: block;
+
+    .History .table td:nth-child(2) {
+        width: 40% !important;
     }
-    .showSmallScreen{
+
+    .History .table th:nth-child(3),
+    .History .table td:nth-child(3) {
         display: none;
     }
 }
 
 
-@media only screen and (max-width: 550px) {
-    .history_content .form-control#leave_type_select {
-        /* width: 40% !important; */
-        font-size: 12px;
+@media only screen and (max-width: 450px) {
+    .Leave_container .grid_container {
+        display: block;
     }
 }

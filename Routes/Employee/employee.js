@@ -780,4 +780,62 @@ router.get('/getempprops', ( req, res ) => {
 
 } );
 
+router.get('/get/employees/all', ( req, res ) => {
+
+    db.query(
+        "SELECT employees.emp_id, employees.name, designations.designation_name, emp_app_profile.emp_image, companies.company_name FROM employees \
+        LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code \
+        LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id \
+        LEFT OUTER JOIN companies ON employees.company_code = companies.company_code WHERE employees.emp_status = 'Active' ORDER BY employees.name ASC;",
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err )
+                res.status(500).send(err);
+                res.end();
+
+            }else 
+            {
+
+                res.send( rslt );
+                res.end();
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/employees/tickets/generate', ( req, res ) => {
+
+    const { emp_id, ticket, remarks, generated_by } = req.body;
+
+    db.query(
+        "INSERT INTO `emp_tickets`(`emp_id`, `generated_by`, `generated_date`, `generated_time`, `ticket`, `remarks`) VALUES (?,?,?,?,?,?);",
+        [ emp_id, generated_by, new Date(), new Date().toTimeString(), ticket, remarks ],
+        ( err ) => {
+
+            if( err )
+            {
+
+                console.log( err )
+                res.status(500).send(err);
+                res.end();
+
+            }else 
+            {
+
+                res.send("success");
+                res.end();
+
+            }
+
+        }
+    );
+
+} );
+
 module.exports = router;

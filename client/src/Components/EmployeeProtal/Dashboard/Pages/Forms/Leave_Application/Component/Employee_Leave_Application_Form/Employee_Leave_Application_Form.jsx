@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Mail from '../../../../../../../UI/Mail/Mail';
 
 const Employee_Leave_Application_Form = ( props ) => {
-
+    
     const [ LeaveData, setLeaveData ] = useState(
         {
             leaveType: '', leaveFrom: '', leaveTo: '',
@@ -25,7 +25,7 @@ const Employee_Leave_Application_Form = ( props ) => {
             message: ""
         }
     );
-
+    const [ LeavesAvailed, setLeavesAvailed ] = useState(0);
     const [ Attachement, setAttachement ] = useState(
         {
             name: '', file: ''
@@ -35,8 +35,48 @@ const Employee_Leave_Application_Form = ( props ) => {
     useEffect(
         () => {
             
+            if ( LeaveData.leaveFrom !== '' && LeaveData.leaveFrom === LeaveData.leaveTo )
+            {
+                $('#checked_single').prop('checked', true);
+                onDayLeave();
+                setLeaveData(
+                    {
+                        ...LeaveData,
+                        leaveDate: LeaveData.leaveFrom,
+                        leaveFrom: '',
+                        leaveTo: ''
+                    }
+                );
+                $('#leaveDate').val(LeaveData.leaveFrom);
+            }
+
+        }, [ LeaveData.leaveFrom, LeaveData.leaveTo ]
+    );
+
+    useEffect(
+        () => {
+            
             $('.Medical_Prove').hide(0);
-            $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration .Leave_Duration_Date2').slideUp(0);
+            $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration_Date2').slideUp(0);
+
+            axios.post(
+                '/leave/total_days_count',
+                {
+                    emp_id: sessionStorage.getItem("EmpID")
+                }
+            ).then(
+                res => {
+
+                    setLeavesAvailed( res.data[0].total_leaves );
+
+                }
+            ).catch(
+                err => {
+
+                    console.log( err );
+
+                }
+            )
 
         }, []
     );
@@ -71,7 +111,7 @@ const Employee_Leave_Application_Form = ( props ) => {
         {
             if ( name === 'leaveType' && value === 'Sick' )
             {
-                $("input[name='attachement']").attr('required', true);
+                // $("input[name='attachement']").attr('required', true);
                 $('.Medical_Prove').show(500);
             }else
             {
@@ -113,13 +153,13 @@ const Employee_Leave_Application_Form = ( props ) => {
                     const endDate = LeaveData.leaveTo;    
                     
                     const days = moment(endDate).diff(moment(startDate), 'days');
-                    NoOfDays = parseInt(days);
+                    NoOfDays = (parseInt(days) + 1);
 
                 }else
                 {
                     NoOfDays = 0;
                 }
-        }
+            }
 
             if ( name === 'leaveTo' && value !== '' && LeaveData.leaveFrom !== '' )
             {
@@ -129,8 +169,9 @@ const Employee_Leave_Application_Form = ( props ) => {
                     const endDate    = value;    
                 
                     const days = moment(endDate).diff(moment(startDate), 'days');
-                    NoOfDays = parseInt(days); 
-                }else
+                    NoOfDays = (parseInt(days) + 1); 
+                }
+                else
                 {
                     NoOfDays = 0;
                 }
@@ -258,14 +299,14 @@ const Employee_Leave_Application_Form = ( props ) => {
                 );
                 if ($('input[name=OnDayLeave]').prop('checked')) {
 
-                    $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration .Leave_Duration_Date').slideUp(500);
-                    $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration .Leave_Duration_Date2').slideDown(500);
+                    $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration_Date').slideUp(500);
+                    $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration_Date2').slideDown(500);
                     $('.Employee_Leave_Application_Form .Application_Form input[type=date]').val('');
 
                 } else {
 
-                    $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration .Leave_Duration_Date').slideDown(500);
-                    $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration .Leave_Duration_Date2').slideUp(500);
+                    $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration_Date').slideDown(500);
+                    $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration_Date2').slideUp(500);
 
                 }
 
@@ -314,9 +355,8 @@ const Employee_Leave_Application_Form = ( props ) => {
         if ( $('input[name=OnDayLeave]').prop('checked') )
         {
 
-            console.log( 'h1' );
-            $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration .Leave_Duration_Date').slideUp(500);
-            $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration .Leave_Duration_Date2').slideDown(500);
+            $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration_Date').slideUp(500);
+            $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration_Date2').slideDown(500);
             $('.Employee_Leave_Application_Form .Application_Form input[type=date]').val('');
             setLeaveData(
                 {
@@ -326,8 +366,8 @@ const Employee_Leave_Application_Form = ( props ) => {
             );
         }else
         {
-            $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration .Leave_Duration_Date').slideDown(500);
-            $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration .Leave_Duration_Date2').slideUp(500);
+            $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration_Date').slideDown(500);
+            $('.Employee_Leave_Application_Form .Application_Form .Leave_Duration_Date2').slideUp(500);
             setLeaveData(
                 {
                     ...LeaveData, leaveFrom: '', leaveTo: '',
@@ -346,79 +386,112 @@ const Employee_Leave_Application_Form = ( props ) => {
             <div className={ props.LeaveForm ? "Employee_Leave_Application_Form" : "Employee_Leave_Application_Form availedform" }>
                 <div className="Application_Form" style={ { animationDelay: ( 0 + '.' + 1 ).toString() + 's' } }>
                     <form onSubmit={ onTakeLeave }>
-                        <h4 className="text-center border-bottom font-weight-bolder pb-3 headings">{props.Mainheading}</h4>
-                        <div className="Check_Box  p-1">
-                            <div className="Check_Box_Heading text-center p-1" >
-                                <h5 className="font-weight-bolder">Please tick ( <i className="las la-check"></i> ) in Application Box</h5>
-                            </div>
-                            <div className="d-flex justify-content-center align-items-center ">
-                                <div className="Check_Box_select" >
-                                    <div className="radio">
-                                        <label>
-                                            <input name='leaveType' value="Privilege" type="radio" className="mr-2" onChange={onChangeHandler}/>
-                                            Privilege
-                                        </label>
-                                    </div>
-                                    <div className="radio">
-                                        <label>
-                                            <input name='leaveType' value="Casual" type="radio" className="mr-2" onChange={onChangeHandler} />
-                                            Casual
-                                        </label>
-                                    </div>
-                                    <div className="radio">
-                                        <label>
-                                            <input name='leaveType' value="Sick" type="radio" className="mr-2" onChange={onChangeHandler} />
-                                            Sick
-                                        </label>
-                                    </div>
-                                    <div className="radio">
-                                        <label>
-                                            <input name='leaveType' value="Other" type="radio" className="mr-2" onChange={onChangeHandler} />
-                                            Other
-                                        </label>
-                                    </div>
+                        <h3 className="heading">
+                            { props.Mainheading }
+                            <sub>Application Form</sub>
+                        </h3>
+
+                        <hr />
+
+                        <div className="number_of_days_container">
+                            <span>Single Day Leave</span>
+                            <input className="d-block" type='checkbox' id="checked_single" value="true" name='OnDayLeave' onChange={ onDayLeave } />
+                        </div>
+
+                        <div className="grid_container types my-4">
+                            <div className="leave_type_container">
+                                <div className="d-flex align-items-center">
+                                    <input name='leaveType' value="Privilege" type="radio" className="mr-2" onChange={onChangeHandler}/>
+                                    <label>
+                                        Privilege
+                                    </label>
                                 </div>
+                                <p className="mb-0">
+                                    Privilege leave (PL) means earned leaves (EL) granted to the employee every year in lieu of his services.
+                                </p>
+                            </div>
+
+                            <div className="leave_type_container">
+                                <div className="d-flex align-items-center">
+                                    <input name='leaveType' value="Casual" type="radio" className="mr-2" onChange={onChangeHandler}/>
+                                    <label>
+                                        Casual
+                                    </label>
+                                </div>
+                                <p className="mb-0">
+                                    Casual Leave or CL is granted to an employee in case if he/she could not report to work for an unforeseen situation.
+                                </p>
+                            </div>
+
+                            <div className="leave_type_container">
+                                <div className="d-flex align-items-center">
+                                    <input name='leaveType' value="Sick" type="radio" className="mr-2" onChange={onChangeHandler}/>
+                                    <label>
+                                        Sick
+                                    </label>
+                                </div>
+                                <p className="mb-0">
+                                    Sick leave is paid time off from work that workers can use to stay home to address their health needs without losing pay.
+                                </p>
+                            </div>
+
+                            <div className="leave_type_container">
+                                <div className="d-flex align-items-center">
+                                    <input name='leaveType' value="Other" type="radio" className="mr-2" onChange={onChangeHandler}/>
+                                    <label>
+                                        Other
+                                    </label>
+                                </div>
+                                <p className="mb-0">
+                                    Any other leave that an employee wants to avail in specific circumstances.
+                                </p>
                             </div>
                         </div>
-                        <div className="Leave_Duration p-1">
-                            <div className="Leave_Duration_Heading text-center p-1" >
-                                <h5 className="font-weight-bolder">Duration Of Leave</h5>
+                        
+                        <div className="grid_container Leave_Duration_Date">
+                            <div>
+                                <label className='mb-0'>Leave From</label>
+                                <input type="date" className="form-control mb-2" name="leaveFrom" onChange={ DaysAndDate } />
                             </div>
-                            <div className="p-1 d-flex align-items-center">
-                                <p className="mb-0 mr-2" style={{ fontSize: '16px' }} >I want <b>1 day</b> leave</p>
-                                <input className="d-block" type='checkbox' value="true" name='OnDayLeave' onChange={ onDayLeave } />
+                            <div>
+                                <label className='mb-0'>Leave To</label>
+                                <input type="date" className="form-control mb-2" name="leaveTo" onChange={ DaysAndDate } />
                             </div>
-                            <div className="Leave_Duration_Date p-1" >
-                                <div className="mb-1"><p >From : </p></div>
-                                <div><input type="date" className="form-control mb-2" name="leaveFrom" onChange={ DaysAndDate } /></div>
-                                <div className="mb-1"><p>To : </p></div>
-                                <div><input type="date" className="form-control mb-2" name="leaveTo" onChange={ DaysAndDate } /></div>
-                                <div className="mb-1"><p>No. of Days : </p></div>
-                                <div><input defaultValue={ LeaveData.NoOfDays + 1 } disabled type="text" className="form-control" /></div>
+                            <div>
+                                <label className='mb-0'>No. of Days</label>
+                                <input value={ LeaveData.NoOfDays } disabled type="text" className="form-control mb-2" />
                             </div>
-                            <div className="Leave_Duration_Date Leave_Duration_Date2 p-1" >
-                                <div className="mb-1"><p >Date : </p></div>
-                                <div><input type="date" className="form-control mb-2" name="leaveDate" onChange={ DaysAndDate } /></div>
+                            <div>
+                                <label className='mb-0'>No. of Leaves Availed ({new Date().getFullYear() - 1} - {new Date().getFullYear()})</label>
+                                <input value={ LeavesAvailed } disabled type="text" className="form-control mb-2" />
                             </div>
                         </div>
-                        <div className="Leave_Purpose p-1">
-                            <div className="Leave_Purpose_Heading p-1" >
-                                <h5 className="font-weight-bolder mb-0">{props.heading}</h5>
+                        
+                        <div className="grid_container Leave_Duration_Date Leave_Duration_Date2">
+                            <div>
+                                <label className='mb-0'>Leave Date</label>
+                                <input type="date" className="form-control" id="leaveDate" name="leaveDate" onChange={ DaysAndDate } />
                             </div>
-                            <div className="Leave_Purpose_reason p-1">
-                                <textarea name="Purpose" onChange={ onChangeHandler } required minLength='30' placeholder="Describe your reason in detail" style={{height: '80px'}} className="form-control"></textarea>
+                            <div>
+                                <label className='mb-0'>No. of Leaves Availed ({new Date().getFullYear() - 1} - {new Date().getFullYear()})</label>
+                                <input value={ LeavesAvailed } disabled type="text" className="form-control" />
                             </div>
                         </div>
-                        <div className="Medical_Prove p-1">
-                            <div className="Leave_Purpose_Heading p-1" >
-                                <h5 className="font-weight-bolder mb-0">Medical Attachment </h5>
+                        
+                        <label className='mb-0 mt-3'>Reason To Avail Leave</label>
+                        <textarea name="Purpose" onChange={ onChangeHandler } required minLength='30' placeholder="Describe your reason in detail..." style={{height: '80px'}} className="form-control" />
+                        
+                        <div className="Medical_Prove">
+                            <div className="Leave_Purpose_Heading" >
+                                <label className='mb-0 mt-3'>Medical Attachment</label>
                             </div>
-                            <div className="Leave_Purpose_reason p-1">
+                            <div className="Leave_Purpose_reason">
                                 <input name="attachement" onChange={ onAttachement } type="file" className="form-control" />
                                 <input type="number" defaultValue={ props.availed } className="d-none form-control" />
                             </div>
                         </div>
-                        <div className="d-flex justify-content-end align-items-center p-2">
+                        <div className="mt-3">
+                            <label className='mb-0'>Submit Application To</label>
                             <select name="submit_to" onChange={onChangeHandler} id="" className="form-control form-control-sm" required>
                                 <option value=''> submit to </option>
                                 {
@@ -435,14 +508,17 @@ const Employee_Leave_Application_Form = ( props ) => {
                                     )
                                 }
                             </select>
-                            <button type="reset" className="btn mr-3 d-none">Cancel</button>
+                        </div>
+
+                        <div className="d-flex align-items-center justify-content-end mt-3">
+                            <button type="reset" className="btn green">Cancel</button>
                             {
                                 LeaveData.leaveType === '' || 
                                 LeaveData.Purpose === '' || 
                                 LeaveData.submit_to === ''
                                 ?null
                                 :
-                                <button type="submit" className="btn ml-2">Submit</button>
+                                <button type="submit" className="btn submit ml-3">Submit</button>
                             }
                         </div>
                     </form>

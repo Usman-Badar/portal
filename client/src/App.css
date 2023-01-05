@@ -1,22 +1,28 @@
 /* width */
 
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 0;
+    height: 0;
+}
+
+:hover::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
 }
 
 
 /* Track */
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #fff;
 }
 
 
 /* Handle */
 
 ::-webkit-scrollbar-thumb {
-    background: var( --gray-text);
+    background: var(--lightgray);
+    border-radius: 20px;
 }
 
 
@@ -57,16 +63,77 @@
     display: none !important;
 }
 
+input[type='radio'],
+input[type='checkbox'] {
+    accent-color: var(--black);
+    width: 20px;
+    height: 20px;
+}
+
+.table th,
+.table td {
+    word-break: break-word;
+}
+
+.btn.submit,
+.btn.cancle,
+.btn {
+    color: #fff;
+    border-radius: 20px;
+    padding: 5px 20px;
+    font-size: 13px;
+    font-family: Roboto-Light;
+}
+
+.btn.cancle {
+    background-color: var(--orange);
+}
+
+.btn.submit {
+    background-color: var(--blue);
+}
+
+.btn.green {
+    background-color: var(--dark-c-green);
+    color: #fff !important;
+}
+
 #root {
-    --black: #494D56;
-    --dark-black: #3A3D44;
-    --c-green: #29C7CA;
-    --dark-c-green: #2BACB1;
-    --orange: #E7604A;
-    --lightgray: #F1F3F2;
+    --black: #3A5579;
+    --dark-black: #272F3E;
+    --c-green: #90B7CE ;
+    /* #D5EEEF */
+    --dark-c-green: #90B7CE;
+    --orange: #E26649;
+    --lightgray: #F1F1F1;
     --gray-text: #bbbdc3;
-    --success: #56CC82;
-    --blue: #5C6E9C;
+    --success: #77C4AD;
+    --blue: #253754;
+    --warning: #F2AE03;
+}
+
+input,
+select,
+textarea {
+    border: 1px solid rgb(212, 212, 212) !important;
+    border-radius: 5px !important;
+    box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset !important;
+    background-color: rgb(240, 240, 240, 0.5) !important;
+    font-family: Roboto-Light;
+}
+
+.heading {
+    font-family: Roboto;
+    position: relative;
+    width: fit-content;
+}
+
+.heading sub {
+    font-size: 12px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    text-transform: uppercase;
 }
 
 .color-c-green {
@@ -95,12 +162,10 @@
 @keyframes popups {
     50% {
         opacity: .5;
-        transform: scale(1.1);
         z-index: -1 !important;
     }
     100% {
         opacity: 1;
-        transform: scale(1);
         z-index: -1 !important;
     }
 }

@@ -1,105 +1,122 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import './UI.css';
 
-import IMG from '../../../../../images/edit.jpg'
-
 import $ from 'jquery';
-import { useEffect } from "react";
 
-const UI = () => {
+const UI = ( { Employees, Keyword, searchEmployees, generateTicket, getEmployees, setEmployee, setTicket } ) => {
 
-    useEffect(
+    useLayoutEffect(
         () => {
-            $('.dropdown_tickets').hide(0);
-        }, []
-    )
+            $('.EmpTickets_container .tickets__selection_container .ticket').on(
+                'click', (e) => {
 
-    const showOptions = () => {
-        $('.dropdown_tickets').slideToggle();
-    }
+                    $('.EmpTickets_container .tickets__selection_container .ticket').removeClass('active');
+                    $('.EmpTickets_container .tickets__selection_container .ticket .la-check').remove();
+
+                    let icon = document.createElement('i');
+                    icon.className = 'las la-check';
+                    if ( e.target.className === "ticket" )
+                    {
+                        $(e.target).addClass('active');
+                        $(e.target).append(icon);
+                    }else
+                    {
+                        $(e.target.parentElement).addClass('active');
+                        $(e.target.parentElement).append(icon);
+                    }
+
+                }
+            )
+        }, []
+    );
 
     return (
         <>
-            <div className="EmpTickets_container">
+            <form className="EmpTickets_container container-fluid" id="ticket_form" onSubmit={ generateTicket }>
 
-                <h3>Employees</h3>
+                <fieldset>
+                    <h3 className="heading">
+                        Performance Tickets
+                        <sub>For Employees</sub>
+                    </h3>
 
-                <hr />
+                    <hr />
 
-                <input type="search" className="form-control" placeholder="Seach the Employees" />
-
-                <div className="employees_list">
-
-                    <div className="employee">
-                        <div>
-                            <img src={IMG} alt="empImg" width="50" height="50" class="rounded-circle"></img>
+                    <div className="tickets__selection_container mb-5">
+                        <div className="ticket" onClick={ () => setTicket("green") }>
+                            <i className="las la-trophy"></i>
                         </div>
-                        <div className="ml-2">
-                            <p class="font-weight-bold"> Muhammad Malahim  </p>
-                            <p> Developer at Seatech</p>
+                        <div className="ticket" onClick={ () => setTicket("yellow") }>
+                            <i className="las la-star-half-alt"></i>
                         </div>
-                    </div>
-
-                    <div className="employee">
-                        <div>
-                            <img src={IMG} alt="empImg" width="50" height="50" class="rounded-circle"></img>
-                        </div>
-                        <div className="ml-2">
-                            <p class="font-weight-bold"> Muhammad Malahim  </p>
-                            <p> Developer at Seatech</p>
+                        <div className="ticket" onClick={ () => setTicket("red") }>
+                            <i className="las la-exclamation"></i>
                         </div>
                     </div>
 
-                </div>
+                    <div className="row mb-3">
+                        <div className="col-lg-6 col-md-6 col-sm-12">
+                            <label className="mb-0">Employee</label>
+                            <div className="search_container">
+                                <input type="search" required className="form-control search_employees" placeholder="Seach employees..." onFocus={ getEmployees } onChange={ searchEmployees } />
+                                {
+                                    Keyword
+                                    ?
+                                    <div className="employees_list">
 
-                <div className="select_tickets" onClick={showOptions}>
+                                        {
+                                            Employees
+                                            ?
+                                            Employees.map(
+                                                ( val, index ) => {
 
-                    <p>Select the ticket</p>
-                    <i class="las la-angle-down"></i>
+                                                    let content = <></>;
+                                                    if ( val.name.toLowerCase().includes(Keyword.toLowerCase()) )
+                                                    {
+                                                        content = (
+                                                            <div className="employee" key={ index } onClick={ () => setEmployee( val.emp_id ) }>
+                                                                <div>
+                                                                    <img src={ "images/employees/" + val.emp_image } alt="emp_photo" width="35" height="35" className="rounded-circle" />
+                                                                </div>
+                                                                <div className="ml-2">
+                                                                    <p className="font-weight-bold mb-0"> { val.name } </p>
+                                                                    <p className="mb-0"> { val.designation_name } at { val.company_name }</p>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
 
-                    <div className="dropdown_tickets">
+                                                    return content;
 
-                        <div className="award_badge">
-                            <div>
-                                <i class="las la-crown"></i>
+                                                }
+                                            )
+                                            :
+                                            <p className="text-center mb-0">Loading employees list...</p>
+                                        }
+                                        
+                                    </div>
+                                    :null
+                                }
                             </div>
-                            <p>*Excelent Work</p>
                         </div>
-
-                        <div className="award_badge">
-                            <div>
-                                <i class="las la-trophy"></i>
-                            </div>
-                            <p>*Good Work</p>
+                        
+                        <div className="col-lg-6 col-md-6 col-sm-12">
+                            <label className="mb-0">Generate Date</label>
+                            <input type="text" className="form-control" value={ new Date().toDateString() } disabled />
                         </div>
-
-                        <div className="award_badge">
-                            <div>
-                                <i class="las la-star-half-alt"></i>
-                            </div>
-                            <p>*Average Work</p>
-                        </div>
-
-                        <div className="award_badge">
-                            <div>
-                                <i class="las la-exclamation"></i>
-                            </div>
-                            <p>*Bad Work</p>
-                        </div>
-
                     </div>
-                </div>
 
-                <div className="reason">
-                    {/* <p className="font-weight-bolder">Give The Reason : </p> */}
-                    <textarea name="" id="" rows="5" className="form-control" placeholder="Give The Reason " ></textarea>
-                </div>
+                    <div className="reason">
+                        <label className="mb-0">Give Remarks</label>
+                        <textarea name="remarks" required id="" rows="3" className="form-control" placeholder="Suitable remarks according to the given task..." />
+                    </div>
 
-                <div className="d-flex justify-content-end mt-3">
-                    <button className="btn btn-dark">Submit</button>
-                </div>
+                    <div className="d-flex justify-content-end mt-3">
+                        <button className="btn submit" type="submit">Submit</button>
+                    </div>
+                </fieldset>
 
-            </div>
+            </form>
         </>
     )
 }

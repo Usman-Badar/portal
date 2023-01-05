@@ -1,12 +1,51 @@
 .Employee_Leave_Application_Form {
     width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
 .Employee_Leave_Application_Form .Application_Form {
     transition: .5s;
-    animation: popups .2s linear 1 forwards alternate;
+    animation: popups 1s linear 1 forwards alternate;
     opacity: 0;
-    transform: scale(0.8);
+    position: relative;
+}
+
+.Employee_Leave_Application_Form .Application_Form .number_of_days_container {
+    position: absolute;
+    top: 40px;
+    right: 80px;
+    background-color: var(--blue);
+    color: #fff;
+    padding: 10px 20px;
+    font-family: Roboto;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.Employee_Leave_Application_Form .Application_Form .number_of_days_container input {
+    width: 20px;
+    height: 20px;
+    margin-left: 15px;
+}
+
+.Employee_Leave_Application_Form .Application_Form .grid_container {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    grid-gap: 20px;
+}
+
+.Employee_Leave_Application_Form .Application_Form .leave_type_container {
+    padding: 15px 10px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    word-break: break-word;
+    font-family: Roboto-Light;
+}
+
+.Employee_Leave_Application_Form .Application_Form label {
+    font-family: Roboto;
+    margin-bottom: 0;
 }
 
 .Employee_Leave_Application_Form .Application_Form .Check_Box .Check_Box_select {
@@ -26,22 +65,6 @@
     margin-bottom: 0;
 }
 
-.Employee_Leave_Application_Form input,
-.Employee_Leave_Application_Form select {
-    border: 1px solid rgb(212, 212, 212) !important;
-    border-radius: 5px !important;
-    box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;
-    background-color: rgb(240, 240, 240, 0.5);
-    padding: 18px 15px;
-}
-
-.Employee_Leave_Application_Form textarea {
-    border: 1px solid rgb(212, 212, 212) !important;
-    border-radius: 5px !important;
-    box-shadow: rgb(204, 219, 232) 1px 1px 1px 0px inset, rgba(255, 255, 255, 0.5) -1px -1px 1px 1px inset;
-    background-color: rgb(240, 240, 240, 0.5);
-}
-
 .Employee_Leave_Application_Form .Medical_Prove input {
     border: 1px solid rgb(212, 212, 212) !important;
     border-radius: 5px !important;
@@ -49,62 +72,47 @@
     background-color: rgb(240, 240, 240, 0.5);
 }
 
-.Employee_Leave_Application_Form .Application_Form form button {
-    background-color: black;
-    color: white;
-}
-
 .Employee_Leave_Application_Form .Application_Form form h5,
 .Employee_Leave_Application_Form .Application_Form form input,
 .Employee_Leave_Application_Form .Application_Form form textarea,
-.Employee_Leave_Application_Form .Application_Form form button,
 .Employee_Leave_Application_Form .Application_Form form p {
     font-size: 13px;
 }
-/* 
-@media only screen and (max-width: 1460px) {
-    .Employee_Leave_Application_Form .Application_Form {
-        width: 40%;
-    }
-}
 
-@media only screen and (max-width: 1100px) {
-    .Employee_Leave_Application_Form .Application_Form {
-        width: 50%;
+@media only screen and (max-width: 786px) {
+    .Employee_Leave_Application_Form .Application_Form .grid_container {
+        grid-template-columns: 100fr;
+        grid-gap: 10px;
     }
-}
-
-@media only screen and (max-width: 880px) {
-    .Employee_Leave_Application_Form .Application_Form {
-        width: 60%;
+    
+    .Employee_Leave_Application_Form .Application_Form .grid_container.types {
+        grid-template-columns: 50fr 50fr;
     }
-}
-
-@media only screen and (max-width: 730px) {
-    .Employee_Leave_Application_Form .Application_Form {
-        width: 70%;
+    
+    .Employee_Leave_Application_Form .Application_Form .leave_type_container {
+        padding: 10px;
     }
-}
-
-@media only screen and (max-width: 630px) {
-    .Employee_Leave_Application_Form .Application_Form {
-        width: 80%;
+    
+    .Employee_Leave_Application_Form .Application_Form .grid_container.types p {
+        display: none;
     }
 }
 
 @media only screen and (max-width: 550px) {
-    .Employee_Leave_Application_Form .Application_Form {
-        width: 90%;
+    .Employee_Leave_Application_Form .Application_Form .number_of_days_container {
+        top: 40px;
+        right: 30px;
+        padding: 10px 20px;
+        font-size: 12px;
     }
-    .Employee_Leave_Application_Form .Application_Form form button {
-        width: 50%;
-        margin-bottom: 10px;
+}
+
+@media only screen and (max-width: 450px) {
+    .Employee_Leave_Application_Form .Application_Form .number_of_days_container {
+        top: 80px;
+        right: 20px;
     }
-    .Employee_Leave_Application_Form .Application_Form {
-        padding: 5px;
+    .Employee_Leave_Application_Form .Application_Form .grid_container.types {
+        padding-top: 36px;
     }
-    .Employee_Leave_Application_Form .Application_Form form h3 {
-        font-size: 20px;
-        padding-top: 10px;
-    }
-} */
+}
