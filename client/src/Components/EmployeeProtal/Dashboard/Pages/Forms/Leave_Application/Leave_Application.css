@@ -158,7 +158,6 @@
 .history_content .accepted_div {
     display: block;
     margin-left: auto;
-    margin-right: 10px;
     width: 200px;
     padding: 30px 0;
     background: none;
@@ -191,6 +190,28 @@
     padding: 2px 15px 1px;
     width: max-content;
     font-size: 10px;
+    text-transform: capitalize;
+}
+
+.history_content .status_div.authorized {
+    background: var(--dark-c-green);
+}
+
+.history_content .status_div.sent {
+    background: var(--dark-black);
+}
+
+.history_content .status_div.accepted {
+    background: var(--success);
+}
+
+.history_content .status_div.rejected {
+    background: var(--orange);
+}
+
+.history_content .status_div.canceled {
+    background: var(--black);
+    color: #fff !important;
 }
 
 .Application_Form {
@@ -237,7 +258,7 @@
 }
 
 @media only screen and (max-width: 992px) {
-    .History .table td:nth-child(2) {
+    .History .table.tbl td:nth-child(2) {
         width: 30% !important;
     }
 }
@@ -256,8 +277,8 @@
     .history_content .form-control#leave_type_select {
         font-size: 13px;
     }
-    .History .table td:nth-child(1),
-    .History .table th:nth-child(1) {
+    .History .table.tbl td:nth-child(1),
+    .History .table.tbl th:nth-child(1) {
         display: none;
     }
 }
@@ -326,12 +347,12 @@
         font-size: 12px;
     }
 
-    .History .table td:nth-child(2) {
+    .History .table.tbl td:nth-child(2) {
         width: 40% !important;
     }
 
-    .History .table th:nth-child(3),
-    .History .table td:nth-child(3) {
+    .History .table.tbl th:nth-child(3),
+    .History .table.tbl td:nth-child(3) {
         display: none;
     }
 }

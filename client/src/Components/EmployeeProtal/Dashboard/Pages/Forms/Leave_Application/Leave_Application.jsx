@@ -378,6 +378,8 @@ const Leave_Application = () => {
 
     const printLeave = () => {
 
+        $('#controls_btns').addClass("d-none");
+
         printJS(
             {
                 printable: 'leaveApp',
@@ -390,6 +392,8 @@ const Leave_Application = () => {
                 font_size: ''
             }
         );
+        
+        $('#controls_btns').removeClass("d-none");
 
     }
 
@@ -438,12 +442,12 @@ const Leave_Application = () => {
                     Do You Want To Cancel This Request?
                 </p>
                 <div className="up py-2 text-right">
-                    <button className="px-3 btn btn-sm btn-primary" onClick={() => openClose('down', 'up')}>Yes</button>
+                    <button className="px-3 btn btn-sm green" onClick={() => openClose('down', 'up')}>Yes</button>
                 </div>
                 <div className="down py-2 text-right">
                     <form onSubmit={(e) => cancelRequest(e, obj)}>
-                        <textarea className="form-control" name="remarks" minLength={10} placeholder="Add Remarks" required></textarea>
-                        <button type='submit' className="px-3 btn btn-sm btn-primary">Send</button>
+                        <textarea className="form-control mb-3" name="remarks" minLength={10} placeholder="Add Remarks" required></textarea>
+                        <button type='submit' className="px-3 btn btn-sm green">Send</button>
                     </form>
                 </div>
             </>
@@ -755,10 +759,10 @@ const Leave_Application = () => {
                     <div className="bg-white Short_Leave_Form divs">
                         <div className="Application_Form" style={{ animationDelay: (0 + '.' + 1).toString() + 's' }}>
                             <form onSubmit={OnTakeShortLeave}>
-                                <h3 className="heading">
+                                <h2 className="heading">
                                     Short Leave
                                     <sub>Application Form</sub>
-                                </h3>
+                                </h2>
 
                                 <hr />
 
@@ -864,167 +868,73 @@ const PrevLeaveApp = ({ Type, PrevLeave, printLeave, cancelLeave, approveLeave, 
 
 
     return (
-        <div id="leaveApp" style={{ width: '100%', fontSize: '13px' }}>
+        <div id="leaveApp" style={{ width: '100%', fontSize: '13px', overflow: 'hidden', position: 'relative' }}>
             <h3 className='text-center font-weight-bold' style={{ letterSpacing: '10px' }}>SEABOARD</h3>
             <p className='text-center font-weight-bold'> {Type === 'short' ? "Short Leave" : "Leave Application"} </p>
 
             <hr />
 
-            <div className='ShowBigTable'>
+            <table className="table tbl table-bordered">
 
-                <table className="table table-bordered">
+                <tbody>
+                    <tr>
 
-                    <tbody>
-                        <tr>
+                        <th>Date</th>
+                        <td>{new Date(PrevLeave.requested_date).toDateString()}</td>
+                        <th>Name</th>
+                        <td>{PrevLeave.sender_person}</td>
 
-                            <th>Date</th>
-                            <td>{new Date(PrevLeave.requested_date).toDateString()}</td>
-                            <th>Name</th>
-                            <td>{PrevLeave.sender_person}</td>
+                    </tr>
+                    <tr>
 
-                        </tr>
-                        <tr>
+                        <th>Designation</th>
+                        <td>{PrevLeave.sender_designation}</td>
+                        <th>Department</th>
+                        <td>{PrevLeave.sender_department}</td>
 
-                            <th>Designation</th>
-                            <td>{PrevLeave.sender_designation}</td>
-                            <th>Department</th>
-                            <td>{PrevLeave.sender_department}</td>
+                    </tr>
+                    <tr>
 
-                        </tr>
-                        <tr>
+                        <th>Company</th>
+                        <td>{PrevLeave.sender_company}</td>
 
-                            <th>Company</th>
-                            <td>{PrevLeave.sender_company}</td>
+                        <th>Cell Phone</th>
+                        <td>{PrevLeave.sender_cell}</td>
 
-                            <th>Cell Phone</th>
-                            <td>{PrevLeave.sender_cell}</td>
+                    </tr>
+                    <tr>
 
-                        </tr>
-                        <tr>
+                        <th>Permanent Address</th>
+                        <td colSpan={3}>{PrevLeave.sender_address}</td>
 
-                            <th>Permanent Address</th>
-                            <td colSpan={3}>{PrevLeave.sender_address}</td>
+                    </tr>
+                    {
+                        PrevLeave.request_status.toLowerCase() === 'canceled'
+                            ?
+                            <>
+                                <tr>
 
-                        </tr>
-                        {
-                            PrevLeave.request_status.toLowerCase() === 'canceled'
-                                ?
-                                <>
-                                    <tr>
+                                    <th>Cancel Date</th>
+                                    <td>{new Date(PrevLeave.cancel_date).toDateString()}</td>
 
-                                        <th>Cancel Date</th>
-                                        <td>{new Date(PrevLeave.cancel_date).toDateString()}</td>
+                                    <th>Cancel Time</th>
+                                    <td>{PrevLeave.cancel_time}</td>
 
-                                        <th>Cancel Time</th>
-                                        <td>{PrevLeave.cancel_time}</td>
+                                </tr>
+                                <tr>
 
-                                    </tr>
-                                    <tr>
+                                    <th>Cancel Reason</th>
+                                    <td colSpan={3}>{PrevLeave.remarks}</td>
 
-                                        <th>Cancel Reason</th>
-                                        <td colSpan={3}>{PrevLeave.remarks}</td>
+                                </tr>
+                            </>
+                            : null
+                    }
+                </tbody>
 
-                                    </tr>
-                                </>
-                                : null
-                        }
-                    </tbody>
+            </table>
 
-                </table>
-
-            </div>
-
-
-
-            <div className='ShowSmallTable' >
-
-                <table className="table table-bordered">
-
-                    <tbody>
-                        <tr>
-
-                            <th>Date</th>
-                            <td>{new Date(PrevLeave.requested_date).toDateString()}</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <th>Name</th>
-                            <td>{PrevLeave.sender_person}</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <th>Designation</th>
-                            <td>{PrevLeave.sender_designation}</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <th>Department</th>
-                            <td>{PrevLeave.sender_department}</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <th>Company</th>
-                            <td>{PrevLeave.sender_company}</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <th>Cell Phone</th>
-                            <td>{PrevLeave.sender_cell}</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <th>Permanent Address</th>
-                            <td colSpan={3}>{PrevLeave.sender_address}</td>
-
-                        </tr>
-                        {
-                            PrevLeave.request_status.toLowerCase() === 'canceled'
-                                ?
-                                <>
-                                    <tr>
-
-                                        <th>Cancel Date</th>
-                                        <td>{new Date(PrevLeave.cancel_date).toDateString()}</td>
-
-                                    </tr>
-
-                                    <tr>
-
-                                        <th>Cancel Time</th>
-                                        <td>{PrevLeave.cancel_time}</td>
-
-                                    </tr>
-
-                                    <tr>
-
-                                        <th>Cancel Reason</th>
-                                        <td colSpan={3}>{PrevLeave.remarks}</td>
-
-                                    </tr>
-                                </>
-                                : null
-                        }
-                    </tbody>
-
-                </table>
-
-            </div>
-
-            <br />
-
-            <table className="table table-borderless">
+            <table className="table table-sm mb-0 table-borderless">
 
                 <thead>
                     <tr>
@@ -1047,7 +957,7 @@ const PrevLeaveApp = ({ Type, PrevLeave, printLeave, cancelLeave, approveLeave, 
 
             <br />
 
-            <table className="table table-borderless">
+            <table className="table table-sm mb-0 table-borderless">
 
                 <thead>
                     <tr>
@@ -1178,7 +1088,7 @@ const PrevLeaveApp = ({ Type, PrevLeave, printLeave, cancelLeave, approveLeave, 
                                 <tr>
 
                                     <td>
-                                        {PrevLeave.comments ? PrevLeave.comments : 'xxxxxxx'}
+                                        {PrevLeave.comments ? PrevLeave.comments : 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}
                                     </td>
 
                                 </tr>
@@ -1222,7 +1132,7 @@ const PrevLeaveApp = ({ Type, PrevLeave, printLeave, cancelLeave, approveLeave, 
                                             <tr>
 
                                                 <td>
-                                                    {PrevLeave.comments2 ? PrevLeave.comments2 : 'xxxxxxx'}
+                                                    {PrevLeave.comments2 ? PrevLeave.comments2 : 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}
                                                 </td>
 
                                             </tr>
@@ -1234,31 +1144,31 @@ const PrevLeaveApp = ({ Type, PrevLeave, printLeave, cancelLeave, approveLeave, 
                     </>
             }
 
-            <div className='Print_button'>
+            <div className='Print_button' id="controls_btns">
 
                 <div>
 
-                    <button type="" className="btn ml-2 btn-dark" onClick={() => backtoleave()} >Back</button>
+                    <button type="button" className="btn ml-2 green" onClick={() => backtoleave()} >Back</button>
 
                 </div>
 
-                <div >
+                <div>
 
                     {
                         parseInt(PrevLeave.requested_by) === parseInt(sessionStorage.getItem('EmpID')) &&
-                            (PrevLeave.request_status.toLowerCase() === 'viewed' || PrevLeave.request_status.toLowerCase() === 'sent')
-                            ?
-                            <button className="btn ml-2 btn-dark" onClick={() => cancelLeave(PrevLeave)}>Cancel</button>
-                            : null
+                        (PrevLeave.request_status.toLowerCase() === 'viewed' || PrevLeave.request_status.toLowerCase() === 'sent')
+                        ?
+                        <button className="btn ml-2 cancle" onClick={() => cancelLeave(PrevLeave)}>Cancel</button>
+                        :null
                     }
                     {
                         parseInt(PrevLeave.requested_by) !== parseInt(sessionStorage.getItem('EmpID')) &&
                             (PrevLeave.request_status.toLowerCase() === 'viewed' || PrevLeave.request_status.toLowerCase() === 'sent')
                             ?
-                            <button className="btn ml-2 btn-danger px-4" onClick={() => rejectLeave(PrevLeave)}>Reject</button>
+                            <button className="btn ml-2 cancle px-4" onClick={() => rejectLeave(PrevLeave)}>Reject</button>
                             : null
                     }
-                    <button type="" className="btn ml-2 btn-dark" onClick={() => printLeave()} >Print</button>
+                    <button type="" className="btn ml-2 submit" onClick={() => printLeave()} >Print</button>
 
                 </div>
 
@@ -1275,10 +1185,10 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
         <>
 
             <div className="d-flex justify-content-between align-items-center">
-                <h5 className="heading">
+                <h3 className="heading">
                     Recent Leaves
                     <sub>Requests</sub>
-                </h5>
+                </h3>
                 <select onChange={(e) => GetHistorySorted(e.target.value)} id="leave_type_select" className='form-control'>
                     <option value="">Select Type</option>
                     <option value="Leaves">Leave Applications</option>
@@ -1295,7 +1205,7 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                     ?
                     Recent.length === 0 ? <h6 className="text-center">No Recent Leave Found</h6> :
                     <>
-                        <table className='table'>
+                        <table className='table tbl'>
                             <thead>
                                 <tr>
 
@@ -1313,7 +1223,7 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                         (val, index) => {
 
                                             return (
-                                                <tr title='Double Click' onDoubleClick={() => openLeave(index, val.date ? "short" : 'leave', 'recent')}>
+                                                <tr style={ { cursor: "pointer" } } title='Double Click' onDoubleClick={() => openLeave(index, val.date ? "short" : 'leave', 'recent')}>
 
                                                     <td>{index + 1}</td>
                                                     <td style={{ width: "40%" }}>
@@ -1361,15 +1271,15 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                                         val.request_status === 'Accepted'
                                                         ?
                                                         <td>
-                                                            <div className='status_div text-white' style={{ backgroundColor: ' #2BACB1' }} >
-                                                                { val.authorized_to == sessionStorage.getItem('EmpID') ? "Pending For Authorization" : val.request_status }
+                                                            <div className={ val.authorized_to == sessionStorage.getItem('EmpID') ? 'status_div text-white rejected' : 'status_div text-white accepted' }>
+                                                                { val.authorized_to == sessionStorage.getItem('EmpID') || val.requested_by == sessionStorage.getItem('EmpID') ? "Pending For Authorization" : val.request_status }
                                                             </div>
                                                         </td>
                                                         :
                                                         val.request_status === 'sent'
                                                         ?
                                                         <td>
-                                                            <div className='status_div text-white' style={{ backgroundColor: ' #3A3D44' }}   >
+                                                            <div className={ val.received_by == sessionStorage.getItem('EmpID') ? 'status_div text-white rejected' : 'status_div text-white sent' }>
                                                                 { val.received_by == sessionStorage.getItem('EmpID') ? "Pending For Approval" : val.request_status }
                                                             </div>
                                                         </td>
@@ -1377,7 +1287,7 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                                         val.request_status === 'rejected'
                                                         ?
                                                         <td>
-                                                            <div className='status_div text-white' style={{ backgroundColor: '#E7604A' }} >
+                                                            <div className='status_div text-white rejected'>
                                                                 {val.request_status}
                                                             </div>
                                                         </td>
@@ -1385,7 +1295,7 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                                         val.request_status === 'Authorized'
                                                         ?
                                                         <td>
-                                                            <div className='status_div bg-success text-white' >
+                                                            <div className='status_div authorized text-white' >
                                                                 {val.request_status}
                                                             </div>
                                                         </td>
@@ -1393,12 +1303,16 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                                         val.request_status === 'canceled'
                                                         ?
                                                         <td>
-                                                            <div className='status_div bg-warning text-dark'>
+                                                            <div className='status_div canceled'>
                                                                 {val.request_status}
                                                             </div>
                                                         </td>
                                                         :
-                                                        null
+                                                        <td>
+                                                            <div className='status_div canceled'>
+                                                                {val.request_status}
+                                                            </div>
+                                                        </td>
                                                     }
                                                 </tr>
                                             )
@@ -1416,7 +1330,7 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                     ?
                     Leaves.length === 0 ? <h6 className="text-center">No Leave Found</h6> :
                     <>
-                        <table className='table'>
+                        <table className='table tbl'>
                             <thead>
                                 <tr>
 
@@ -1434,7 +1348,7 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                         (val, index) => {
 
                                             return (
-                                                <tr title='Double Click' onDoubleClick={() => openLeave(index, val.date ? "short" : 'leave')}>
+                                                <tr style={ { cursor: "pointer" } } title='Double Click' onDoubleClick={() => openLeave(index, val.date ? "short" : 'leave')}>
 
                                                     <td>{index + 1}</td>
                                                     <td style={{ width: "40%" }}>
@@ -1442,7 +1356,7 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                                             parseInt(val.requested_by) !== parseInt(sessionStorage.getItem('EmpID'))
                                                                 ?
                                                                 <>
-                                                                    <b className='text-primary'>{val.name}</b>
+                                                                    <b>{val.name}</b>
                                                                     <br />
                                                                 </>
                                                                 : null
@@ -1482,15 +1396,15 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                                         val.request_status === 'Accepted'
                                                         ?
                                                         <td>
-                                                            <div className='status_div text-white' style={{ backgroundColor: ' #2BACB1' }} >
-                                                                { val.authorized_to == sessionStorage.getItem('EmpID') ? "Pending For Authorization" : val.request_status }
+                                                            <div className={ val.authorized_to == sessionStorage.getItem('EmpID') ? 'status_div text-white rejected' : 'status_div text-white accepted' }>
+                                                                { val.authorized_to == sessionStorage.getItem('EmpID') || val.requested_by == sessionStorage.getItem('EmpID') ? "Pending For Authorization" : val.request_status }
                                                             </div>
                                                         </td>
                                                         :
                                                         val.request_status === 'sent'
                                                         ?
                                                         <td>
-                                                            <div className='status_div text-white' style={{ backgroundColor: ' #3A3D44' }}   >
+                                                            <div className={ val.received_by == sessionStorage.getItem('EmpID') ? 'status_div text-white rejected' : 'status_div text-white sent' }>
                                                                 { val.received_by == sessionStorage.getItem('EmpID') ? "Pending For Approval" : val.request_status }
                                                             </div>
                                                         </td>
@@ -1498,7 +1412,7 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                                         val.request_status === 'rejected'
                                                         ?
                                                         <td>
-                                                            <div className='status_div text-white' style={{ backgroundColor: '#E7604A' }} >
+                                                            <div className='status_div text-white rejected'>
                                                                 {val.request_status}
                                                             </div>
                                                         </td>
@@ -1506,7 +1420,7 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                                         val.request_status === 'Authorized'
                                                         ?
                                                         <td>
-                                                            <div className='status_div bg-success text-white' >
+                                                            <div className='status_div authorized text-white' >
                                                                 {val.request_status}
                                                             </div>
                                                         </td>
@@ -1514,12 +1428,16 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                                         val.request_status === 'canceled'
                                                         ?
                                                         <td>
-                                                            <div className='status_div bg-warning text-dark"' >
+                                                            <div className='status_div canceled' >
                                                                 {val.request_status}
                                                             </div>
                                                         </td>
                                                         :
-                                                        null
+                                                        <td>
+                                                            <div className='status_div canceled'>
+                                                                {val.request_status}
+                                                            </div>
+                                                        </td>
                                                     }
                                                 </tr>
                                             )
@@ -1533,216 +1451,6 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                     :null    
                 }
             </div>
-
-            {/* <div className='showSmallScreen' >
-                {
-                    Leaves.length === 0 ? <h5 className="text-center">Please Wait... <br /> Or Select...</h5> :
-                        <>
-                            <table className='table'>
-                                <thead>
-                                    <tr>
-
-                                        <th>Sr.No</th>
-                                        <th>Request Date & Time</th>
-                                        <th>Leave Date & Time</th>
-                                        <th>Status</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        Leaves.map(
-                                            (val, index) => {
-
-                                                console.log(val)
-
-                                                return (
-                                                    <tr title='Double Click' onDoubleClick={() => openLeave(index, val.date ? "short" : 'leave')}>
-
-                                                        <td>{index + 1}</td>
-                                                        <td>
-                                                            {new Date(val.requested_date).toDateString()} <br />
-                                                            at {val.requested_time}
-                                                        </td>
-                                                        {
-                                                            val.date
-                                                                ?
-                                                                <td>
-                                                                    {new Date(val.date).toDateString()} <br />
-                                                                    at {val.leave_time}
-                                                                </td>
-                                                                :
-                                                                <td>
-                                                                    {new Date(val.leave_from).toDateString()}
-                                                                    <br />
-                                                                    {
-                                                                        val.leave_to
-                                                                            ?
-                                                                            <>
-                                                                                To
-                                                                                <br />
-                                                                            </>
-                                                                            : null
-                                                                    }
-                                                                    {val.leave_to ? new Date(val.leave_to).toDateString() : ''}
-                                                                </td>
-                                                        }
-
-
-                                                        {
-                                                            val.request_status === 'Accepted'
-                                                                ?
-                                                                <td>
-                                                                    <div className='status_div text-white' style={{ backgroundColor: ' #2BACB1' }} >
-                                                                        {val.request_status}
-                                                                    </div>
-                                                                </td>
-                                                                :
-                                                                val.request_status === 'sent'
-                                                                    ?
-                                                                    <td>
-                                                                        <div className='status_div text-white' style={{ backgroundColor: ' #3A3D44' }}   >
-                                                                            {val.request_status}
-                                                                        </div>
-                                                                    </td>
-                                                                    :
-                                                                    val.request_status === 'rejected'
-                                                                        ?
-                                                                        <td>
-                                                                            <div className='status_div text-white' style={{ backgroundColor: '#E7604A' }} >
-                                                                                {val.request_status}
-                                                                            </div>
-                                                                        </td>
-                                                                        :
-                                                                        val.request_status === 'Authorized'
-                                                                            ?
-                                                                            <td>
-                                                                                <div className='status_div bg-success text-white' >
-                                                                                    {val.request_status}
-                                                                                </div>
-                                                                            </td>
-                                                                            :
-                                                                            null
-
-
-                                                        }
-
-
-
-                                                    </tr>
-                                                )
-
-                                            }
-                                        )
-                                    }
-                                </tbody>
-                            </table>
-                        </>
-                }
-            </div>
-
-            <div className='showSmallerScreen' >
-                {
-                    Leaves.length === 0 ? <h5 className="text-center">Please Wait... <br /> Or Select...</h5> :
-                        <>
-                            <table className='table'>
-                                <thead>
-                                    <tr>
-
-                                        <th>Sr.No</th>
-                                        <th>Leave Date & Time</th>
-                                        <th>Status</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        Leaves.map(
-                                            (val, index) => {
-
-                                                console.log(val)
-
-                                                return (
-                                                    <tr title='Double Click' onDoubleClick={() => openLeave(index, val.date ? "short" : 'leave')}>
-
-                                                        <td>{index + 1}</td>
-                                                        {
-                                                            val.date
-                                                                ?
-                                                                <td>
-                                                                    {new Date(val.date).toDateString()} <br />
-                                                                    at {val.leave_time}
-                                                                </td>
-                                                                :
-                                                                <td>
-                                                                    {new Date(val.leave_from).toDateString()}
-                                                                    <br />
-                                                                    {
-                                                                        val.leave_to
-                                                                            ?
-                                                                            <>
-                                                                                To
-                                                                                <br />
-                                                                            </>
-                                                                            : null
-                                                                    }
-                                                                    {val.leave_to ? new Date(val.leave_to).toDateString() : ''}
-                                                                </td>
-                                                        }
-
-
-                                                        {
-                                                            val.request_status === 'Accepted'
-                                                                ?
-                                                                <td>
-                                                                    <div className='status_div text-white' style={{ backgroundColor: ' #2BACB1' }} >
-                                                                        {val.request_status}
-                                                                    </div>
-                                                                </td>
-                                                                :
-                                                                val.request_status === 'sent'
-                                                                    ?
-                                                                    <td>
-                                                                        <div className='status_div text-white' style={{ backgroundColor: ' #3A3D44' }}   >
-                                                                            {val.request_status}
-                                                                        </div>
-                                                                    </td>
-                                                                    :
-                                                                    val.request_status === 'rejected'
-                                                                        ?
-                                                                        <td>
-                                                                            <div className='status_div text-white' style={{ backgroundColor: '#E7604A' }} >
-                                                                                {val.request_status}
-                                                                            </div>
-                                                                        </td>
-                                                                        :
-                                                                        val.request_status === 'Authorized'
-                                                                            ?
-                                                                            <td>
-                                                                                <div className='status_div bg-success text-white' >
-                                                                                    {val.request_status}
-                                                                                </div>
-                                                                            </td>
-                                                                            :
-                                                                            null
-
-
-                                                        }
-
-
-
-                                                    </tr>
-                                                )
-
-                                            }
-                                        )
-                                    }
-                                </tbody>
-                            </table>
-                        </>
-                }
-            </div> */}
-
         </>
     )
 

@@ -85,6 +85,10 @@ input[type='checkbox'] {
     font-family: Roboto-Light;
 }
 
+.btn {
+    color: #000;
+}
+
 .btn.cancle {
     background-color: var(--orange);
 }
@@ -131,7 +135,7 @@ textarea {
 .heading sub {
     font-size: 12px;
     position: absolute;
-    bottom: 0;
+    bottom: -5px;
     right: 0;
     text-transform: uppercase;
 }
