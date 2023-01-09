@@ -109,7 +109,7 @@
 
 @media only screen and (max-width: 450px) {
     .Employee_Leave_Application_Form .Application_Form .number_of_days_container {
-        top: 80px;
+        top: 75px;
         right: 20px;
     }
     .Employee_Leave_Application_Form .Application_Form .grid_container.types {

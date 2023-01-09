@@ -1205,7 +1205,7 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                     ?
                     Recent.length === 0 ? <h6 className="text-center">No Recent Leave Found</h6> :
                     <>
-                        <table className='table tbl'>
+                        <table className='table tbl tbl2'>
                             <thead>
                                 <tr>
 
@@ -1266,54 +1266,87 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                                             </td>
                                                     }
 
-
-                                                    {
-                                                        val.request_status === 'Accepted'
-                                                        ?
-                                                        <td>
+                                                    <td>
+                                                        {
+                                                            val.request_status === 'Accepted'
+                                                            ?
                                                             <div className={ val.authorized_to == sessionStorage.getItem('EmpID') ? 'status_div text-white rejected' : 'status_div text-white accepted' }>
                                                                 { val.authorized_to == sessionStorage.getItem('EmpID') || val.requested_by == sessionStorage.getItem('EmpID') ? "Pending For Authorization" : val.request_status }
                                                             </div>
-                                                        </td>
-                                                        :
-                                                        val.request_status === 'sent'
-                                                        ?
-                                                        <td>
+                                                            :
+                                                            val.request_status === 'sent'
+                                                            ?
                                                             <div className={ val.received_by == sessionStorage.getItem('EmpID') ? 'status_div text-white rejected' : 'status_div text-white sent' }>
                                                                 { val.received_by == sessionStorage.getItem('EmpID') ? "Pending For Approval" : val.request_status }
                                                             </div>
-                                                        </td>
-                                                        :
-                                                        val.request_status === 'rejected'
-                                                        ?
-                                                        <td>
+                                                            :
+                                                            val.request_status === 'rejected'
+                                                            ?
                                                             <div className='status_div text-white rejected'>
                                                                 {val.request_status}
                                                             </div>
-                                                        </td>
-                                                        :
-                                                        val.request_status === 'Authorized'
-                                                        ?
-                                                        <td>
+                                                            :
+                                                            val.request_status === 'Authorized'
+                                                            ?
                                                             <div className='status_div authorized text-white' >
                                                                 {val.request_status}
                                                             </div>
-                                                        </td>
-                                                        :
-                                                        val.request_status === 'canceled'
-                                                        ?
-                                                        <td>
+                                                            :
+                                                            val.request_status === 'canceled'
+                                                            ?
                                                             <div className='status_div canceled'>
                                                                 {val.request_status}
                                                             </div>
-                                                        </td>
-                                                        :
-                                                        <td>
+                                                            :
                                                             <div className='status_div canceled'>
                                                                 {val.request_status}
                                                             </div>
-                                                        </td>
-                                                    }
+                                                        }
+                                                        <div className="d-flex align-items-start justify-content-between leave_status_date">
+                                                            <b>
+                                                                Reuqest Date:
+                                                            </b>
+                                                            <div>
+                                                                <span>
+                                                                    {new Date(val.requested_date).toDateString()}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {
+                                                            val.date
+                                                            ?
+                                                            <div className="d-flex align-items-start justify-content-between leave_status_date">
+                                                                <b>
+                                                                    Leave Date/Time:
+                                                                </b>
+                                                                <div>
+                                                                    <span>
+                                                                        {new Date(val.date).toDateString()}
+                                                                    </span>
+                                                                    <br />
+                                                                    <span>
+                                                                        {val.leave_time}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            :
+                                                            <div className="d-flex align-items-start justify-content-between leave_status_date">
+                                                                <b>
+                                                                    Leave {val.leave_to ? "Dates" : "Date" }:
+                                                                </b>
+                                                                <div>
+                                                                    <span>
+                                                                        {new Date(val.leave_from).toDateString()}
+                                                                    </span>
+                                                                    {val.leave_to ? <br /> : null}
+                                                                    <span>
+                                                                        {val.leave_to ? new Date(val.leave_to).toDateString() : ''}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </td>
                                                 </tr>
                                             )
 
@@ -1330,7 +1363,7 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                     ?
                     Leaves.length === 0 ? <h6 className="text-center">No Leave Found</h6> :
                     <>
-                        <table className='table tbl'>
+                        <table className='table tbl tbl2'>
                             <thead>
                                 <tr>
 
@@ -1391,54 +1424,87 @@ const List = ({ Recent, Leaves, GetHistorySorted, openLeave }) => {
                                                         </td>
                                                     }
 
-
-                                                    {
-                                                        val.request_status === 'Accepted'
-                                                        ?
-                                                        <td>
+                                                    <td>
+                                                        {
+                                                            val.request_status === 'Accepted'
+                                                            ?
                                                             <div className={ val.authorized_to == sessionStorage.getItem('EmpID') ? 'status_div text-white rejected' : 'status_div text-white accepted' }>
                                                                 { val.authorized_to == sessionStorage.getItem('EmpID') || val.requested_by == sessionStorage.getItem('EmpID') ? "Pending For Authorization" : val.request_status }
                                                             </div>
-                                                        </td>
-                                                        :
-                                                        val.request_status === 'sent'
-                                                        ?
-                                                        <td>
+                                                            :
+                                                            val.request_status === 'sent'
+                                                            ?
                                                             <div className={ val.received_by == sessionStorage.getItem('EmpID') ? 'status_div text-white rejected' : 'status_div text-white sent' }>
                                                                 { val.received_by == sessionStorage.getItem('EmpID') ? "Pending For Approval" : val.request_status }
                                                             </div>
-                                                        </td>
-                                                        :
-                                                        val.request_status === 'rejected'
-                                                        ?
-                                                        <td>
+                                                            :
+                                                            val.request_status === 'rejected'
+                                                            ?
                                                             <div className='status_div text-white rejected'>
                                                                 {val.request_status}
                                                             </div>
-                                                        </td>
-                                                        :
-                                                        val.request_status === 'Authorized'
-                                                        ?
-                                                        <td>
+                                                            :
+                                                            val.request_status === 'Authorized'
+                                                            ?
                                                             <div className='status_div authorized text-white' >
                                                                 {val.request_status}
                                                             </div>
-                                                        </td>
-                                                        :
-                                                        val.request_status === 'canceled'
-                                                        ?
-                                                        <td>
-                                                            <div className='status_div canceled' >
-                                                                {val.request_status}
-                                                            </div>
-                                                        </td>
-                                                        :
-                                                        <td>
+                                                            :
+                                                            val.request_status === 'canceled'
+                                                            ?
                                                             <div className='status_div canceled'>
                                                                 {val.request_status}
                                                             </div>
-                                                        </td>
-                                                    }
+                                                            :
+                                                            <div className='status_div canceled'>
+                                                                {val.request_status}
+                                                            </div>
+                                                        }
+                                                        <div className="d-flex align-items-start justify-content-between leave_status_date">
+                                                            <b>
+                                                                Reuqest Date:
+                                                            </b>
+                                                            <div>
+                                                                <span>
+                                                                    {new Date(val.requested_date).toDateString()}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        {
+                                                            val.date
+                                                            ?
+                                                            <div className="d-flex align-items-start justify-content-between leave_status_date">
+                                                                <b>
+                                                                    Leave Date/Time:
+                                                                </b>
+                                                                <div>
+                                                                    <span>
+                                                                        {new Date(val.date).toDateString()}
+                                                                    </span>
+                                                                    <br />
+                                                                    <span>
+                                                                        {val.leave_time}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            :
+                                                            <div className="d-flex align-items-start justify-content-between leave_status_date">
+                                                                <b>
+                                                                    Leave {val.leave_to ? "Dates" : "Date" }:
+                                                                </b>
+                                                                <div>
+                                                                    <span>
+                                                                        {new Date(val.leave_from).toDateString()}
+                                                                    </span>
+                                                                    {val.leave_to ? <br /> : null}
+                                                                    <span>
+                                                                        {val.leave_to ? new Date(val.leave_to).toDateString() : ''}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </td>
                                                 </tr>
                                             )
 
