@@ -1,26 +1,27 @@
 .EmployeeChat {
     width: 100%;
-    height: calc( 100vh - 60px);
-    margin-top: 10px;
-    padding: 10px 20px;
+    height: calc( 100vh - 65px);
+    padding: 0 20px;
     display: grid;
-    grid-template-columns: 25fr 50fr 25fr;
+    grid-template-columns: 30fr 70fr;
     grid-column-gap: 20px;
     font-size: 12px !important;
     position: relative;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .EmployeeChat p {
     margin-bottom: 0;
-    font-size: 13px !important;
-    font-family: Maersk !important;
-    font-weight: lighter !important;
+    font-size: 13px;
+    font-family: Roboto-Light !important;
 }
 
 .EmployeeChat .Left {
     position: relative;
+}
+
+.EmployeeChat .Left .chatcount {
+    height: 40px;
 }
 
 .EmployeeChat .Left p:nth-child(2) {
@@ -29,12 +30,11 @@
 
 .EmployeeChat .Left .tabs {
     width: 100%;
-    height: max-content;
+    height: 39px;
     border-bottom: 1px dotted lightgray;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: flex-end;
-    margin-bottom: 10px;
 }
 
 .EmployeeChat .Left .tabs button {
@@ -69,13 +69,24 @@
     display: flex;
     align-items: center;
     justify-content: start;
-    margin-bottom: 10px;
+    padding: 10px 0;
+}
+
+.EmployeeChat .Center .ChatEmployee img {
+    border: 3px solid #fff;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.EmployeeChat .Center .ChatEmployee p {
+    font-size: 11px !important;
+    margin-bottom: 0;
 }
 
 .EmployeeChat .Center .ChatContent {
     width: 100%;
-    height: calc( 100vh - 30vh);
+    height: 50vh;
     overflow: auto;
+    overflow-y: overlay;
     border-radius: 10px;
     padding: 20px 30px;
     background-color: #fff;
@@ -185,18 +196,20 @@
     margin-bottom: 20px;
 }
 
-.EmployeeChat .Right .Details .offline {
+.EmployeeChat .offline {
     background-color: var( --orange);
     color: #fff;
-    padding: 0 5px;
-    border-radius: 5px;
+    width: fit-content;
+    padding: 0 15px;
+    border-radius: 10px;
 }
 
-.EmployeeChat .Right .Details .online {
+.EmployeeChat .online {
     background-color: var( --c-green);
     color: #fff;
-    padding: 0 5px;
-    border-radius: 5px;
+    width: fit-content;
+    padding: 0 15px;
+    border-radius: 10px;
 }
 
 .EmployeeChat .Right .Details .lightColor {
@@ -217,6 +230,7 @@
     align-items: center;
     font-size: 50px;
     color: white;
+    display: none;
 }
 
 @media only screen and (max-width: 992px) {
@@ -238,8 +252,29 @@
     .EmployeeChat .Center .calenderdiv {
         opacity: 1;
     }
+}
+
+@media only screen and (max-height: 992px) {
     .EmployeeChat .Center .ChatContent {
-        height: calc( 100vh - 27vh);
+        height: 70vh;
+    }
+}
+
+@media only screen and (max-height: 700px) {
+    .EmployeeChat .Center .ChatContent {
+        height: 65vh;
+    }
+}
+
+@media only screen and (max-height: 640px) {
+    .EmployeeChat .Center .ChatContent {
+        height: 60vh;
+    }
+}
+
+@media only screen and (max-height: 500px) {
+    .EmployeeChat .Center .ChatContent {
+        height: 50vh;
     }
 }
 

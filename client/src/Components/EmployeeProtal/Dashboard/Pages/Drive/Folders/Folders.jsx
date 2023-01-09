@@ -31,7 +31,7 @@ const Folders = React.memo(
 
                             return (
                                 <>
-                                    <div className="Div1 d-flex p-3 align-items-center justify-content-between" onDoubleClick={() => props.OpenFolder(val.id, val.name)}>
+                                    <div className="Div1 d-flex p-2 align-items-center justify-content-between" onDoubleClick={() => props.OpenFolder(val.id, val.name)}>
                                         <div className='d-flex align-items-center'>
                                             <i className="las la-wallet"></i> <p className="font-weight-bold"> {val.name} </p>
                                         </div>

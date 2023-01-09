@@ -1,7 +1,8 @@
 .EmployeeChat .Left .List {
-    height: calc( 100vh - 175px);
+    height: calc( 100vh - 120px);
     width: 100%;
     overflow: auto;
+    overflow-y: overlay;
     position: absolute;
 }
 

@@ -35,6 +35,7 @@
 .Dashboard_sideBar .linksContainer {
     height: calc( 100vh - 45px) !important;
     overflow: auto;
+    overflow-y: overlay;
     padding-top: 20px;
 }
 

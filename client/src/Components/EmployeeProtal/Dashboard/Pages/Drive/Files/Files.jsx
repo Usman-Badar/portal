@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import InsteadImg from '../../../../../../images/not found.png';
+import InsteadImg from '../../../../../../images/not found.jpg';
 
 const Files = React.memo(
     (props) => {

@@ -1,7 +1,8 @@
 .Employee_Drive {
-    padding: 20px;
+    padding: 0 20px;
     max-height: calc( 100vh - 110px);
-    overflow: auto;
+    font-family: Roboto-Light;
+    overflow-y: overlay;
 }
 
 .Employee_Drive video {
@@ -22,28 +23,22 @@
 .Employee_Drive .Employee_Drive_Grid {
     display: grid;
     grid-template-columns: 20fr 20fr 20fr 20fr 20fr;
-    grid-column-gap: 20px;
+    grid-gap: 20px;
     padding: 20px 0;
 }
 
 .Employee_Drive .Employee_Drive_GridForModal {
     display: grid;
     grid-template-columns: 50fr 50fr !important;
-    grid-column-gap: 20px;
+    grid-gap: 20px;
     padding: 20px 0;
 }
 
 .Employee_Drive .Employee_Drive_Grid .Div1 {
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    top: 0;
-    left: 0;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     border-radius: 10px;
-    margin-bottom: 20px;
     cursor: pointer;
     background-color: #fff;
-    animation: popups .2s linear 1 forwards alternate;
-    opacity: 0;
-    transform: scale(0.8);
 }
 
 .Employee_Drive .Employee_Drive_Grid .Div1 .Employee_Drive_Text {
@@ -51,13 +46,13 @@
     display: flex;
     align-items: center;
     word-break: break-all;
-    background-color: var( --dark-black );
+    background-color: #fff;
     border-radius: 0 0 10px 10px;
 }
 
 .Employee_Drive .Employee_Drive_Grid .Div1 .Employee_Drive_Text p:first-child,
 .Employee_Drive .Employee_Drive_Grid .Div1 .Employee_Drive_Text i {
-    color: var( --lightgray );
+    color: #000;
 }
 
 .Employee_Drive .Drive_Icon {
@@ -88,6 +83,7 @@
     padding: 10px 0;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     display: none;
+    z-index: 1;
 }
 
 .Employee_Drive .Employee_Drive_Grid .Div1 .Show_Changes_Menu i {
@@ -151,10 +147,7 @@
         padding: 10px;
     }
     .Employee_Drive .Employee_Drive_Grid {
-        grid-column-gap: 10px;
-    }
-    .Employee_Drive .Employee_Drive_Grid .Div1 {
-        margin-bottom: 20px;
+        grid-gap: 10px;
     }
     .Employee_Drive .Employee_Drive_Grid .Div1 .Employee_Drive_Text {
         padding: 10px;
@@ -165,5 +158,8 @@
     }
     .folders .Div1 .Drive_Icon .DropDown_Drive_Menu i {
         font-size: 12px !important;
+    }
+    .Employee_Drive .Drive_Icon .Show_Changes_Menu {
+        width: 150px;
     }
 }

@@ -5,39 +5,44 @@ import loading from '../../../../../../../images/loadingIcons/icons8-iphone-spin
 
 const DailyChat = React.memo(
 
-    ( props ) => {
+    (props) => {
 
-        const [ Chat, setChat ] = useState([]);
-        const [ LoadingState, setLoadingState ] = useState(false);
-        const [ Calender, setCalender ] = useState( new Date() );
-        const [ EmpID, setEmpID ] = useState();
-        const [ ChatEmployee, setChatEmployee ] = useState({});
-        const [ CurrentEmployeeData, setCurrentEmployeeData ] = useState({});
+        const [Chat, setChat] = useState([]);
+        const [LoadingState, setLoadingState] = useState(false);
+        const [Calender, setCalender] = useState(new Date());
+        const [EmpID, setEmpID] = useState();
+        const [ChatEmployee, setChatEmployee] = useState({});
+        const [CurrentEmployeeData, setCurrentEmployeeData] = useState({});
 
         useEffect(
             () => {
 
-                setLoadingState( props.LoadingState )
-                setChat( props.Chat )
-                setCalender( props.Calender )
-                setEmpID( props.EmpID )
-                setChatEmployee( props.ChatEmployee )
-                setCurrentEmployeeData( props.CurrentEmployeeData )
+                setLoadingState(props.LoadingState)
+                setChat(props.Chat)
+                setCalender(props.Calender)
+                setEmpID(props.EmpID)
+                setChatEmployee(props.ChatEmployee)
+                setCurrentEmployeeData(props.CurrentEmployeeData)
 
-            }, [ props.LoadingState, props.Chat, props.Calender, props.EmpID, props.ChatEmployee, props.CurrentEmployeeData ]
+            }, [props.LoadingState, props.Chat, props.Calender, props.EmpID, props.ChatEmployee, props.CurrentEmployeeData]
         );
 
         return (
             <>
-                <div className={ LoadingState ? "LoadingStateForDailyChat" : "LoadingStateForDailyChat d-none" }>
-                    <img 
-                        src={ loading } 
-                        alt="Please wait....." 
-                        width="50" 
-                        height="50" 
-                        className="rounded-circle"
-                    />
-                </div>
+                {
+                    LoadingState
+                    ?
+                    <div className={LoadingState ? "LoadingStateForDailyChat" : "LoadingStateForDailyChat d-none"}>
+                        <img
+                            src={loading}
+                            alt="Please wait....."
+                            width="50"
+                            height="50"
+                            className="rounded-circle"
+                        />
+                    </div>
+                    :null
+                }
                 {
                     Chat.map(
                         (val, index) => {
@@ -77,35 +82,35 @@ const DailyChat = React.memo(
                                                     <p className="Tweeter"> {val.sender_id !== EmpID ? ChatEmployee.name : CurrentEmployeeData.name}</p>
                                                     <div className="TweetBox">
                                                         {
-                                        props.encryptor.decrypt(val.chat_body).includes('/***')
-                                            ?
-                                            <img
-                                                src={'images/drive/' + src}
-                                                width="100%"
-                                                height="auto"
-                                                alt="drive attachment"
-                                            />
-                                            :
-                                            <>
-                                                {props.encryptor.decrypt(val.chat_body)}
-                                            </>
+                                                            props.encryptor.decrypt(val.chat_body).includes('/***')
+                                                                ?
+                                                                <img
+                                                                    src={'images/drive/' + src}
+                                                                    width="100%"
+                                                                    height="auto"
+                                                                    alt="drive attachment"
+                                                                />
+                                                                :
+                                                                <>
+                                                                    {props.encryptor.decrypt(val.chat_body)}
+                                                                </>
                                                         }
                                                     </div>
                                                     <p className="TweetTime">
                                                         {
-                                        val.sender_id !== EmpID
-                                            ?
-                                            null
-                                            :
-                                            <>
-                                                {
-                                                    val.read_status === 'Read'
-                                                        ?
-                                                        <i style={{ fontSize: '12px !important' }} className="las la-check-double mr-1"></i>
-                                                        :
-                                                        <i style={{ fontSize: '12px !important' }} className="las la-check mr-1"></i>
-                                                }
-                                            </>
+                                                            val.sender_id !== EmpID
+                                                                ?
+                                                                null
+                                                                :
+                                                                <>
+                                                                    {
+                                                                        val.read_status === 'Read'
+                                                                            ?
+                                                                            <i style={{ fontSize: '12px !important' }} className="las la-check-double mr-1"></i>
+                                                                            :
+                                                                            <i style={{ fontSize: '12px !important' }} className="las la-check mr-1"></i>
+                                                                    }
+                                                                </>
                                                         }
                                                         {props.tConvert(val.send_time)}
                                                     </p>
@@ -118,30 +123,30 @@ const DailyChat = React.memo(
                                                     <div key={index} className={val.sender_id !== EmpID ? "Tweet" : "Tweet owner"}>
                                                         <p className="Tweeter"> {val.sender_id !== EmpID ? ChatEmployee.name : CurrentEmployeeData.name}</p>
                                                         <div className="TweetBox">
-                                        {
-                                            props.encryptor.decrypt(val.chat_body).includes('/***')
-                                                ?
-                                                <img
-                                                    src={'images/drive/' + src}
-                                                    width="100%"
-                                                    height="auto"
-                                                    alt="drive attachment"
-                                                />
-                                                :
-                                                <>
-                                                    {props.encryptor.decrypt(val.chat_body)}
-                                                </>
-                                        }
+                                                            {
+                                                                props.encryptor.decrypt(val.chat_body).includes('/***')
+                                                                    ?
+                                                                    <img
+                                                                        src={'images/drive/' + src}
+                                                                        width="100%"
+                                                                        height="auto"
+                                                                        alt="drive attachment"
+                                                                    />
+                                                                    :
+                                                                    <>
+                                                                        {props.encryptor.decrypt(val.chat_body)}
+                                                                    </>
+                                                            }
                                                         </div>
                                                         <p className="TweetTime">
-                                        {
-                                            val.read_status === 'Read'
-                                                ?
-                                                <i style={{ fontSize: '12px !important' }} className="las la-check-double mr-1"></i>
-                                                :
-                                                <i style={{ fontSize: '12px !important' }} className="las la-check mr-1"></i>
-                                        }
-                                        {props.tConvert(val.send_time)}
+                                                            {
+                                                                val.read_status === 'Read'
+                                                                    ?
+                                                                    <i style={{ fontSize: '12px !important' }} className="las la-check-double mr-1"></i>
+                                                                    :
+                                                                    <i style={{ fontSize: '12px !important' }} className="las la-check mr-1"></i>
+                                                            }
+                                                            {props.tConvert(val.send_time)}
                                                         </p>
                                                     </div>
                                                 </>

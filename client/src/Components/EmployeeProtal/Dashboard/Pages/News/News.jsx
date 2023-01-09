@@ -54,7 +54,7 @@ const News = () => {
                             return (
                                 <>
                                     <div className='Employee_Portal_news_divs' key={index} onClick={() => { GoToNewsPaper(val.id) }} style={{ animationDelay: (0 + '.' + index).toString() + 's' }}>
-                                        <div>
+                                        <div className='d-flex flex-column justify-content-between h-100'>
                                             <img src={'images/news_papers/' + val.news_papers_title_image} alt="news papers" />
                                             <p className='mb-0' style={ { fontSize: '12px' } }>{val.news_papers_name}</p>
                                         </div>

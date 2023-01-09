@@ -15,10 +15,10 @@ import Modal from '../../../../UI/Modal/Modal';
 
 import socket from '../../../../../io';
 
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+// import Calendar from 'react-calendar';
+// import 'react-calendar/dist/Calendar.css';
 
-import NoCHat from '../../../../../images/nochat.png';
+import NoCHat from '../../../../../images/chat_preview.png';
 import loading from '../../../../../images/loadingIcons/icons8-iphone-spinner.gif';
 
 const EmployeesList = lazy(() => import('./Components/EmployeesList/EmployeesList'));
@@ -472,14 +472,25 @@ const Employee_Chat = () => {
                                                 <div className="ChatEmployee popUps">
                                                     <img
                                                         src={'images/employees/' + ChatEmployee.emp_image}
-                                                        width='40'
-                                                        height='40'
+                                                        width='55'
+                                                        height='55'
                                                         alt="chat employee img"
                                                         className='rounded-circle'
                                                     />
                                                     <div className="ml-2">
                                                         <p className='font-weight-bold'> {ChatEmployee.name} </p>
                                                         <p> {ChatEmployee.designation_name + ' in ' + ChatEmployee.company_name} </p>
+                                                        {
+                                                            ShowChat
+                                                            ?
+                                                            EmployeeStatus === '' 
+                                                            ? 
+                                                            <p className="offline">offline</p> 
+                                                            : 
+                                                            <p className="online">online</p>
+                                                            :
+                                                            null
+                                                        }
                                                     </div>
                                                 </div>
 
@@ -572,7 +583,7 @@ const Employee_Chat = () => {
                     )
                 }
 
-                <div className='Right popUps'>
+                {/* <div className='Right'>
 
                     <div className='RightDiv'>
                         <Calendar
@@ -611,7 +622,7 @@ const Employee_Chat = () => {
                         </div>
                     </div>
 
-                </div>
+                </div> */}
 
             </div>
         </>
