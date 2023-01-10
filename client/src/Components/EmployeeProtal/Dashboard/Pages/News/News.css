@@ -42,21 +42,21 @@
     margin-bottom: 0;
 }
 
-@media only screen and (max-width: 1200px) {
+/* @media only screen and (max-width: 1200px) {
     .Employee_Portal_news .Employee_Portal_news_divs img {
-        width: 150px;
-        height: 150px;
+        width: 100%;
+        height: 100%;
     }
-}
+} */
 
 @media only screen and (max-width: 1050px) {
     .Employee_Portal_news {
         grid-template-columns: 33.33fr 33.33fr 33.33fr;
     }
-    .Employee_Portal_news .Employee_Portal_news_divs img {
+    /* .Employee_Portal_news .Employee_Portal_news_divs img {
         width: 110px;
         height: 110px;
-    }
+    } */
 }
 
 @media only screen and (max-width: 800px) {

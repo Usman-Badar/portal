@@ -1,0 +1,16 @@
+09:13:04 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+12:49:09 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'product_id')
+
+13:19:40 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'product_id')
+
+13:19:40 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+

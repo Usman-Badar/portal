@@ -181,6 +181,7 @@
 {
     .EmpTickets_container {
         width: 90%;
+        padding: 20px;
     }
     .EmpTickets_container .tickets__selection_container .ticket .la-check {
         font-size: 15px;

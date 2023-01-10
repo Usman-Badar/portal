@@ -7,17 +7,21 @@ import $ from 'jquery';
 import Loading from '../../../../../UI/Loading/Loading';
 import LoadingIcon from '../../../../../../images/loadingIcons/icons8-loading-circle.gif';
 
-const UI = ( { StartLoading, Requests, Details, Comments, OpenRequest, newComment, CloseRequest, issueToInventory } ) => {
+const UI = ( { Specifications, Requests, Details, Comments, OpenRequest, newComment, CloseRequest, issueToInventory } ) => {
 
     return (
         <>
             <div className="inventory_requests_page">
-                
-                <div className="left requests request_details">
 
-                    <h2>Inventory Requests</h2>
+                <div className="inventory_requests_page_content">
+
+                    <h3 className="heading">
+                        Inventory Requests
+                        <sub>Item Requirements</sub>
+                    </h3>
+
                     <hr />
-
+                    
                     {
                         Details
                         ?
@@ -32,12 +36,83 @@ const UI = ( { StartLoading, Requests, Details, Comments, OpenRequest, newCommen
                             CloseRequest={ CloseRequest }
                         />
                         :
-                        <List
-                            Requests={ Requests }
-                            StartLoading={ StartLoading }
+                        Requests
+                        ?
+                        Requests.length === 0
+                        ?
+                        <h6 className="text-center">No Request Found</h6>
+                        :
+                        <table className="table table-bordered table-hover">
+                            <thead>
+                                <tr>
 
-                            OpenRequest={ OpenRequest }
-                        />
+                                    <th>Sr.No</th>
+                                    <th>Requested By</th>
+                                    <th>Request Date/Time</th>
+                                    <th>Status</th>
+                                    <th>Required Items</th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {
+                                    Requests.map(
+                                        ( val, index ) => {
+
+                                            let arr = [];
+                                            if ( Specifications )
+                                            {
+                                                for ( let x = 0; x < Specifications.length; x++ )
+                                                {
+                                                    if ( Specifications[x].request_id === val.id )
+                                                    {
+                                                        arr.push( <><span>{Specifications[x].name} : <b>{ Specifications[x].assigned_quantity }</b> Qty</span> <br /></> )
+                                                    }
+                                                }
+                                            }
+
+                                            return (
+                                                <tr title="Double Click To View" key={ index } onDoubleClick={ () => OpenRequest( index ) }>
+
+                                                    <td>{ index + 1 }</td>
+                                                    <td>
+                                                        <b>{ val.sender_name }</b>
+                                                        <br />
+                                                        <span>{ val.sender_designation }</span>
+                                                    </td>
+                                                    <td>
+                                                        { new Date(val.request_date).toDateString() } 
+                                                        <br />
+                                                        { val.request_time }
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            val.accepted_by
+                                                            ?
+                                                            val.issued
+                                                            ?
+                                                            <span className='badge badge-pill px-3 badge-green'> Issued </span>
+                                                            :
+                                                            <span className='badge badge-pill px-3 badge-dark'> Viewed </span>
+                                                            :
+                                                            <span className='badge badge-pill px-3 badge-danger'> Pending </span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        { arr }
+                                                    </td>
+
+                                                </tr>
+                                            )
+
+                                        }
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                        :
+                        <h6 className="text-center">Loading Requests...</h6>
                     }
 
                 </div>
@@ -111,12 +186,14 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
                 <div>
                     <div className="d-flex align-items-center justify-content-between">
                         <h5 className='mb-0'>
-                            Request Details
+                            Request Details & Specifications
                         </h5>
-                        <i className="la-2x las la-times-circle" onClick={ CloseRequest }></i>
+                        <button className='btn submit d-flex align-items-center' onClick={CloseRequest}>
+                            Go Back
+                        </button>
                     </div>
 
-                    <br />
+                    <hr />
 
                     <table className="table table-sm table-bordered">
                         <tbody>
@@ -134,13 +211,13 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
                             </tr>
                             <tr>
                                 
-                                <th className="bg-light">Accepted By</th>
+                                <th className="bg-light">Viewed By</th>
                                 <td>{ !details.receiver_name ? "N" : details.receiver_name }</td>
 
                             </tr>
                             <tr>
                                 
-                                <th className="bg-light">Accept Date/Time</th>
+                                <th className="bg-light">View Date/Time</th>
                                 <td>{ !details.accept_date ? "N" : new Date(details.accept_date).toDateString() + " at " + details.accept_time }</td>
 
                             </tr>
@@ -156,7 +233,11 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
                                 <th>Sr.No</th>
                                 <th>Product</th>
                                 <th>Description</th>
+                                <th>Company</th>
+                                <th>Location</th>
+                                <th>Sub Location</th>
                                 <th>Required Quantity</th>
+                                <th>Stored Quantity</th>
 
                             </tr>
                         </thead>
@@ -171,7 +252,11 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
                                                 <td>{ index + 1 }</td>
                                                 <td>{ val.name }</td>
                                                 <td>{ val.description }</td>
+                                                <td>{ val.company_name }</td>
+                                                <td>{ val.location_name }</td>
+                                                <td>{ val.sub_location_name }</td>
                                                 <td>{ val.assigned_quantity }</td>
+                                                <td>{ val.stored_quantity }</td>
 
                                             </tr>
                                         )
@@ -185,14 +270,14 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
                     {
                         !details.issued
                         ?
-                        <button className="btn btn-sm d-block mx-auto btn-danger rounded-pill px-4" onDoubleClick={ () => issueToInventory( details.request_id, details.id ) } title="Double click to enter">
-                            Issue To Inventory
+                        <button className="btn btn-sm submit d-block mx-auto px-4" onDoubleClick={ () => issueToInventory( details.request_id, details.id ) } title="Double click to issue">
+                            Double Click To Issue
                         </button>
                         :null
                     }
                 </div>
 
-                <div>
+                {/* <div>
                     {
                         Comments.length > 0 || Details
                         ?
@@ -203,7 +288,7 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
                         />
                         :null
                     }
-                </div>
+                </div> */}
 
             </div>
         </>
@@ -211,28 +296,10 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
 
 }
 
-const List = ( { Requests, StartLoading, OpenRequest } ) => {
+const List = ( { Requests, OpenRequest } ) => {
 
     return (
         <div className="list">
-
-            <Loading 
-                display={ StartLoading }
-                styling={
-                    {
-                        zIndex: 100000,
-                        position: 'absolute'
-                    }
-                }
-                icon={ 
-                    <img 
-                        src={ LoadingIcon }
-                        className="LoadingImg"
-                        alt="LoadingIcon"
-                    /> 
-                }
-                txt="Please Wait"
-            />
 
             {
                 Requests

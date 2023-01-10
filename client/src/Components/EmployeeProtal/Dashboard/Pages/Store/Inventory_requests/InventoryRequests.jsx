@@ -7,6 +7,9 @@ import LoadingIcon from '../../../../../../images/loadingIcons/icons8-loading-ci
 // REACT REDUX
 import { useSelector } from 'react-redux';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { getRequests, GetComments, issueToInventory, OpenRequest, newComment } from './Functions';
 import axios from '../../../../../../axios';
 import socket from '../../../../../../io';
@@ -19,13 +22,14 @@ const InventoryRequests = () => {
 
     const [ StartLoading, setStartLoading ] = useState(false);
     const [ Requests, setRequests ] = useState();
+    const [ Specifications, setSpecifications ] = useState();
     const [ Details, setDetails ] = useState();
     const [ Comments, setComments ] = useState([]);
 
     useEffect(
         () => {
 
-            getRequests( axios, setRequests );
+            getRequests( axios, setRequests, setSpecifications );
 
             socket.on(
                 'newitemrequestcomment', ( request_id ) => {
@@ -49,15 +53,16 @@ const InventoryRequests = () => {
                         Requests={ Requests }
                         Details={ Details }
                         Comments={ Comments }
-                        StartLoading={ StartLoading }
+                        Specifications={ Specifications }
 
                         CloseRequest={ () => { setComments([]); setDetails(); getRequests( axios, setRequests ); } }
-                        OpenRequest={ ( index ) => OpenRequest( index, axios, UserData.emp_id, Requests, setDetails, setComments, setStartLoading ) }
+                        OpenRequest={ ( index ) => OpenRequest( toast, index, axios, UserData.emp_id, Requests, setDetails, setComments ) }
                         newComment={ ( e ) => newComment( e, axios, Details[0][0].request_id, socket, setComments ) }
                         issueToInventory={ ( request_id, id ) => issueToInventory( request_id, id, axios, setDetails, setComments, setRequests ) }
                     /> 
                 } 
             />
+            <ToastContainer />
         </>
     )
 

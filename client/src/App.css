@@ -309,3 +309,17 @@ td {
     font-size: 12px;
     font-weight: lighter;
 }
+
+.badge.badge-danger {
+    background: var(--orange) !important;
+}
+
+.badge.badge-green {
+    background: var(--success) !important;
+    color: #ffff;
+}
+
+.badge.badge-dark {
+    background: var(--dark-black) !important;
+    color: #ffff;
+}

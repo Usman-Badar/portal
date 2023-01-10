@@ -891,7 +891,7 @@ const ItemRequest = () => {
     return (
         <>
             <Modal show={ ShowModal } Hide={ onClose } content={ Content } />
-            {
+            {/* {
                 View.includes('index')
                 ?
                 <div className='commentBox'>
@@ -936,7 +936,7 @@ const ItemRequest = () => {
                     </form>
                 </div>
                 :null
-            }
+            } */}
             {
                 window.location.href.split('/')[5] === 'generatepr'
                 ?
@@ -1043,7 +1043,7 @@ const ItemRequest = () => {
                                 <tr className="bg-light">
 
                                     <th>Sr No.</th>
-                                    <th>Status</th>
+                                    {/* <th>Status</th> */}
                                     <th>Item</th>
                                     <th>Quantity</th>
                                     <th>Reason / Details</th>
@@ -1092,7 +1092,7 @@ const ItemRequest = () => {
                                                         <tr>
 
                                                             <td>{ index + 1 }</td>
-                                                            <td>{ val.new_added ? "new" : val.edited ? 'edited' : 'default' }</td>
+                                                            {/* <td>{ val.new_added ? "new" : val.edited ? 'edited' : 'default' }</td> */}
                                                             <td className='underline'>
                                                                 { val.name }
                                                                 {
@@ -1574,7 +1574,7 @@ const ItemRequest = () => {
 
                                     <tr>
                                         <th>Sr No</th>
-                                        <th>Status</th>
+                                        {/* <th>Status</th> */}
                                         <th>Item Name</th>
                                         <th>Quantity</th>
                                         <th>Reason / Details</th>
@@ -1587,7 +1587,7 @@ const ItemRequest = () => {
                                                 return (
                                                     <tr>
                                                         <td>{ index + 1 }</td>
-                                                        <td>{ val.new_added ? "new" : val.edited ? 'edited' : 'default' }</td>
+                                                        {/* <td>{ val.new_added ? "new" : val.edited ? 'edited' : 'default' }</td> */}
                                                         {
                                                             JSON.parse(AccessControls.access).includes(529)
                                                             ||

@@ -10,9 +10,30 @@
 
 .Dashboard_topbar .topbar_news {
     overflow: hidden;
-    font-family: Maersk-Head;
+    font-family: Roboto-Light;
     font-size: 12px;
     padding: 0 50px 0 0;
+    position: relative;
+}
+
+.Dashboard_topbar .topbar_news::before {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(90deg,#272F3E 0,hsla(0,0%,100%,0));
+    left: 0;
+    top: 0;
+}
+
+.Dashboard_topbar .topbar_news::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(270deg,#272F3E 0,hsla(0,0%,100%,0));
+    right: 0;
+    top: 0;
 }
 
 .Dashboard_topbar .icons {

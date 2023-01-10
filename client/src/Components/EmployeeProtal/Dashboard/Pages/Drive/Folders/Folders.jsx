@@ -20,6 +20,7 @@ const Folders = React.memo(
                 ?
                 <>
                     <h5 className="pt-2">Folders</h5>
+                    <hr />
                     <div className="Employee_Drive_Grid folders">
                         {
                             Folders.length === 0

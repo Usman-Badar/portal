@@ -1,11 +1,12 @@
-export const getRequests = ( axios, setRequests ) => {
+export const getRequests = ( axios, setRequests, setSpecifications ) => {
 
     axios.get(
         '/store/get_inventory_requests'
     ).then(
         res => {
 
-            setRequests( res.data );
+            setRequests( res.data[0] );
+            setSpecifications( res.data[1] );
 
         }
     ).catch(
@@ -18,23 +19,60 @@ export const getRequests = ( axios, setRequests ) => {
 
 }
 
-export const OpenRequest = ( index, axios, accepted_by, Requests, setDetails, setComments, setStartLoading ) => {
+export const OpenRequest = ( toast, index, axios, accepted_by, Requests, setDetails, setComments ) => {
 
     let obj = Requests[index];
-    setStartLoading(true);
     GetComments( axios, obj.request_id, setComments );
 
     if ( !obj.accepted_by )
     {
+        toast.dark("Setting Up The Details", {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
         axios.post(
             '/store/accept_inventory_request',
             {
                 accepted_by: accepted_by,
                 request_id: obj.id
             }
+        ).then(
+            () => {
+                fetchDetails( axios, obj, setDetails );
+                toast.dark("Opening The Request", {
+                    position: 'top-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
         )
+    }else
+    {
+        fetchDetails( axios, obj, setDetails );
+        toast.dark("Opening The Request", {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     }
-    
+
+}
+
+const fetchDetails = ( axios, obj, setDetails ) => {
+
     axios.post(
         '/store/inventory_request/details',
         {
@@ -43,7 +81,6 @@ export const OpenRequest = ( index, axios, accepted_by, Requests, setDetails, se
     ).then(
         res => {
 
-            setStartLoading(false);
             setDetails( res.data );
 
         }

@@ -357,9 +357,7 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
                 );
 
                 let itemRequestDescriptionQuery = "";
-                let productsQuery = "SELECT * FROM tbl_inventory_products WHERE ";
                 let params = [];
-                let productsQueryParams = [];
                 
                 for ( let x = 0; x < products.length; x++ )
                 {
@@ -367,7 +365,7 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
                         "UPDATE `tbl_inventory_products` SET tbl_inventory_products.quantity = tbl_inventory_products.quantity - ? WHERE tbl_inventory_products.product_id = ?;" +
                         "UPDATE `tbl_inventory_product_transactions` SET tbl_inventory_product_transactions.stored_quantity = tbl_inventory_product_transactions.stored_quantity - ? WHERE tbl_inventory_product_transactions.transaction_id = ?;" +
                         "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `entry`, `quantity`, `recorded_by`, `record_date`, `record_time`, `employee`, `request_id`, `status`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `note`, `acquisition_date`) \
-                        SELECT product_id, ?, ?, ?, ?, ?, ?, ?, ?, unit_price, ? * unit_price, delivery_challan, company_code, location_code, sub_location_code, preview, physical_condition, note, acquisition_date FROM `tbl_inventory_product_transactions`;"
+                        SELECT product_id, ?, ?, ?, ?, ?, ?, ?, ?, unit_price, ? * unit_price, delivery_challan, company_code, location_code, sub_location_code, preview, physical_condition, note, acquisition_date FROM `tbl_inventory_product_transactions` WHERE transaction_id = ?;"
                     );
                     params.push( products[x].assigned_quantity );
                     params.push( products[x].product_id );
@@ -384,22 +382,15 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
                     params.push( request_id );
                     params.push( "issued" );
                     params.push( products[x].assigned_quantity );
-
-                    if( x == 0 )
-                    {
-                        productsQuery = productsQuery.concat(' product_id = ? ');
-                    }else
-                    {
-                        productsQuery = productsQuery.concat(' OR product_id = ? ');
-                    }
-                    productsQueryParams.push(products[x].product_id);
+                    params.push( products[x].transaction_id );
                 }
 
-                db.query(
+                let query = db.query(
                     itemRequestDescriptionQuery,
                     params,
                     ( err ) => {
             
+                        console.log( query.sql );
                         if( err )
                         {
             
@@ -409,27 +400,8 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
             
                         }else 
                         {
-                            db.query(
-                                productsQuery,
-                                productsQueryParams,
-                                ( err, result ) => {
-                        
-                                    if( err )
-                                    {
-                        
-                                        console.log(err)
-                                        res.send(err);
-                                        res.end();
-                        
-                                    }else 
-                                    {
-
-                                        res.send(err);
-                                        res.end();
-                                    }
-                                    
-                                }
-                            )
+                            res.send('success');
+                            res.end();
                         }
                         
                     }
@@ -447,13 +419,14 @@ router.post('/inventory/get/product/inwards', ( req, res ) => {
     const { product_id } = req.body;
 
     db.query(
-        "SELECT * FROM `tbl_inventory_product_transactions` WHERE product_id = ? AND entry = 'inward';",
+        "SELECT tbl_inventory_product_transactions.*, companies.company_name FROM `tbl_inventory_product_transactions` LEFT OUTER JOIN companies ON tbl_inventory_product_transactions.company_code = companies.company_code WHERE tbl_inventory_product_transactions.product_id = ? AND tbl_inventory_product_transactions.entry = 'inward';",
         [ product_id ],
         ( err, rslt ) => {
 
             if( err )
             {
 
+                console.log(err);
                 res.send(err);
                 res.end();
 

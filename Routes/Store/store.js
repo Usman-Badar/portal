@@ -285,11 +285,9 @@ router.get('/store/get_inventory_requests', ( req, res ) => {
         "SELECT  \
         tbl_inventory_request_to_store.*, \
         sender.name AS sender_name , \
-        sender_img.emp_image AS sender_image, \
         sender_designation.designation_name AS sender_designation \
         FROM `tbl_inventory_request_to_store` \
         LEFT OUTER JOIN employees sender ON tbl_inventory_request_to_store.requested_by = sender.emp_id \
-        LEFT OUTER JOIN emp_app_profile sender_img ON sender.emp_id = sender_img.emp_id \
         LEFT OUTER JOIN designations sender_designation ON sender.designation_code = sender_designation.designation_code \
         ORDER BY tbl_inventory_request_to_store.id DESC;",
         ( err, rslt ) => {
@@ -302,9 +300,55 @@ router.get('/store/get_inventory_requests', ( req, res ) => {
 
             }else 
             {
+
+                let arr = [rslt];
+                if ( rslt.length > 0 )
+                {
+                    let query = "SELECT tbl_inventory_request_to_store_assigned_items.request_id, tbl_inventory_request_to_store_assigned_items.assigned_quantity, tbl_inventory_products.name FROM `tbl_inventory_request_to_store_assigned_items` \
+                    LEFT OUTER JOIN tbl_inventory_products ON tbl_inventory_request_to_store_assigned_items.product_id = tbl_inventory_products.product_id \
+                    WHERE ";
+                    let params = [];
+                    for ( let x = 0; x < rslt.length; x++ )
+                    {
+                        query = query.concat(" tbl_inventory_request_to_store_assigned_items.request_id  = ?");
+                        params.push( rslt[x].id );
+
+                        if ( (x+1) === rslt.length )
+                        {
+                            // nothing
+                        }else
+                        {
+                            query = query.concat(" OR ");
+                        }
+                    }
+                    db.query(
+                        query,
+                        params,
+                        ( err, rslt2 ) => {
                 
-                res.send( rslt );
-                res.end();
+                            if( err )
+                            {
+                
+                                console.log( err );
+                                res.status(500).send(err);
+                                res.end();
+                
+                            }else 
+                            {
+                                
+                                arr.push( rslt2 )
+                                res.send( arr );
+                                res.end();
+                
+                            }
+                
+                        }
+                    )
+                }else
+                {
+                    res.send( arr );
+                    res.end();
+                }
 
             }
 
@@ -320,18 +364,18 @@ router.post('/store/accept_inventory_request', ( req, res ) => {
     db.query(
         "UPDATE tbl_inventory_request_to_store SET accepted_by = ?, accept_date = ?, accept_time = ? WHERE id = ?",
         [ accepted_by, new Date(), new Date().toTimeString(), request_id ],
-        ( err, rslt ) => {
+        ( err ) => {
 
             if( err )
             {
 
+                console.log( err )
                 res.status(500).send(err);
                 res.end();
 
             }else 
             {
-                
-                res.send( rslt );
+                res.send('success');
                 res.end();
 
             }
@@ -357,9 +401,17 @@ router.post('/store/inventory_request/details', ( req, res ) => {
         "SELECT  \
         tbl_inventory_request_to_store_assigned_items.*, \
         tbl_inventory_products.name, \
-        tbl_inventory_products.description \
+        tbl_inventory_products.description, \
+        tbl_inventory_product_transactions.stored_quantity, \
+        companies.company_name, \
+        locations.location_name, \
+        tbl_inventory_sub_locations.sub_location_name \
         FROM `tbl_inventory_request_to_store_assigned_items`  \
         LEFT OUTER JOIN tbl_inventory_products ON tbl_inventory_request_to_store_assigned_items.product_id = tbl_inventory_products.product_id \
+        LEFT OUTER JOIN tbl_inventory_product_transactions ON tbl_inventory_request_to_store_assigned_items.transaction_id = tbl_inventory_product_transactions.transaction_id \
+        LEFT OUTER JOIN companies ON tbl_inventory_product_transactions.company_code = companies.company_code \
+        LEFT OUTER JOIN locations ON tbl_inventory_product_transactions.location_code = locations.location_code \
+        LEFT OUTER JOIN tbl_inventory_sub_locations ON tbl_inventory_product_transactions.sub_location_code = tbl_inventory_sub_locations.sub_location_code \
         WHERE tbl_inventory_request_to_store_assigned_items.request_id = ?;",
         [ request_id, request_id ],
         ( err, rslt ) => {

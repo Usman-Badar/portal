@@ -65,7 +65,7 @@ app.use( express.json() );
 
 // simulate delay response
 app.use((req, res, next) => {
-    setTimeout(() => next(), 1000);
+    setTimeout(() => next(), 2000);
 });
 
 app.use("/client", express.static(__dirname + "/client"));

@@ -18,6 +18,7 @@ const Files = React.memo(
         return (
             <>
                 <h5 className="pt-2">Files</h5>
+                <hr />
                 <div className="Employee_Drive_Grid" >
                     {
                         Files.length === 0
