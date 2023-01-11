@@ -42,7 +42,7 @@ const UI = ( { Specifications, Requests, Details, Comments, OpenRequest, newComm
                         ?
                         <h6 className="text-center">No Request Found</h6>
                         :
-                        <table className="table table-bordered table-hover">
+                        <table className="table table-bordered tbl table-hover">
                             <thead>
                                 <tr>
 
@@ -82,6 +82,19 @@ const UI = ( { Specifications, Requests, Details, Comments, OpenRequest, newComm
                                                         <span>{ val.sender_designation }</span>
                                                     </td>
                                                     <td>
+                                                        <div className="status_column">
+                                                            {
+                                                                val.accepted_by
+                                                                ?
+                                                                val.issued
+                                                                ?
+                                                                <span className='badge badge-pill px-3 badge-green'> Issued </span>
+                                                                :
+                                                                <span className='badge badge-pill px-3 badge-dark'> Viewed </span>
+                                                                :
+                                                                <span className='badge badge-pill px-3 badge-danger'> Pending </span>
+                                                            }
+                                                        </div>
                                                         { new Date(val.request_date).toDateString() } 
                                                         <br />
                                                         { val.request_time }
@@ -195,7 +208,7 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
 
                     <hr />
 
-                    <table className="table table-sm table-bordered">
+                    <table className="table table-sm table-bordered tbl">
                         <tbody>
                             <tr>
                                 
@@ -226,46 +239,62 @@ const DetailsContainer = ( { details, specifications, Comments, Details, newComm
 
                     <br />
 
-                    <table className="table table-bordered">
-                        <thead className="thead-light">
-                            <tr>
+                    <div className="products_div">
+                        <table className="table table-bordered product_tbl">
+                            <thead className="thead-light">
+                                <tr>
 
-                                <th>Sr.No</th>
-                                <th>Product</th>
-                                <th>Description</th>
-                                <th>Company</th>
-                                <th>Location</th>
-                                <th>Sub Location</th>
-                                <th>Required Quantity</th>
-                                <th>Stored Quantity</th>
+                                    <th>Sr.No</th>
+                                    <th>Product</th>
+                                    <th>Description</th>
+                                    <th>Company</th>
+                                    <th>Location</th>
+                                    <th>Sub Location</th>
+                                    <th>Required Quantity</th>
+                                    <th>Stored Quantity</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                specifications.map(
-                                    ( val, index ) => {
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    specifications.map(
+                                        ( val, index ) => {
 
-                                        return (
-                                            <tr key={ index }>
+                                            return (
+                                                <tr key={ index }>
 
-                                                <td>{ index + 1 }</td>
-                                                <td>{ val.name }</td>
-                                                <td>{ val.description }</td>
-                                                <td>{ val.company_name }</td>
-                                                <td>{ val.location_name }</td>
-                                                <td>{ val.sub_location_name }</td>
-                                                <td>{ val.assigned_quantity }</td>
-                                                <td>{ val.stored_quantity }</td>
+                                                    <td>{ index + 1 }</td>
+                                                    <td>{ val.name }</td>
+                                                    <td>{ val.description }</td>
+                                                    <td>
+                                                        { val.company_name }
+                                                        <div className="location_name_column">
+                                                            <b>Location Name</b> <br />
+                                                            <span>{ val.location_name }</span>
+                                                        </div>
+                                                        <div className="sub_location_name_column">
+                                                            <b>Sub Location Name</b> <br />
+                                                            <span>{ val.sub_location_name }</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        { val.location_name }
+                                                    </td>
+                                                    <td>
+                                                        { val.sub_location_name }
+                                                    </td>
+                                                    <td>{ val.assigned_quantity }</td>
+                                                    <td>{ val.current_stored_quantity }</td>
 
-                                            </tr>
-                                        )
+                                                </tr>
+                                            )
 
-                                    }
-                                )
-                            }
-                        </tbody>
-                    </table>
+                                        }
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                     
                     {
                         !details.issued

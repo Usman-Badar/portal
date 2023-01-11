@@ -1,0 +1,8 @@
+08:33:48 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+08:42:47 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+

@@ -677,41 +677,48 @@ router.post('/inventory/products/create/inward', ( req, res ) => {
             }else 
             {
 
-                let query2 = "";
-                let params2 = [];
-                for ( let x = 0; x < product_attributes.length; x++ )
+                if ( product_attributes.length === 0 || !product_attributes )
                 {
-                    query2 = query2.concat("INSERT INTO `tbl_inventory_product_attributes`(`transaction_id`, `description`, `value_str`, `value_int`, `value_float`, `value_date`, `value_time`) VALUES (?,?,?,?,?,?,?);");
-                    params2.push(rslt[1][0].transaction_id);
-                    params2.push(product_attributes[x].description.toLowerCase());
-                    params2.push(product_attributes[x].type.toLowerCase() === 'value_str' ? product_attributes[x].value.toLowerCase() : null);
-                    params2.push(product_attributes[x].type.toLowerCase() === 'value_int' ? product_attributes[x].value.toLowerCase() : null);
-                    params2.push(product_attributes[x].type.toLowerCase() === 'value_float' ? product_attributes[x].value.toLowerCase() : null);
-                    params2.push(product_attributes[x].type.toLowerCase() === 'value_date' ? product_attributes[x].value.toLowerCase() : null);
-                    params2.push(product_attributes[x].type.toLowerCase() === 'value_time' ? product_attributes[x].value.toLowerCase() : null);
-                }
-
-                db.query(
-                    query2,
-                    params2,
-                    ( err ) => {
-            
-                        if( err )
-                        {
-            
-                            console.log( err );
-                            res.send(err);
-                            res.end();
-            
-                        }else 
-                        {
-                            res.send("success");
-                            res.end();
+                    res.send("success");
+                    res.end();
+                }else
+                {
+                    let query2 = "";
+                    let params2 = [];
+                    for ( let x = 0; x < product_attributes.length; x++ )
+                    {
+                        query2 = query2.concat("INSERT INTO `tbl_inventory_product_attributes`(`transaction_id`, `description`, `value_str`, `value_int`, `value_float`, `value_date`, `value_time`) VALUES (?,?,?,?,?,?,?);");
+                        params2.push(rslt[1][0].transaction_id);
+                        params2.push(product_attributes[x].description.toLowerCase());
+                        params2.push(product_attributes[x].type.toLowerCase() === 'value_str' ? product_attributes[x].value.toLowerCase() : null);
+                        params2.push(product_attributes[x].type.toLowerCase() === 'value_int' ? product_attributes[x].value.toLowerCase() : null);
+                        params2.push(product_attributes[x].type.toLowerCase() === 'value_float' ? product_attributes[x].value.toLowerCase() : null);
+                        params2.push(product_attributes[x].type.toLowerCase() === 'value_date' ? product_attributes[x].value.toLowerCase() : null);
+                        params2.push(product_attributes[x].type.toLowerCase() === 'value_time' ? product_attributes[x].value.toLowerCase() : null);
+                    }
+    
+                    db.query(
+                        query2,
+                        params2,
+                        ( err ) => {
+                
+                            if( err )
+                            {
+                
+                                console.log( err );
+                                res.send(err);
+                                res.end();
+                
+                            }else 
+                            {
+                                res.send("success");
+                                res.end();
+                                
+                            }
                             
                         }
-                        
-                    }
-                )
+                    )
+                }
                 
             }
             

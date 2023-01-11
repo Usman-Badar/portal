@@ -238,7 +238,7 @@ router.post('/inventory/item_request/request_to_store', ( req, res ) => {
 
     const assigned_products = JSON.parse(products);
     const code = new Date().getTime() + '_' + new Date().getDate() + (new Date().getMonth() + 1) + new Date().getFullYear();
-
+    
     db.query(
         "INSERT INTO `tbl_inventory_request_to_store`(`request_id`, `entry_code`, `requested_by`, `request_date`, `request_time`) VALUES (?,?,?,?,?);" +
         "SELECT id FROM tbl_inventory_request_to_store WHERE entry_code = ?",
@@ -258,11 +258,12 @@ router.post('/inventory/item_request/request_to_store', ( req, res ) => {
                 let params = [];
                 for ( let x = 0; x < assigned_products.length; x++ )
                 {
-                    attr_query = attr_query.concat("INSERT INTO `tbl_inventory_request_to_store_assigned_items`(`request_id`, `transaction_id`, `product_id`, `assigned_quantity`) VALUES (?,?,?,?);");
+                    attr_query = attr_query.concat("INSERT INTO `tbl_inventory_request_to_store_assigned_items`(`request_id`, `transaction_id`, `product_id`, `assigned_quantity`, `current_stored_quantity`) VALUES (?,?,?,?,?);");
                     params.push(rslt[1][0].id);
                     params.push(assigned_products[x].transaction_id);
                     params.push(assigned_products[x].product_id);
                     params.push(assigned_products[x].assigned_quantity);
+                    params.push(assigned_products[x].stored_quantity);
                 }
                 
                 db.query(
