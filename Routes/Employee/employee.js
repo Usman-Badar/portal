@@ -838,4 +838,34 @@ router.post('/employees/tickets/generate', ( req, res ) => {
 
 } );
 
+router.post('/employees/tickets/fetch/issued', ( req, res ) => {
+
+    const { emp_id } = req.body;
+
+    db.query(
+        "SELECT emp_tickets.*, employees.name, designations.designation_name FROM `emp_tickets` LEFT OUTER JOIN employees ON employees.emp_id = emp_tickets.emp_id LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code WHERE generated_by = ? ORDER BY ticket_id DESC;" +
+        "SELECT COUNT(ticket_id) AS y, ticket AS indexLabel, (SELECT COUNT(ticket_id) FROM emp_tickets  WHERE generated_by = ?) AS total_tickets_issued FROM `emp_tickets` WHERE generated_by = ? GROUP BY ticket ORDER BY ticket ASC;",
+        [ emp_id, emp_id, emp_id ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err )
+                res.status(500).send(err);
+                res.end();
+
+            }else 
+            {
+
+                res.send(rslt);
+                res.end();
+
+            }
+
+        }
+    );
+
+} );
+
 module.exports = router;

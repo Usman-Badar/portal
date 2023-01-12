@@ -358,6 +358,7 @@ const Dashboard = () => {
                         <Route exact path='/empdailyattendance' render={ () => <Sus content={ <DailyAttendance /> } /> } />
 
                         <Route exact path='/employeestickets' render={ () => <Sus content={ <EmpTickets /> } /> } />
+                        <Route exact path='/employeestickets/form' render={ () => <Sus content={ <EmpTickets /> } /> } />
 
 
                         {/* <Route exact path="/invtry" component={ Assets } />

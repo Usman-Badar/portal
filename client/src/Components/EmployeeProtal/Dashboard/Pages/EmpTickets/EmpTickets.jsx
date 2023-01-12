@@ -4,13 +4,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import $ from 'jquery';
 
-import { searchEmployees, getEmployees, generateTicket } from './Functions';
+import { searchEmployees, getEmployees, generateTicket, getIssuedTickets } from './Functions';
 const UI = lazy(() => import('./UI'));
 
 const EmpTickets = () => {
 
     const [ Keyword, setKeyword ] = useState();
     const [ Ticket, setTicket ] = useState();
+    const [ Tickets, setTickets ] = useState();
+    const [ Data, setData ] = useState([]);
     const [ Employee, setEmployee ] = useState();
     const [ Employees, setEmployees ] = useState();
 
@@ -38,7 +40,10 @@ const EmpTickets = () => {
                 <UI 
                     Keyword={ Keyword }
                     Employees={ Employees }
+                    Tickets={ Tickets }
+                    Data={ Data }
 
+                    getIssuedTickets={ ( emp_id ) => getIssuedTickets( emp_id, setTickets, setData ) }
                     setTicket={ setTicket }
                     setEmployee={ setEmployee }
                     searchEmployees={ (e) => searchEmployees( e, setKeyword, setEmployee ) }

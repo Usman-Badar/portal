@@ -303,6 +303,7 @@ textarea {
 
 td {
     word-break: break-all;
+    max-width: 150px;
 }
 
 .badge {

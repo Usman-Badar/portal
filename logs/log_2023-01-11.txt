@@ -6,3 +6,11 @@ TypeError: Cannot read properties of undefined (reading '0')
 type: error
 Error: net::ERR_FAILED at https://web.whatsapp.com/
 
+15:01:14 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+15:04:05 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+

@@ -90,6 +90,7 @@ const App = () => {
                     <Route exact path='/drive' render={ () => <Sus content={ <Dashboard /> } /> } />
 
                     <Route exact path="/employeestickets" render={ () => <Sus content={ <Dashboard /> } /> } />
+                    <Route exact path="/employeestickets/form" render={ () => <Sus content={ <Dashboard /> } /> } />
 
                     {/* LEAVE MODULE */}
                     

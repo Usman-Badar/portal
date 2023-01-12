@@ -1,0 +1,4 @@
+10:42:56 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+

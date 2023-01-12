@@ -113,3 +113,27 @@ export const generateTicket = (e, Employee, Ticket, toast, setEmployee, setTicke
     )
 
 }
+
+export const getIssuedTickets = ( emp_id, setTickets, setData ) => {
+
+    axios.post(
+        '/employees/tickets/fetch/issued',
+        {
+            emp_id: emp_id
+        }
+    ).then(
+        res => {
+
+            setTickets( res.data[0] );
+            setData( res.data[1] )
+
+        }
+    ).catch(
+        err => {
+
+            console.log( err );
+
+        }
+    )
+
+}
