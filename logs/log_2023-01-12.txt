@@ -2,3 +2,7 @@
 type: error
 Error: net::ERR_FAILED at https://web.whatsapp.com/
 
+13:58:27 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+

@@ -224,11 +224,28 @@ router.post('/newitemrequest', ( req, res ) => {
     let requestData = JSON.parse( request );
     let specificationsData = JSON.parse( specifications );
     const d = new Date( requestData.request_date );
+    let hod_approval = false;
+
+    specificationsData.forEach(
+        ( val ) => {
+
+            if ( val.hod_approval_required === 1 )
+            {
+                hod_approval = true;
+            }
+
+        }
+    );
+
+    if ( !hod_approval )
+    {
+        requestData.request_to = 20015;
+    }
 
     db.query(
-        "INSERT INTO `tbl_item_requests`(`location_code`, `company_code`, `request_by`, `request_date`, `request_time`, `received_by`, `received_date`, `received_time`) VALUES (?,?,?,?,?,?,?,?);" +
+        "INSERT INTO `tbl_item_requests`(`location_code`, `company_code`, `request_by`, `request_date`, `request_time`, `received_by`, `received_date`, `received_time`, `hod_approval_required`) VALUES (?,?,?,?,?,?,?,?,?);" +
         "SELECT id FROM tbl_item_requests WHERE request_by = ? AND received_by = ? AND received_time = ?;",
-        [ requestData.location_code, requestData.company_code, requestData.request_by, d, d.toTimeString(), requestData.request_to, d, d.toTimeString(), requestData.request_by, requestData.request_to, d.toTimeString().substring(0,8) ],
+        [ requestData.location_code, requestData.company_code, requestData.request_by, d, d.toTimeString(), requestData.request_to, d, d.toTimeString(), hod_approval ? 1 : 0, requestData.request_by, requestData.request_to, d.toTimeString().substring(0,8) ],
         ( err, rslt ) => {
 
             if( err )
@@ -244,8 +261,8 @@ router.post('/newitemrequest', ( req, res ) => {
                 for ( let x = 0; x < specificationsData.length; x++ )
                 {
                     db.query(
-                        "INSERT INTO `tbl_item_requests_specifications`(`request_id`, `item_id`, `reason`, `required_quantity`) VALUES (?,?,?,?);",
-                        [ rslt[1][0].id, specificationsData[x].item_id, specificationsData[x].reason, specificationsData[x].required_quantity ],
+                        "INSERT INTO `tbl_item_requests_specifications`(`request_id`, `item_id`, `reason`, `required_quantity`, `hod_approval_required`) VALUES (?,?,?,?,?);",
+                        [ rslt[1][0].id, specificationsData[x].item_id, specificationsData[x].reason, specificationsData[x].required_quantity, specificationsData[x].hod_approval_required ],
                         ( err ) => {
                 
                             if( err )
@@ -266,8 +283,50 @@ router.post('/newitemrequest', ( req, res ) => {
                                         "New item request initialized",
                                         'info'
                                     );
+
                                     res.send("Success");
                                     res.end();
+                                    // if ( !hod_approval )
+                                    // {
+                                    //     db.query(
+                                    //         "UPDATE tbl_item_requests SET status = ?, acted_by = ?, acted_date = ?, acted_time = ?, remarks = ? WHERE id = ?",
+                                    //         [ 'approved', requestData.request_to, d, d.toTimeString(), "The request has been approved by the system on behalf of the receiver, and diverted to the inventory department due to the items do not require H.O.D's approval.", rslt[1][0].id ],
+                                    //         ( err ) => {
+                                    
+                                    //             if( err )
+                                    //             {
+                                    
+                                    //                 console.log( err );
+                                    //                 res.status(500).send(err);
+                                    //                 res.end();
+                                    
+                                    //             }else 
+                                    //             {
+                                                 
+                                    //                 CreateLogs( 
+                                    //                     'tbl_item_requests', 
+                                    //                     rslt[1][0].id,
+                                    //                     "This request has been approved",
+                                    //                     'info'
+                                    //                 );
+                                    //                 CreateLogs( 
+                                    //                     'tbl_item_requests', 
+                                    //                     rslt[1][0].id,
+                                    //                     "Pending for delivery",
+                                    //                     'info'
+                                    //                 );
+                                    //                 res.send("Success");
+                                    //                 res.end();
+                                    
+                                    //             }
+                                    
+                                    //         }
+                                    //     )
+                                    // }else
+                                    // {
+                                    //     res.send("Success");
+                                    //     res.end();
+                                    // }
                                 }
                 
                             }

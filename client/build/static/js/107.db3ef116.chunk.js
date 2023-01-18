@@ -1,1 +1,0 @@
-(this.webpackJsonpclient=this.webpackJsonpclient||[]).push([[107],{594:function(e,n,t){"use strict";t.r(n);var c=t(1),i=t(0),s=Object(c.lazy)((function(){return t.e(68).then(t.bind(null,635))}));n.default=function(){return Object(i.jsx)(i.Fragment,{children:Object(i.jsx)(c.Suspense,{fallback:Object(i.jsx)("div",{children:"Loading...."}),children:Object(i.jsx)(s,{})})})}}}]);

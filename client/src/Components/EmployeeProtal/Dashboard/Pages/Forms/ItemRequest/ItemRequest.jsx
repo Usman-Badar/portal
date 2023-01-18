@@ -590,7 +590,8 @@ const ItemRequest = () => {
                     item_id: Entity.item_id,
                     name: Entity.name,
                     required_quantity: Entity.required_quantity,
-                    reason: Entity.reason
+                    reason: Entity.reason,
+                    hod_approval_required: Entity.hod_approval_required
                 }
                 setEditMode(false);
                 setIndex();
@@ -602,7 +603,8 @@ const ItemRequest = () => {
                         item_id: Entity.item_id,
                         name: Entity.name,
                         required_quantity: Entity.required_quantity,
-                        reason: Entity.reason
+                        reason: Entity.reason,
+                        hod_approval_required: Entity.hod_approval_required
                     }
                 );
             }
@@ -624,7 +626,8 @@ const ItemRequest = () => {
         const val ={
             ...Entity,
             item_id: StoreItems[index].id,
-            name: StoreItems[index].name
+            name: StoreItems[index].name,
+            hod_approval_required: StoreItems[index].hod_approval_required
         }
 
         setEntity( val );
@@ -1441,7 +1444,7 @@ const ItemRequest = () => {
                                         </>
                                         :null
                                     }
-                                    {
+                                    {/* {
                                         RequestDetails.details.status === 'approved' && RequestDetails.details.request_by !== AccessControls.emp_id
                                         ?
                                         JSON.parse(AccessControls.access).includes(529) || JSON.parse(AccessControls.access).includes(1)
@@ -1451,8 +1454,8 @@ const ItemRequest = () => {
                                         </>
                                         :null
                                         :null
-                                    }
-                                    {
+                                    } */}
+                                    {/* {
                                         RequestDetails.details.request_by !== AccessControls.emp_id
                                         ?
                                         JSON.parse(AccessControls.access).includes(529) || JSON.parse(AccessControls.access).includes(1)
@@ -1465,7 +1468,7 @@ const ItemRequest = () => {
                                         :null
                                         :null
                                         :null
-                                    }
+                                    } */}
                                 </select>
                                 :null
                             }
@@ -1574,7 +1577,7 @@ const ItemRequest = () => {
 
                                     <tr>
                                         <th>Sr No</th>
-                                        {/* <th>Status</th> */}
+                                        <th>H.O.D Approval Required</th>
                                         <th>Item Name</th>
                                         <th>Quantity</th>
                                         <th>Reason / Details</th>
@@ -1587,7 +1590,7 @@ const ItemRequest = () => {
                                                 return (
                                                     <tr>
                                                         <td>{ index + 1 }</td>
-                                                        {/* <td>{ val.new_added ? "new" : val.edited ? 'edited' : 'default' }</td> */}
+                                                        <td>{ val.hod_approval_required === 1 ? <span className='text-danger'>Reuqired</span> : <span className='text-primary'>Not Required</span> }</td>
                                                         {
                                                             JSON.parse(AccessControls.access).includes(529)
                                                             ||
@@ -1805,7 +1808,6 @@ const ItemRequest = () => {
                                     ( val, index ) => {
 
                                         const d = new Date(val.request_date);
-                                        console.log(val)
 
                                         return (
                                             <tr className="hover" key={ index } onClick={ () => OpenRequest(val.id) }>

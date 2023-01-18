@@ -213,3 +213,14 @@
     border: 0;
     color: #fff;
 }
+
+@media only screen and (max-width: 992px) {
+    .Profile {
+        grid-template-columns: 25fr 50fr 25fr;
+        padding: 0 20px;
+    }
+    
+    .Profile .Center .FirstContainer .detailsContainer {
+        grid-template-columns: 100fr;
+    }
+}

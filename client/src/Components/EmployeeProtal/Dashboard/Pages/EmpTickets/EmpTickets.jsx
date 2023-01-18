@@ -9,6 +9,7 @@ const UI = lazy(() => import('./UI'));
 
 const EmpTickets = () => {
 
+    const [ ShowModal, setShowModal ] = useState(false);
     const [ Keyword, setKeyword ] = useState();
     const [ Ticket, setTicket ] = useState();
     const [ Tickets, setTickets ] = useState();
@@ -42,7 +43,9 @@ const EmpTickets = () => {
                     Employees={ Employees }
                     Tickets={ Tickets }
                     Data={ Data }
+                    ShowModal={ ShowModal }
 
+                    setShowModal={ setShowModal }
                     getIssuedTickets={ ( emp_id ) => getIssuedTickets( emp_id, setTickets, setData ) }
                     setTicket={ setTicket }
                     setEmployee={ setEmployee }

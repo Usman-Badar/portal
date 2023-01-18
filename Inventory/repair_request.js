@@ -32,6 +32,7 @@ router.post('/inventory/new_repair_request', ( req, res ) => {
 
                 if ( !Attachments )
                 {
+                    console.log( err );
                     res.send(rslt[2][0]);
                     res.end();
                 }else
@@ -442,6 +443,7 @@ router.post('/inventory/complete_repair_request', ( req, res ) => {
             }else 
             {
 
+                console.log( Attachments )
                 if ( !Attachments )
                 {
                     res.send('error');
@@ -457,14 +459,14 @@ router.post('/inventory/complete_repair_request', ( req, res ) => {
                         arr = Attachments;
                     }
 
-                    for ( let x = 0; x < arr[0].length; x++ )
+                    for ( let x = 0; x < arr.length; x++ )
                     {
                         
-                        console.log( AttachmentName[x] );
+                        console.log( arr[x] );
                         // console.log( arr[x] );
                         db.query(
                             "INSERT INTO tbl_inventory_repair_request_attachments (attachment, request_id) VALUES (?,?);",
-                            [ 'assets/portal/assets/images/repair/' + AttachmentName[x], request_id ],
+                            [ 'assets/portal/assets/images/repair/' + arr[x].name, request_id ],
                             ( err ) => {
                     
                                 if( err )
@@ -488,7 +490,7 @@ router.post('/inventory/complete_repair_request', ( req, res ) => {
                                             }
                                             else {
                 
-                                                arr[0][x].mv('assets/portal/assets/images/repair/' + AttachmentName[x], (err) => {
+                                                arr[x].mv('assets/portal/assets/images/repair/' + AttachmentName, (err) => {
                                                         if (err) 
                                                         {
                                                         

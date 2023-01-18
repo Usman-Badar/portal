@@ -357,8 +357,7 @@ const Dashboard = () => {
                         <Route exact path='/profile/:path/:link' render={ () => <Sus content={ <EmployeeProfile /> } /> } />
                         <Route exact path='/empdailyattendance' render={ () => <Sus content={ <DailyAttendance /> } /> } />
 
-                        <Route exact path='/employeestickets' render={ () => <Sus content={ <EmpTickets /> } /> } />
-                        <Route exact path='/employeestickets/form' render={ () => <Sus content={ <EmpTickets /> } /> } />
+                        <Route exact path='/employeestickets/:path' render={ () => <Sus content={ <EmpTickets /> } /> } />
 
 
                         {/* <Route exact path="/invtry" component={ Assets } />

@@ -1,10 +1,13 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import './UI.css';
 
 import $ from 'jquery';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import Modal from '../../../../UI/Modal/Modal';
 
-const UI = ( { Data, Tickets, Employees, Keyword, searchEmployees, generateTicket, getIssuedTickets, getEmployees, setEmployee, setTicket } ) => {
+const UI = ( { ShowModal, Data, Tickets, Employees, Keyword, searchEmployees, setShowModal, generateTicket, getIssuedTickets, getEmployees, setEmployee, setTicket } ) => {
+
+    const history = useHistory();
 
     useLayoutEffect(
         () => {
@@ -38,6 +41,8 @@ const UI = ( { Data, Tickets, Employees, Keyword, searchEmployees, generateTicke
                         () => <Form
                             Employees={ Employees }
                             Keyword={ Keyword }
+                            history={ history }
+
                             searchEmployees={ searchEmployees }
                             generateTicket={ generateTicket }
                             getEmployees={ getEmployees }
@@ -46,11 +51,14 @@ const UI = ( { Data, Tickets, Employees, Keyword, searchEmployees, generateTicke
                         />
                     } 
                 />
-                <Route exact path="/employeestickets" render={ 
+                <Route exact path="/employeestickets/list" render={ 
                         () => <List 
                             Tickets={ Tickets }
                             Data={ Data }
+                            history={ history }
+                            ShowModal={ ShowModal }
 
+                            setShowModal={ setShowModal }
                             getIssuedTickets={ getIssuedTickets }
                         />
                     } 
@@ -62,7 +70,9 @@ const UI = ( { Data, Tickets, Employees, Keyword, searchEmployees, generateTicke
 
 export default UI;
 
-const List = ( { Data, Tickets, getIssuedTickets } ) => {
+const List = ( { ShowModal, history, Data, Tickets, setShowModal, getIssuedTickets } ) => {
+
+    const [ Content, setContent ] = useState(<></>);
 
     useEffect(
         () => {
@@ -72,8 +82,57 @@ const List = ( { Data, Tickets, getIssuedTickets } ) => {
         }, []
     );
 
+    const OpenDetails = ( index ) => {
+
+        if ( window.innerWidth <= 600 )
+        {
+            setContent(
+                <div className="p-3 rounded" style={ { fontSize: '13px', border: '1px solid lightgray' } }>
+                    <div className="d-flex align-items-center justify-content-between">
+                        <h5 className="font-weight-bold mb-0">Details</h5>
+                        {
+                            Tickets[index].ticket === 'green'
+                            ?
+                            <i className="las green la-trophy"></i>
+                            :
+                            Tickets[index].ticket === 'yellow'
+                            ?
+                            <i className="las yellow la-star-half-alt"></i>
+                            :
+                            <i className="las red la-exclamation"></i>
+                        }
+                    </div>
+                    <hr />
+
+                    <b>Employee</b>
+                    <br />
+                    <p>
+                        { Tickets[index].name } <br />
+                        { Tickets[index].designation_name }
+                    </p>
+
+                    <b>Generate Date</b>
+                    <br />
+                    <p>
+                        { new Date(Tickets[index].generated_date).toDateString() } <br />
+                        { Tickets[index].generated_time }
+                    </p>
+
+                    <b>Remarks</b>
+                    <br />
+                    <p>
+                        { Tickets[index].remarks }
+                    </p>
+                </div>
+            )
+            setShowModal(true);
+        }
+
+    }
+
     return (
         <>
+            <Modal show={ ShowModal } Hide={ () => setShowModal(!ShowModal) } content={ Content } />
             <div className="grid_container">
                 {
                     window.screen.availWidth <= 800
@@ -127,7 +186,9 @@ const List = ( { Data, Tickets, getIssuedTickets } ) => {
                             </div>
                         </div>
                         
-                        <hr />
+                        <hr className="mb-1" />
+
+                        <button className="btn submit d-block ml-auto mb-1" onClick={ () => history.push('/employeestickets/form') }>New</button>
                         
                         {
                             Tickets
@@ -152,7 +213,7 @@ const List = ( { Data, Tickets, getIssuedTickets } ) => {
                                             ( val, index ) => {
 
                                                 return (
-                                                    <tr key={ index } title={ val.remarks }>
+                                                    <tr key={ index } title={ val.remarks } onClick={ () => OpenDetails(index) }>
                                                         <td>
                                                             { index + 1 }
                                                         </td>
@@ -236,7 +297,7 @@ const List = ( { Data, Tickets, getIssuedTickets } ) => {
 
 }
 
-const Form = ( { Employees, Keyword, searchEmployees, generateTicket, getEmployees, setEmployee, setTicket } ) => {
+const Form = ( { history, Employees, Keyword, searchEmployees, generateTicket, getEmployees, setEmployee, setTicket } ) => {
 
     return (
         <form className="EmpTickets_container container-fluid" id="ticket_form" onSubmit={ generateTicket }>
@@ -319,6 +380,7 @@ const Form = ( { Employees, Keyword, searchEmployees, generateTicket, getEmploye
                 </div>
 
                 <div className="d-flex justify-content-end mt-3">
+                    <button className="btn green mr-3" type="button" onClick={ () => history.push('/employeestickets/list') }>Back</button>
                     <button className="btn submit" type="submit">Submit</button>
                 </div>
             </fieldset>

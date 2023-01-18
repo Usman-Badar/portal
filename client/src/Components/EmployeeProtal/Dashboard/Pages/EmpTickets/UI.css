@@ -84,7 +84,8 @@
     font-size: 11px;
 }
 
-.emp_tickets_container .tickets_issued .table i {
+.emp_tickets_container .tickets_issued .table i,
+.emp_tickets_container .Attandence_Request_Div_Content i {
     font-size: 20px;
     border-radius: 50%;
     display: flex;
@@ -94,17 +95,20 @@
     height: 40px;
 }
 
-.emp_tickets_container .tickets_issued .table i.green {
+.emp_tickets_container .tickets_issued .table i.green,
+.emp_tickets_container .Attandence_Request_Div_Content i.green {
     border: 2px solid var(--success);
     color: var(--success);
 }
 
-.emp_tickets_container .tickets_issued .table i.yellow {
+.emp_tickets_container .tickets_issued .table i.yellow,
+.emp_tickets_container .Attandence_Request_Div_Content i.yellow {
     border: 2px solid var(--warning);
     color: var(--warning);
 }
 
-.emp_tickets_container .tickets_issued .table i.red {
+.emp_tickets_container .tickets_issued .table i.red,
+.emp_tickets_container .Attandence_Request_Div_Content i.red {
     border: 2px solid var(--orange);
     color: var(--orange);
 }
@@ -397,5 +401,10 @@
 
     .emp_tickets_container .EmpTickets_container .tickets__selection_container .ticket:nth-child(3)::after {
         left: 30%;
+    }
+
+    .emp_tickets_container .tickets_issued .table th:nth-child(4),
+    .emp_tickets_container .tickets_issued .table td:nth-child(4) {
+        display: none;
     }
 }
