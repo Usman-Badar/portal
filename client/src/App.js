@@ -72,14 +72,6 @@ const App = () => {
                     <Route exact path='/logout' render={ () => <Sus content={ <Logout /> } /> } />
                     <Route exact path='/descuss_chat/:id' render={ () => <Sus content={ <Dashboard /> } /> } />
 
-                    <Route exact path='/purchaserequisition/view=:view' render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path='/purchaserequisition/view=form' render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path='/purchaserequisition/view=:view/:pr_id' render={ () => <Sus content={ <Dashboard /> } /> } />
-
-                    <Route exact path='/purchaserorder' render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path='/purchaseorder/view=:view' render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path='/purchaseorder/view=:view/:id/:id' render={ () => <Sus content={ <Dashboard /> } /> } />
-
                     <Route exact path='/attdevices' render={ () => <Sus content={ <Dashboard /> } /> } />
                     <Route exact path='/guests' render={ () => <Sus content={ <Dashboard /> } /> } />
 
@@ -169,12 +161,9 @@ const App = () => {
                     <Route exact path='/invtry_Login' render={ () => <Sus content={ <InvtryLogin /> } /> } />
                     <Route exact path='/invtry_logout' render={ () => <Sus content={ <InvtryLogOut /> } /> } />
 
-                    <Route exact path='/invtry/view=purchase_order' render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path="/invtry/requests=purchase_order" render={ () => <Sus content={ <Dashboard /> } /> } /> */}
+                     */}
 
                     {/* VIEWS */}
-                    <Route exact path="/view=purchase_order/:id/:id" render={ () => <Sus content={ <POPrintUI /> } /> } />
-                    <Route exact path="/view=purchase_requisition/:id" render={ () => <Sus content={ <PRprintUI /> } /> } />
                     <Route exact path="/view=quotations/:id" render={ () => <Sus content={ <Quatation /> } /> } />
                     <Route exact path="/view=bills/:id" render={ () => <Sus content={ <Bills /> } /> } />
                     <Route exact path="/view=vouchers/:id" render={ () => <Sus content={ <Vouchers /> } /> } />
@@ -183,11 +172,6 @@ const App = () => {
                         For Procurement
                     */}
 
-                    <Route exact path="/purchaserequisition/home" render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path="/purchaserequisition/view=:view&&id=:pr_id" render={ () => <Sus content={ <Dashboard /> } /> } />
-
-                    <Route exact path="/purchaseorder/home" render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path="/purchaseorder/window=:view&&id=:id" render={ () => <Sus content={ <Dashboard /> } /> } />
 
                     <Route exact path="/employment_setup" render={ () => <Sus content={ <Dashboard /> } /> } />
                     <Route exact path="/employment_setup/:view" render={ () => <Sus content={ <Dashboard /> } /> } />
@@ -210,6 +194,11 @@ const App = () => {
 
                     {/* REPAIR REQUEST */}
                     <Route exact path="/repair_request" render={ () => <Sus content={ <Dashboard /> } /> } />
+
+                    {/* PURCAHSE REQUISITION */}
+                    <Route exact path="/purchase/requisition/form" render={ () => <Sus content={ <Dashboard /> } /> } />
+                    <Route exact path="/purchase/requisition/requests" render={ () => <Sus content={ <Dashboard /> } /> } />
+                    <Route exact path="/purchase/requisition/details" render={ () => <Sus content={ <Dashboard /> } /> } />
 
                     
                 </Switch>

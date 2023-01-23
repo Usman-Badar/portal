@@ -1,0 +1,91 @@
+.purchase_requisition {
+    padding: 0 20px;
+}
+
+.purchase_requisition .purchase_requisition_form {
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.purchase_requisition .purchase_requisition_form .form-control {
+    font-size: 12px;
+}
+
+.purchase_requisition .purchase_requisition_form .flex_container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+.purchase_requisition .purchase_requisition_form .flex_container > div {
+    width: 50%;
+}
+
+.purchase_requisition .purchase_requisition_form .grid_container {
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    grid-gap: 20px;
+}
+
+.purchase_requisition .purchase_requisition_form .table {
+    font-size: 10px;
+}
+
+.purchase_requisition .purchase_requisition_form .table thead tr,
+.purchase_requisition .purchase_requisition_form .table tr #total_calculated_amount_label {
+    background-color: var(--lightgray);
+}
+
+.purchase_requisition .Attandence_Request_Div .Attandence_Request_Div_Content {
+    width: 50%;
+}
+
+.purchase_requisition .Attandence_Request_Div .Attandence_Request_Div_Content .modal_content input.quotations_file {
+    width: 80px;
+    margin-right: 30px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.purchase_requisition .Attandence_Request_Div .Attandence_Request_Div_Content .modal_content .quotations_grid_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.purchase_requisition .Attandence_Request_Div .Attandence_Request_Div_Content .modal_content .quotations_grid_container > div {
+    width: 30%;
+    text-align: center;
+}
+
+.purchase_requisition .Attandence_Request_Div .Attandence_Request_Div_Content .modal_content .quotations_grid_container img {
+    border: 1px solid lightgray;
+    width: 100%;
+    display: block;
+    height: 250px;
+}
+
+.purchase_requisition .purchase_requisition_form .purchase_requests .table tbody tr {
+    transition: .5s;
+    cursor: pointer;
+}
+
+.purchase_requisition .purchase_requisition_form .purchase_requisition_details_2 .grid_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.purchase_requisition .purchase_requisition_form .purchase_requisition_details_2 .grid_container img {
+    border: 1px solid lightgray;
+    width: 20%;
+    display: block;
+    height: 250px;
+}

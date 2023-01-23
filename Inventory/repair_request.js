@@ -340,8 +340,9 @@ router.post('/inventory/assign_repair_request', ( req, res ) => {
     const d = new Date();
 
     db.query(
-        "UPDATE tbl_inventory_repair_requests SET assign_to = ?, assign_date = ?, assign_time = ?, status = ? WHERE request_id = ?;",
-        [ assign_to, d, d.toTimeString(), 'working', request_id ],
+        "UPDATE tbl_inventory_repair_requests SET assign_to = ?, assign_date = ?, assign_time = ?, status = ? WHERE request_id = ?;" +
+        "SELECT tbl_inventory_repair_requests.request_date, tbl_inventory_repair_requests.request_time, employee.name, employee.cell from tbl_inventory_repair_requests LEFT OUTER JOIN employee ON employee.emp_id = tbl_inventory_repair_requests.requested_by WHERE tbl_inventory_repair_requests.request_id = ?;",
+        [ assign_to, d, d.toTimeString(), 'working', request_id, request_id ],
         ( err, rslt ) => {
 
             if( err )
@@ -353,6 +354,7 @@ router.post('/inventory/assign_repair_request', ( req, res ) => {
             }else 
             {
 
+                SendWhatsappNotification( null, null, "Hi " + rslt[1][0].name, "Inventory Department has assigned you a task related to a repar request, kindly contact our inventory department", rslt[1][0].cell );
                 res.send('success');
                 res.end();
                 

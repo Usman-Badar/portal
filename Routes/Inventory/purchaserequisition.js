@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../db/connection');
 const fs = require('fs');
+const MakeDir = require('fs');
 const moment = require('moment');
 const io = require('../../server');
 
@@ -1700,6 +1701,215 @@ router.post('/generatepronitemrequest', ( req, res ) => {
 
         }
     )
+
+} );
+
+router.post('/purchase/requisition/submittion&&submit_by=employee', ( req, res ) => {
+
+    const { specifications, data, note, requested_by } = req.body;
+
+    const code = new Date().getTime() + '_' + new Date().getDate() + (new Date().getMonth() + 1) + new Date().getFullYear();
+    const received_specifications = JSON.parse( specifications );
+    const received_data = JSON.parse( data );
+    let quotations_attached = 0;
+    const submitted_to = 20015;
+    if ( req.files )
+    {
+        const { Attachments } = req.files;
+        quotations_attached = Attachments.length;
+    }
+
+    db.query(
+        "INSERT INTO `tbl_inventory_purchase_requisition`(`entry`,`note`, `company_code`, `location_code`, `new_purchase`, `repair_replacement`, `budgeted`, `not_budgeted`, `invoice_attached`, `reason`, `requested_by`, `requested_date`, `requested_time`, `total_value`, `no_items_requested`, `submitted_to`, `quotations_attached`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);" +
+        "SELECT pr_id FROM tbl_inventory_purchase_requisition WHERE entry = ?;",
+        [ code, note, received_data.company_code, received_data.location_code, received_data.new_purchase_checkbox ? 1 :0, received_data.repair_replacement_checkbox ? 1 :0, received_data.budgeted_checkbox ? 1 :0, received_data.not_budgeted_checkbox ? 1 :0, received_data.invoice_attached_checkbox ? 1 :0, received_data.reason, requested_by, new Date(), new Date().toTimeString(), received_data.total_calculated_amount, received_specifications.length, submitted_to, quotations_attached, code ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                // console.log( rslt[0] )
+                for ( let x = 0; x < received_specifications.length; x++ )
+                {
+                    db.query(
+                        "INSERT INTO `tbl_inventory_purchase_requisition_specifications`(`pr_id`, `sr_no`, `description`, `quantity`, `estimated_cost`, `total_estimated_cost`, `entered_by`, `entered_date`) VALUES (?,?,?,?,?,?,?,?);",
+                        [ rslt[1][0].pr_id, received_specifications[x].specification_serial_number, received_specifications[x].specification_description, received_specifications[x].specification_quantity, received_specifications[x].specification_est_cost, received_specifications[x].specification_total_cost, requested_by, new Date() ],
+                        ( err ) => {
+                
+                            if( err )
+                            {
+                
+                                console.log( err );
+                                res.send( err );
+                                res.end();
+                
+                            }
+                
+                        }
+                    );
+                }
+
+                if ( req.files )
+                {
+                    const { Attachments } = req.files;
+                    let arr;
+                    if ( typeof(Attachments) === 'object' && !Attachments.length )
+                    {
+                        arr = [Attachments];
+                    }else
+                    {
+                        arr = Attachments;
+                    }
+                    for ( let y = 0; y < arr.length; y++ )
+                    {
+                        MakeDir.mkdir('assets/inventory/assets/images/purchase_requisition',
+                            { recursive: true },
+                            (err) => {
+                                if (err) {
+    
+                                    console.log( err );
+                                    res.status(500).send(err);
+                                    res.end();
+                                    
+                                }
+                                else {
+    
+                                    arr[y].mv('assets/inventory/assets/images/purchase_requisition/' + arr[y].name, (err) => {
+                                            if (err) 
+                                            {
+                                            
+                                                console.log( err );
+                                                res.status(500).send(err);
+                                                res.end();
+                    
+                                            }else
+                                            {
+                                                db.query(
+                                                    "INSERT INTO `tbl_inventory_purchase_requisition_quotations`(`quotation`, `uploaded_by`, `uploaded_date`, `uploaded_time`, `pr_id`) VALUES (?,?,?,?,?);",
+                                                    [ 'assets/inventory/assets/images/purchase_requisition/' + arr[y].name, requested_by, new Date(), new Date().toTimeString(), rslt[1][0].pr_id ],
+                                                    ( err ) => {
+                                            
+                                                        if( err )
+                                                        {
+                                            
+                                                            console.log( err );
+                                                            res.send( err );
+                                                            res.end();
+                                            
+                                                        }
+                                            
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    )
+                                    
+                                }
+                            }
+                        )
+
+                        if ( (y+1) === arr.length )
+                        {
+                            res.send("success");
+                            res.end();
+                        }
+                    }
+                }else
+                {
+                    res.send("success");
+                    res.end();
+                }
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/requisition/load/requests', ( req, res ) => {
+
+    const { emp_id } = req.body;
+
+    db.query(
+        "SELECT tbl_inventory_purchase_requisition.status,  \
+        tbl_inventory_purchase_requisition.no_items_requested,  \
+        tbl_inventory_purchase_requisition.total_value,  \
+        tbl_inventory_purchase_requisition.requested_date,  \
+        tbl_inventory_purchase_requisition.requested_time,  \
+        tbl_inventory_purchase_requisition.pr_id,  \
+        companies.company_name, \
+        locations.location_name \
+        FROM `tbl_inventory_purchase_requisition`  \
+        LEFT OUTER JOIN companies ON tbl_inventory_purchase_requisition.company_code = companies.company_code \
+        LEFT OUTER JOIN locations ON tbl_inventory_purchase_requisition.location_code = locations.location_code \
+        WHERE requested_by = ? OR request_submitted_on_behalf = ? ORDER BY pr_id DESC;",
+        [ emp_id, emp_id ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                
+                res.send(rslt);
+                res.end();
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/requisition/details', ( req, res ) => {
+
+    const { pr_id } = req.body;
+
+    db.query(
+        "SELECT tbl_inventory_purchase_requisition.*,  \
+        companies.company_name, \
+        behalf_employee.name AS behalf_employee_name, \
+        submit_to_employee.name AS submit_to_employee_name, \
+        locations.location_name \
+        FROM `tbl_inventory_purchase_requisition`  \
+        LEFT OUTER JOIN companies ON tbl_inventory_purchase_requisition.company_code = companies.company_code \
+        LEFT OUTER JOIN locations ON tbl_inventory_purchase_requisition.location_code = locations.location_code \
+        LEFT OUTER JOIN employees behalf_employee ON tbl_inventory_purchase_requisition.request_submitted_on_behalf = behalf_employee.emp_id \
+        LEFT OUTER JOIN employees submit_to_employee ON tbl_inventory_purchase_requisition.submitted_to = submit_to_employee.emp_id \
+        WHERE pr_id = ?;" +
+        "SELECT * FROM `tbl_inventory_purchase_requisition_specifications` WHERE pr_id = ?;" +
+        "SELECT * FROM `tbl_inventory_purchase_requisition_quotations` WHERE pr_id = ?;",
+        [ pr_id, pr_id, pr_id ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                
+                res.send(rslt);
+                res.end();
+
+            }
+
+        }
+    );
 
 } );
 

@@ -275,39 +275,22 @@ router.get('/getlastcompanycode', ( req, res ) => {
 
 router.get('/getallcompanies', ( req, res ) => {
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        "SELECT * FROM companies WHERE Status_View = 'Y' GROUP BY company_name ASC",
+        ( err, rslt ) => {
 
-            if ( err )
+            if( err )
             {
 
-                res.status(503).send(err);
+                res.status(500).send(err);
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "SELECT * FROM companies GROUP BY company_code DESC",
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
-            
-                            res.status(500).send(err);
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-            
-                            res.send( rslt );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
-                    }
-                )
+
+                res.send( rslt );
+                res.end();
+
             }
 
         }

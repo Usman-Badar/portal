@@ -26,7 +26,7 @@
 }
 
 .guests_container .Attandence_Request_Div .Attandence_Request_Div_Content {
-    width: 80% !important;
+    width: 70% !important;
 }
 
 .guests_container .modal_content {
@@ -44,4 +44,31 @@
 .guests_container .modal_content .flex_container .partition {
     width: 50%;
     padding: 10px;
+}
+
+.guests_container .modal_content .flex_container .partition {
+    max-height: 50vh;
+    overflow-y: overlay;
+}
+
+.guests_container .modal_content .flex_container .partition .guest {
+    border-bottom: 1px solid lightgray;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: .5s;
+    font-size: 11px;
+}
+
+.guests_container .modal_content .flex_container .partition .guest:hover {
+    background-color: var(--lightgray);
+}
+
+@media only screen and (max-width: 992px)
+{
+    .guests_container .list_content .table tr th:nth-child(1),
+    .guests_container .list_content .table tr td:nth-child(1) {
+        display: none;
+    }
 }

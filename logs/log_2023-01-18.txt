@@ -6,3 +6,7 @@ TypeError: Cannot read properties of undefined (reading '0')
 type: error
 ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
 
+16:32:15 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+

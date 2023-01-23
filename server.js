@@ -276,6 +276,7 @@ app.use( require('./Management/attendance') );
 
 // AI - AUTO SYSTEM
 app.use( require('./Routes/AI/reminders') );
+app.use( require('./Routes/AI/signature') );
 
 
 sslserver.listen(process.env.SERVER_PORT, () => {

@@ -26,9 +26,6 @@ import socket from '../../../io';
 const SideBar = lazy( () => import('./Components/SideBar/SideBar') );
 const TopBar = lazy( () => import('./Components/TopBar/TopBar') );
 const Descussion = lazy( () => import('./Pages/Descussion/Descussion') );
-const PurchaseRequisition = lazy( () => import('./Pages/Forms/PurchaseRequisition/Employee_Requisition') );
-const PurchaseOrder = lazy( () => import('./Pages/Forms/PurchaseOrder/PurchaseOrder') );
-// const Viewpurchaseorder = lazy( () => import('./Pages/Inventory/ViewPurchaseOrder/ViewPurchaseOrder') );
 const Devices = lazy( () => import('./Pages/Attendance/Devices/Devices') );
 const EmployeeProfile = lazy( () => import('./Pages/EmployeeProfile/EmployeeProfile') );
 const DailyAttendance = lazy( () => import('./Pages/EmployeeProfile/DailyAttendance/DailyAttendance') );
@@ -67,9 +64,6 @@ const View_Emp_Attendance = lazy( () => import('./Pages/View_Emp_Attendance/View
 // const InvtryLocation = lazy( () => import(  './Pages/Inventory/InvtryLocation/InvtryLocation' ) );
 // const InvtrySubLocations = lazy( () => import(  './Pages/Inventory/InvtryLocation/InvtrySubLocations/InvtrySubLocations' ) );
 
-const ViewPurchaseRequisition = lazy( () => import( './Pages/Procurement/ViewPurchaseRequisition/ViewPurchaseRequisition' ) );
-const ViewPurchaseOrder = lazy( () => import( './Pages/Procurement/ViewPurchaseOrder/ViewPurchaseOrder' ) );
-
 const EmploymentForm = lazy( () => import( './Pages/Forms/EmployementSetup/EmployementForm' ) );
 const EmploymentRequests = lazy( () => import( './Pages/Forms/EmployementSetup/Employement_Request/Employement_Request' ) );
 const ViewEmployees = lazy( () => import( './Pages/Forms/EmployementSetup/View_Employees/View_Employees' ) );
@@ -83,6 +77,8 @@ const ItemRequest = lazy( () => import('./Pages/Forms/ItemRequest/ItemRequest') 
 const RepairRequest = lazy( () => import('./Pages/Forms/RepairRequest/RepairRequest') );
 
 const EmpTickets = lazy( () => import('./Pages/EmpTickets/EmpTickets') );
+
+const PurchaseRequisition = lazy( () => import('./Pages/Forms/PurchaseRequisition/PurchaseRequisition') );
 
 const Dashboard = () => {
     
@@ -321,14 +317,6 @@ const Dashboard = () => {
 
                         <Route exact path='/chat' render={ () => <Sus content={ <Chat /> } /> } />
 
-                        <Route exact path='/purchaserequisition/view=home' render={ () => <Sus content={ <PurchaseRequisition /> } /> } />
-                        <Route exact path='/purchaserequisition/view=form' render={ () => <Sus content={ <PurchaseRequisition /> } /> } />
-                        <Route exact path='/purchaserequisition/view=:view/:pr_id' render={ () => <Sus content={ <PurchaseRequisition /> } /> } />
-                        
-                        <Route exact path='/purchaserorder' render={ () => <Sus content={ <PurchaseOrder /> } /> } />
-                        <Route exact path='/purchaseorder/view=:view' render={ () => <Sus content={ <PurchaseOrder /> } /> } />
-                        <Route exact path='/purchaseorder/view=:view/:id/:id' render={ () => <Sus content={<PurchaseOrder />}  /> }/>
-
                         <Route exact path='/attdevices' render={ () => <Sus content={ <Devices /> } /> } />
                         <Route exact path='/guests' render={ () => <Sus content={ <Guests /> } /> } />
 
@@ -373,15 +361,7 @@ const Dashboard = () => {
 
                         <Route exact path="/invtry_locations" component={InvtryLocation} />
                         <Route exact path="/invtry_locations/invtrysublocations/:id" component={InvtrySubLocations} />
-                        
-                        <Route exact path='/invtry/view=purchase_order' component={ PurchaseOrder } />
-                        <Route exact path='/invtry/requests=purchase_order' component={ Viewpurchaseorder } /> */}
-
-                        <Route exact path="/purchaserequisition/home" render={ () => <Sus content={ <ViewPurchaseRequisition /> } /> } />
-                        <Route exact path="/purchaserequisition/view=:view&&id=:pr_id" render={ () => <Sus content={ <ViewPurchaseRequisition /> } /> } />
-                        
-                        <Route exact path="/purchaseorder/home" render={ () => <Sus content={ <ViewPurchaseOrder /> } /> } />
-                        <Route exact path="/purchaseorder/window=:view&&id=:id" render={ () => <Sus content={ <ViewPurchaseOrder /> } /> } />
+                         */}
                         
                         <Route exact path="/employment_setup" render={ () => <Sus content={ <EmploymentForm /> } /> } />
                         <Route exact path="/employment_setup/form" render={ () => <Sus content={ <EmploymentForm /> } /> } />
@@ -408,6 +388,11 @@ const Dashboard = () => {
 
                         {/* REPAIR REQUEST */}
                         <Route exact path="/repair_request" render={ () => <Sus content={ <RepairRequest /> } /> } />
+                        
+                        {/* PURCAHSE REQUISITION */}
+                        <Route exact path="/purchase/requisition/form" render={ () => <Sus content={ <PurchaseRequisition /> } /> } />
+                        <Route exact path="/purchase/requisition/requests" render={ () => <Sus content={ <PurchaseRequisition /> } /> } />
+                        <Route exact path="/purchase/requisition/details" render={ () => <Sus content={ <PurchaseRequisition /> } /> } />
                     </div>
 
                 </div>

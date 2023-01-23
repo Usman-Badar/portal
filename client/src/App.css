@@ -102,6 +102,10 @@ input[type='checkbox'] {
     color: #fff !important;
 }
 
+[contenteditable] {
+    outline: 0px solid transparent;
+}
+
 #root {
     --black: #3A5579;
     --dark-black: #272F3E;
@@ -304,6 +308,35 @@ textarea {
 td {
     word-break: break-all;
     max-width: 150px;
+}
+
+.status_div {
+    border-radius: 20px;
+    padding: 2px 15px 1px;
+    width: max-content;
+    font-size: 10px;
+    text-transform: capitalize;
+}
+
+.status_div.authorized {
+    background: var(--dark-c-green);
+}
+
+.status_div.sent {
+    background: var(--dark-black);
+}
+
+.status_div.accepted {
+    background: var(--success);
+}
+
+.status_div.rejected {
+    background: var(--orange);
+}
+
+.status_div.canceled {
+    background: var(--black);
+    color: #fff !important;
 }
 
 .badge {

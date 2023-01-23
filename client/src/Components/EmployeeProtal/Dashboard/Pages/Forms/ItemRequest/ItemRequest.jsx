@@ -1022,7 +1022,7 @@ const ItemRequest = () => {
                             </div>
                             <div className="d-flex w-100">
                                 <div className="mr-1 w-50">
-                                <label className="mb-0"> Delivery / Work Location </label>
+                                    <label className="mb-0"> Delivery / Work Location </label>
                                     <select className="form-control form-control-sm mb-2" log='location_code' onChange={ onChangeHandler } name="location_code" value={ Item.location_code }>
                                         <option value=''>Select the option</option>
                                         {
@@ -1436,7 +1436,7 @@ const ItemRequest = () => {
                                         :null
                                     }
                                     {
-                                        RequestDetails.details.status === 'sent' && RequestDetails.details.request_by !== AccessControls.emp_id
+                                        RequestDetails.details.status === 'sent'
                                         ?
                                         <>
                                             <option value="approve">approve</option>

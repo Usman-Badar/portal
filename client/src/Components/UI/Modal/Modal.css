@@ -7,6 +7,8 @@
     top: 0;
     left: 0;
     z-index: 1;
+    font-size: 12px;
+    overflow: hidden;
 }
 
 .Attandence_Request_Div .dark {
@@ -22,7 +24,6 @@
 .Attandence_Request_Div_Content2 {
     animation: popups .4s linear 1 forwards alternate;
     opacity: 0;
-    transform: scale(0.8);
 }
 
 .Attandence_Request_Div .Attandence_Request_Div_Content {
@@ -32,8 +33,19 @@
     border-radius: 10px;
     width: 30%;
     max-height: 85vh;
-    overflow-y: auto;
+    overflow-y: overlay;
+    overflow-x: hidden;
     z-index: 1001;
+    position: relative;
+}
+
+.Attandence_Request_Div .Attandence_Request_Div_Content .lar.cross {
+    position: absolute;
+    font-size: 20px;
+    cursor: pointer;
+    top: 15px;
+    right: 15px;
+    z-index: 1002;
 }
 
 @media only screen and (max-width: 992px) {

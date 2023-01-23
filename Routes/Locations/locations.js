@@ -137,7 +137,7 @@ router.post('/deletelocation', ( req, res ) => {
 router.get('/getalllocations', ( req, res ) => {
 
     db.query(
-        "SELECT * FROM locations",
+        "SELECT * FROM locations ORDER BY location_name ASC;",
         ( err, rslt ) => {
 
             if( err )

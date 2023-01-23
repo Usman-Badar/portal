@@ -156,50 +156,35 @@ router.post('/getthatempguestallmeetings', ( req, res ) => {
 
     const { guestID, empID } = req.body;
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        "\
+        SELECT \
+        guest_meetings.meeting_date, \
+        guest_meetings.meeting_time, \
+        guest_meetings.guest_off_time \
+        FROM employees  \
+        RIGHT OUTER JOIN guest_meetings ON employees.emp_id = guest_meetings.emp_id  \
+        RIGHT OUTER JOIN guests ON guest_meetings.guest_id = guests.id  \
+        WHERE employees.emp_id = " + empID + " AND guest_meetings.guest_id = " + guestID + " \
+        ORDER BY guest_meetings.id DESC;",
+        ( err, rslt ) => {
 
-            if ( err )
+            if( err )
             {
-                res.status(503).send(err);
+
+                res.status(500).send(err);
                 res.end();
 
-            }else
+            }else 
             {
-                connection.query(
-                    "\
-                    SELECT \
-                    guest_meetings.meeting_time, \
-                    ADDDATE(guest_meetings.meeting_date, INTERVAL 1 DAY) meeting_date \
-                    FROM employees  \
-                    RIGHT OUTER JOIN guest_meetings ON employees.emp_id = guest_meetings.emp_id  \
-                    RIGHT OUTER JOIN guests ON guest_meetings.guest_id = guests.id  \
-                    WHERE employees.emp_id = " + empID + " AND guest_meetings.guest_id = " + guestID + " \
-                    ORDER BY guest_meetings.id DESC;",
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
-            
-                            res.status(500).send(err);
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-            
-                            res.send( rslt );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
-                    }
-                )
+
+                res.send( rslt );
+                res.end();
+
             }
 
         }
-    );
+    )
 
 } );
 

@@ -8,7 +8,9 @@ function Guests() {
     
     const [ Employee, setEmployee ] = useState();
     const [ Employees, setEmployees ] = useState([]);
+    const [ Guests, setGuests ] = useState([]);
     const [ Filter, setFilter ] = useState();
+    const [ SelectedGuestMeetings, setSelectedGuestMeetings ] = useState();
 
     useEffect(
         () => {
@@ -32,9 +34,50 @@ function Guests() {
 
     };
 
-    const ViewDetails = ( index ) => {
+    const ViewDetails = ( index, ) => {
 
         setEmployee( Employees[index] );
+        setGuests([]);
+
+        const Data = new FormData();
+        Data.append('empID', Employees[index].emp_id);
+
+        axios.post('/getthatemployeeallguests', Data).then( res => {
+            
+            setGuests( res.data );
+
+        } ).catch( err => {
+
+            console.log( err );
+
+        } );
+
+    }
+
+    const ViewGuestDetails = ( guestID, empID ) => {
+
+        const Data = new FormData();
+        Data.append('empID', empID);
+        Data.append('guestID', guestID);
+        setSelectedGuestMeetings();
+
+        axios.post('/getthatempguestallmeetings', Data).then( res => {
+            
+            setSelectedGuestMeetings( res.data );
+
+        } ).catch( err => {
+
+            console.log( err );
+
+        } );
+
+    }
+
+    const hideModal = () => {
+
+        setEmployee();
+        setGuests([]);
+        setSelectedGuestMeetings([]);
 
     }
 
@@ -45,7 +88,7 @@ function Guests() {
                 {
                     Employee
                     ?
-                    <Modal show={ true } Hide={ () => setEmployee() } content={ <ModalContent Employee={ Employee } /> } />
+                    <Modal show={ true } Hide={ hideModal } content={ <ModalContent SelectedGuestMeetings={ SelectedGuestMeetings } Guests={ Guests } Employee={ Employee } ViewGuestDetails={ ViewGuestDetails } /> } />
                     :null
                 }
 
@@ -175,7 +218,7 @@ const ListView = ( { Employees, Filter, setFilter, ViewDetails } ) => {
 
 }
 
-const ModalContent = ( { Employee } ) => {
+const ModalContent = ( { SelectedGuestMeetings, Employee, Guests, ViewGuestDetails } ) => {
 
     return (
         <>
@@ -192,15 +235,74 @@ const ModalContent = ( { Employee } ) => {
                 
                 <div className="flex_container">
                     
-                    <h5 className='partition p-0'>Guests</h5>
-                    <h5 className='partition p-0'>Meeting Details</h5>
+                    <p className='partition mb-0 font-weight-bold p-0 d-flex justify-content-between'>
+                        <span>Guests</span>
+                        <span>Total: {Guests.length}</span>
+                    </p>
+                    <p className='partition mb-0 font-weight-bold p-0 d-flex justify-content-between'>
+                        <span>Meetings</span>
+                        <span>Total: {SelectedGuestMeetings ? SelectedGuestMeetings.length : 0}</span>
+                    </p>
 
                 </div>
 
                 <div className="flex_container">
 
-                    <div className='partition bg-white'></div>
-                    <div className='partition bg-white'></div>
+                    <div className='partition bg-white'>
+                        {
+                            Guests.map(
+                                ( val, index ) => {
+                                    return (
+                                        <div className='guest' key={index} onClick={ () => ViewGuestDetails( val.id, val.emp_id ) }>
+                                            <img src={ 'images/guests/' + val.guest_image } className="rounded-circle mr-2" alt='Guest photo' width='40' height='40' />
+                                            <div>
+                                                <p className="mb-0"><b>{ val.guest_name }</b></p>
+                                                <p className="mb-0">{ val.guest_phone }</p>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            )
+                        }
+                    </div>
+                    <div className='partition bg-white'>
+
+                        {
+                            !SelectedGuestMeetings
+                            ?
+                            <p className="text-center mb-0">Please Wait...</p>
+                            :
+                            SelectedGuestMeetings.length === 0
+                            ?
+                            <p className="text-center mb-0">No Details Found</p>
+                            :
+                            <table className="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Meeting Date</th>
+                                        <th>Meeting Start-Time</th>
+                                        <th>Meeting End-Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        SelectedGuestMeetings.map(
+                                            ( val, index ) => {
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{ new Date(val.meeting_date).toDateString() }</td>
+                                                        <td>{ val.meeting_time == null ? "Not Entered" : val.meeting_time }</td>
+                                                        <td>{ val.guest_off_time == null ? "Not Entered" : val.guest_off_time }</td>
+                                                    </tr>
+                                                )
+                                            }
+                                        )
+                                    }
+                                </tbody>
+                            </table>
+                        }
+
+                    </div>
 
                 </div>
 

@@ -185,35 +185,6 @@
     grid-column-gap: 10px;
 }
 
-.history_content .status_div {
-    border-radius: 20px;
-    padding: 2px 15px 1px;
-    width: max-content;
-    font-size: 10px;
-    text-transform: capitalize;
-}
-
-.history_content .status_div.authorized {
-    background: var(--dark-c-green);
-}
-
-.history_content .status_div.sent {
-    background: var(--dark-black);
-}
-
-.history_content .status_div.accepted {
-    background: var(--success);
-}
-
-.history_content .status_div.rejected {
-    background: var(--orange);
-}
-
-.history_content .status_div.canceled {
-    background: var(--black);
-    color: #fff !important;
-}
-
 .Application_Form {
     border-radius: 10px;
     padding: 20px;
