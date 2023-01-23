@@ -62,3 +62,31 @@ Error: net::ERR_FAILED at https://web.whatsapp.com/
 type: error
 ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
 
+16:03:19 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+16:20:10 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+16:20:10 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+16:24:49 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+16:25:21 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Execution context was destroyed, most likely because of a navigation.
+
+16:25:21 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+

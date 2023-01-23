@@ -42,9 +42,17 @@ const SendWhatsappNotification = ( receiverID, senderID, Title, NotificationBody
 
     let standardNumber;
     let code = '92';
-    let num = cell.substring(1, 11);
     let message;
-    standardNumber = code + num + '@c.us';
+    let num = "";
+    if ( cell.includes('+') )
+    {
+        num = cell.replace('+', '');
+        standardNumber = num + '@c.us';
+    }else
+    {
+        num = cell.substring(1, 11);
+        standardNumber = code + num + '@c.us';
+    }
     console.log(standardNumber)
     message = "*!PORTAL NOTIFICATION!* \n \
     _" + Title + ": " + NotificationBody + "._";
