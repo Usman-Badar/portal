@@ -70,7 +70,7 @@ const PRForm = ( { history, Locations, Quotations, Companies, SubmitPR, setShowQ
                     <sub>Application Form</sub>
                 </h3>
 
-                <button className="btn submit" onClick={ () => setShowQuotationModal(true) }>Attached Quotations ({ Quotations.length })</button>
+                <button className="btn submit" type='reset' onClick={ () => history.replace('/purchase/requisition/requests') }>Back To Requests</button>
             </div>
             <hr />
 
@@ -237,8 +237,8 @@ const PRForm = ( { history, Locations, Quotations, Companies, SubmitPR, setShowQ
                     </table>
 
                     <div className="d-flex align-items-center justify-content-between">
-
-                        <button className="btn green" type='reset' onClick={ () => history.replace('/purchase/requisition/requests') }>Back To Requests</button>
+                        
+                        <button className="btn green" type='button' onClick={ () => setShowQuotationModal(true) }>Attached Quotations ({ Quotations.length })</button>
                         <button className="btn submit" type='submit'>Generate Purchase Requisition</button>
 
                     </div>
@@ -269,11 +269,11 @@ const RequestDetailsView = ( { history, Quotations, Specifications, RequestDetai
                 ?
                 RequestDetails.requested_by == sessionStorage.getItem("EmpID")
                 ?
-                <Detailing Quotations={ Quotations } setView={ setView } View={ View } RequestDetails={ RequestDetails } Specifications={ Specifications } />
+                <Detailing history={ history } Quotations={ Quotations } setView={ setView } View={ View } RequestDetails={ RequestDetails } Specifications={ Specifications } />
                 :
                 RequestDetails.request_submitted_on_behalf == sessionStorage.getItem("EmpID")
                 ?
-                <Detailing Quotations={ Quotations } setView={ setView } View={ View } RequestDetails={ RequestDetails } Specifications={ Specifications } />
+                <Detailing history={ history } Quotations={ Quotations } setView={ setView } View={ View } RequestDetails={ RequestDetails } Specifications={ Specifications } />
                 :
                 <>
                     <h6 className="text-center">Access Denied</h6>
@@ -284,14 +284,12 @@ const RequestDetailsView = ( { history, Quotations, Specifications, RequestDetai
                 :
                 <h6 className="text-center">Loading Details....</h6>
             }
-
-            <button className="btn submit mt-3 d-block mx-auto" onClick={ () => history.replace('/purchase/requisition/requests') }>Back To Requests</button>
         </>
     )
 
 }
 
-const Detailing = ( { Quotations, View, setView, RequestDetails, Specifications } ) => {
+const Detailing = ( { history, Quotations, View, setView, RequestDetails, Specifications } ) => {
 
     return (
         <>
@@ -303,6 +301,7 @@ const Detailing = ( { Quotations, View, setView, RequestDetails, Specifications 
                         <sub>Request Details</sub>
                     </h4>
                     <div className='btn-group'>
+                        <button className="btn green" onClick={ () => history.replace('/purchase/requisition/requests') }>Back To Requests</button>
                         <button className={ View === 'application' ? "btn submit" : "btn green" } onClick={ () => setView('application') }>Application</button>
                         <button className={ View === 'request_status' ? "btn submit" : "btn green" } onClick={ () => setView('request_status') }>Request Status</button>
                     </div>
@@ -408,65 +407,74 @@ const Detailing = ( { Quotations, View, setView, RequestDetails, Specifications 
                         </fieldset>
                     </form>
                     :
-                    <div className='purchase_requisition_details_2'>
-                        <h5>General Detail</h5>
-                        <table className="table table-bordered">
-                            <tbody>
-                                <tr>
-                                    <th>Requisition</th>
-                                    <td> 
-                                        { new Date(RequestDetails.requested_date).toDateString() } <br />
-                                        { RequestDetails.requested_time }
-                                    </td>
-                                    <th>Request Status</th>
-                                    <td> <span className={ RequestDetails.status + " text-white status_div" }>{ RequestDetails.status }</span> </td>
-                                    <th>Employee Name (On Behalf Of)</th>
-                                    <td> { RequestDetails.behalf_employee_name ? RequestDetails.behalf_employee_name : "Requested By The Employee Itself" } </td>
-                                </tr>
-                                <tr>
-                                    <th>Submit To (Employee)</th>
-                                    <td> 
-                                        { RequestDetails.submit_to_employee_name }
-                                    </td>
-                                    <th>Vision</th>
-                                    <td> 
-                                        {
-                                            RequestDetails.view_date
-                                            ?
-                                            <>
-                                                { new Date(RequestDetails.view_date).toDateString() } <br />
-                                                { RequestDetails.view_time }
-                                            </>
-                                            :
-                                            <span className={ RequestDetails.status + " text-white status_div" }>Not Viewed</span>
-                                        }
-                                    </td>
-                                    <th>No of Items Requested</th>
-                                    <td> { RequestDetails.no_items_requested } </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div className='purchase_requisition_details_2' id="accordion">
+                        <h6 className='collapse_toogle' data-toggle="collapse" data-target="#general_details" aria-expanded="false" aria-controls="general_details">General Detail</h6>
+                        <div className="collapse show" id="general_details" data-parent="#accordion">
+                            <table className="table table-bordered popUps">
+                                <tbody>
+                                    <tr>
+                                        <th>Requisition</th>
+                                        <td> 
+                                            { new Date(RequestDetails.requested_date).toDateString() } <br />
+                                            { RequestDetails.requested_time }
+                                        </td>
+                                        <th>Request Status</th>
+                                        <td> <span className={ RequestDetails.status + " text-white status_div" }>{ RequestDetails.status }</span> </td>
+                                        <th>Employee Name (On Behalf Of)</th>
+                                        <td> { RequestDetails.behalf_employee_name ? RequestDetails.behalf_employee_name : "Requested By The Employee Itself" } </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Submit To (Employee)</th>
+                                        <td> 
+                                            { RequestDetails.submit_to_employee_name }
+                                        </td>
+                                        <th>Vision</th>
+                                        <td> 
+                                            {
+                                                RequestDetails.view_date
+                                                ?
+                                                <>
+                                                    { new Date(RequestDetails.view_date).toDateString() } <br />
+                                                    { RequestDetails.view_time }
+                                                </>
+                                                :
+                                                <span className={ RequestDetails.status + " text-white status_div" }>Not Viewed</span>
+                                            }
+                                        </td>
+                                        <th>No of Items Requested</th>
+                                        <td> { RequestDetails.no_items_requested } </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         
-                        <h5>Quotations Attached</h5>
-                        {
-                            Quotations.length === 0
-                            ?
-                            <h6 className="text-center">No Quotation Attached</h6>
-                            :
-                            <div className="grid_container">
-                                    
-                                {
-                                    Quotations.map(
-                                        (val, index) => {
-                                            return (
-                                                <img src={ process.env.REACT_APP_SERVER + '/' + val.quotation } alt="quotation_preview" key={ index } />
-                                            )
-                                        }
-                                    )
-                                }
+                        <div className='collapse_toogle d-flex justify-content-between' data-toggle="collapse" data-target="#attached_quotations" aria-expanded="false" aria-controls="attached_quotations">
+                            <h6 className='mb-0'>Quotations Attached</h6>
+                            <h6 className='mb-0'>({Quotations.length})</h6>
+                        </div>
+                        <div className="collapse" id="attached_quotations" data-parent="#accordion">
+                            {
+                                Quotations.length === 0
+                                ?
+                                <h6 className="text-center">No Quotation Attached</h6>
+                                :
+                                <div className="grid_container">
+                                        
+                                    {
+                                        Quotations.map(
+                                            (val, index) => {
+                                                return (
+                                                    <div className='quotation_card'>
+                                                        <img src={ process.env.REACT_APP_SERVER + '/' + val.quotation } alt="quotation_preview" key={ index } />
+                                                    </div>
+                                                )
+                                            }
+                                        )
+                                    }
 
-                            </div>
-                        }
+                                </div>
+                            }
+                        </div>
                     </div>
                 }
 

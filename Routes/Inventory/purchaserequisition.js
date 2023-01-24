@@ -1720,9 +1720,8 @@ router.post('/purchase/requisition/submittion&&submit_by=employee', ( req, res )
     }
 
     db.query(
-        "INSERT INTO `tbl_inventory_purchase_requisition`(`entry`,`note`, `company_code`, `location_code`, `new_purchase`, `repair_replacement`, `budgeted`, `not_budgeted`, `invoice_attached`, `reason`, `requested_by`, `requested_date`, `requested_time`, `total_value`, `no_items_requested`, `submitted_to`, `quotations_attached`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);" +
-        "SELECT pr_id FROM tbl_inventory_purchase_requisition WHERE entry = ?;",
-        [ code, note, received_data.company_code, received_data.location_code, received_data.new_purchase_checkbox ? 1 :0, received_data.repair_replacement_checkbox ? 1 :0, received_data.budgeted_checkbox ? 1 :0, received_data.not_budgeted_checkbox ? 1 :0, received_data.invoice_attached_checkbox ? 1 :0, received_data.reason, requested_by, new Date(), new Date().toTimeString(), received_data.total_calculated_amount, received_specifications.length, submitted_to, quotations_attached, code ],
+        "INSERT INTO `tbl_inventory_purchase_requisition`(`entry`,`note`, `company_code`, `location_code`, `new_purchase`, `repair_replacement`, `budgeted`, `not_budgeted`, `invoice_attached`, `reason`, `requested_by`, `requested_date`, `requested_time`, `total_value`, `no_items_requested`, `submitted_to`, `quotations_attached`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
+        [ code, note, received_data.company_code, received_data.location_code, received_data.new_purchase_checkbox ? 1 :0, received_data.repair_replacement_checkbox ? 1 :0, received_data.budgeted_checkbox ? 1 :0, received_data.not_budgeted_checkbox ? 1 :0, received_data.invoice_attached_checkbox ? 1 :0, received_data.reason, requested_by, new Date(), new Date().toTimeString(), received_data.total_calculated_amount, received_specifications.length, submitted_to, quotations_attached ],
         ( err, rslt ) => {
 
             if( err )
@@ -1734,12 +1733,12 @@ router.post('/purchase/requisition/submittion&&submit_by=employee', ( req, res )
 
             }else 
             {
-                // console.log( rslt[0] )
+                const mPrId = rslt.insertId;
                 for ( let x = 0; x < received_specifications.length; x++ )
                 {
                     db.query(
                         "INSERT INTO `tbl_inventory_purchase_requisition_specifications`(`pr_id`, `sr_no`, `description`, `quantity`, `estimated_cost`, `total_estimated_cost`, `entered_by`, `entered_date`) VALUES (?,?,?,?,?,?,?,?);",
-                        [ rslt[1][0].pr_id, received_specifications[x].specification_serial_number, received_specifications[x].specification_description, received_specifications[x].specification_quantity, received_specifications[x].specification_est_cost, received_specifications[x].specification_total_cost, requested_by, new Date() ],
+                        [ mPrId, received_specifications[x].specification_serial_number, received_specifications[x].specification_description, received_specifications[x].specification_quantity, received_specifications[x].specification_est_cost, received_specifications[x].specification_total_cost, requested_by, new Date() ],
                         ( err ) => {
                 
                             if( err )
@@ -1768,7 +1767,7 @@ router.post('/purchase/requisition/submittion&&submit_by=employee', ( req, res )
                     }
                     for ( let y = 0; y < arr.length; y++ )
                     {
-                        MakeDir.mkdir('assets/inventory/assets/images/purchase_requisition',
+                        MakeDir.mkdir('assets/inventory/assets/images/quotations',
                             { recursive: true },
                             (err) => {
                                 if (err) {
@@ -1780,7 +1779,7 @@ router.post('/purchase/requisition/submittion&&submit_by=employee', ( req, res )
                                 }
                                 else {
     
-                                    arr[y].mv('assets/inventory/assets/images/purchase_requisition/' + arr[y].name, (err) => {
+                                    arr[y].mv('assets/inventory/assets/images/quotations/' + arr[y].name, (err) => {
                                             if (err) 
                                             {
                                             
@@ -1792,7 +1791,7 @@ router.post('/purchase/requisition/submittion&&submit_by=employee', ( req, res )
                                             {
                                                 db.query(
                                                     "INSERT INTO `tbl_inventory_purchase_requisition_quotations`(`quotation`, `uploaded_by`, `uploaded_date`, `uploaded_time`, `pr_id`) VALUES (?,?,?,?,?);",
-                                                    [ 'assets/inventory/assets/images/purchase_requisition/' + arr[y].name, requested_by, new Date(), new Date().toTimeString(), rslt[1][0].pr_id ],
+                                                    [ 'assets/inventory/assets/images/quotations/' + arr[y].name, requested_by, new Date(), new Date().toTimeString(), mPrId ],
                                                     ( err ) => {
                                             
                                                         if( err )

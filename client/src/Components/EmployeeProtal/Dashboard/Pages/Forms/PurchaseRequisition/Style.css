@@ -61,6 +61,7 @@
 .purchase_requisition .Attandence_Request_Div .Attandence_Request_Div_Content .modal_content .quotations_grid_container > div {
     width: 30%;
     text-align: center;
+    word-break: break-all;
 }
 
 .purchase_requisition .Attandence_Request_Div .Attandence_Request_Div_Content .modal_content .quotations_grid_container img {
@@ -76,16 +77,27 @@
 }
 
 .purchase_requisition .purchase_requisition_form .purchase_requisition_details_2 .grid_container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 50fr 50fr;
+    grid-gap: 20px;
 }
 
-.purchase_requisition .purchase_requisition_form .purchase_requisition_details_2 .grid_container img {
-    border: 1px solid lightgray;
-    width: 20%;
+.purchase_requisition .purchase_requisition_form .collapse_toogle {
+    cursor: pointer;
+    background-color: var(--lightgray);
+    padding: 10px 10px 7px;
+    border-bottom: 3px solid lightgray;
+}
+
+.purchase_requisition .purchase_requisition_form .purchase_requisition_details_2 .grid_container .quotation_card {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.purchase_requisition .purchase_requisition_form .purchase_requisition_details_2 .grid_container .quotation_card img {
+    border: 1px dashed lightgray;
+    width: 100%;
     display: block;
-    height: 250px;
+    border-radius: 10px;
 }
