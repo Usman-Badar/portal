@@ -1,4 +1,5 @@
 import axios from '../../../../../../axios';
+import socket from '../../../../../../io';
 import $ from 'jquery';
 
 export const onContentInput = ( e ) => {
@@ -283,6 +284,7 @@ export const PRSubmittion = ( e, history, toast, Quotations, Data ) => {
                     
                 if ( res.data === 'success' )
                 {
+                    socket.emit( 'new_purchase_requisition_found' );
                     setTimeout(() => {
                         $('fieldset').prop('disabled', false);
                         history.replace('/purchase/requisition/requests');
@@ -309,6 +311,122 @@ export const PRSubmittion = ( e, history, toast, Quotations, Data ) => {
         );
     }
     
+}
+
+export const CancelRequisition = ( e, pr_id, history ) => {
+
+    e.preventDefault();
+    const reason = e.target['reason'].value;
+    $('fieldset').prop('disabled', true);
+    axios.post(
+        '/purchase/requisition/cancellation',
+        {
+            emp_id: sessionStorage.getItem('EmpID'),
+            reason: reason,
+            pr_id: pr_id
+        }
+    )
+    .then(
+        res => 
+        {
+                
+            if ( res.data === 'success' )
+            {
+                setTimeout(() => {
+                    history.push('/purchase/requisition/requests');
+                }, 1500);
+                $('#error_alert_cancelation').removeClass('d-none').text("Your application has been canceled.");
+            }
+
+        }
+    ).catch(
+        err => {
+
+            $('fieldset').prop('disabled', false);
+            console.log(err);
+
+        }
+    );
+
+}
+
+export const ApproveRequisition = ( e, pr_id, requested_by, submitted_to, history ) => {
+
+    e.preventDefault();
+    const reason = e.target['reason'].value;
+    $('fieldset').prop('disabled', true);
+    axios.post(
+        '/purchase/requisition/approval',
+        {
+            emp_id: sessionStorage.getItem('EmpID'),
+            reason: reason,
+            pr_id: pr_id,
+            requested_by: requested_by,
+            submitted_to: submitted_to
+        }
+    )
+    .then(
+        res => 
+        {
+                
+            if ( res.data === 'success' )
+            {
+                setTimeout(() => {
+                    history.push('/purchase/requisition/requests');
+                }, 1500);
+                $('#error_alert_approval').removeClass('d-none').text("The application has been approved.");
+            }
+
+        }
+    ).catch(
+        err => {
+
+            $('fieldset').prop('disabled', false);
+            console.log(err);
+
+        }
+    );
+
+}
+
+export const RejectRequisition = ( e, pr_id, requested_by, Specifications, history ) => {
+
+    e.preventDefault();
+    const reason = e.target['reason'].value;
+    $('fieldset').prop('disabled', true);
+    axios.post(
+        '/purchase/requisition/reject',
+        {
+            emp_id: sessionStorage.getItem('EmpID'),
+            remarks: reason,
+            pr_id: pr_id,
+            requested_by: requested_by,
+            specifications: JSON.stringify(Specifications),
+            department: 'accounts'
+        }
+    )
+    .then(
+        res => 
+        {
+                
+            if ( res.data === 'success' )
+            {
+                setTimeout(() => {
+                    history.push('/purchase/requisition/requests');
+                }, 1500);
+                $('#error_alert_rejection').removeClass('d-none').text("The application has been rejected.");
+            }
+
+        }
+    ).catch(
+        err => {
+
+            $('fieldset').prop('disabled', false);
+            console.log(err);
+
+        }
+    );
+
 }
 
 export const loadRequests = ( setRequests ) => {
@@ -348,9 +466,9 @@ export const openRequestDetails = ( pr_id, setRequestDetails, setSpecifications,
         res => 
         {
             
-            setRequestDetails(res.data[0][0]);
-            setSpecifications(res.data[1]);
-            setQuotations(res.data[2]);
+            setRequestDetails(res.data[1][0]);
+            setSpecifications(res.data[2]);
+            setQuotations(res.data[3]);
 
         }
     ).catch(

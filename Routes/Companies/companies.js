@@ -147,44 +147,27 @@ router.post('/getcompanylocations', ( req, res ) => {
 
 router.get('/getcompaniescodes', ( req, res ) => {
 
-    db.getConnection(
-        ( err, connection ) => {
+    db.query(
+        "SELECT * FROM companies Where status_view = 'Y' ORDER BY company_name ASC",
+       //"SELECT * FROM companies ",
+       ( err, rslt ) => {
 
-            if ( err )
-            {
+           if( err )
+           {
 
-                res.status(503).send(err);
-                res.end();
+               res.status(500).send(err);
+               res.end();
 
-            }else
-            {
-                db.query(
-                     "SELECT * FROM companies Where status_view = 'Y'",
-                    //"SELECT * FROM companies ",
-                    ( err, rslt ) => {
-            
-                        if( err )
-                        {
-            
-                            res.status(500).send(err);
-                            res.end();
-                            connection.release();
-            
-                        }else 
-                        {
-                            
-                            res.send( rslt );
-                            res.end();
-                            connection.release();
-            
-                        }
-            
-                    }
-                )
-            }
+           }else 
+           {
+               
+               res.send( rslt );
+               res.end();
 
-        }
-    )
+           }
+
+       }
+   )
 
 } );
 

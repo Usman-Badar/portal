@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { onContentInput, GetCompanies, openRequestDetails, loadRequests, GetLocations, PRSubmittion, SubmitPR, onAttachQuotations } from './Functions';
+import { ApproveRequisition, RejectRequisition, CancelRequisition, openRequestDetails, loadRequests, GetLocations, PRSubmittion, SubmitPR, onAttachQuotations, GetCompanies, onContentInput } from './Functions';
 const UI = lazy( () => import('./UI') );
 
 function PurchaseRequisition() {
@@ -54,6 +54,9 @@ function PurchaseRequisition() {
                     setShowQuotationModal={ setShowQuotationModal }
                     onContentInput={ onContentInput }
                     loadRequests={ () => loadRequests( setRequests ) }
+                    CancelRequisition={ ( e, pr_id ) => CancelRequisition( e, pr_id, history ) }
+                    ApproveRequisition={ ( e, pr_id, requested_by, submitted_to ) => ApproveRequisition( e, pr_id, requested_by, submitted_to, history ) }
+                    RejectRequisition={ ( e, pr_id, requested_by, Specifications ) => RejectRequisition( e, pr_id, requested_by, Specifications, history ) }
                 />
             </Suspense>
             <ToastContainer />

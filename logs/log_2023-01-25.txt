@@ -1,0 +1,141 @@
+09:14:18 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+09:14:18 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+09:41:49 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+09:46:42 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+09:48:00 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+09:57:26 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+09:58:06 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+09:58:27 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+10:00:53 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+10:02:02 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+10:07:40 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+10:21:18 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+10:28:11 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_NAME_NOT_RESOLVED at https://web.whatsapp.com/
+
+10:37:53 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'canSend')
+    at Object.t.canReplyMsg (https://web.whatsapp.com/app.4610d8f663d48d87c826.js:72:819556)
+    at Object.window.WWebJS.sendMessage (__puppeteer_evaluation_script__:36:41)
+    at __puppeteer_evaluation_script__:10:45
+
+10:43:48 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_NAME_NOT_RESOLVED at https://web.whatsapp.com/
+
+10:43:48 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+10:43:48 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+10:48:29 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_NAME_NOT_RESOLVED at https://web.whatsapp.com/
+
+10:49:38 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'canSend')
+    at Object.t.canReplyMsg (https://web.whatsapp.com/app.4610d8f663d48d87c826.js:72:819556)
+    at Object.window.WWebJS.sendMessage (__puppeteer_evaluation_script__:36:41)
+    at __puppeteer_evaluation_script__:10:45
+
+11:38:31 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+11:38:31 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+11:41:00 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+11:41:00 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+11:41:00 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+11:43:29 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+11:43:29 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+11:44:20 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+11:44:20 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+12:04:05 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+12:09:08 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+12:09:08 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+12:09:08 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'canSend')
+    at Object.t.canReplyMsg (https://web.whatsapp.com/app.4ebf2a30c9e5a5c9f244.js:72:817567)
+    at Object.window.WWebJS.sendMessage (__puppeteer_evaluation_script__:36:41)
+    at __puppeteer_evaluation_script__:10:45
+

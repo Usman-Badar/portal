@@ -339,6 +339,21 @@ td {
     color: #fff !important;
 }
 
+.status_div.waiting_for_approval {
+    background: var(--warning);
+    color: #fff !important;
+}
+
+.status_div.viewed {
+    background: var(--c-green);
+    color: #fff !important;
+}
+
+.status_div.approved {
+    background: var(--success);
+    color: #fff !important;
+}
+
 .badge {
     font-size: 12px;
     font-weight: lighter;

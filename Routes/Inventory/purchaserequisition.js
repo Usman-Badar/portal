@@ -7,29 +7,14 @@ const moment = require('moment');
 const io = require('../../server');
 
 const CreateLogs = require('../Employee/logs').CreateLog;
+const SendWhatsappNotification = require('../Whatsapp/whatsapp').SendWhatsappNotification;
 
 io.on('connection', ( socket ) => {
 
     socket.on(
-        'prdiscussions', () => {
-
-            socket.broadcast.emit('prdiscussions');
-    
-        }
-    )
-
-    socket.on(
-        'prsubdiscussions', ( id ) => {
+        'new_purchase_requisition_found', () => {
             
-            socket.broadcast.emit('prsubdiscussions', id);
-    
-        }
-    )
-
-    socket.on(
-        'newpurchaserequision', () => {
-            
-            socket.broadcast.emit('newpurchaserequision');
+            socket.broadcast.emit('new_purchase_requisition_found');
     
         }
     )
@@ -1710,13 +1695,22 @@ router.post('/purchase/requisition/submittion&&submit_by=employee', ( req, res )
 
     const code = new Date().getTime() + '_' + new Date().getDate() + (new Date().getMonth() + 1) + new Date().getFullYear();
     const received_specifications = JSON.parse( specifications );
+    let arr_spacifications_names = []; 
     const received_data = JSON.parse( data );
     let quotations_attached = 0;
     const submitted_to = 20015;
     if ( req.files )
     {
         const { Attachments } = req.files;
-        quotations_attached = Attachments.length;
+        let arr;
+        if ( typeof(Attachments) === 'object' && !Attachments.length )
+        {
+            arr = [Attachments];
+        }else
+        {
+            arr = Attachments;
+        }
+        quotations_attached = arr.length;
     }
 
     db.query(
@@ -1736,6 +1730,7 @@ router.post('/purchase/requisition/submittion&&submit_by=employee', ( req, res )
                 const mPrId = rslt.insertId;
                 for ( let x = 0; x < received_specifications.length; x++ )
                 {
+                    arr_spacifications_names.push(received_specifications[x].specification_description);
                     db.query(
                         "INSERT INTO `tbl_inventory_purchase_requisition_specifications`(`pr_id`, `sr_no`, `description`, `quantity`, `estimated_cost`, `total_estimated_cost`, `entered_by`, `entered_date`) VALUES (?,?,?,?,?,?,?,?);",
                         [ mPrId, received_specifications[x].specification_serial_number, received_specifications[x].specification_description, received_specifications[x].specification_quantity, received_specifications[x].specification_est_cost, received_specifications[x].specification_total_cost, requested_by, new Date() ],
@@ -1753,6 +1748,28 @@ router.post('/purchase/requisition/submittion&&submit_by=employee', ( req, res )
                         }
                     );
                 }
+
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ requested_by, submitted_to ],
+                    ( err, rslt ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + rslt[1][0].name, rslt[0][0].name + " have sent you a purchase requisition for " + arr_spacifications_names.join(', ') + ". The total value of the requisition is Rs " + received_data.total_calculated_amount.toLocaleString('en') + ". Kindly check", rslt[1][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + rslt[0][0].name, "We have received your purchase requisition. Kindly wait while our inventory department starts working on it", rslt[0][0].cell );
+                        }
+            
+                    }
+                );
 
                 if ( req.files )
                 {
@@ -1778,8 +1795,9 @@ router.post('/purchase/requisition/submittion&&submit_by=employee', ( req, res )
                                     
                                 }
                                 else {
-    
-                                    arr[y].mv('assets/inventory/assets/images/quotations/' + arr[y].name, (err) => {
+                                    
+                                    let name = new Date().getTime() + "_" + arr[y].name;
+                                    arr[y].mv('assets/inventory/assets/images/quotations/' + name, (err) => {
                                             if (err) 
                                             {
                                             
@@ -1791,7 +1809,7 @@ router.post('/purchase/requisition/submittion&&submit_by=employee', ( req, res )
                                             {
                                                 db.query(
                                                     "INSERT INTO `tbl_inventory_purchase_requisition_quotations`(`quotation`, `uploaded_by`, `uploaded_date`, `uploaded_time`, `pr_id`) VALUES (?,?,?,?,?);",
-                                                    [ 'assets/inventory/assets/images/quotations/' + arr[y].name, requested_by, new Date(), new Date().toTimeString(), mPrId ],
+                                                    [ 'assets/inventory/assets/images/quotations/' + name, requested_by, new Date(), new Date().toTimeString(), mPrId ],
                                                     ( err ) => {
                                             
                                                         if( err )
@@ -1843,13 +1861,18 @@ router.post('/purchase/requisition/load/requests', ( req, res ) => {
         tbl_inventory_purchase_requisition.requested_date,  \
         tbl_inventory_purchase_requisition.requested_time,  \
         tbl_inventory_purchase_requisition.pr_id,  \
+        tbl_inventory_purchase_requisition.appr_rejct_by,  \
+        requested_employee.name AS requested_employee_name,  \
+        requested_employee_designations.designation_name AS requested_employee_designation_name,  \
         companies.company_name, \
         locations.location_name \
         FROM `tbl_inventory_purchase_requisition`  \
         LEFT OUTER JOIN companies ON tbl_inventory_purchase_requisition.company_code = companies.company_code \
         LEFT OUTER JOIN locations ON tbl_inventory_purchase_requisition.location_code = locations.location_code \
-        WHERE requested_by = ? OR request_submitted_on_behalf = ? ORDER BY pr_id DESC;",
-        [ emp_id, emp_id ],
+        LEFT OUTER JOIN employees requested_employee ON tbl_inventory_purchase_requisition.requested_by = requested_employee.emp_id \
+        LEFT OUTER JOIN designations requested_employee_designations ON requested_employee.designation_code = requested_employee_designations.designation_code \
+        WHERE requested_by = ? OR request_submitted_on_behalf = ? OR submitted_to = ? OR appr_rejct_by = ? ORDER BY pr_id DESC;",
+        [ emp_id, emp_id, emp_id, emp_id ],
         ( err, rslt ) => {
 
             if( err )
@@ -1872,30 +1895,16 @@ router.post('/purchase/requisition/load/requests', ( req, res ) => {
 
 } );
 
-router.post('/purchase/requisition/details', ( req, res ) => {
-
-    const { pr_id } = req.body;
+router.get('/purchase/requisition/load/hod', ( req, res ) => {
 
     db.query(
-        "SELECT tbl_inventory_purchase_requisition.*,  \
-        companies.company_name, \
-        behalf_employee.name AS behalf_employee_name, \
-        submit_to_employee.name AS submit_to_employee_name, \
-        locations.location_name \
-        FROM `tbl_inventory_purchase_requisition`  \
-        LEFT OUTER JOIN companies ON tbl_inventory_purchase_requisition.company_code = companies.company_code \
-        LEFT OUTER JOIN locations ON tbl_inventory_purchase_requisition.location_code = locations.location_code \
-        LEFT OUTER JOIN employees behalf_employee ON tbl_inventory_purchase_requisition.request_submitted_on_behalf = behalf_employee.emp_id \
-        LEFT OUTER JOIN employees submit_to_employee ON tbl_inventory_purchase_requisition.submitted_to = submit_to_employee.emp_id \
-        WHERE pr_id = ?;" +
-        "SELECT * FROM `tbl_inventory_purchase_requisition_specifications` WHERE pr_id = ?;" +
-        "SELECT * FROM `tbl_inventory_purchase_requisition_quotations` WHERE pr_id = ?;",
-        [ pr_id, pr_id, pr_id ],
+        "SELECT emp_props.*, employees.name FROM emp_props LEFT OUTER JOIN employees ON emp_props.emp_id = employees.emp_id WHERE emp_props.pr_approval_limit != 0;",
         ( err, rslt ) => {
 
             if( err )
             {
 
+                console.log( err );
                 res.send( err );
                 res.end();
 
@@ -1904,6 +1913,289 @@ router.post('/purchase/requisition/details', ( req, res ) => {
                 
                 res.send(rslt);
                 res.end();
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/requisition/cancellation', ( req, res ) => {
+
+    const { emp_id, reason, pr_id } = req.body;
+
+    db.query(
+        "UPDATE tbl_inventory_purchase_requisition SET status = ?, appr_rejct_by = ?, act_date = ?, act_time = ?, remarks = ? WHERE pr_id = ?;",
+        [ 'canceled', emp_id, new Date(), new Date().toTimeString(), reason, pr_id ],
+        ( err ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ emp_id ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0].name, "Your purchase requestion with PR NO # " + pr_id + " has been canceled, as it has/there was '" + reason + "'.", result[0].cell );
+                            res.send('success');
+                            res.end();
+                        }
+            
+                    }
+                );
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/requisition/approval', ( req, res ) => {
+
+    const { emp_id, reason, pr_id, requested_by, submitted_to } = req.body;
+
+    db.query(
+        "UPDATE tbl_inventory_purchase_requisition SET status = ?, appr_rejct_by = ?, act_date = ?, act_time = ?, remarks = ? WHERE pr_id = ?;",
+        [ 'approved', emp_id, new Date(), new Date().toTimeString(), reason, pr_id ],
+        ( err ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ emp_id, requested_by, submitted_to ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "You have approved the purchase requestion with PR NO # " + pr_id + ", and the requested employee has been notified.", result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, "Your purchase requestion with PR NO # " + pr_id + " has been approved by the accounts department.", result[1][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[2][0].name, "The purchase requestion with PR NO # " + pr_id + " has been approved by the accounts department. Kindly check and proceed to purchase order if necessary.", result[2][0].cell );
+                            res.send('success');
+                            res.end();
+                        }
+            
+                    }
+                );
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/requisition/details', ( req, res ) => {
+
+    const { pr_id, viewed } = req.body;
+
+    db.query(
+        ( viewed ? "UPDATE tbl_inventory_purchase_requisition SET status = 'viewed', view_date = ?, view_time = ? WHERE pr_id = ? AND status = 'sent';" : "SELECT ? AND ? AND ?;" ) +
+        "SELECT tbl_inventory_purchase_requisition.*,  \
+        companies.company_name, \
+        behalf_employee.name AS behalf_employee_name, \
+        submit_to_employee.name AS submit_to_employee_name, \
+        hod_employee.name AS hod_employee_name, \
+        locations.location_name \
+        FROM `tbl_inventory_purchase_requisition`  \
+        LEFT OUTER JOIN companies ON tbl_inventory_purchase_requisition.company_code = companies.company_code \
+        LEFT OUTER JOIN locations ON tbl_inventory_purchase_requisition.location_code = locations.location_code \
+        LEFT OUTER JOIN employees behalf_employee ON tbl_inventory_purchase_requisition.request_submitted_on_behalf = behalf_employee.emp_id \
+        LEFT OUTER JOIN employees submit_to_employee ON tbl_inventory_purchase_requisition.submitted_to = submit_to_employee.emp_id \
+        LEFT OUTER JOIN employees hod_employee ON tbl_inventory_purchase_requisition.appr_rejct_by = hod_employee.emp_id \
+        WHERE pr_id = ?;" +
+        "SELECT * FROM `tbl_inventory_purchase_requisition_specifications` WHERE pr_id = ?;" +
+        "SELECT * FROM `tbl_inventory_purchase_requisition_quotations` WHERE pr_id = ?;",
+        [ new Date(), new Date().toTimeString(), pr_id, pr_id, pr_id, pr_id ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err )
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+
+                if ( viewed && rslt[0].affectedRows != 0 )
+                {
+                    db.query(
+                        "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                        "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                        [ rslt[1][0].request_submitted_on_behalf == null ? rslt[1][0].requested_by : rslt[1][0].request_submitted_on_behalf, rslt[1][0].submitted_to ],
+                        ( err, result ) => {
+                
+                            if( err )
+                            {
+                
+                                console.log( err );
+                                res.send( err );
+                                res.end();
+                
+                            }else
+                            {
+                                SendWhatsappNotification( null, null, "Hi " + result[1][0].name, "The status of the purchase requisition with PR NO # " + rslt[1][0].pr_id + " has been updated from 'sent' to 'viewed'. The employee has been notified.", result[1][0].cell );
+                                SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "Our inventory department has viewed your purchase requisition with PR NO # " + rslt[1][0].pr_id + ". Kindly wait... while we are sending your application to our accounts department.", result[0][0].cell );
+                            }
+                
+                        }
+                    );
+                }
+                
+                res.send(rslt);
+                res.end();
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/requisition/send_for_approval', ( req, res ) => {
+
+    const { pr_id, requested_by, emp_id, remarks, submit_to, specifications } = req.body;
+    let arr = [];
+    for ( let x = 0; x < JSON.parse(specifications).length; x++ )
+    {
+        arr.push( JSON.parse(specifications)[x].description );
+    }
+
+    db.query(
+        "UPDATE tbl_inventory_purchase_requisition SET status = 'waiting_for_approval', appr_rejct_by = ?, remarks = ? WHERE pr_id = ? AND status = 'viewed';",
+        [ submit_to, remarks, pr_id ],
+        ( err ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ emp_id, requested_by, submit_to ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "Purchase requisition with PR NO # " + pr_id + " has been sent to the accounts department for approval. Please wait... while the accounts department is reviewing your approval request.", result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, "Your Purchase Requisition with PR NO # " + pr_id + " has been proceed to the accounts department.", result[1][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[2][0].name, "Inventory department has forward you a purchase requisition with PR NO # " + pr_id + " for item(s) " + arr.join(', ') + ", Kindly review.", result[2][0].cell );
+
+                            res.send('success');
+                            res.end();
+                        }
+            
+                    }
+                );
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/requisition/reject', ( req, res ) => {
+
+    const { pr_id, requested_by, emp_id, remarks, specifications, department } = req.body;
+    let arr = [];
+    for ( let x = 0; x < JSON.parse(specifications).length; x++ )
+    {
+        arr.push( JSON.parse(specifications)[x].description );
+    }
+
+    db.query(
+        "UPDATE tbl_inventory_purchase_requisition SET status = 'rejected', appr_rejct_by = ?, act_date = ?, act_time = ?, remarks = ? WHERE pr_id = ?;",
+        [ emp_id, new Date(), new Date().toTimeString(), remarks, pr_id ],
+        ( err ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ emp_id, requested_by ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "You have rejected the purchase requisition with PR NO # " + pr_id + " with reason '" + remarks + "'. The requested employee has been notified.", result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, "Your Purchase Requisition with PR NO # " + pr_id + " has been rejected by the "  + ( department ? department : "inventory" ) + " department with remarks '" + remarks + "'. If you have any question, kindly contact our " + ( department ? department : "inventory" ) + " department, headoffice.", result[1][0].cell );
+
+                            res.send('success');
+                            res.end();
+                        }
+            
+                    }
+                );
 
             }
 

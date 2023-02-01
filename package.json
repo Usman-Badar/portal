@@ -35,6 +35,6 @@
         "simple-encryptor": "^4.0.0",
         "socket.io": "^4.4.0",
         "wbm": "^1.1.16",
-        "whatsapp-web.js": "^1.18.2"
+        "whatsapp-web.js": "^1.18.4"
     }
 }

@@ -4,12 +4,12 @@ import './Style.css';
 import { Route, Switch } from 'react-router-dom';
 import Modal from '../../../../../UI/Modal/Modal';
 
-const UI = ( { AttachedQuotations, Specifications, RequestDetails, history, Requests, SubmitConfirmation, ShowQuotationModal, Quotations, Locations, Companies, SubmitPR, loadRequests, openRequestDetails, PRSubmittion, setSubmitConfirmation, onAttachQuotations, onContentInput, setShowQuotationModal } ) => {
+const UI = ( { ApproveRequisition, AttachedQuotations, Specifications, RequestDetails, history, Requests, RejectRequisition, CancelRequisition, SubmitConfirmation, ShowQuotationModal, Quotations, Locations, Companies, SubmitPR, loadRequests, openRequestDetails, PRSubmittion, setSubmitConfirmation, onAttachQuotations, onContentInput, setShowQuotationModal } ) => {
     
     return (
         <>
             <div className="purchase_requisition">
-                <Modal show={ ShowQuotationModal } Hide={ () => setShowQuotationModal(!ShowQuotationModal) } content={ <ModalContent Quotations={ Quotations } onAttachQuotations={ onAttachQuotations } /> } />
+                <Modal show={ ShowQuotationModal } Hide={ () => setShowQuotationModal(!ShowQuotationModal) } content={ <ModalContent setShowQuotationModal={ setShowQuotationModal } Quotations={ Quotations } onAttachQuotations={ onAttachQuotations } /> } />
                 <div className="purchase_requisition_form">
                     <Modal show={ SubmitConfirmation } Hide={ () => setSubmitConfirmation(!SubmitConfirmation) } content={ <SubmitConfirmationModal PRSubmittion={ PRSubmittion } /> } />
 
@@ -47,6 +47,9 @@ const UI = ( { AttachedQuotations, Specifications, RequestDetails, history, Requ
                                     history={ history }
 
                                     openRequestDetails={ openRequestDetails }
+                                    CancelRequisition={ CancelRequisition }
+                                    RejectRequisition={ RejectRequisition }
+                                    ApproveRequisition={ ApproveRequisition }
                                 />
                             )
                         } />
@@ -249,7 +252,7 @@ const PRForm = ( { history, Locations, Quotations, Companies, SubmitPR, setShowQ
 
 }
 
-const RequestDetailsView = ( { history, Quotations, Specifications, RequestDetails, openRequestDetails } ) => {
+const RequestDetailsView = ( { ApproveRequisition, history, Quotations, Specifications, RequestDetails, CancelRequisition, RejectRequisition, openRequestDetails } ) => {
 
     const [ View, setView ] = useState("application");
 
@@ -267,13 +270,11 @@ const RequestDetailsView = ( { history, Quotations, Specifications, RequestDetai
             {
                 RequestDetails
                 ?
-                RequestDetails.requested_by == sessionStorage.getItem("EmpID")
+                parseInt(RequestDetails.requested_by) === parseInt(sessionStorage.getItem("EmpID")) ||
+                parseInt(RequestDetails.request_submitted_on_behalf) === parseInt(sessionStorage.getItem("EmpID")) ||
+                parseInt(RequestDetails.appr_rejct_by) === parseInt(sessionStorage.getItem("EmpID"))
                 ?
-                <Detailing history={ history } Quotations={ Quotations } setView={ setView } View={ View } RequestDetails={ RequestDetails } Specifications={ Specifications } />
-                :
-                RequestDetails.request_submitted_on_behalf == sessionStorage.getItem("EmpID")
-                ?
-                <Detailing history={ history } Quotations={ Quotations } setView={ setView } View={ View } RequestDetails={ RequestDetails } Specifications={ Specifications } />
+                <Detailing ApproveRequisition={ ApproveRequisition } pr_id={ window.location.href.split('?').pop().split('=').pop() } RejectRequisition={ RejectRequisition } CancelRequisition={ CancelRequisition } history={ history } Quotations={ Quotations } setView={ setView } View={ View } RequestDetails={ RequestDetails } Specifications={ Specifications } />
                 :
                 <>
                     <h6 className="text-center">Access Denied</h6>
@@ -289,11 +290,18 @@ const RequestDetailsView = ( { history, Quotations, Specifications, RequestDetai
 
 }
 
-const Detailing = ( { history, Quotations, View, setView, RequestDetails, Specifications } ) => {
+const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequisition, history, Quotations, View, setView, RequestDetails, Specifications } ) => {
+
+    const [ CancelConfirm, setCancelConfirm ] = useState(false);
+    const [ RejectConfirm, setRejectConfirm ] = useState(false);
+    const [ ApprovalConfirm, setApprovalConfirm ] = useState(false);
 
     return (
         <>
             <div className="purchase_requisition_details">
+                <Modal show={ CancelConfirm } Hide={ () => setCancelConfirm(false) } content={ <CancelConfirmation pr_id={ pr_id } CancelRequisition={ CancelRequisition } /> } />
+                <Modal show={ ApprovalConfirm } Hide={ () => setApprovalConfirm(false) } content={ <ApprovalConfirmation submitted_to={ RequestDetails.submitted_to } requested_by={ RequestDetails.requested_by } pr_id={ pr_id } ApproveRequisition={ ApproveRequisition } /> } />
+                <Modal show={ RejectConfirm } Hide={ () => setRejectConfirm(false) } content={ <RejectConfirmation RequestDetails={ RequestDetails } Specifications={ Specifications } pr_id={ pr_id } RejectRequisition={ RejectRequisition } /> } />
 
                 <div className="d-flex align-items-end justify-content-between">
                     <h4 className="heading">
@@ -307,6 +315,32 @@ const Detailing = ( { history, Quotations, View, setView, RequestDetails, Specif
                     </div>
                 </div>
                 <hr />
+
+                <div className='ml-auto mb-2' style={ { width: 'fit-content' } }>
+                    <div className="btn-group">
+                        {
+                            RequestDetails.requested_by != sessionStorage.getItem('EmpID') &&
+                            RequestDetails.appr_rejct_by == sessionStorage.getItem('EmpID') &&
+                            RequestDetails.status === 'waiting_for_approval'
+                            ?
+                            <>
+                                <button className="btn cancle" onClick={ () => setRejectConfirm(true) }>Reject</button>
+                                <button className="btn submit" onClick={ () => setApprovalConfirm(true) }>Approve</button>
+                            </>
+                            :null
+                        }
+
+                        {
+                            RequestDetails.requested_by == sessionStorage.getItem('EmpID') &&
+                            ( RequestDetails.status === 'sent' || RequestDetails.status === 'viewed' )
+                            ?
+                            <>
+                                <button className="btn cancle" onClick={ () => setCancelConfirm(true) }>Cancel</button>
+                            </>
+                            :null
+                        }
+                    </div>
+                </div>
 
                 {
                     View === 'application'
@@ -444,6 +478,53 @@ const Detailing = ( { history, Quotations, View, setView, RequestDetails, Specif
                                         <th>No of Items Requested</th>
                                         <td> { RequestDetails.no_items_requested } </td>
                                     </tr>
+                                    <tr>
+                                        {
+                                            RequestDetails.remarks != null
+                                            ?
+                                            <>
+                                                <th>
+                                                    { RequestDetails.status === 'canceled' ? "Reason To Cancel" : "Inventory's Remarks" }
+                                                </th>
+                                                <td colSpan={5}>
+                                                    { RequestDetails.remarks }
+                                                </td>
+                                            </>
+                                            :null
+                                        }
+                                    </tr>
+                                    <tr>
+                                    {
+                                            RequestDetails.hod_employee_name != null
+                                            ?
+                                            RequestDetails.status === 'rejected'
+                                            ?
+                                            <>
+                                                <th>Rejected By</th>
+                                                <td>{ RequestDetails.hod_employee_name }</td>
+                                                <th>Rejection</th>
+                                                <td>{ new Date(RequestDetails.act_date).toDateString() } at { RequestDetails.act_time }</td>
+                                            </>
+                                            :
+                                            <>
+                                                <th>{ RequestDetails.status === 'canceled' ? "Canceled By" : "Proceed To" }</th>
+                                                <td>{ RequestDetails.hod_employee_name }</td>
+
+                                                {
+                                                    RequestDetails.status === 'approved'
+                                                    ?
+                                                    <>
+                                                        <th>Approval</th>
+                                                        <td>{ new Date(RequestDetails.act_date).toDateString() } at { RequestDetails.act_time }</td>
+                                                        <th>H.O.D's Remarks</th>
+                                                        <td>{ RequestDetails.remarks_from_hod }</td>
+                                                    </>
+                                                    :null
+                                                }
+                                            </>
+                                            :null
+                                        }
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -463,6 +544,7 @@ const Detailing = ( { history, Quotations, View, setView, RequestDetails, Specif
                                     {
                                         Quotations.map(
                                             (val, index) => {
+
                                                 return (
                                                     <div className='quotation_card'>
                                                         <img src={ process.env.REACT_APP_SERVER + '/' + val.quotation } alt="quotation_preview" key={ index } />
@@ -479,6 +561,60 @@ const Detailing = ( { history, Quotations, View, setView, RequestDetails, Specif
                 }
 
             </div>
+        </>
+    )
+
+}
+
+const ApprovalConfirmation = ( { pr_id, ApproveRequisition, submitted_to, requested_by } ) => {
+
+    return (
+        <>
+            <form className='pt-1' onSubmit={ (e) => ApproveRequisition( e, pr_id, requested_by, submitted_to ) }>
+                <fieldset>
+                    <h6 className='font-weight-bold'>Confirm Approval</h6>
+                    <hr />
+                    <div className="alert alert-success d-none" id="error_alert_approval"></div>
+                    <textarea placeholder='Add Your Remarks...' name="reason" cols="30" rows="5" className='form-control' required minLength={30} />
+                    <button className='btn d-block ml-auto submit mt-3'>Confirm</button>
+                </fieldset>
+            </form>
+        </>
+    )
+
+}
+
+const CancelConfirmation = ( { pr_id, CancelRequisition } ) => {
+
+    return (
+        <>
+            <form className='pt-1' onSubmit={ (e) => CancelRequisition( e, pr_id ) }>
+                <fieldset>
+                    <h6 className='font-weight-bold'>Confirm Cancellation</h6>
+                    <hr />
+                    <div className="alert alert-warning d-none" id="error_alert_cancelation"></div>
+                    <textarea placeholder='Any Specific Reason...' name="reason" cols="30" rows="5" className='form-control' required minLength={30} />
+                    <button className='btn d-block ml-auto submit mt-3'>Confirm</button>
+                </fieldset>
+            </form>
+        </>
+    )
+
+}
+
+const RejectConfirmation = ( { RequestDetails, Specifications, pr_id, RejectRequisition } ) => {
+
+    return (
+        <>
+            <form className='pt-1' onSubmit={ (e) => RejectRequisition( e, pr_id, RequestDetails.requested_by, Specifications ) }>
+                <fieldset>
+                    <h6 className='font-weight-bold'>Confirm Rejection</h6>
+                    <hr />
+                    <div className="alert alert-warning d-none" id="error_alert_rejection"></div>
+                    <textarea placeholder='Any Specific Reason...' name="reason" cols="30" rows="5" className='form-control' required minLength={30} />
+                    <button className='btn d-block ml-auto submit mt-3'>Confirm</button>
+                </fieldset>
+            </form>
         </>
     )
 
@@ -540,7 +676,15 @@ const PRequests = ( { history, Requests, loadRequests } ) => {
                                                     { val.requested_time }
                                                 </td>
                                                 <td>
-                                                    <span className={ "status_div text-white " + val.status }>{ val.status }</span>
+                                                    <span className={ "status_div text-white " + val.status }>
+                                                        {
+                                                            val.status === 'waiting_for_approval' && parseInt(val.appr_rejct_by) === parseInt(sessionStorage.getItem("EmpID"))
+                                                            ?
+                                                            "Pending"
+                                                            :
+                                                            val.status.replace('_', " ")
+                                                        }
+                                                    </span>
                                                 </td>
                                                     <td>Rs { val.total_value.toLocaleString('en') }</td>
                                             </tr>
@@ -577,7 +721,7 @@ const SubmitConfirmationModal = ( { PRSubmittion } ) => {
 
 }
 
-const ModalContent = ( { Quotations, onAttachQuotations } ) => {
+const ModalContent = ( { Quotations, setShowQuotationModal, onAttachQuotations } ) => {
 
     return (
         <>
@@ -613,6 +757,8 @@ const ModalContent = ( { Quotations, onAttachQuotations } ) => {
                         </div>
                     </>
                 }
+
+                <button className="btn submit d-block mx-auto mt-3" onClick={ () => setShowQuotationModal(false) }>Close</button>
 
             </div>
         </>
