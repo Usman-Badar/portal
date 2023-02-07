@@ -152,8 +152,8 @@ const PRForm = ( { history, Locations, Quotations, Companies, SubmitPR, setShowQ
                                 <th>Sr.No.</th>
                                 <th>Description</th>
                                 <th>Quantity</th>
-                                <th>Estimated Cost</th>
-                                <th>Total Cost</th>
+                                <th>Estimated Price</th>
+                                <th>Total Price</th>
                             </tr>
                         </thead>
                         <tbody id="specifications_table_body">
@@ -231,7 +231,7 @@ const PRForm = ( { history, Locations, Quotations, Companies, SubmitPR, setShowQ
                         <tfoot>
                             <tr id="specification_total_row">
                                 <td></td>
-                                <td id="total_calculated_amount_label"><b>Total</b></td>
+                                <td id="total_calculated_amount_label"><b>Total Estimated Amount</b></td>
                                 <td></td>
                                 <td></td>
                                 <td id="total_calculated_amount"></td>
@@ -361,27 +361,77 @@ const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequis
                             </div>
 
                             <div className="grid_container mb-3 px-5">
-
-                                <div className='grid_container align-items-center'>
+                                
+                                {/* <div className='grid_container align-items-center'>
                                     <span>New Purchase</span>
                                     <input checked={ RequestDetails.new_purchase === 1 ? true : false } type="checkbox" className='ml-2' />
                                 </div>
+
                                 <div className='grid_container align-items-center'>
                                     <span>Repair / Replacement</span>
                                     <input checked={ RequestDetails.repair_replacement === 1 ? true : false } type="checkbox" className='ml-2' />
                                 </div>
+
                                 <div className='grid_container align-items-center'>
                                     <span>Budgeted</span>
                                     <input checked={ RequestDetails.budgeted === 1 ? true : false } type="checkbox" className='ml-2' />
                                 </div>
+                        
                                 <div className='grid_container align-items-center'>
                                     <span>Not Budgeted</span>
                                     <input checked={ RequestDetails.not_budgeted === 1 ? true : false } type="checkbox" className='ml-2' />
                                 </div>
+                    
                                 <div className='grid_container align-items-center'>
                                     <span>Invoice Attached</span>
                                     <input checked={ RequestDetails.invoice_attached === 1 ? true : false } type="checkbox" className='ml-2' />
-                                </div>
+                                </div> */}
+
+                                {
+                                    RequestDetails.new_purchase === 1
+                                    ?
+                                    <div className='grid_container align-items-center'>
+                                        <span>New Purchase</span>
+                                        <input checked={ true } type="checkbox" className='ml-2' />
+                                    </div>
+                                    :null
+                                }
+                                {
+                                    RequestDetails.repair_replacement
+                                    ?
+                                    <div className='grid_container align-items-center'>
+                                        <span>Repair / Replacement</span>
+                                        <input checked={ true } type="checkbox" className='ml-2' />
+                                    </div>
+                                    :null
+                                }
+                                {
+                                    RequestDetails.budgeted
+                                    ?
+                                    <div className='grid_container align-items-center'>
+                                        <span>Budgeted</span>
+                                        <input checked={ true } type="checkbox" className='ml-2' />
+                                    </div>
+                                    :null
+                                }
+                                {
+                                    RequestDetails.not_budgeted
+                                    ?
+                                    <div className='grid_container align-items-center'>
+                                        <span>Not Budgeted</span>
+                                        <input checked={ true } type="checkbox" className='ml-2' />
+                                    </div>
+                                    :null
+                                }
+                                {
+                                    RequestDetails.invoice_attached
+                                    ?
+                                    <div className='grid_container align-items-center'>
+                                        <span>Invoice Attached</span>
+                                        <input checked={ true } type="checkbox" className='ml-2' />
+                                    </div>
+                                    :null
+                                }
 
                             </div>
 
@@ -395,11 +445,11 @@ const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequis
                             <table className="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Sr.No.</th>
-                                        <th>Description</th>
-                                        <th>Quantity</th>
-                                        <th>Estimated Cost</th>
-                                        <th>Total Cost</th>
+                                        <th className='text-center'>Sr.No.</th>
+                                        <th className='text-center'>Description</th>
+                                        <th className='text-center'>Quantity</th>
+                                        <th className='text-center'>Estimated Cost</th>
+                                        <th className='text-center'>Total Cost</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -408,11 +458,11 @@ const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequis
                                             ( val, index ) => {
                                                 return (
                                                     <tr key={ index }>
-                                                        <td> { index + 1 } </td>
-                                                        <td> { val.description } </td>
-                                                        <td> { val.quantity } </td>
-                                                        <td> Rs { val.estimated_cost.toLocaleString('en') } </td>
-                                                        <td> Rs { val.total_estimated_cost.toLocaleString('en') } </td>
+                                                        <td className='text-center'> { index + 1 } </td>
+                                                        <td className='text-center'> { val.description } </td>
+                                                        <td className='text-center'> { val.quantity } </td>
+                                                        <td className='text-center'> Rs { val.estimated_cost.toLocaleString('en') } </td>
+                                                        <td className='text-center'> Rs { val.total_estimated_cost.toLocaleString('en') } </td>
                                                     </tr>
                                                 )
                                             }
@@ -421,11 +471,11 @@ const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequis
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td></td>
-                                        <td><b>Total</b></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td> Rs { RequestDetails.total_value.toLocaleString('en') } </td>
+                                        <td className='text-center'></td>
+                                        <td className='text-center'></td>
+                                        <td className='text-center'></td>
+                                        <td className='text-center'><b>Total</b></td>
+                                        <td className='text-center'> Rs { RequestDetails.total_value.toLocaleString('en') } </td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -453,17 +503,9 @@ const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequis
                                             { new Date(RequestDetails.requested_date).toDateString() } <br />
                                             { RequestDetails.requested_time }
                                         </td>
-                                        <th>Request Status</th>
-                                        <td> <span className={ RequestDetails.status + " text-white status_div" }>{ RequestDetails.status }</span> </td>
                                         <th>Employee Name (In Behalf Of)</th>
                                         <td> { RequestDetails.behalf_employee_name ? RequestDetails.behalf_employee_name : "Requested By The Employee Itself" } </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Submit To (Employee)</th>
-                                        <td> 
-                                            { RequestDetails.submit_to_employee_name }
-                                        </td>
-                                        <th>Vision</th>
+                                        <th>Inventory Vision</th>
                                         <td> 
                                             {
                                                 RequestDetails.view_date
@@ -476,6 +518,14 @@ const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequis
                                                 <span className={ RequestDetails.status + " text-white status_div" }>Not Viewed</span>
                                             }
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Submit To (Employee)</th>
+                                        <td> 
+                                            { RequestDetails.submit_to_employee_name }
+                                        </td>
+                                        <th>Request Status</th>
+                                        <td> <span className={ RequestDetails.status + " text-white status_div" }>{ RequestDetails.status }</span> </td>
                                         <th>No of Items Requested</th>
                                         <td> { RequestDetails.no_items_requested } </td>
                                     </tr>

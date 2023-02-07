@@ -1974,7 +1974,7 @@ router.post('/purchase/requisition/approval', ( req, res ) => {
     const { emp_id, reason, pr_id, requested_by, submitted_to } = req.body;
 
     db.query(
-        "UPDATE tbl_inventory_purchase_requisition SET status = ?, appr_rejct_by = ?, act_date = ?, act_time = ?, remarks = ? WHERE pr_id = ?;",
+        "UPDATE tbl_inventory_purchase_requisition SET status = ?, appr_rejct_by = ?, act_date = ?, act_time = ?, remarks_from_hod = ? WHERE pr_id = ?;",
         [ 'approved', emp_id, new Date(), new Date().toTimeString(), reason, pr_id ],
         ( err ) => {
 
@@ -2033,6 +2033,10 @@ router.post('/purchase/requisition/details', ( req, res ) => {
         submit_to_employee.name AS submit_to_employee_name, \
         hod_employee.name AS hod_employee_name, \
         requested_employee.name AS requested_employee_name, \
+        requested_employee_designation.designation_name AS requested_employee_designation_name, \
+        behalf_employee_designation.designation_name AS behalf_employee_designation_name, \
+        submit_to_employee_designation.designation_name AS submit_to_employee_designation_name, \
+        hod_employee_designation.designation_name AS hod_employee_designation_name, \
         locations.location_name \
         FROM `tbl_inventory_purchase_requisition`  \
         LEFT OUTER JOIN companies ON tbl_inventory_purchase_requisition.company_code = companies.company_code \
@@ -2041,6 +2045,10 @@ router.post('/purchase/requisition/details', ( req, res ) => {
         LEFT OUTER JOIN employees behalf_employee ON tbl_inventory_purchase_requisition.request_submitted_on_behalf = behalf_employee.emp_id \
         LEFT OUTER JOIN employees submit_to_employee ON tbl_inventory_purchase_requisition.submitted_to = submit_to_employee.emp_id \
         LEFT OUTER JOIN employees hod_employee ON tbl_inventory_purchase_requisition.appr_rejct_by = hod_employee.emp_id \
+        LEFT OUTER JOIN designations requested_employee_designation ON requested_employee.designation_code = requested_employee_designation.designation_code \
+        LEFT OUTER JOIN designations behalf_employee_designation ON behalf_employee.designation_code = behalf_employee_designation.designation_code \
+        LEFT OUTER JOIN designations submit_to_employee_designation ON submit_to_employee.designation_code = submit_to_employee_designation.designation_code \
+        LEFT OUTER JOIN designations hod_employee_designation ON hod_employee.designation_code = hod_employee_designation.designation_code \
         WHERE pr_id = ?;" +
         "SELECT * FROM `tbl_inventory_purchase_requisition_specifications` WHERE pr_id = ?;" +
         "SELECT * FROM `tbl_inventory_purchase_requisition_quotations` WHERE pr_id = ?;",

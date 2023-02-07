@@ -1,29 +1,30 @@
-2023/02/07-11:01:01.763 35e8 Reusing MANIFEST F:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2023/02/07-11:01:01.764 35e8 Recovering log #336
-2023/02/07-11:01:02.792 35e8 Reusing old log F:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000336.log 
-2023/02/07-11:01:16.515 1f08 Level-0 table #349: started
-2023/02/07-11:01:16.633 1f08 Level-0 table #349: 1034769 bytes OK
-2023/02/07-11:01:16.636 1f08 Delete type=0 #336
-2023/02/07-11:01:17.647 33fc Compacting 1@1 + 9@2 files
-2023/02/07-11:01:17.919 33fc Generated table #350@1: 35525 keys, 2223583 bytes
-2023/02/07-11:01:18.155 33fc Generated table #351@1: 3928 keys, 2149299 bytes
-2023/02/07-11:01:18.540 33fc Generated table #352@1: 24703 keys, 2193455 bytes
-2023/02/07-11:01:18.941 33fc Generated table #353@1: 36848 keys, 2176774 bytes
-2023/02/07-11:01:19.668 33fc Generated table #354@1: 117780 keys, 2270588 bytes
-2023/02/07-11:01:20.402 33fc Generated table #355@1: 117392 keys, 2269654 bytes
-2023/02/07-11:01:21.621 33fc Generated table #356@1: 117490 keys, 2269926 bytes
-2023/02/07-11:01:23.346 33fc Generated table #357@1: 117377 keys, 2270673 bytes
-2023/02/07-11:01:24.102 33fc Generated table #358@1: 117874 keys, 2271193 bytes
-2023/02/07-11:01:24.129 33fc Generated table #359@1: 6917 keys, 133755 bytes
-2023/02/07-11:01:24.129 33fc Compacted 1@1 + 9@2 files => 20228900 bytes
-2023/02/07-11:01:24.129 33fc compacted to: files[ 0 0 10 0 0 0 0 ]
-2023/02/07-11:01:24.130 33fc Delete type=2 #338
-2023/02/07-11:01:24.130 33fc Delete type=2 #339
-2023/02/07-11:01:24.130 33fc Delete type=2 #340
-2023/02/07-11:01:24.130 33fc Delete type=2 #341
-2023/02/07-11:01:24.130 33fc Delete type=2 #342
-2023/02/07-11:01:24.130 33fc Delete type=2 #343
-2023/02/07-11:01:24.130 33fc Delete type=2 #344
-2023/02/07-11:01:24.130 33fc Delete type=2 #345
-2023/02/07-11:01:24.130 33fc Delete type=2 #346
-2023/02/07-11:01:24.130 33fc Delete type=2 #349
+2023/02/07-15:05:51.576 614 Reusing MANIFEST F:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2023/02/07-15:05:51.577 614 Recovering log #361
+2023/02/07-15:05:52.103 614 Reusing old log F:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000361.log 
+2023/02/07-15:06:27.590 4a94 Level-0 table #375: started
+2023/02/07-15:06:27.663 4a94 Level-0 table #375: 1244144 bytes OK
+2023/02/07-15:06:27.666 4a94 Delete type=0 #361
+2023/02/07-15:06:34.350 545c Compacting 1@1 + 10@2 files
+2023/02/07-15:06:34.800 545c Generated table #376@1: 40989 keys, 2249878 bytes
+2023/02/07-15:06:35.012 545c Generated table #377@1: 3908 keys, 2149829 bytes
+2023/02/07-15:06:35.254 545c Generated table #378@1: 24521 keys, 2195784 bytes
+2023/02/07-15:06:35.459 545c Generated table #379@1: 15101 keys, 2150986 bytes
+2023/02/07-15:06:35.707 545c Generated table #380@1: 117406 keys, 2269238 bytes
+2023/02/07-15:06:36.049 545c Generated table #381@1: 117359 keys, 2269126 bytes
+2023/02/07-15:06:36.449 545c Generated table #382@1: 117195 keys, 2268915 bytes
+2023/02/07-15:06:36.819 545c Generated table #383@1: 117479 keys, 2270282 bytes
+2023/02/07-15:06:37.099 545c Generated table #384@1: 117613 keys, 2268628 bytes
+2023/02/07-15:06:37.156 545c Generated table #385@1: 32466 keys, 625796 bytes
+2023/02/07-15:06:37.156 545c Compacted 1@1 + 10@2 files => 20718462 bytes
+2023/02/07-15:06:37.157 545c compacted to: files[ 0 0 10 0 0 0 0 ]
+2023/02/07-15:06:37.157 545c Delete type=2 #363
+2023/02/07-15:06:37.157 545c Delete type=2 #364
+2023/02/07-15:06:37.157 545c Delete type=2 #365
+2023/02/07-15:06:37.157 545c Delete type=2 #366
+2023/02/07-15:06:37.157 545c Delete type=2 #367
+2023/02/07-15:06:37.157 545c Delete type=2 #368
+2023/02/07-15:06:37.157 545c Delete type=2 #369
+2023/02/07-15:06:37.157 545c Delete type=2 #370
+2023/02/07-15:06:37.157 545c Delete type=2 #371
+2023/02/07-15:06:37.157 545c Delete type=2 #372
+2023/02/07-15:06:37.157 545c Delete type=2 #375
