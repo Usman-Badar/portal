@@ -469,7 +469,7 @@ router.post('/inventory/products/create', ( req, res ) => {
                 }else
                 {
                     const product_attributes = JSON.parse(attributes);
-                    const deliveryChallanDate = challan_generate_date === 'null' ? new Date(product_acquisition_date) : new Date(challan_generate_date);
+                    const deliveryChallanDate = challan_generate_date == 'null' ? new Date(product_acquisition_date) : new Date(challan_generate_date);
                     const code = new Date().getTime() + '_' + new Date().getDate() + (new Date().getMonth() + 1) + new Date().getFullYear();
                     let file_name;
                 
@@ -491,9 +491,9 @@ router.post('/inventory/products/create', ( req, res ) => {
                     }
                 
                     db.query(
-                        "INSERT INTO `tbl_inventory_products`(`name`, `product_type`, `entering_code`, `category_id`, `sub_category_id`, `description`, `quantity`, `recording_date`) VALUES (?,?,?,?,?,?,?,?);" +
+                        "INSERT INTO `tbl_inventory_products`(`product_type`, `entering_code`, `category_id`, `sub_category_id`, `quantity`, `recording_date`) VALUES (?,?,?,?,?,?);" +
                         "SELECT product_id FROM tbl_inventory_products WHERE entering_code = ?",
-                        [ name, product_type, code, category, sub_category, description, quantity, new Date(), code ],
+                        [ product_type, code, category, sub_category, quantity, new Date(), code ],
                         ( err, rslt ) => {
                 
                             if( err )
@@ -506,11 +506,14 @@ router.post('/inventory/products/create', ( req, res ) => {
                             }else 
                             {
                 
-                                let attr_query = "INSERT INTO `tbl_inventory_product_transactions`(`labeling`,`product_id`, `quantity`, `stored_quantity`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `acquisition_date`, `note`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                                let attr_query = "INSERT INTO `tbl_inventory_product_transactions`(`name`,`description`,`labeling`,`product_id`, `quantity`, `stored_quantity`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `acquisition_date`, `note`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
                                 let params = [];
+                                let product_id = rslt[1][0].product_id;
 
+                                params.push(name);
+                                params.push(description);
                                 params.push(labeling);
-                                params.push(rslt[1][0].product_id);
+                                params.push(product_id);
                                 params.push(quantity);
                                 params.push(quantity);
                                 params.push(unit_price);
@@ -527,13 +530,7 @@ router.post('/inventory/products/create', ( req, res ) => {
                                 params.push(new Date());
                                 params.push(new Date().toTimeString());
 
-                                attr_query = attr_query.concat("SELECT transaction_id FROM tbl_inventory_product_transactions WHERE product_id = ? AND record_date = ? AND record_time = ?;");
-
-                                params.push(rslt[1][0].product_id);
-                                params.push(new Date().toISOString().slice(0, 10).replace('T', ' '));
-                                params.push(new Date().toTimeString().substring(0,8));
-
-                                let attr_query2 = "";
+                                let attr_query2 = "SELECT 1;";
                                 let params2 = [];
                                 
                                 db.query(
@@ -553,7 +550,7 @@ router.post('/inventory/products/create', ( req, res ) => {
                                             for ( let x = 0; x < product_attributes.length; x++ )
                                             {
                                                 attr_query2 = attr_query2.concat("INSERT INTO `tbl_inventory_product_attributes`(`transaction_id`, `description`, `value_str`, `value_int`, `value_float`, `value_date`, `value_time`) VALUES (?,?,?,?,?,?,?);");
-                                                params2.push(rslt[1][0].transaction_id);
+                                                params2.push(rslt.insertId);
                                                 params2.push(product_attributes[x].description.toLowerCase());
                                                 params2.push(product_attributes[x].type.toLowerCase() === 'value_str' ? product_attributes[x].value.toLowerCase() : null);
                                                 params2.push(product_attributes[x].type.toLowerCase() === 'value_int' ? product_attributes[x].value.toLowerCase() : null);
@@ -578,11 +575,11 @@ router.post('/inventory/products/create', ( req, res ) => {
                                                     {
                                                         CreateLogs( 
                                                             'tbl_inventory_products', 
-                                                            rslt[1][0].product_id,
+                                                            product_id,
                                                             "Product '" + name + "' has created",
                                                             'info'
                                                         );
-                                                        res.send("success");
+                                                        res.send('success');
                                                         res.end();
                                                         
                                                     }
@@ -610,10 +607,10 @@ router.post('/inventory/products/create', ( req, res ) => {
 
 router.post('/inventory/products/create/inward', ( req, res ) => {
 
-    const { attributes, recorded_by, product_id, product_company, product_location, product_sub_location, product_quantity, product_unit_price, product_total_amount, product_physical_condition, product_acquisition_date, product_note, delivery_challan, extension } = req.body;
+    const { product_name, product_description, attributes, recorded_by, product_id, product_company, product_location, product_sub_location, product_quantity, product_unit_price, product_total_amount, product_physical_condition, product_acquisition_date, product_note, delivery_challan, extension } = req.body;
 
     const product_attributes = JSON.parse(attributes);
-    let query = "INSERT INTO `tbl_inventory_product_transactions`(`product_id`, `quantity`, `stored_quantity`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `acquisition_date`, `note`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+    let query = "INSERT INTO `tbl_inventory_product_transactions`(`name`, `description`, `product_id`, `quantity`, `stored_quantity`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `acquisition_date`, `note`, `recorded_by`, `record_date`, `record_time`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
     let params = [];
     let file_name;
 
@@ -634,28 +631,24 @@ router.post('/inventory/products/create/inward', ( req, res ) => {
 
     }
 
+    params.push(product_name);
+    params.push(product_description);
     params.push(product_id);
     params.push(product_quantity);
     params.push(product_quantity);
     params.push(product_unit_price);
     params.push(product_total_amount);
-    params.push(delivery_challan === 'null' || delivery_challan === null || delivery_challan === undefined || delivery_challan === 'undefined' ? null : delivery_challan);
+    params.push(delivery_challan == 'null' || delivery_challan == null || delivery_challan == undefined || delivery_challan == 'undefined' ? null : delivery_challan);
     params.push(product_company);
     params.push(product_location);
     params.push(product_sub_location);
     params.push(file_name ? (file_name + extension) : null);
     params.push(product_physical_condition);
-    params.push(product_acquisition_date);
+    params.push(new Date(product_acquisition_date));
     params.push(product_note);
     params.push(recorded_by);
     params.push(new Date());
     params.push(new Date().toTimeString());
-
-    query = query.concat("SELECT transaction_id FROM tbl_inventory_product_transactions WHERE product_id = ? AND record_date = ? AND record_time = ?;");
-
-    params.push(product_id);
-    params.push(new Date().toISOString().slice(0, 10).replace('T', ' '));
-    params.push(new Date().toTimeString().substring(0,8));
 
     query = query.concat("UPDATE tbl_inventory_products SET quantity = quantity + ? WHERE product_id = ?;");
     
@@ -688,7 +681,7 @@ router.post('/inventory/products/create/inward', ( req, res ) => {
                     for ( let x = 0; x < product_attributes.length; x++ )
                     {
                         query2 = query2.concat("INSERT INTO `tbl_inventory_product_attributes`(`transaction_id`, `description`, `value_str`, `value_int`, `value_float`, `value_date`, `value_time`) VALUES (?,?,?,?,?,?,?);");
-                        params2.push(rslt[1][0].transaction_id);
+                        params2.push(rslt.insertId);
                         params2.push(product_attributes[x].description.toLowerCase());
                         params2.push(product_attributes[x].type.toLowerCase() === 'value_str' ? product_attributes[x].value.toLowerCase() : null);
                         params2.push(product_attributes[x].type.toLowerCase() === 'value_int' ? product_attributes[x].value.toLowerCase() : null);

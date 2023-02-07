@@ -449,12 +449,13 @@ const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequis
                                     <tr>
                                         <th>Requisition</th>
                                         <td> 
+                                            { RequestDetails.requested_employee_name } <br />
                                             { new Date(RequestDetails.requested_date).toDateString() } <br />
                                             { RequestDetails.requested_time }
                                         </td>
                                         <th>Request Status</th>
                                         <td> <span className={ RequestDetails.status + " text-white status_div" }>{ RequestDetails.status }</span> </td>
-                                        <th>Employee Name (On Behalf Of)</th>
+                                        <th>Employee Name (In Behalf Of)</th>
                                         <td> { RequestDetails.behalf_employee_name ? RequestDetails.behalf_employee_name : "Requested By The Employee Itself" } </td>
                                     </tr>
                                     <tr>

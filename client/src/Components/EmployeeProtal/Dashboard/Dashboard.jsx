@@ -191,8 +191,20 @@ const Dashboard = () => {
                                                     Menu.map(
                                                         val2 => {
     
+                                                            let subAccess = val2.access === null ? [] : JSON.parse( val2.access );
+                                                            let subAccessKey = val2.access === null ? true : false;
                                                             let sub_content = null;
-                                                            if ( val2.under_menu === val.option_id )
+                                                            for ( let x = 0; x < subAccess.length; x++ )
+                                                            {
+                                                                for ( let y = 0; y < JSON.parse(AccessControls.access).length; y++ )
+                                                                {
+                                                                    if ( parseInt(JSON.parse(AccessControls.access)[y]) === parseInt(subAccess[x]) )
+                                                                    {
+                                                                        subAccessKey = true;
+                                                                    }
+                                                                }
+                                                            }
+                                                            if ( val2.under_menu === val.option_id && subAccessKey )
                                                             {
                                                                 sub_content = <>
                                                                     <NavLink key={ val2.menu_txt } activeClassName="Dashboard_active" to={ val2.link } className="d-center links">

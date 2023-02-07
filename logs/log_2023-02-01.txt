@@ -1,0 +1,15 @@
+09:37:50 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+09:37:50 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'canSend')
+    at Object.t.canReplyMsg (https://web.whatsapp.com/app.c5b22a78d334f432a3c8.js:72:817567)
+    at Object.window.WWebJS.sendMessage (__puppeteer_evaluation_script__:36:41)
+    at __puppeteer_evaluation_script__:10:45
+
+11:38:13 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_NAME_NOT_RESOLVED at https://web.whatsapp.com/
+

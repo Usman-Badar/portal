@@ -139,7 +139,7 @@ const Attendance = () => {
                         <div className="d-flex align-items-center">
 
                             {
-                                AccessControls.access ? JSON.parse(AccessControls.access).includes(502) || JSON.parse(AccessControls.access).includes(1)
+                                AccessControls.access ? JSON.parse(AccessControls.access).includes(18) || JSON.parse(AccessControls.access).includes(0)
                                     ?
                                     <div className="w-100 px-1">
                                         <label className="mb-0">Company</label>

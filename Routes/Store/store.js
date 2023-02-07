@@ -304,8 +304,8 @@ router.get('/store/get_inventory_requests', ( req, res ) => {
                 let arr = [rslt];
                 if ( rslt.length > 0 )
                 {
-                    let query = "SELECT tbl_inventory_request_to_store_assigned_items.request_id, tbl_inventory_request_to_store_assigned_items.assigned_quantity, tbl_inventory_products.name FROM `tbl_inventory_request_to_store_assigned_items` \
-                    LEFT OUTER JOIN tbl_inventory_products ON tbl_inventory_request_to_store_assigned_items.product_id = tbl_inventory_products.product_id \
+                    let query = "SELECT tbl_inventory_request_to_store_assigned_items.request_id, tbl_inventory_request_to_store_assigned_items.assigned_quantity, tbl_inventory_product_transactions.name FROM `tbl_inventory_request_to_store_assigned_items` \
+                    LEFT OUTER JOIN tbl_inventory_product_transactions ON tbl_inventory_request_to_store_assigned_items.transaction_id = tbl_inventory_product_transactions.transaction_id \
                     WHERE ";
                     let params = [];
                     for ( let x = 0; x < rslt.length; x++ )
@@ -321,7 +321,7 @@ router.get('/store/get_inventory_requests', ( req, res ) => {
                             query = query.concat(" OR ");
                         }
                     }
-                    db.query(
+                    let qqqqq =db.query(
                         query,
                         params,
                         ( err, rslt2 ) => {
@@ -400,9 +400,9 @@ router.post('/store/inventory_request/details', ( req, res ) => {
         WHERE tbl_inventory_request_to_store.id = ?;" +
         "SELECT  \
         tbl_inventory_request_to_store_assigned_items.*, \
-        tbl_inventory_products.name, \
-        tbl_inventory_products.description, \
         tbl_inventory_product_transactions.stored_quantity, \
+        tbl_inventory_product_transactions.name, \
+        tbl_inventory_product_transactions.description, \
         companies.company_name, \
         locations.location_name, \
         tbl_inventory_sub_locations.sub_location_name \

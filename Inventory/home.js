@@ -17,7 +17,6 @@ router.get('/inventory/get_data/home', ( req, res ) => {
 
     db.query(
         "SELECT \
-        `tbl_inventory_products`.`name`, \
         `tbl_inventory_product_transactions`.`entry`, \
         `tbl_inventory_product_transactions`.`quantity`, \
         `tbl_inventory_product_transactions`.`total_amount`, \

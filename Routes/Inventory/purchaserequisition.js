@@ -2032,10 +2032,12 @@ router.post('/purchase/requisition/details', ( req, res ) => {
         behalf_employee.name AS behalf_employee_name, \
         submit_to_employee.name AS submit_to_employee_name, \
         hod_employee.name AS hod_employee_name, \
+        requested_employee.name AS requested_employee_name, \
         locations.location_name \
         FROM `tbl_inventory_purchase_requisition`  \
         LEFT OUTER JOIN companies ON tbl_inventory_purchase_requisition.company_code = companies.company_code \
         LEFT OUTER JOIN locations ON tbl_inventory_purchase_requisition.location_code = locations.location_code \
+        LEFT OUTER JOIN employees requested_employee ON tbl_inventory_purchase_requisition.requested_by = requested_employee.emp_id \
         LEFT OUTER JOIN employees behalf_employee ON tbl_inventory_purchase_requisition.request_submitted_on_behalf = behalf_employee.emp_id \
         LEFT OUTER JOIN employees submit_to_employee ON tbl_inventory_purchase_requisition.submitted_to = submit_to_employee.emp_id \
         LEFT OUTER JOIN employees hod_employee ON tbl_inventory_purchase_requisition.appr_rejct_by = hod_employee.emp_id \
@@ -2148,6 +2150,197 @@ router.post('/purchase/requisition/send_for_approval', ( req, res ) => {
 
 } );
 
+router.post('/purchase/requisition/request_from_inventory', ( req, res ) => {
+
+    const { emp_id, note, request_in_behalf, submit_to, data, specifications } = req.body;
+    let received_data = JSON.parse( data );
+    let arr_spacifications_names = []; 
+    let quotations_attached = 0;
+    const code = new Date().getTime() + '_' + new Date().getDate() + (new Date().getMonth() + 1) + new Date().getFullYear();
+    const received_specifications = JSON.parse( specifications );
+
+    if ( req.files )
+    {
+        const { Attachments } = req.files;
+        let arr;
+        if ( typeof(Attachments) === 'object' && !Attachments.length )
+        {
+            arr = [Attachments];
+        }else
+        {
+            arr = Attachments;
+        }
+        quotations_attached = arr.length;
+    }
+
+    const submitted_to = submit_to;
+
+    db.query(
+        "INSERT INTO `tbl_inventory_purchase_requisition`(`entry`,`note`, `company_code`, `location_code`, `new_purchase`, `repair_replacement`, `budgeted`, `not_budgeted`, `invoice_attached`, `reason`, `requested_by`, `requested_date`, `requested_time`, `total_value`, `no_items_requested`, `submitted_to`, `quotations_attached`, `request_submitted_on_behalf`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
+        [ code, note, received_data.company_code, received_data.location_code, received_data.new_purchase_checkbox ? 1 :0, received_data.repair_replacement_checkbox ? 1 :0, received_data.budgeted_checkbox ? 1 :0, received_data.not_budgeted_checkbox ? 1 :0, received_data.invoice_attached_checkbox ? 1 :0, received_data.reason, emp_id, new Date(), new Date().toTimeString(), received_data.total_calculated_amount, received_specifications.length, submitted_to, quotations_attached, request_in_behalf == null || request_in_behalf == 'null' ? null : request_in_behalf ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                const mPrId = rslt.insertId;
+                for ( let x = 0; x < received_specifications.length; x++ )
+                {
+                    arr_spacifications_names.push(received_specifications[x].specification_description);
+                    db.query(
+                        "INSERT INTO `tbl_inventory_purchase_requisition_specifications`(`pr_id`, `sr_no`, `description`, `quantity`, `estimated_cost`, `total_estimated_cost`, `entered_by`, `entered_date`) VALUES (?,?,?,?,?,?,?,?);",
+                        [ mPrId, received_specifications[x].specification_serial_number, received_specifications[x].specification_description, received_specifications[x].specification_quantity, received_specifications[x].specification_est_cost, received_specifications[x].specification_total_cost, emp_id, new Date() ],
+                        ( err ) => {
+                
+                            if( err )
+                            {
+                
+                                console.log( err );
+                                res.send( err );
+                                res.end();
+                
+                            }
+                
+                        }
+                    );
+                }
+                db.query(
+                    "UPDATE tbl_inventory_purchase_requisition SET status = 'waiting_for_approval', appr_rejct_by = ?, remarks = ?, view_date = ?, view_time = ? WHERE pr_id = ?;",
+                    [ submit_to, note, new Date(), new Date().toTimeString(), mPrId ],
+                    ( err ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else 
+                        {
+                            
+                            db.query(
+                                "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                                "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                                "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                                [ emp_id, request_in_behalf == null || request_in_behalf == 'null' ? emp_id : request_in_behalf, submit_to ],
+                                ( err, result ) => {
+                        
+                                    if( err )
+                                    {
+                        
+                                        console.log( err );
+                                        res.send( err );
+                                        res.end();
+                        
+                                    }else
+                                    {
+
+                                        console.log( result );
+                                        SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "Purchase requisition with PR NO # " + mPrId + " has been sent to the accounts department for approval. Please wait... while the accounts department is reviewing your approval request.", result[0][0].cell );
+                                        if ( request_in_behalf != null || request_in_behalf != 'null' )
+                                        {
+                                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, "A Purchase Requisition with PR NO # " + mPrId + " has been generated by the inventory department in your behalf, for item(s) " + arr_spacifications_names.join(', ') + ". The request has been proceed to the accounts department.", result[1][0].cell );
+                                        }
+                                        SendWhatsappNotification( null, null, "Hi " + result[2][0].name, "Inventory department has forward you a purchase requisition with PR NO # " + mPrId + " for item(s) " + arr_spacifications_names.join(', ') + ", Kindly review.", result[2][0].cell );
+            
+                                        res.send('success');
+                                        res.end();
+                                    }
+                        
+                                }
+                            );
+            
+                        }
+            
+                    }
+                );
+
+                if ( req.files )
+                {
+                    const { Attachments } = req.files;
+                    let arr;
+                    if ( typeof(Attachments) === 'object' && !Attachments.length )
+                    {
+                        arr = [Attachments];
+                    }else
+                    {
+                        arr = Attachments;
+                    }
+                    for ( let y = 0; y < arr.length; y++ )
+                    {
+                        MakeDir.mkdir('assets/inventory/assets/images/quotations',
+                            { recursive: true },
+                            (err) => {
+                                if (err) {
+    
+                                    console.log( err );
+                                    res.status(500).send(err);
+                                    res.end();
+                                    
+                                }
+                                else {
+                                    
+                                    let name = new Date().getTime() + "_" + arr[y].name;
+                                    arr[y].mv('assets/inventory/assets/images/quotations/' + name, (err) => {
+                                            if (err) 
+                                            {
+                                            
+                                                console.log( err );
+                                                res.status(500).send(err);
+                                                res.end();
+                    
+                                            }else
+                                            {
+                                                db.query(
+                                                    "INSERT INTO `tbl_inventory_purchase_requisition_quotations`(`quotation`, `uploaded_by`, `uploaded_date`, `uploaded_time`, `pr_id`) VALUES (?,?,?,?,?);",
+                                                    [ 'assets/inventory/assets/images/quotations/' + name, emp_id, new Date(), new Date().toTimeString(), mPrId ],
+                                                    ( err ) => {
+                                            
+                                                        if( err )
+                                                        {
+                                            
+                                                            console.log( err );
+                                                            res.send( err );
+                                                            res.end();
+                                            
+                                                        }
+                                            
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    )
+                                    
+                                }
+                            }
+                        )
+
+                        if ( (y+1) === arr.length )
+                        {
+                            res.send("success");
+                            res.end();
+                        }
+                    }
+                }else
+                {
+                    res.send("success");
+                    res.end();
+                }
+
+            }
+
+        }
+    );
+
+} );
+
 router.post('/purchase/requisition/reject', ( req, res ) => {
 
     const { pr_id, requested_by, emp_id, remarks, specifications, department } = req.body;
@@ -2196,6 +2389,34 @@ router.post('/purchase/requisition/reject', ( req, res ) => {
             
                     }
                 );
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/inventory/pusrchase/requisition/search/employees', ( req, res ) => {
+
+    const { key } = req.body;
+
+    db.query(
+        "SELECT employees.emp_id, employees.name, designations.designation_name, emp_app_profile.emp_image FROM employees LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id WHERE employees.name LIKE '%" + key + "%' ORDER BY employees.name ASC;",
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                
+                res.send(rslt);
+                res.end();
 
             }
 

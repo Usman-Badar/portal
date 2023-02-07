@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../db/connection');
+const SendWhatsappNotification = require('../Whatsapp/whatsapp').SendWhatsappNotification;
 
 router.post('/applyshortleave', (req, res) => {
 
@@ -44,8 +45,29 @@ router.post('/applyshortleave', (req, res) => {
 
                                     } else {
 
-                                        res.send(rslt);
-                                        res.end();
+                                        db.query(
+                                            "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                                            "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                                            [ RequestedBy, RequestedTo ],
+                                            ( err, result ) => {
+                                    
+                                                if( err )
+                                                {
+                                    
+                                                    console.log( err );
+                                                    res.send( err );
+                                                    res.end();
+                                    
+                                                }else
+                                                {
+                                                    SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "Your short leave has been sent to your H.O.D " + result[1][0].name + ", kindly wait... while your application is proceeding for approval.", result[0][0].cell );
+                                                    SendWhatsappNotification( null, null, "Hi " + result[1][0].name, result[0][0].name + " has sent you a short leave on portal, " + result[0][0].name + " will leave at around " + ShortLeaveTime + " on " + ShortLeaveDate + " under reason '" + ShortLeaveReason + "'. Kindly view", result[1][0].cell );
+                                                    res.send(rslt);
+                                                    res.end();
+                                                }
+                                    
+                                            }
+                                        );
 
                                     }
 
@@ -929,7 +951,7 @@ router.post('/getmyleavedetails', (req, res) => {
 
 router.post('/cancel_leave', (req, res) => {
 
-    const { leave_id, remarks, type } = req.body;
+    const { leave_id, remarks, type, submit_to, submit_by } = req.body;
     let q = "";
     const d = new Date();
     if ( type === 'short' )
@@ -953,8 +975,29 @@ router.post('/cancel_leave', (req, res) => {
 
             } else {
 
-                res.send(rslt);
-                res.end();
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ submit_by, submit_to ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "You have canceled your short leave. Your H.O.D also has been notified.", result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, result[0][0].name + " has canceled his/her short leave with reason '" + remarks + "'.", result[1][0].cell );
+                            res.send(rslt);
+                            res.end();
+                        }
+            
+                    }
+                );
 
             }
 
@@ -965,7 +1008,7 @@ router.post('/cancel_leave', (req, res) => {
 
 router.post('/reject_leave', (req, res) => {
 
-    const { leave_id, emp_id, remarks, type } = req.body;
+    const { leave_id, emp_id, remarks, type, submit_by } = req.body;
     let q = "";
     const d = new Date();
     if ( type === 'short' )
@@ -989,8 +1032,29 @@ router.post('/reject_leave', (req, res) => {
 
             } else {
 
-                res.send(rslt);
-                res.end();
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ submit_by, emp_id ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "Your short leave has been rejected by " + result[1][0].name + " with remarks '" + remarks + "'. If you have any query, kindly contact " + result[1][0].name, result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, "You have rejected a short leave with reason '" + remarks + "'. The requested employee " + result[0][0].name + " has been notified", result[1][0].cell );
+                            res.send(rslt);
+                            res.end();
+                        }
+            
+                    }
+                );
 
             }
 
@@ -1001,7 +1065,7 @@ router.post('/reject_leave', (req, res) => {
 
 router.post('/approve_leave', (req, res) => {
 
-    const { leave_id, emp_id, remarks, type, submit_to } = req.body;
+    const { leave_id, emp_id, remarks, type, submit_to, submit_by } = req.body;
     let q = "";
     const d = new Date();
     if ( type === 'short' )
@@ -1025,8 +1089,31 @@ router.post('/approve_leave', (req, res) => {
 
             } else {
 
-                res.send(rslt);
-                res.end();
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ submit_by, emp_id, submit_to ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "Your short leave has been approved by " + result[1][0].name + " with remarks '" + remarks + "'. Your request has been proceed for authorization.", result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, "Thank you for approving the short leave. The requested employee " + result[0][0].name + " has been notified. The short leave has been proceed to " + result[2][0].name, result[1][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[2][0].name, result[1][0].name + " has forward you a short leave with remarks '" + remarks + "'. The requested employee " + result[0][0].name + " has been notified.", result[2][0].cell );
+                            res.send(rslt);
+                            res.end();
+                        }
+            
+                    }
+                );
 
             }
 
@@ -1037,7 +1124,7 @@ router.post('/approve_leave', (req, res) => {
 
 router.post('/authorize_leave', (req, res) => {
 
-    const { leave_id, emp_id, remarks, type } = req.body;
+    const { leave_id, emp_id, remarks, type, submit_by } = req.body;
     let q = "";
     const d = new Date();
     if ( type === 'short' )
@@ -1062,8 +1149,29 @@ router.post('/authorize_leave', (req, res) => {
 
             } else {
 
-                res.send(rslt);
-                res.end();
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ submit_by, emp_id ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "Your short leave has been authorized by " + result[1][0].name + " with remarks '" + remarks + "'. Good luck.", result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, "Thank you for authorizing the short leave. The requested employee " + result[0][0].name + " has been notified.", result[1][0].cell );
+                            res.send(rslt);
+                            res.end();
+                        }
+            
+                    }
+                );
 
             }
 

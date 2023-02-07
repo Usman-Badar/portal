@@ -945,7 +945,7 @@ const Attandence_Request = () => {
 
                                             if ( AccessControls.access && CheckCancellation() )
                                             {
-                                                if ( JSON.parse(AccessControls.access).includes(101) )
+                                                if ( JSON.parse(AccessControls.access).includes(19) || JSON.parse(AccessControls.access).includes(0) )
                                                 {
                                                     options.push(<option value="mark">Mark</option>);
                                                     {/* options.push(<option value="mark_&_forward">Mark & Forward</option>); */}
@@ -1599,7 +1599,7 @@ const View2 = ({ RequestList, RequestDetails, buttonslideSnapeshot, OnTimeChange
                             :
                             AccessControls.access && RequestDetails.reviews.length > 0 //&& RequestDetails.reviews[0].request_by !== parseInt( sessionStorage.getItem('EmpID') )
                             ?
-                            JSON.parse(AccessControls.access).includes(101) || JSON.parse(AccessControls.access).includes(1)
+                            JSON.parse(AccessControls.access).includes(19) || JSON.parse(AccessControls.access).includes(0)
                             ?
                             <div className='details'>
                                 <p>Your timings : </p>

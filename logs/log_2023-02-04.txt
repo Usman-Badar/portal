@@ -1,0 +1,18 @@
+10:02:52 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+10:02:52 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+10:02:52 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+11:08:30 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+

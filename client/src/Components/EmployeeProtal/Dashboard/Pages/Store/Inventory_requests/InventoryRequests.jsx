@@ -20,7 +20,7 @@ const InventoryRequests = () => {
 
     const UserData = useSelector( ( state ) => state.EmpAuth.EmployeeData );
 
-    const [ StartLoading, setStartLoading ] = useState(false);
+    // const [ StartLoading, setStartLoading ] = useState(false);
     const [ Requests, setRequests ] = useState();
     const [ Specifications, setSpecifications ] = useState();
     const [ Details, setDetails ] = useState();

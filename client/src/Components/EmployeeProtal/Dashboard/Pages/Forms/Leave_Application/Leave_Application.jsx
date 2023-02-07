@@ -190,19 +190,6 @@ const Leave_Application = () => {
 
             $('button[type=reset]').trigger('click');
             $('#mail_form').trigger('click');
-            const Data2 = new FormData();
-            Data2.append('eventID', 2);
-            Data2.append('whatsapp', true);
-            Data2.append('receiverID', ShortLeaveData.submit_to);
-            Data2.append('senderID', sessionStorage.getItem('EmpID'));
-            Data2.append('Title', sessionStorage.getItem('name'));
-            Data2.append('NotificationBody', sessionStorage.getItem('name') + ' apply for a short leave on the portal');
-            axios.post('/newnotification', Data2).then(() => {
-
-                // axios.post('/sendmail', Data2).then(() => {
-
-                // })
-            })
 
         }).catch(err => {
 
@@ -403,25 +390,14 @@ const Leave_Application = () => {
         const objects = {
             leave_id: obj.leave_id,
             remarks: e.target['remarks'].value,
-            type: history.location.pathname.split('/').pop().split('_').pop()
+            type: history.location.pathname.split('/').pop().split('_').pop(),
+            submit_by: obj.requested_by,
+            submit_to: obj.received_by
         }
         axios.post('/cancel_leave', objects).then(() => {
 
             ShowHistory();
             $('#mail_form').trigger('click');
-            const Data2 = new FormData();
-            Data2.append('eventID', 2);
-            Data2.append('whatsapp', true);
-            Data2.append('receiverID', obj.received_by);
-            Data2.append('senderID', sessionStorage.getItem('EmpID'));
-            Data2.append('Title', sessionStorage.getItem('name'));
-            Data2.append('NotificationBody', sessionStorage.getItem('name') + ' has cancel the leave request on the portal');
-            axios.post('/newnotification', Data2).then(() => {
-
-                // axios.post('/sendmail', Data2).then(() => {
-
-                // })
-            })
 
         }).catch(
             err => {
@@ -479,25 +455,13 @@ const Leave_Application = () => {
             leave_id: obj.leave_id,
             remarks: e.target['remarks'].value,
             type: history.location.pathname.split('/').pop().split('_').pop(),
-            emp_id: sessionStorage.getItem('EmpID')
+            emp_id: sessionStorage.getItem('EmpID'),
+            submit_by: obj.requested_by
         }
         axios.post('/reject_leave', objects).then(() => {
 
             ShowHistory();
             $('#mail_form').trigger('click');
-            const Data2 = new FormData();
-            Data2.append('eventID', 2);
-            Data2.append('whatsapp', true);
-            Data2.append('receiverID', obj.requested_by);
-            Data2.append('senderID', sessionStorage.getItem('EmpID'));
-            Data2.append('Title', sessionStorage.getItem('name'));
-            Data2.append('NotificationBody', sessionStorage.getItem('name') + ' has rejected your leave request on the portal');
-            axios.post('/newnotification', Data2).then(() => {
-
-                // axios.post('/sendmail', Data2).then(() => {
-
-                // })
-            })
 
         }).catch(
             err => {
@@ -539,28 +503,12 @@ const Leave_Application = () => {
             remarks: e.target['remarks'].value,
             type: history.location.pathname.split('/').pop().split('_').pop(),
             emp_id: sessionStorage.getItem('EmpID'),
-            submit_to: e.target['submit_to'].value
+            submit_to: e.target['submit_to'].value,
+            submit_by: obj.requested_by,
         }
         axios.post('/approve_leave', objects).then(() => {
 
             ShowHistory();
-            let arr = [{ person: obj.requested_by, message: sessionStorage.getItem('name') + ' has approved your leave request on the portal' }, { person: e.target['submit_to'].value, message: sessionStorage.getItem('name') + ' has forward you a leave request on the portal' }]
-            for (let x = 0; x < arr.length; x++) {
-                $('#mail_form').trigger('click');
-                const Data2 = new FormData();
-                Data2.append('eventID', 2);
-                Data2.append('whatsapp', true);
-                Data2.append('receiverID', arr[x].person);
-                Data2.append('senderID', sessionStorage.getItem('EmpID'));
-                Data2.append('Title', sessionStorage.getItem('name'));
-                Data2.append('NotificationBody', arr[x].message);
-                axios.post('/newnotification', Data2).then(() => {
-
-                    // axios.post('/sendmail', Data2).then(() => {
-
-                    // })
-                })
-            }
 
         }).catch(
             err => {
@@ -616,7 +564,8 @@ const Leave_Application = () => {
             leave_id: obj.leave_id,
             remarks: e.target['remarks'].value,
             type: history.location.pathname.split('/').pop().split('_').pop(),
-            emp_id: sessionStorage.getItem('EmpID')
+            emp_id: sessionStorage.getItem('EmpID'),
+            submit_by: obj.requested_by
         }
         axios.post('/authorize_leave', objects).then(() => {
 

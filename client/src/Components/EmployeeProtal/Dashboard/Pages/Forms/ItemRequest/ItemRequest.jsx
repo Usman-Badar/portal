@@ -1591,29 +1591,7 @@ const ItemRequest = () => {
                                                     <tr>
                                                         <td>{ index + 1 }</td>
                                                         <td>{ val.hod_approval_required === 1 ? <span className='text-danger'>Reuqired</span> : <span className='text-primary'>Not Required</span> }</td>
-                                                        {
-                                                            JSON.parse(AccessControls.access).includes(529)
-                                                            ||
-                                                            JSON.parse(AccessControls.access).includes(1)
-                                                            ?
-                                                            <td className='underline'>
-                                                                { val.name }
-                                                                {/* {
-                                                                    RequestDetails.specificationsStatus[index]
-                                                                    ?
-                                                                    <div className='items_specifications details'>
-                                                                        <b>Availble Quantity: </b>
-                                                                        <span> { RequestDetails.specificationsStatus[index].availble_quantity } </span>
-                                                                        <br />
-                                                                        <b>Status: </b>
-                                                                        <span> { RequestDetails.specificationsStatus[index].status } </span>
-                                                                    </div>
-                                                                    :null
-                                                                } */}
-                                                            </td>
-                                                            :
-                                                            <td>{ val.name }</td>
-                                                        }
+                                                        <td>{ val.name }</td>
                                                         <td>{ val.required_quantity }</td>
                                                         <td style={ { wordBreak: 'break-all' } }>
                                                             { val.reason }

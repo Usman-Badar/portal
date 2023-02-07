@@ -1,38 +1,29 @@
-2023/01/31-16:58:52.597 35bc Reusing MANIFEST F:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2023/01/31-16:58:52.598 35bc Recovering log #891
-2023/01/31-16:58:52.818 35bc Reusing old log F:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000891.log 
-2023/01/31-16:59:08.558 21e0 Level-0 table #908: started
-2023/01/31-16:59:08.617 21e0 Level-0 table #908: 1247445 bytes OK
-2023/01/31-16:59:08.619 21e0 Delete type=0 #891
-2023/01/31-17:00:07.908 21e0 Compacting 1@1 + 7@2 files
-2023/01/31-17:00:08.184 21e0 Generated table #909@1: 30578 keys, 2250944 bytes
-2023/01/31-17:00:08.412 21e0 Generated table #910@1: 24751 keys, 2265502 bytes
-2023/01/31-17:00:08.632 21e0 Generated table #911@1: 24794 keys, 2261845 bytes
-2023/01/31-17:00:08.810 21e0 Generated table #912@1: 70821 keys, 2259203 bytes
-2023/01/31-17:00:09.007 21e0 Generated table #913@1: 25796 keys, 2221609 bytes
-2023/01/31-17:00:09.288 21e0 Generated table #914@1: 15209 keys, 2171971 bytes
-2023/01/31-17:00:09.624 21e0 Generated table #915@1: 14386 keys, 2166755 bytes
-2023/01/31-17:00:09.691 21e0 Generated table #916@1: 679 keys, 262771 bytes
-2023/01/31-17:00:09.691 21e0 Compacted 1@1 + 7@2 files => 15860600 bytes
-2023/01/31-17:00:09.714 21e0 compacted to: files[ 0 2 17 0 0 0 0 ]
-2023/01/31-17:00:09.714 21e0 Delete type=2 #895
-2023/01/31-17:00:09.714 21e0 Delete type=2 #896
-2023/01/31-17:00:09.715 21e0 Delete type=2 #897
-2023/01/31-17:00:09.715 21e0 Delete type=2 #898
-2023/01/31-17:00:09.715 21e0 Delete type=2 #899
-2023/01/31-17:00:09.715 21e0 Delete type=2 #900
-2023/01/31-17:00:09.715 21e0 Delete type=2 #901
-2023/01/31-17:00:09.715 21e0 Delete type=2 #908
-2023/01/31-18:15:45.811 21e0 Compacting 1@1 + 5@2 files
-2023/01/31-18:15:46.104 21e0 Generated table #917@1: 117395 keys, 2269525 bytes
-2023/01/31-18:15:46.387 21e0 Generated table #918@1: 117393 keys, 2268775 bytes
-2023/01/31-18:15:46.628 21e0 Generated table #919@1: 117645 keys, 2270579 bytes
-2023/01/31-18:15:46.748 21e0 Generated table #920@1: 58469 keys, 1131069 bytes
-2023/01/31-18:15:46.748 21e0 Compacted 1@1 + 5@2 files => 7939948 bytes
-2023/01/31-18:15:46.749 21e0 compacted to: files[ 0 1 16 0 0 0 0 ]
-2023/01/31-18:15:46.749 21e0 Delete type=2 #874
-2023/01/31-18:15:46.749 21e0 Delete type=2 #886
-2023/01/31-18:15:46.749 21e0 Delete type=2 #887
-2023/01/31-18:15:46.749 21e0 Delete type=2 #888
-2023/01/31-18:15:46.749 21e0 Delete type=2 #889
-2023/01/31-18:15:46.749 21e0 Delete type=2 #894
+2023/02/07-11:01:01.763 35e8 Reusing MANIFEST F:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2023/02/07-11:01:01.764 35e8 Recovering log #336
+2023/02/07-11:01:02.792 35e8 Reusing old log F:\IT\Web Development\MERN\portal\.wwebjs_auth\session-portal\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000336.log 
+2023/02/07-11:01:16.515 1f08 Level-0 table #349: started
+2023/02/07-11:01:16.633 1f08 Level-0 table #349: 1034769 bytes OK
+2023/02/07-11:01:16.636 1f08 Delete type=0 #336
+2023/02/07-11:01:17.647 33fc Compacting 1@1 + 9@2 files
+2023/02/07-11:01:17.919 33fc Generated table #350@1: 35525 keys, 2223583 bytes
+2023/02/07-11:01:18.155 33fc Generated table #351@1: 3928 keys, 2149299 bytes
+2023/02/07-11:01:18.540 33fc Generated table #352@1: 24703 keys, 2193455 bytes
+2023/02/07-11:01:18.941 33fc Generated table #353@1: 36848 keys, 2176774 bytes
+2023/02/07-11:01:19.668 33fc Generated table #354@1: 117780 keys, 2270588 bytes
+2023/02/07-11:01:20.402 33fc Generated table #355@1: 117392 keys, 2269654 bytes
+2023/02/07-11:01:21.621 33fc Generated table #356@1: 117490 keys, 2269926 bytes
+2023/02/07-11:01:23.346 33fc Generated table #357@1: 117377 keys, 2270673 bytes
+2023/02/07-11:01:24.102 33fc Generated table #358@1: 117874 keys, 2271193 bytes
+2023/02/07-11:01:24.129 33fc Generated table #359@1: 6917 keys, 133755 bytes
+2023/02/07-11:01:24.129 33fc Compacted 1@1 + 9@2 files => 20228900 bytes
+2023/02/07-11:01:24.129 33fc compacted to: files[ 0 0 10 0 0 0 0 ]
+2023/02/07-11:01:24.130 33fc Delete type=2 #338
+2023/02/07-11:01:24.130 33fc Delete type=2 #339
+2023/02/07-11:01:24.130 33fc Delete type=2 #340
+2023/02/07-11:01:24.130 33fc Delete type=2 #341
+2023/02/07-11:01:24.130 33fc Delete type=2 #342
+2023/02/07-11:01:24.130 33fc Delete type=2 #343
+2023/02/07-11:01:24.130 33fc Delete type=2 #344
+2023/02/07-11:01:24.130 33fc Delete type=2 #345
+2023/02/07-11:01:24.130 33fc Delete type=2 #346
+2023/02/07-11:01:24.130 33fc Delete type=2 #349
