@@ -61,7 +61,7 @@ const Descussion = () => {
                             cTime = fullTimes.toString();
 
                             return (
-                                    <div className="previous_descussions popUps" key={ index }>
+                                    <div className="previous_descussions animate__animated animate__fadeInDown" key={ index }>
                                         <div className="d-flex justify-content-start align-items-center mb-3">
                                             <div className="emp_img" style={{ 'backgroundImage': "url('images/employees/" + val.emp_image + "')" }}></div>
                                             <div className="pl-3">

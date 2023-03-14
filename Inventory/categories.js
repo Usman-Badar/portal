@@ -121,7 +121,7 @@ router.post('/inventory/add_new_category', ( req, res ) => {
 
 router.post('/inventory/edit_category', ( req, res ) => {
 
-    const { category, category_id, icon, type, labeling } = req.body;
+    const { category, category_id, icon, type } = req.body;
 
     db.query(
         "SELECT LOWER(name) FROM `tbl_inventory_categories` WHERE name = ? AND category_id != ?;",
@@ -131,6 +131,7 @@ router.post('/inventory/edit_category', ( req, res ) => {
             if( err )
             {
 
+                console.log( err );
                 res.send(err);
                 res.end();
 
@@ -144,13 +145,14 @@ router.post('/inventory/edit_category', ( req, res ) => {
                 }else
                 {
                     db.query(
-                        "UPDATE `tbl_inventory_categories` SET name = ?, icon = ?, type = ?, labeling = ? WHERE category_id = ?;",
-                        [ category, icon, type, labeling ? 1 : 0, category_id ],
+                        "UPDATE `tbl_inventory_categories` SET name = ?, icon = ?, type = ? WHERE category_id = ?;",
+                        [ category, icon, type, category_id ],
                         ( err ) => {
                 
                             if( err )
                             {
                 
+                                console.log( err );
                                 res.send(err);
                                 res.end();
                 

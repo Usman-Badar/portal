@@ -79,6 +79,11 @@ const RepairRequest = lazy( () => import('./Pages/Forms/RepairRequest/RepairRequ
 const EmpTickets = lazy( () => import('./Pages/EmpTickets/EmpTickets') );
 
 const PurchaseRequisition = lazy( () => import('./Pages/Forms/PurchaseRequisition/PurchaseRequisition') );
+const PurchaseOrder = lazy( () => import('./Pages/Forms/PurchaseOrder/PurchaseOrder') );
+
+const DeliveryChallan = lazy( () => import('./Pages/Inventory/DeliveryChallan/DeliveryChallan') );
+
+const Container = lazy( () => import('./Pages/Container/Container') );
 
 const Dashboard = () => {
     
@@ -178,7 +183,7 @@ const Dashboard = () => {
                                     if ( val.option_id !== null && accessKey )
                                     {
                                         content = <>
-                                            <div key={ index } className={ "d-center links " + val.menu_txt + val.option_id } onClick={() => FormsLinks(val.menu_txt + val.option_id, val.option_id)}>
+                                            <div key={ index } className={ "d-center links animate__animated ripple animate__bounceInLeft animate__fast " + val.menu_txt + val.option_id } onClick={() => FormsLinks(val.menu_txt + val.option_id, val.option_id)}>
                                                 <div className="pr-3"><i className={ val.icon_class_name }></i></div>
                                                 <div className="d-flex justify-content-between w-100">
                                                     <div className="links_txt"> { val.menu_txt } </div>
@@ -207,7 +212,7 @@ const Dashboard = () => {
                                                             if ( val2.under_menu === val.option_id && subAccessKey )
                                                             {
                                                                 sub_content = <>
-                                                                    <NavLink key={ val2.menu_txt } activeClassName="Dashboard_active" to={ val2.link } className="d-center links">
+                                                                    <NavLink key={ val2.menu_txt } activeClassName="Dashboard_active" to={ val2.link } className="d-center links animate__animated ripple animate__bounceInLeft animate__fast">
                                                                         <div className="pr-3"><i className={ val2.icon_class_name }></i></div>
                                                                         <div className="links_txt">{ val2.menu_txt }</div>
                                                                     </NavLink>
@@ -225,7 +230,7 @@ const Dashboard = () => {
                                     }else if ( val.under_menu === null && accessKey )
                                     {
                                         content = <>
-                                            <NavLink key={ val.menu_txt } activeClassName="Dashboard_active" to={ val.link } className="d-center links">
+                                            <NavLink key={ val.menu_txt } activeClassName="Dashboard_active" to={ val.link } className="d-center links animate__animated ripple animate__bounceInLeft animate__fast">
                                                 <div className="pr-3"><i className={ val.icon_class_name }></i></div>
                                                 <div className="links_txt">{ val.menu_txt }</div>
                                             </NavLink>
@@ -359,21 +364,7 @@ const Dashboard = () => {
 
                         <Route exact path='/employeestickets/:path' render={ () => <Sus content={ <EmpTickets /> } /> } />
 
-
-                        {/* <Route exact path="/invtry" component={ Assets } />
-                        <Route exact path="/invtry_assets" component={InvtryAssets} />
-
-                        <Route exact path="/invtry_assets/new/entry" component={ NewAssetEntry } />
-
-                        <Route exact path="/invtry_assets/invtrysubassets/:id" component={InvtrySubAssets} />
-
-                        <Route exact path="/view_invtry_requests" component={ ViewInvtryRequests } />
-                        <Route exact path="/view_invtry_requests/employee=:id" component={ ViewInvtryRequests } />
-                        <Route exact path="/view_invtry_requests/employee=:id&&request=:id" component={ ViewInvtryRequests } />
-
-                        <Route exact path="/invtry_locations" component={InvtryLocation} />
-                        <Route exact path="/invtry_locations/invtrysublocations/:id" component={InvtrySubLocations} />
-                         */}
+                        <Route exact path="/inventory/challan/:path" render={ () => <Sus content={ <DeliveryChallan /> } /> } />
                         
                         <Route exact path="/employment_setup" render={ () => <Sus content={ <EmploymentForm /> } /> } />
                         <Route exact path="/employment_setup/form" render={ () => <Sus content={ <EmploymentForm /> } /> } />
@@ -395,7 +386,7 @@ const Dashboard = () => {
                         */}
                         <Route exact path="/item_requests" render={ () => <Sus content={ <ItemRequest /> } /> } />
                         <Route exact path="/item_requests/:path" render={ () => <Sus content={ <ItemRequest /> } /> } />
-                        <Route exact path="/item_requests/:path/index=:index" render={ () => <Sus content={ <ItemRequest /> } /> } />
+                        <Route exact path="/item_requests/:path/id=:index" render={ () => <Sus content={ <ItemRequest /> } /> } />
                         
 
                         {/* REPAIR REQUEST */}
@@ -405,6 +396,16 @@ const Dashboard = () => {
                         <Route exact path="/purchase/requisition/form" render={ () => <Sus content={ <PurchaseRequisition /> } /> } />
                         <Route exact path="/purchase/requisition/requests" render={ () => <Sus content={ <PurchaseRequisition /> } /> } />
                         <Route exact path="/purchase/requisition/details" render={ () => <Sus content={ <PurchaseRequisition /> } /> } />
+                        
+                        {/* PURCAHSE ORDER */}
+                        <Route exact path="/purchase/order/form" render={ () => <Sus content={ <PurchaseOrder /> } /> } />
+                        <Route exact path="/purchase/order/requests" render={ () => <Sus content={ <PurchaseOrder /> } /> } />
+                        <Route exact path="/purchase/order/details" render={ () => <Sus content={ <PurchaseOrder /> } /> } />
+                        
+                        {/* 
+                            For Container
+                        */}
+                        <Route exact path="/logistics/container/:path" render={ () => <Sus content={ <Container /> } /> } />
                     </div>
 
                 </div>

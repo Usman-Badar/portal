@@ -13,15 +13,30 @@ export const searchEmployees = (e, setKeyword, setEmployee) => {
 
 }
 
-export const getEmployees = (Employees, setEmployees) => {
+export const getEmployees = (Employees, AccessControls, setEmployees) => {
 
     if ( Employees )
     {
         return false;
     }
 
-    axios.get(
-        '/get/employees/all'
+    let accessKey = 0;
+    if ( AccessControls )
+    {
+        for ( let y = 0; y < JSON.parse(AccessControls.access).length; y++ )
+        {
+            if ( parseInt(JSON.parse(AccessControls.access)[y]) === 0 )
+            {
+                accessKey = 1;
+            }
+        }
+    }
+    axios.post(
+        '/get/employees/all',
+        {
+            emp_id: sessionStorage.getItem("EmpID"),
+            accessKey: accessKey
+        }
     ).then(
         res => {
 

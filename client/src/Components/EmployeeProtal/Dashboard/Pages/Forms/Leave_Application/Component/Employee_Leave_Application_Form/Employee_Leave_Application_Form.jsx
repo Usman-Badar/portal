@@ -287,7 +287,16 @@ const Employee_Leave_Application_Form = ( props ) => {
             Data.append('Availed', $('input[type=number]').val());
     
             axios.post('/applyleave', Data).then( () => {
-    
+
+                toast.dark( 'Request Submitted' , {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
                 $('button[type=reset]').trigger('click');
                 $('.Medical_Prove').hide(500);
                 $('#mail_form').trigger('click');
@@ -316,20 +325,10 @@ const Employee_Leave_Application_Form = ( props ) => {
                 Data2.append('receiverID', LeaveData.submit_to);
                 Data2.append('senderID', sessionStorage.getItem('EmpID'));
                 Data2.append('Title', sessionStorage.getItem('name'));
-                Data2.append('NotificationBody', sessionStorage.getItem('name') + ' apply for a leave on the portal');
+                Data2.append('NotificationBody', sessionStorage.getItem('name') + ' has applied apply for a leave on the portal');
                 axios.post('/newnotification', Data2).then(() => {
                     
                 })
-    
-                toast.dark( 'Request Submitted' , {
-                    position: 'top-right',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
     
             } ).catch( err => {
     

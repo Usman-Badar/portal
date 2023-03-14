@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './fonts.css';
+import 'animate.css';
 
 import { HashRouter as Router } from 'react-router-dom';
 import store from './Redux/Store';

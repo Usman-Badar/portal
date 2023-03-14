@@ -9,6 +9,7 @@ import $ from 'jquery';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Typewriter from 'typewriter-effect';
 
 import Drive from './Components/Drive/Drive';
 import Modal from '../../../../UI/Modal/Modal';
@@ -31,17 +32,19 @@ const Employee_Chat = () => {
     let key = 'real secret keys should be long and random';
     const encryptor = require('simple-encryptor')(key);
 
-    const [Employees, setEmployees] = useState([]);
+    const [Employees, setEmployees] = useState();
+    const [SearchEmpKeywords, setSearchEmpKeywords] = useState();
     const [EmployeesLastChat, setEmployeesLastChat] = useState([]);
     const [LoadingState, setLoadingState] = useState(false);
     const [EmployeeStatus, setEmployeeStatus] = useState('');
     const [Chat, setChat] = useState([]);
     const [ChatEmployee, setChatEmployee] = useState({});
-    const [ShowChat, setShowChat] = useState(false);
+    const [ShowChat, setShowChat] = useState("No Employee Selected");
     const [Show, setShow] = useState(false);
     const [DriveContent, setDriveContent] = useState([]);
     const [EmpID, setEmpID] = useState();
     const [EmpIndex, setEmpIndex] = useState();
+    const [Mode, setMode] = useState('chat');
 
     const CurrentEmployeeData = useSelector((state) => state.EmpAuth.EmployeeData);
 
@@ -103,10 +106,11 @@ const Employee_Chat = () => {
     const GetAllEmployees = (mode) => {
 
         const Data = new FormData();
+        setMode(mode);
 
         if (mode === 'chat') {
 
-            setEmployees([]);
+            setEmployees();
             Data.append('currentEmp', sessionStorage.getItem('EmpID'));
 
             axios.post('/getchatemployees', Data).then(res => {
@@ -163,7 +167,7 @@ const Employee_Chat = () => {
 
         if (mode === 'contacts') {
 
-            setEmployees([]);
+            setEmployees();
             Data.append('currentEmp', sessionStorage.getItem('EmpID'));
 
             axios.post('/getallemployees', Data).then(res => {
@@ -205,6 +209,11 @@ const Employee_Chat = () => {
     const GetThatEmpChat = (id, index) => {
 
         setLoadingState(true);
+        setShowChat("Loading Chat....");
+
+        let arr = SearchEmpKeywords ? Employees.filter(
+            obj => { return obj.name.toLowerCase().includes(SearchEmpKeywords.toLowerCase()) }
+        ) : Employees;
 
         const Data = new FormData();
         Data.append('sender', id);
@@ -213,10 +222,10 @@ const Employee_Chat = () => {
         axios.post('/getemployeewithchat', Data).then(res => {
 
             setLoadingState(false);
-            setShowChat(true);
-            setChatEmployee(Employees[index]);
+            setShowChat();
+            setChatEmployee(arr[index]);
             socket.emit(
-                'UserOnline', Employees[index].emp_id
+                'UserOnline', arr[index].emp_id
             )
 
             setEmpIndex(index);
@@ -405,28 +414,16 @@ const Employee_Chat = () => {
 
     return (
         <>
-            <div className="EmployeeChat">
+            <div className="EmployeeChat popUps">
                 <Modal show={Show} Hide={ShowHide} content={<Drive AttachDrive={AttachDrive} data={DriveContent} />} />
 
                 <div className="Left">
 
-                    <div className='chatcount'>
-                        <p className='color-c-green'>Chat Members</p>
-                        <p>
-                            {
-                                Employees.length > 0
-                                    ?
-                                    (Employees.length - 1) + ' '
-                                    :
-                                    Employees.length
-                            }
-                            members
-                        </p>
-                    </div>
+                    <input type="search" onChange={ (e) => setSearchEmpKeywords( e.target.value ) } className='form-control form-control-sm' placeholder='Search Employees...' />
 
                     <div className="tabs">
-                        <button onClick={() => GetAllEmployees('chat')}>Chat</button>
-                        <button onClick={() => GetAllEmployees('contacts')}>contacts</button>
+                        <button className={ Mode === 'chat' ? 'btn submit' : 'btn green' } onClick={() => GetAllEmployees('chat')}>Chat</button>
+                        <button className={ Mode === 'contacts' ? 'btn submit' : 'btn green' } onClick={() => GetAllEmployees('contacts')}>contacts</button>
                     </div>
 
                     {/* EMPLOYEES LIST */}
@@ -449,7 +446,7 @@ const Employee_Chat = () => {
                                             </div>
                                         }
                                     >
-                                        <EmployeesList encryptor={encryptor} EmployeesLastChat={EmployeesLastChat} Employees={Employees} GetThatEmpChat={GetThatEmpChat} />
+                                        <EmployeesList encryptor={encryptor} EmployeesLastChat={EmployeesLastChat} SearchEmpKeywords={ SearchEmpKeywords } Employees={Employees} GetThatEmpChat={GetThatEmpChat} />
                                     </Suspense>
                                 )
 
@@ -466,109 +463,118 @@ const Employee_Chat = () => {
                             return (
                                 <div className="Center">
                                     {
-                                        ShowChat
-                                            ?
-                                            <>
-                                                <div className="ChatEmployee popUps">
-                                                    <img
-                                                        src={'images/employees/' + ChatEmployee.emp_image}
-                                                        width='55'
-                                                        height='55'
-                                                        alt="chat employee img"
-                                                        className='rounded-circle'
-                                                    />
-                                                    <div className="ml-2">
-                                                        <p className='font-weight-bold'> {ChatEmployee.name} </p>
-                                                        <p> {ChatEmployee.designation_name + ' in ' + ChatEmployee.company_name} </p>
-                                                        {
-                                                            ShowChat
-                                                            ?
-                                                            EmployeeStatus === '' 
-                                                            ? 
-                                                            <p className="offline">offline</p> 
-                                                            : 
-                                                            <p className="online">online</p>
-                                                            :
-                                                            null
-                                                        }
-                                                    </div>
-                                                </div>
-
-                                                <div className="ChatContent popUps" id="ChatContainer">
-
+                                        !ShowChat
+                                        ?
+                                        <>
+                                            <div className="ChatEmployee popUps">
+                                                <img
+                                                    src={'images/employees/' + ChatEmployee.emp_image}
+                                                    width='55'
+                                                    height='55'
+                                                    alt="chat employee img"
+                                                    className='rounded-circle'
+                                                />
+                                                <div className="ml-2">
+                                                    <p className='font-weight-bold'> {ChatEmployee.name} </p>
+                                                    <p> {ChatEmployee.designation_name + ' in ' + ChatEmployee.company_name} </p>
                                                     {
-                                                        Calender.toDateString() !== new Date().toDateString()
-                                                            ?
-                                                            <p className="TweetDate"> {Calender.toDateString()}</p>
-                                                            :
-                                                            null
+                                                        ShowChat
+                                                        ?
+                                                        EmployeeStatus === '' 
+                                                        ? 
+                                                        <p className="offline">offline</p> 
+                                                        : 
+                                                        <p className="online">online</p>
+                                                        :
+                                                        null
                                                     }
-                                                    {
-                                                        <Suspense
-                                                            fallback={
-                                                                <div className="h-100 d-flex align-items-center justify-content-center">
-                                                                    <img
-                                                                        src={loading}
-                                                                        alt="Please wait....."
-                                                                        width="40"
-                                                                        height="40"
-                                                                        className="rounded-circle"
-                                                                    />
-                                                                </div>
-                                                            }
-                                                        >
-                                                            <DailyChat
-                                                                LoadingState={LoadingState}
-                                                                encryptor={encryptor}
-                                                                Calender={Calender}
-                                                                EmpID={EmpID}
-                                                                CurrentEmployeeData={CurrentEmployeeData}
-                                                                tConvert={tConvert}
-                                                                Chat={Chat}
-                                                                ChatEmployee={ChatEmployee}
-                                                            />
-                                                        </Suspense>
-                                                    }
-
-
                                                 </div>
+                                            </div>
 
-                                                <form className="NewTweet popUps" onSubmit={OnChat}>
-                                                    <div
-                                                        className="d-flex align-content-center w-100 bg-white border"
-                                                        style={
-                                                            {
-                                                                borderRadius: '10px',
-                                                                color: 'rgb(91, 109, 128, .5)'
-                                                            }
+                                            <div className="ChatContent popUps" id="ChatContainer">
+
+                                                {
+                                                    Calender.toDateString() !== new Date().toDateString()
+                                                        ?
+                                                        <p className="TweetDate"> {Calender.toDateString()}</p>
+                                                        :
+                                                        null
+                                                }
+                                                {
+                                                    <Suspense
+                                                        fallback={
+                                                            <div className="h-100 d-flex align-items-center justify-content-center">
+                                                                <img
+                                                                    src={loading}
+                                                                    alt="Please wait....."
+                                                                    width="40"
+                                                                    height="40"
+                                                                    className="rounded-circle"
+                                                                />
+                                                            </div>
                                                         }
                                                     >
-                                                        <input
-                                                            className="form-control w-100"
-                                                            placeholder="Type something here..."
-                                                            id="Sendtext"
+                                                        <DailyChat
+                                                            LoadingState={LoadingState}
+                                                            encryptor={encryptor}
+                                                            Calender={Calender}
+                                                            EmpID={EmpID}
+                                                            CurrentEmployeeData={CurrentEmployeeData}
+                                                            tConvert={tConvert}
+                                                            Chat={Chat}
+                                                            ChatEmployee={ChatEmployee}
                                                         />
-                                                        <i className="las la-paperclip" title="Attachment From Drive" onClick={OpenDriveModal}></i>
-                                                    </div>
-                                                    <button type="submit">
-                                                        <i className="las la-arrow-up"></i>
-                                                    </button>
-                                                    <button type="button" className="btn text-white refresh d-none" onClick={() => GetThatEmpChat(ChatEmployee.emp_id, EmpIndex)}><i className="las la-redo-alt"></i></button>
-                                                </form>
-                                            </>
-                                            :
-                                            <div className="NoChat popUps">
+                                                    </Suspense>
+                                                }
 
-                                                <img
-                                                    src={NoCHat}
-                                                    width="100%"
-                                                    height="auto"
-                                                    alt="No CHat Img"
-                                                />
-
-                                                <h3 className='font-weight-bold mt-3'>NO EMPLOYEE SELECTED</h3>
 
                                             </div>
+
+                                            <form className="NewTweet popUps" onSubmit={OnChat}>
+                                                <div
+                                                    className="d-flex align-content-center w-100 bg-white border"
+                                                    style={
+                                                        {
+                                                            borderRadius: '10px',
+                                                            color: 'rgb(91, 109, 128, .5)'
+                                                        }
+                                                    }
+                                                >
+                                                    <input
+                                                        className="form-control w-100"
+                                                        placeholder="Type something here..."
+                                                        id="Sendtext"
+                                                    />
+                                                    <i className="las la-paperclip" title="Attachment From Drive" onClick={OpenDriveModal}></i>
+                                                </div>
+                                                <button type="submit">
+                                                    <i className="las la-arrow-up"></i>
+                                                </button>
+                                                <button type="button" className="btn text-white refresh d-none" onClick={() => GetThatEmpChat(ChatEmployee.emp_id, EmpIndex)}><i className="las la-redo-alt"></i></button>
+                                            </form>
+                                        </>
+                                        :
+                                        <div className="NoChat popUps">
+
+                                            <img
+                                                src={NoCHat}
+                                                width="100%"
+                                                height="auto"
+                                                alt="No CHat Img"
+                                            />
+
+                                            <h5 className='font-weight-bold mt-3'>
+                                                <Typewriter
+                                                    options={{
+                                                        strings: [ShowChat],
+                                                        autoStart: true,
+                                                        loop: true,
+                                                        delay: 50
+                                                    }}
+                                                />
+                                            </h5>
+
+                                        </div>
                                     }
 
                                     <div className='calenderdiv' onClick={showCalender}>

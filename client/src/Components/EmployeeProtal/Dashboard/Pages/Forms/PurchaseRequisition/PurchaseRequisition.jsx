@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { ApproveRequisition, RejectRequisition, CancelRequisition, openRequestDetails, loadRequests, GetLocations, PRSubmittion, SubmitPR, onAttachQuotations, GetCompanies, onContentInput } from './Functions';
+import { addRow, ApproveRequisition, RejectRequisition, CancelRequisition, openRequestDetails, loadRequests, GetLocations, PRSubmittion, SubmitPR, onAttachQuotations, GetCompanies, onContentInput, onContentEdit } from './Functions';
 const UI = lazy( () => import('./UI') );
 
 function PurchaseRequisition() {
@@ -46,12 +46,14 @@ function PurchaseRequisition() {
                     Specifications={ Specifications }
                     AttachedQuotations={ AttachedQuotations }
 
+                    addRow={ addRow }
                     openRequestDetails={ ( pr_id ) => openRequestDetails( pr_id, setRequestDetails, setSpecifications, setAttachedQuotations ) }
                     PRSubmittion={ ( e ) => PRSubmittion( e, history, toast, Quotations, Data ) }
                     SubmitPR={ ( e ) => SubmitPR( e, setData, setSubmitConfirmation ) }
                     setSubmitConfirmation={ setSubmitConfirmation }
                     onAttachQuotations={ ( e ) => onAttachQuotations( e, setQuotations ) }
                     setShowQuotationModal={ setShowQuotationModal }
+                    onContentEdit={ onContentEdit }
                     onContentInput={ onContentInput }
                     loadRequests={ () => loadRequests( setRequests ) }
                     CancelRequisition={ ( e, pr_id ) => CancelRequisition( e, pr_id, history ) }

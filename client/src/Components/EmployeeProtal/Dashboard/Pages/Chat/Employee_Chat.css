@@ -1,13 +1,18 @@
 .EmployeeChat {
     width: 100%;
     height: calc( 100vh - 65px);
-    padding: 0 20px;
     display: grid;
     grid-template-columns: 30fr 70fr;
     grid-column-gap: 20px;
     font-size: 12px !important;
     position: relative;
     overflow: hidden;
+    padding: 15px;
+    width: 96%;
+    margin: auto;
+    background-color: #fff;
+    box-shadow: rgb(0 0 0 / 15%) 1.95px 1.95px 2.6px;
+    border-radius: 10px;
 }
 
 .EmployeeChat p {
@@ -41,7 +46,6 @@
     font-size: 12px !important;
     border: 0;
     outline: 0;
-    background-color: var( --dark-c-green);
     color: #fff;
     padding: 3px 10px;
 }
@@ -62,6 +66,16 @@
 .EmployeeChat .Center .NoChat {
     width: 100%;
     text-align: center;
+}
+
+.EmployeeChat .Center .NoChat img {
+    animation: upDown 1s linear infinite forwards alternate;
+}
+
+@keyframes upDown {
+    100% {
+        transform: translateY(-10px);
+    }
 }
 
 .EmployeeChat .Center .ChatEmployee {
@@ -287,7 +301,7 @@
     .EmployeeChat p {
         font-size: 15px !important;
     }
-    .NoChat h3 {
+    .NoChat h5 {
         font-size: 15px;
     }
     .EmployeeChat .Center .NewTweet {

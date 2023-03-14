@@ -16,6 +16,7 @@ router.post('/applyshortleave', (req, res) => {
 
             if (err) {
 
+                console.log(err)
                 res.status(500).send(err);
                 res.end();
 
@@ -28,6 +29,7 @@ router.post('/applyshortleave', (req, res) => {
 
                         if (err) {
 
+                            console.log(err)
                             res.status(500).send(err);
                             res.end();
 
@@ -40,6 +42,7 @@ router.post('/applyshortleave', (req, res) => {
 
                                     if (err) {
 
+                                        console.log(err)
                                         res.status(500).send(err);
                                         res.end();
 
@@ -278,6 +281,7 @@ router.post('/applyleave', (req, res) => {
 
             if (err) {
 
+                console.log(err)
                 res.status(500).send(err);
                 res.end();
 
@@ -290,6 +294,7 @@ router.post('/applyleave', (req, res) => {
 
                         if (err) {
 
+                            console.log(err)
                             res.status(500).send(err);
                             res.end();
 
@@ -301,6 +306,7 @@ router.post('/applyleave', (req, res) => {
 
                                     if (err) {
 
+                                        console.log(err)
                                         res.status(500).send(err);
                                         res.end();
 

@@ -82,6 +82,13 @@ const EmployeeProfile = () => {
                             link: '/profile/notifications/all',
                             id: "all"
                         }
+                    ],
+                    [
+                        {
+                            title: 'Tickets Issued',
+                            link: '/profile/tickets/all',
+                            id: "all"
+                        }
                     ]
                 ]
             )
@@ -111,6 +118,13 @@ const EmployeeProfile = () => {
                     GetAllNotifications();
                     setCategory(
                         SubCategories[2]
+                    );
+                }else
+                if ( View === 'tickets' )
+                {
+                    GetAllNotifications();
+                    setCategory(
+                        SubCategories[3]
                     );
                 }
 
@@ -156,6 +170,11 @@ const EmployeeProfile = () => {
 
     }
 
+    if ( Object.keys(ProfileData).length === 0 )
+    {
+        return <></>
+    }
+
     return (
         <div className="Profile">
             
@@ -166,89 +185,127 @@ const EmployeeProfile = () => {
                     <h3 className='mb-0'> Profile </h3>
                 </div>
 
-                <LinkItem 
-                    event={ () => history.replace('/profile/personal/info') }
-                    icon={ <i style={ { color: 'var(--blue)' } } className="las la-user"></i> }
-                    title="Personal"
-                    desc="info, name, password"
-                    id="personal"
-                />
-                
-                <LinkItem 
-                    event={ () => history.replace('/profile/attendance/sheet') }
-                    icon={ <i style={ { color: 'var(--c-green)' } } className="las la-calendar-week"></i> }
-                    title="Attendance"
-                    desc="view daily attendance"
-                    id="attendance"
-                />
-                
-                <LinkItem 
-                    event={ () => history.replace('/profile/notifications/all') }
-                    icon={ <i style={ { color: 'var(--orange)' } } className="las la-bell"></i> }
-                    title="Notifications"
-                    desc="desktop notifications"
-                    id="notifications"
-                />
+                <div className='navigation'>
+                    <LinkItem 
+                        event={ () => history.replace('/profile/personal/info') }
+                        icon={ <i style={ { color: 'var(--blue)' } } className="las la-user"></i> }
+                        title="Personal"
+                        desc="info, name, password"
+                        id="personal"
+                    />
+                    
+                    <LinkItem 
+                        event={ () => history.replace('/profile/attendance/sheet') }
+                        icon={ <i style={ { color: 'var(--c-green)' } } className="las la-calendar-week"></i> }
+                        title="Attendance"
+                        desc="view daily attendance"
+                        id="attendance"
+                    />
+                    
+                    <LinkItem 
+                        event={ () => history.replace('/profile/notifications/all') }
+                        icon={ <i style={ { color: 'var(--orange)' } } className="las la-bell"></i> }
+                        title="Notifications"
+                        desc="desktop notifications"
+                        id="notifications"
+                    />
+                    
+                    <LinkItem 
+                        event={ () => history.replace('/profile/tickets/all') }
+                        icon={ <i style={ { color: 'var(--warning)' } } className="las la-comments-dollar"></i> }
+                        title="ACR Tickets"
+                        desc="Performance Ticket System"
+                        id="tickets"
+                    />
+                </div>
 
             </div>
             <div className="Center w-100">
 
-                {
-                    View === 'personal'
-                    ?
-                    <AccountInfo 
-                        ProfileData={ ProfileData } 
-                        View={ View }
-                        SubView={ SubView }
-                    />
-                    :
-                    View === 'attendance'
-                    ?
-                    <Attendance 
-                        ProfileData={ ProfileData } 
-                        View={ View }
-                        SubView={ SubView }
-                    />
-                    :
-                    View === 'notifications'
-                    ?
-                    <Notifications 
-                        ProfileData={ ProfileData } 
-                        EmpNotifications={ EmpNotifications }
-                        View={ View }
-                        SubView={ SubView }
-                    />
-                    :null
-                }
-
-            </div>
-            <div className="Right w-100">
-
-                <div className="NavigationContainer">
-
-                    <div className="Heading navigationItem">
-                        Navigation
+                <div className="profile_cover">
+                    <img src={ 'images/employees/' + ProfileData.emp_image } alt="employee" />
+                    <div className="intro">
+                        <h5>{ ProfileData.name }</h5>
+                        <h6 className='text-secondary'>{ ProfileData.designation_name } in { ProfileData.department_name } Department, { ProfileData.company_name }, { ProfileData.location_name }</h6>
                     </div>
-                    
+                </div>
+
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+
+                <div className="center_div_content">
                     {
-                        Category.map(
-                            ( val, index ) => {
-
-                                return (
-                                    <div 
-                                        className="navigationItem" 
-                                        key={ index }
-                                        onClick={ () => history.replace(val.link) }
-                                        id={ val.id }
-                                    >
-                                        { val.title }
-                                    </div>
-                                )
-
+                        ProfileData
+                        ?
+                        <>
+                            {
+                                View === 'personal'
+                                ?
+                                <AccountInfo 
+                                    ProfileData={ ProfileData } 
+                                    View={ View }
+                                    SubView={ SubView }
+                                />
+                                :
+                                View === 'attendance'
+                                ?
+                                <Attendance 
+                                    ProfileData={ ProfileData } 
+                                    View={ View }
+                                    SubView={ SubView }
+                                />
+                                :
+                                View === 'notifications'
+                                ?
+                                <Notifications 
+                                    ProfileData={ ProfileData } 
+                                    EmpNotifications={ EmpNotifications }
+                                    View={ View }
+                                    SubView={ SubView }
+                                />
+                                :
+                                View === 'tickets'
+                                ?
+                                <ACRTickets />
+                                :null
                             }
-                        )
+                        </>
+                        :null
                     }
 
+                    <div className="Right">
+
+                        <div className="NavigationContainer">
+
+                            <div className="Heading navigationItem">
+                                Navigation
+                            </div>
+                            
+                            {
+                                Category.map(
+                                    ( val, index ) => {
+
+                                        return (
+                                            <div 
+                                                className="navigationItem" 
+                                                key={ index }
+                                                onClick={ () => history.replace(val.link) }
+                                                id={ val.id }
+                                            >
+                                                { val.title }
+                                            </div>
+                                        )
+
+                                    }
+                                )
+                            }
+
+                        </div>
+
+                    </div>
                 </div>
 
             </div>
@@ -257,6 +314,55 @@ const EmployeeProfile = () => {
     )
 }
 export default EmployeeProfile;
+
+const ACRTickets = () => {
+
+    useEffect(
+        () => {
+
+            loadTickets();
+
+        }, []
+    );
+
+    const loadTickets = () => {
+
+        
+
+    }
+
+    return (
+        <>
+            <div>
+
+                <h4> ACR Tickets </h4>
+
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>Sr.No</th>
+                            <th>Ticket</th>
+                            <th>Issue Date</th>
+                            <th>Issued By</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sr.No</td>
+                            <td>Ticket</td>
+                            <td>Issue Date</td>
+                            <td>Issued By</td>
+                            <td>Remarks</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </>
+    )
+
+}
 
 const LinkItem = ( { icon, title, desc, event, id } ) => {
 
@@ -529,6 +635,11 @@ const AccountInfo = ( props ) => {
 
     }
 
+    if ( !props.ProfileData )
+    {
+        return <></>
+    }
+
     return (
         <div className="AccountInfo w-100">
             
@@ -543,368 +654,358 @@ const AccountInfo = ( props ) => {
             </div>
             <br />
 
-            <div className="FirstContainer">
+            <div className="w-100">
 
-                <div>
-                    <img src={ 'images/employees/' + props.ProfileData.emp_image } alt="employee" />
-                </div>
-                <div className="pl-3 w-100">
+                {
+                    props.SubView === 'info'
+                    ?
+                    <div className="detailsContainer">
 
-                    <h5> { props.ProfileData.name } </h5>
-                    <br />
+                        <Item 
+                            label="employee id"
+                            txt={ props.ProfileData.emp_id }
+                        />
+                        
+                        <Item 
+                            label="father name"
+                            txt={ props.ProfileData.father_name }
+                        />
+                        
+                        <Item 
+                            label="date of birth"
+                            txt={ props.ProfileData.date_of_birth ? new Date( props.ProfileData.date_of_birth.substring(0,10) ).toDateString() : null }
+                        />
+                        
+                        <Item 
+                            label="place of birth"
+                            txt={ props.ProfileData.place_of_birth }
+                        />
+                        
+                        <Item 
+                            label="gender"
+                            txt={ props.ProfileData.gender }
+                        />
 
-                    {
-                        props.SubView === 'info'
-                        ?
-                        <div className="detailsContainer">
+                    </div>
+                    :
+                    props.SubView === 'contact'
+                    ?
+                    <div className="detailsContainer">
+                        
+                        {
+                            Mode === 'Edit'
+                            ?
+                            <EditItem
+                                label="residential address"
+                                value={ Form.residential_address }
+                                onChangeHandler={ onChangeHandler }
+                                type="text"
+                                name="residential_address"
+                            />
+                            :
+                            <Item 
+                                label="residential address"
+                                txt={ props.ProfileData.residential_address }
+                            />
+                        }
+                        
+                        <Item 
+                            label="permanent address"
+                            txt={ props.ProfileData.permanent_address }
+                        />
+                        
+                        {
+                            Mode === 'Edit'
+                            ?
+                            <EditItem
+                                label="emergency person"
+                                value={ Form.emergency_person_name }
+                                onChangeHandler={ onChangeHandler }
+                                type="text"
+                                name="emergency_person_name"
+                            />
+                            :
+                            <Item 
+                                label="emergency person"
+                                txt={ props.ProfileData.emergency_person_name }
+                            />
+                        }
 
-                            <Item 
-                                label="employee id"
-                                txt={ props.ProfileData.emp_id }
+                        {
+                            Mode === 'Edit'
+                            ?
+                            <EditItem
+                                label="emergency person number"
+                                value={ Form.emergency_person_number }
+                                onChangeHandler={ onChangeHandler }
+                                type="number"
+                                name="emergency_person_number"
                             />
-                            
+                            :
                             <Item 
-                                label="father name"
-                                txt={ props.ProfileData.father_name }
+                                label="emergency person number"
+                                txt={ props.ProfileData.emergency_person_number }
                             />
-                            
-                            <Item 
-                                label="date of birth"
-                                txt={ new Date( props.ProfileData.date_of_birth.substring(0,10) ).toDateString() }
-                            />
-                            
-                            <Item 
-                                label="place of birth"
-                                txt={ props.ProfileData.place_of_birth }
-                            />
-                            
-                            <Item 
-                                label="gender"
-                                txt={ props.ProfileData.gender }
-                            />
+                        }
 
-                        </div>
-                        :
-                        props.SubView === 'contact'
-                        ?
-                        <div className="detailsContainer">
-                            
-                            {
-                                Mode === 'Edit'
+                        {
+                            Mode === 'Edit'
+                            ?
+                            <EditItem
+                                label="landline"
+                                value={ Form.landline }
+                                onChangeHandler={ onChangeHandler }
+                                type="number"
+                                name="landline"
+                            />
+                            :
+                            <Item 
+                                label="landline"
+                                txt={ props.ProfileData.landline }
+                            />
+                        }
+
+                        {
+                            Mode === 'Edit'
+                            ?
+                            <EditItem
+                                label="cell phone"
+                                value={ Form.cell }
+                                onChangeHandler={ onChangeHandler }
+                                type="number"
+                                name="cell"
+                            />
+                            :
+                            <Item 
+                                label="cell phone"
+                                txt={ props.ProfileData.cell }
+                            />
+                        }
+
+                    </div>
+                    :
+                    props.SubView === 'email'
+                    ?
+                    <div className="detailsContainer">
+                        
+                        {
+                            Mode === 'Edit'
+                            ?
+                            <EditItem
+                                label="email"
+                                value={ Form.email }
+                                onChangeHandler={ onChangeHandler }
+                                type="email"
+                                name="email"
+                            />
+                            :
+                            <Item 
+                                label="email"
+                                txt={ props.ProfileData.email }
+                            />
+                        }
+
+                    </div>
+                    :
+                    props.SubView === 'office'
+                    ?
+                    <div className="detailsContainer">
+                        
+                        <Item 
+                            label="designation"
+                            txt={ props.ProfileData.designation_name }
+                        />
+                        
+                        <Item 
+                            label="department"
+                            txt={ props.ProfileData.department_name }
+                        />
+                        
+                        <Item 
+                            label="company"
+                            txt={ props.ProfileData.company_name }
+                        />
+                        
+                        <Item 
+                            label="location"
+                            txt={ props.ProfileData.location_name }
+                        />
+                        
+                        <Item 
+                            label="Employment"
+                            txt={ props.ProfileData.emp_status }
+                        />
+                        
+                        <Item 
+                            label="Date of Join"
+                            txt={ new Date(props.ProfileData.date_of_join.substring(0,10)).toDateString() }
+                        />
+                        
+                        <Item 
+                            label="time in"
+                            txt={ props.ProfileData.time_in }
+                        />
+                        
+                        <Item 
+                            label="time out"
+                            txt={ props.ProfileData.time_out }
+                        />
+                        
+                        <Item 
+                            label="Additional off"
+                            txt={ 
+                                JSON.parse(props.ProfileData.additional_off).length === 0
                                 ?
-                                <EditItem
-                                    label="residential address"
-                                    value={ Form.residential_address }
-                                    onChangeHandler={ onChangeHandler }
-                                    type="text"
-                                    name="residential_address"
-                                />
+                                "No Additional Off"
                                 :
-                                <Item 
-                                    label="residential address"
-                                    txt={ props.ProfileData.residential_address }
-                                />
+                                JSON.parse(props.ProfileData.additional_off).map( 
+                                    ( val, index ) => { 
+                                        return <span>{val} { (index + 1) === JSON.parse(props.ProfileData.additional_off).length ? "" : ', ' }</span> 
+                                    } 
+                                ) 
                             }
-                            
-                            <Item 
-                                label="permanent address"
-                                txt={ props.ProfileData.permanent_address }
-                            />
-                            
-                            {
-                                Mode === 'Edit'
-                                ?
-                                <EditItem
-                                    label="emergency person"
-                                    value={ Form.emergency_person_name }
-                                    onChangeHandler={ onChangeHandler }
-                                    type="text"
-                                    name="emergency_person_name"
-                                />
-                                :
-                                <Item 
-                                    label="emergency person"
-                                    txt={ props.ProfileData.emergency_person_name }
-                                />
-                            }
+                        />
 
-                            {
-                                Mode === 'Edit'
-                                ?
+                    </div>
+                    :
+                    props.SubView === 'password'
+                    ?
+                    <div className="detailsContainer">
+                        
+                        {
+                            Mode === 'Edit'
+                            ?
+                            <div>
                                 <EditItem
-                                    label="emergency person number"
-                                    value={ Form.emergency_person_number }
+                                    label="login id"
+                                    value={ Form.login_id }
                                     onChangeHandler={ onChangeHandler }
-                                    type="number"
-                                    name="emergency_person_number"
+                                    type={ ShowLoginID ? 'text' : "password" }
+                                    name="login_id"
                                 />
-                                :
-                                <Item 
-                                    label="emergency person number"
-                                    txt={ props.ProfileData.emergency_person_number }
-                                />
-                            }
+                                <div className="d-flex align-items-center mt-2">
+                                    <input type="checkbox" onChange={ (e) => setShowLoginID( e.target.checked ) } className="mr-1" /> Show Login ID
+                                </div>
+                            </div>
+                            :
+                            <Item 
+                                label="login id"
+                                txt={
+                                    encryptor.decrypt( props.ProfileData.login_id ).split('').map(
+                                        () => {
 
-                            {
-                                Mode === 'Edit'
-                                ?
-                                <EditItem
-                                    label="landline"
-                                    value={ Form.landline }
-                                    onChangeHandler={ onChangeHandler }
-                                    type="number"
-                                    name="landline"
-                                />
-                                :
-                                <Item 
-                                    label="landline"
-                                    txt={ props.ProfileData.landline }
-                                />
-                            }
+                                            return <span style={ { fontSize: '15px' } }> * </span>
 
-                            {
-                                Mode === 'Edit'
-                                ?
-                                <EditItem
-                                    label="cell phone"
-                                    value={ Form.cell }
-                                    onChangeHandler={ onChangeHandler }
-                                    type="number"
-                                    name="cell"
-                                />
-                                :
-                                <Item 
-                                    label="cell phone"
-                                    txt={ props.ProfileData.cell }
-                                />
-                            }
-
-                        </div>
-                        :
-                        props.SubView === 'email'
-                        ?
-                        <div className="detailsContainer">
-                            
-                            {
-                                Mode === 'Edit'
-                                ?
-                                <EditItem
-                                    label="email"
-                                    value={ Form.email }
-                                    onChangeHandler={ onChangeHandler }
-                                    type="email"
-                                    name="email"
-                                />
-                                :
-                                <Item 
-                                    label="email"
-                                    txt={ props.ProfileData.email }
-                                />
-                            }
-
-                        </div>
-                        :
-                        props.SubView === 'office'
-                        ?
-                        <div className="detailsContainer">
-                            
-                            <Item 
-                                label="designation"
-                                txt={ props.ProfileData.designation_name }
-                            />
-                            
-                            <Item 
-                                label="department"
-                                txt={ props.ProfileData.department_name }
-                            />
-                            
-                            <Item 
-                                label="company"
-                                txt={ props.ProfileData.company_name }
-                            />
-                            
-                            <Item 
-                                label="location"
-                                txt={ props.ProfileData.location_name }
-                            />
-                            
-                            <Item 
-                                label="Employment"
-                                txt={ props.ProfileData.emp_status }
-                            />
-                            
-                            <Item 
-                                label="Date of Join"
-                                txt={ new Date(props.ProfileData.date_of_join.substring(0,10)).toDateString() }
-                            />
-                            
-                            <Item 
-                                label="time in"
-                                txt={ props.ProfileData.time_in }
-                            />
-                            
-                            <Item 
-                                label="time out"
-                                txt={ props.ProfileData.time_out }
-                            />
-                            
-                            <Item 
-                                label="Additional off"
-                                txt={ 
-                                    JSON.parse(props.ProfileData.additional_off).length === 0
-                                    ?
-                                    "No Additional Off"
-                                    :
-                                    JSON.parse(props.ProfileData.additional_off).map( 
-                                        ( val, index ) => { 
-                                            return <span>{val} { (index + 1) === JSON.parse(props.ProfileData.additional_off).length ? "" : ', ' }</span> 
-                                        } 
-                                    ) 
+                                        }
+                                    )
                                 }
                             />
+                        }
 
-                        </div>
-                        :
-                        props.SubView === 'password'
-                        ?
-                        <div className="detailsContainer">
-                            
-                            {
-                                Mode === 'Edit'
-                                ?
-                                <div>
-                                    <EditItem
-                                        label="login id"
-                                        value={ Form.login_id }
-                                        onChangeHandler={ onChangeHandler }
-                                        type={ ShowLoginID ? 'text' : "password" }
-                                        name="login_id"
-                                    />
-                                    <div className="d-flex align-items-center mt-2">
-                                        <input type="checkbox" onChange={ (e) => setShowLoginID( e.target.checked ) } className="mr-1" /> Show Login ID
-                                    </div>
-                                </div>
-                                :
-                                <Item 
-                                    label="login id"
-                                    txt={
-                                        encryptor.decrypt( props.ProfileData.login_id ).split('').map(
-                                            () => {
-    
-                                                return <span style={ { fontSize: '15px' } }> * </span>
-    
-                                            }
-                                        )
-                                    }
-                                />
-                            }
-
-                            {
-                                Mode === 'Edit'
-                                ?
-                                <div>
-                                    <EditItem
-                                        label="password"
-                                        value={ Form.emp_password }
-                                        onChangeHandler={ onChangeHandler }
-                                        type={ ShowPassword ? 'text' : "password" }
-                                        name="emp_password"
-                                    />
-                                    <div className="d-flex align-items-center mt-2">
-                                        <input type="checkbox" onChange={ (e) => setShowPassword( e.target.checked ) } className="mr-1" /> Show Password
-                                    </div>
-                                </div>
-                                :
-                                <Item 
+                        {
+                            Mode === 'Edit'
+                            ?
+                            <div>
+                                <EditItem
                                     label="password"
-                                    txt={ 
-                                        encryptor.decrypt( props.ProfileData.emp_password ).split('').map(
-                                            () => {
-
-                                                return <span style={ { fontSize: '15px' } }> * </span>
-
-                                            }
-                                        )
-                                    }
+                                    value={ Form.emp_password }
+                                    onChangeHandler={ onChangeHandler }
+                                    type={ ShowPassword ? 'text' : "password" }
+                                    name="emp_password"
                                 />
-                            }
-
-                        </div>
-                        :
-                        props.SubView === 'documents'
-                        ?
-                        <div className="detailsContainer">
-
-                            <FileItem 
-                                label="CNIC (front)"
-                                source={ props.ProfileData.cnic_front_image }
-                            />
-
-                            <FileItem 
-                                label="CNIC (back)"
-                                source={ props.ProfileData.cnic_back_image }
-                            />
-                            
-                            {
-                                Mode === 'Edit'
-                                ?
-                                <div className="AccountInfoItem">
-                                    <label> { 'CV' } </label>
-                                    <input type={ 'file' } className="inputs" name="CV" onChange={ onImageUpload } accept=".jpg, .jpeg, .png, .pdf" />
+                                <div className="d-flex align-items-center mt-2">
+                                    <input type="checkbox" onChange={ (e) => setShowPassword( e.target.checked ) } className="mr-1" /> Show Password
                                 </div>
-                                :
-                                <FileItem 
-                                    label="CV"
-                                    source={ props.ProfileData.cv }
-                                />
-                            }
-                            
-                            {
-                                Mode === 'Edit'
-                                ?
-                                <div className="AccountInfoItem">
-                                    <label> { 'Proof of address' } </label>
-                                    <input type={ 'file' } className="inputs" name="PRF" onChange={ onImageUpload } accept=".jpg, .jpeg, .png, .pdf" />
-                                </div>
-                                :
-                                <FileItem 
-                                    label="Proof of address"
-                                    source={ props.ProfileData.proof_of_address }
-                                />
-                            }
+                            </div>
+                            :
+                            <Item 
+                                label="password"
+                                txt={ 
+                                    encryptor.decrypt( props.ProfileData.emp_password ).split('').map(
+                                        () => {
 
-                            {
-                                props.ProfileData.driving_license !== null
-                                ?
-                                <FileItem 
-                                    label="driving license"
-                                    source={ props.ProfileData.driving_license }
-                                />
-                                :null
-                            }
+                                            return <span style={ { fontSize: '15px' } }> * </span>
 
-                            {
-                                props.ProfileData.armed_license !== null
-                                ?
-                                <FileItem 
-                                    label="armed license"
-                                    source={ props.ProfileData.armed_license }
-                                />
-                                :null
-                            }
+                                        }
+                                    )
+                                }
+                            />
+                        }
 
-                        </div>
-                        :null
-                    }
+                    </div>
+                    :
+                    props.SubView === 'documents'
+                    ?
+                    <div className="detailsContainer">
 
-                    {
-                        Mode === 'Edit'
-                        ?
-                        <button className="btn updateBtn" disabled={ Disabled } onClick={ UpdateProfile }>Update</button>
-                        :null
-                    }
+                        <FileItem 
+                            label="CNIC (front)"
+                            source={ props.ProfileData.cnic_front_image }
+                        />
 
-                </div>
+                        <FileItem 
+                            label="CNIC (back)"
+                            source={ props.ProfileData.cnic_back_image }
+                        />
+                        
+                        {
+                            Mode === 'Edit'
+                            ?
+                            <div className="AccountInfoItem">
+                                <label> { 'CV' } </label>
+                                <input type={ 'file' } className="inputs" name="CV" onChange={ onImageUpload } accept=".jpg, .jpeg, .png, .pdf" />
+                            </div>
+                            :
+                            <FileItem 
+                                label="CV"
+                                source={ props.ProfileData.cv }
+                            />
+                        }
+                        
+                        {
+                            Mode === 'Edit'
+                            ?
+                            <div className="AccountInfoItem">
+                                <label> { 'Proof of address' } </label>
+                                <input type={ 'file' } className="inputs" name="PRF" onChange={ onImageUpload } accept=".jpg, .jpeg, .png, .pdf" />
+                            </div>
+                            :
+                            <FileItem 
+                                label="Proof of address"
+                                source={ props.ProfileData.proof_of_address }
+                            />
+                        }
+
+                        {
+                            props.ProfileData.driving_license !== null
+                            ?
+                            <FileItem 
+                                label="driving license"
+                                source={ props.ProfileData.driving_license }
+                            />
+                            :null
+                        }
+
+                        {
+                            props.ProfileData.armed_license !== null
+                            ?
+                            <FileItem 
+                                label="armed license"
+                                source={ props.ProfileData.armed_license }
+                            />
+                            :null
+                        }
+
+                    </div>
+                    :null
+                }
+
+                {
+                    Mode === 'Edit'
+                    ?
+                    <button className="btn updateBtn" disabled={ Disabled } onClick={ UpdateProfile }>Update</button>
+                    :null
+                }
 
             </div>
 

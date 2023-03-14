@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../db/connection');
 const fs = require('fs');
+const MakeDir = require('fs');
 const moment = require('moment');
 const io = require('../../server');
+
+const SendWhatsappNotification = require('../Whatsapp/whatsapp').SendWhatsappNotification;
 
 io.on('connection', ( socket ) => {
 
@@ -16,6 +19,507 @@ io.on('connection', ( socket ) => {
     )
 
 });
+
+router.post('/purchase/order/submission', ( req, res ) => {
+
+    const { submitted_to, specifications, data, note, pr_id, vendor_id, requested_by } = req.body;
+
+    const code = new Date().getTime() + '_' + new Date().getDate() + (new Date().getMonth() + 1) + new Date().getFullYear();
+    const received_specifications = JSON.parse( specifications );
+    let arr_specifications_names = []; 
+    const received_data = JSON.parse( data );
+    let bills_attached = 0;
+    if ( req.files )
+    {
+        const { Attachments } = req.files;
+        let arr;
+        if ( typeof(Attachments) === 'object' && !Attachments.length )
+        {
+            arr = [Attachments];
+        }else
+        {
+            arr = Attachments;
+        }
+        bills_attached = arr.length;
+    }
+
+    db.query(
+        "INSERT INTO `tbl_inventory_purchase_order`(`pr_id`, `invoice_no`, `entry`, `vendor_id`, `company_code`, `ship_to`, `new_purchase`, `repair`, `replace_recycle`, `invoice_attached`, `requested_by`, `requested_date`, `requested_time`, `total_value`, `total_sub_value`, `no_items_requested`, `status`, `appr_rejct_by`, `bills_attached`, `note`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
+        [ pr_id == 'undefined' ? null : pr_id, received_data.invoice_no, code, vendor_id, received_data.company_code, received_data.location_code, received_data.new_purchase_checkbox ? 1 :0, received_data.repair_checkbox ? 1 :0, received_data.replace_recycle_checkbox ? 1 :0, received_data.invoice_attached_checkbox ? 1 :0, requested_by, new Date(), new Date().toTimeString(), received_data.total_calculated_amount, received_data.sub_total_calculated_amount, received_specifications.length, "waiting_for_approval", submitted_to, bills_attached, note ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                const mPoId = rslt.insertId;
+                for ( let x = 0; x < received_specifications.length; x++ )
+                {
+                    arr_specifications_names.push(received_specifications[x].specification_description);
+                    db.query(
+                        "INSERT INTO `tbl_inventory_purchase_order_specifications`(`po_id`, `sr_no`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `entered_by`, `entered_date`) VALUES (?,?,?,?,?,?,?,?,?);",
+                        [ mPoId, received_specifications[x].specification_serial_number, received_specifications[x].specification_description, received_specifications[x].specification_quantity, received_specifications[x].specification_unit, received_specifications[x].specification_est_cost, received_specifications[x].specification_total_cost, requested_by, new Date() ],
+                        ( err ) => {
+                
+                            if( err )
+                            {
+                
+                                console.log( err );
+                                res.send( err );
+                                res.end();
+                
+                            }
+                
+                        }
+                    );
+                }
+
+                for ( let x = 0; x < received_data.additional_specifications.length; x++ )
+                {
+                    db.query(
+                        "INSERT INTO `tbl_inventory_purchase_order_additional_specifications`(`po_id`, `label`, `value`, `entered_by`, `entered_date`) VALUES (?,?,?,?,?);",
+                        [ mPoId, received_data.additional_specifications[x].additional_label, received_data.additional_specifications[x].additional_value, requested_by, new Date() ],
+                        ( err ) => {
+                
+                            if( err )
+                            {
+                
+                                console.log( err );
+                                res.send( err );
+                                res.end();
+                
+                            }
+                
+                        }
+                    );
+                }
+
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ requested_by, submitted_to ],
+                    ( err, rslt ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + rslt[1][0].name, rslt[0][0].name + " have sent you a purchase order for " + arr_specifications_names.join(', ') + ". The total value of the requisition is Rs " + received_data.total_calculated_amount.toLocaleString('en') + ". Kindly check", rslt[1][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + rslt[0][0].name, "We have received your purchase order. Kindly wait while our accounts department starts working on it", rslt[0][0].cell );
+                        }
+            
+                    }
+                );
+
+                if ( req.files )
+                {
+                    const { Attachments } = req.files;
+                    let arr;
+                    if ( typeof(Attachments) === 'object' && !Attachments.length )
+                    {
+                        arr = [Attachments];
+                    }else
+                    {
+                        arr = Attachments;
+                    }
+                    for ( let y = 0; y < arr.length; y++ )
+                    {
+                        MakeDir.mkdir('assets/inventory/assets/images/bills',
+                            { recursive: true },
+                            (err) => {
+                                if (err) {
+    
+                                    console.log( err );
+                                    res.status(500).send(err);
+                                    res.end();
+                                    
+                                }
+                                else {
+                                    
+                                    let name = new Date().getTime() + "_" + arr[y].name;
+                                    arr[y].mv('assets/inventory/assets/images/bills/' + name, (err) => {
+                                            if (err) 
+                                            {
+                                            
+                                                console.log( err );
+                                                res.status(500).send(err);
+                                                res.end();
+                    
+                                            }else
+                                            {
+                                                db.query(
+                                                    "INSERT INTO `tbl_inventory_purchase_order_bills`(`bill`, `uploaded_by`, `uploaded_date`, `uploaded_time`, `po_id`) VALUES (?,?,?,?,?);",
+                                                    [ 'assets/inventory/assets/images/bills/' + name, requested_by, new Date(), new Date().toTimeString(), mPoId ],
+                                                    ( err ) => {
+                                            
+                                                        if( err )
+                                                        {
+                                            
+                                                            console.log( err );
+                                                            res.send( err );
+                                                            res.end();
+                                            
+                                                        }
+                                            
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    )
+                                    
+                                }
+                            }
+                        )
+
+                        if ( (y+1) === arr.length )
+                        {
+                            res.send("success");
+                            res.end();
+                        }
+                    }
+                }else
+                {
+                    res.send("success");
+                    res.end();
+                }
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/order/load/requests', ( req, res ) => {
+
+    const { emp_id } = req.body;
+
+    db.query(
+        "SELECT tbl_inventory_purchase_order.status,  \
+        tbl_inventory_purchase_order.no_items_requested,  \
+        tbl_inventory_purchase_order.total_value,  \
+        tbl_inventory_purchase_order.requested_date,  \
+        tbl_inventory_purchase_order.requested_time,  \
+        tbl_inventory_purchase_order.po_id,  \
+        tbl_inventory_purchase_order.appr_rejct_by,  \
+        requested_employee.name AS requested_employee_name,  \
+        requested_employee_designations.designation_name AS requested_employee_designation_name,  \
+        companies.company_name, \
+        locations.location_name \
+        FROM `tbl_inventory_purchase_order`  \
+        LEFT OUTER JOIN companies ON tbl_inventory_purchase_order.company_code = companies.company_code \
+        LEFT OUTER JOIN locations ON tbl_inventory_purchase_order.ship_to = locations.location_code \
+        LEFT OUTER JOIN employees requested_employee ON tbl_inventory_purchase_order.requested_by = requested_employee.emp_id \
+        LEFT OUTER JOIN designations requested_employee_designations ON requested_employee.designation_code = requested_employee_designations.designation_code \
+        WHERE requested_by = ? OR submitted_to = ? OR appr_rejct_by = ? ORDER BY po_id DESC;",
+        [ emp_id, emp_id, emp_id ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                
+                res.send(rslt);
+                res.end();
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/order/load/subordinates', ( req, res ) => {
+
+    const { emp_id } = req.body;
+
+    db.query(
+        "SELECT \
+        employees.emp_id, \
+        employees.name, \
+        emp_props.po_receival \
+        FROM \
+        employees \
+        LEFT OUTER JOIN emp_props ON employees.emp_id = emp_props.emp_id \
+        LEFT OUTER JOIN tbl_er ON employees.emp_id = tbl_er.jr \
+        WHERE emp_props.po_receival = 1 AND tbl_er.sr = ?;",
+        [ emp_id ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                
+                res.send(rslt);
+                res.end();
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/order/details', ( req, res ) => {
+
+    const { po_id, viewed } = req.body;
+
+    db.query(
+        ( viewed ? "UPDATE tbl_inventory_purchase_order SET view_date = ?, view_time = ? WHERE po_id = ? AND view_date IS NULL;" : "SELECT ? AND ? AND ?;" ) +
+        "SELECT tbl_inventory_purchase_order.*,  \
+        companies.*, \
+        submit_to_employee.name AS submit_to_employee_name, \
+        hod_employee.name AS hod_employee_name, \
+        requested_employee.name AS requested_employee_name, \
+        requested_employee_designation.designation_name AS requested_employee_designation_name, \
+        submit_to_employee_designation.designation_name AS submit_to_employee_designation_name, \
+        hod_employee_designation.designation_name AS hod_employee_designation_name, \
+        locations.location_code, \
+        locations.location_name, \
+        locations.address, \
+        locations.location_phone, \
+        tbl_inventory_venders.name AS vendor_name, \
+        tbl_inventory_venders.phone AS vendor_phone, \
+        tbl_inventory_venders.address AS vendor_address \
+        FROM `tbl_inventory_purchase_order`  \
+        LEFT OUTER JOIN companies ON tbl_inventory_purchase_order.company_code = companies.company_code \
+        LEFT OUTER JOIN locations ON tbl_inventory_purchase_order.ship_to = locations.location_code \
+        LEFT OUTER JOIN tbl_inventory_venders ON tbl_inventory_purchase_order.vendor_id = tbl_inventory_venders.vender_id \
+        LEFT OUTER JOIN employees requested_employee ON tbl_inventory_purchase_order.requested_by = requested_employee.emp_id \
+        LEFT OUTER JOIN employees submit_to_employee ON tbl_inventory_purchase_order.submitted_to = submit_to_employee.emp_id \
+        LEFT OUTER JOIN employees hod_employee ON tbl_inventory_purchase_order.appr_rejct_by = hod_employee.emp_id \
+        LEFT OUTER JOIN designations requested_employee_designation ON requested_employee.designation_code = requested_employee_designation.designation_code \
+        LEFT OUTER JOIN designations submit_to_employee_designation ON submit_to_employee.designation_code = submit_to_employee_designation.designation_code \
+        LEFT OUTER JOIN designations hod_employee_designation ON hod_employee.designation_code = hod_employee_designation.designation_code \
+        WHERE po_id = ?;" +
+        "SELECT * FROM `tbl_inventory_purchase_order_specifications` WHERE po_id = ? ORDER BY sr_no;" +
+        "SELECT * FROM `tbl_inventory_purchase_order_bills` WHERE po_id = ?;" +
+        "SELECT * FROM `tbl_inventory_purchase_order_additional_specifications` WHERE po_id = ?;",
+        [ new Date(), new Date().toTimeString(), po_id, po_id, po_id, po_id, po_id ],
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err )
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+
+                if ( viewed && rslt[0].affectedRows != 0 )
+                {
+                    db.query(
+                        "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                        "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                        [ rslt[1][0].requested_by, rslt[1][0].submitted_to ],
+                        ( err, result ) => {
+                
+                            if( err )
+                            {
+                
+                                console.log( err );
+                                res.send( err );
+                                res.end();
+                
+                            }else
+                            {
+                                SendWhatsappNotification( null, null, "Hi " + result[1][0].name, "The purchase order with PO NO # " + rslt[1][0].po_id + " has been 'viewed'. The requested employee has been notified.", result[1][0].cell );
+                                SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "Our accounts department has viewed your purchase order with PO NO # " + rslt[1][0].po_id + ". Kindly wait.", result[0][0].cell );
+                            }
+                
+                        }
+                    );
+                }
+
+                let arr = [];
+
+                if ( rslt[1][0].pr_id )
+                {
+                    db.query( 
+                        "SELECT tbl_inventory_purchase_requisition.*,  \
+                        companies.company_name, \
+                        submit_to_employee.name AS submit_to_employee_name, \
+                        hod_employee.name AS hod_employee_name, \
+                        requested_employee.name AS requested_employee_name, \
+                        requested_employee_designation.designation_name AS requested_employee_designation_name, \
+                        submit_to_employee_designation.designation_name AS submit_to_employee_designation_name, \
+                        hod_employee_designation.designation_name AS hod_employee_designation_name, \
+                        locations.location_name \
+                        FROM `tbl_inventory_purchase_requisition`  \
+                        LEFT OUTER JOIN companies ON tbl_inventory_purchase_requisition.company_code = companies.company_code \
+                        LEFT OUTER JOIN locations ON tbl_inventory_purchase_requisition.location_code = locations.location_code \
+                        LEFT OUTER JOIN employees requested_employee ON tbl_inventory_purchase_requisition.requested_by = requested_employee.emp_id \
+                        LEFT OUTER JOIN employees submit_to_employee ON tbl_inventory_purchase_requisition.submitted_to = submit_to_employee.emp_id \
+                        LEFT OUTER JOIN employees hod_employee ON tbl_inventory_purchase_requisition.appr_rejct_by = hod_employee.emp_id \
+                        LEFT OUTER JOIN designations requested_employee_designation ON requested_employee.designation_code = requested_employee_designation.designation_code \
+                        LEFT OUTER JOIN designations submit_to_employee_designation ON submit_to_employee.designation_code = submit_to_employee_designation.designation_code \
+                        LEFT OUTER JOIN designations hod_employee_designation ON hod_employee.designation_code = hod_employee_designation.designation_code \
+                        WHERE pr_id = ?;" +
+                        "SELECT * FROM `tbl_inventory_purchase_requisition_specifications` WHERE pr_id = ?;",
+                        [ rslt[1][0].pr_id, rslt[1][0].pr_id ],
+                        ( err, result ) => {
+                
+                            if( err )
+                            {
+                
+                                console.log( err );
+                                res.send( err );
+                                res.end();
+                
+                            }else
+                            {
+                                arr = result;
+                
+                                res.send([rslt, arr]);
+                                res.end();
+                            }
+                
+                        }
+                    );
+                }else
+                {
+                    res.send([rslt, []]);
+                    res.end();
+                }
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/order/approval', ( req, res ) => {
+
+    const { emp_id, reason, submit_to, po_id, requested_by } = req.body;
+
+    db.query(
+        "UPDATE tbl_inventory_purchase_order SET status = ?, submitted_to = ?, act_date = ?, act_time = ?, remarks_from_hod = ? WHERE po_id = ?;",
+        [ 'approved', submit_to, new Date(), new Date().toTimeString(), reason, po_id ],
+        ( err ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ emp_id, requested_by, submit_to ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "You have approved the purchase order with PO NO # " + po_id + ", and the requested employee has been notified.", result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, "Your purchase order with PO NO # " + po_id + " has been approved by the accounts department.", result[1][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[2][0].name, "The accounts department has proceed you a purchase order with PO NO # " + po_id + ". Kindly review.", result[2][0].cell );
+                            res.send('success');
+                            res.end();
+                        }
+            
+                    }
+                );
+
+            }
+
+        }
+    );
+
+} );
+
+router.post('/purchase/order/reject', ( req, res ) => {
+
+    const { po_id, requested_by, emp_id, remarks, specifications, department } = req.body;
+    let arr = [];
+    for ( let x = 0; x < JSON.parse(specifications).length; x++ )
+    {
+        arr.push( JSON.parse(specifications)[x].description );
+    }
+
+    db.query(
+        "UPDATE tbl_inventory_purchase_order SET status = 'rejected', act_date = ?, act_time = ?, remarks_from_hod = ? WHERE po_id = ?;",
+        [ new Date(), new Date().toTimeString(), remarks, po_id ],
+        ( err ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+                res.send( err );
+                res.end();
+
+            }else 
+            {
+                
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ emp_id, requested_by ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "You have rejected the purchase Order with PO NO # " + po_id + " with reason '" + remarks + "'. The requested employee has been notified.", result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, "Your Purchase Order with PO NO # " + po_id + " has been rejected by the "  + ( department ) + " department with remarks '" + remarks + "'. If you have any question, kindly contact our " + ( department ) + " department, headoffice.", result[1][0].cell );
+
+                            res.send('success');
+                            res.end();
+                        }
+            
+                    }
+                );
+
+            }
+
+        }
+    );
+
+} );
 
 router.get('/getlastpono', ( req, res ) => {
 

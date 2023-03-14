@@ -1,0 +1,149 @@
+07:22:35 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+07:22:35 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+07:30:55 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+07:31:34 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+07:34:27 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+11:36:37 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading '0')
+
+11:36:37 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+13:17:49 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+13:19:59 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+13:21:15 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+13:22:31 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+13:25:07 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+13:48:33 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+13:49:32 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+13:50:16 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+13:50:56 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+14:01:09 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+14:46:31 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+14:53:16 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+14:54:39 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+14:55:01 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+14:55:01 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'createWid')
+    at __puppeteer_evaluation_script__:2:53
+
+14:55:01 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'createWid')
+    at __puppeteer_evaluation_script__:2:53
+
+15:00:57 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+
+15:02:43 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+15:03:07 GMT+0500 (Pakistan Standard Time)
+type: error
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+
+15:03:07 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_FAILED at https://web.whatsapp.com/
+
+15:03:07 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+15:03:07 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+15:03:07 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+16:24:59 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'queryExists')
+    at __puppeteer_evaluation_script__:25:69
+

@@ -5,8 +5,7 @@ import $ from 'jquery';
 
 import { useHistory } from 'react-router-dom';
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import JSAlert from 'js-alert'
 
 import axios from '../../../../axios';
 
@@ -104,13 +103,13 @@ const Employee_Login = () => {
 
             if ( failed )
             {
-                ShowNotification( "No Employee Found" );
+                JSAlert.alert("No Employee Found").dismissIn(1000 * 2);
             }
 
         }).catch(error => {
 
             setStartLoading(false);
-            ShowNotification( error );
+            JSAlert.alert(error).dismissIn(1000 * 2);
 
         });
 
@@ -160,7 +159,7 @@ const Employee_Login = () => {
 
             } ).catch( err => {
 
-                ShowNotification( err );
+                JSAlert.alert(err).dismissIn(1000 * 2);
 
             } );
 
@@ -169,7 +168,7 @@ const Employee_Login = () => {
             setStartLoading(false);
 
             setUserData( { LoginID: UserData.LoginID, LoginPass: '' } );
-            ShowNotification( 'Password Not Matched' );
+            JSAlert.alert('Password Not Matched').dismissIn(1000 * 2);
             
         }
 
@@ -181,7 +180,7 @@ const Employee_Login = () => {
         
         if ( result.err === null && result.rslt[0].app_status === '' )
         {
-            ShowNotification( 'Login Success' );
+            JSAlert.alert('Welcome To Web Portal').dismissIn(1000 * 2);
 
             sessionStorage.setItem('Token', encryptor.encrypt(emp.emp_id));
             sessionStorage.setItem('EmpID', emp.emp_id);
@@ -201,7 +200,7 @@ const Employee_Login = () => {
             }, 1000);
         }else
         {
-            ShowNotification( 'You are already login in another window' );
+            JSAlert.alert('You are already login in another window').dismissIn(1000 * 2);
         }
 
     }
@@ -220,25 +219,8 @@ const Employee_Login = () => {
         
     };
 
-    const ShowNotification = ( txt ) => {
-
-        toast.dark( txt.toString() , {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-
-    }
-
-
     return (
         <>
-
-            <ToastContainer />
             <Loading 
                 display={ StartLoading }
                 styling={

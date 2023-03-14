@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
 import './Loading.css';
+import Typewriter from 'typewriter-effect';
 
 const Loading = ( props ) => {
 
     const [ ShowLoading, setShowLoading ] = useState( false );
-    const [ LoadingState, setLoadingState ] = useState(
-        {
-            icon: '',
-            txt: ''
-        }
-    );
     const [ Styling, setStyling ] = useState({});
 
     useEffect(
@@ -18,27 +12,6 @@ const Loading = ( props ) => {
 
             setShowLoading( props.display );
             setStyling( props.styling );
-
-            let i = 0;
-            let txt = props.txt ? props.txt : '';
-            let speed = 80;
-            let val = '';
-
-            function typeWriter() {
-                if ( i < txt.length ) {
-                    val += txt.charAt(i);
-                    setLoadingState(
-                        {
-                        icon: props.icon,
-                        txt: val
-                        }
-                    );
-                    i++;
-                    setTimeout(typeWriter, speed);
-                }
-            }
-
-            typeWriter();
 
         }, [ props.display, props.styling, props.icon, props.txt ]
     )
@@ -58,13 +31,21 @@ const Loading = ( props ) => {
                         <div>
                             {/* LOADING IMAGE */}
                             {
-                                LoadingState.icon
+                                props.icon
                             }
+                            <p className='text-center mb-3 company'>
+                                SEABOARD
+                            </p>
                             {/* LOADING TEXT */}
                             <p className='text-center mb-0'>
-                                {
-                                    LoadingState.txt
-                                }
+                                <Typewriter
+                                    options={{
+                                        strings: [props.txt, 'Please Wait...', "Loading Content..."],
+                                        autoStart: true,
+                                        loop: true,
+                                        delay: 100
+                                    }}
+                                />
                             </p>
                         </div>
 

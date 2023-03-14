@@ -313,7 +313,7 @@ router.post('/getempattdetails', ( req, res ) => {
             }else
             {
                 connection.query(
-                    "SELECT `id`, `emp_id`, `time_in`, `time_out`, `break_in`, `break_out`, `status`, `emp_date`  FROM emp_attendance WHERE emp_id = " + empID + " ORDER BY emp_date DESC",
+                    "SELECT `id`, `emp_id`, `time_in`, `time_out`, `break_in`, `break_out`, `status`, `emp_date` FROM emp_attendance WHERE emp_id = " + empID + " ORDER BY emp_date DESC",
                     ( err, rslt ) => {
             
                         if( err )

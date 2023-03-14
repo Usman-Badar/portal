@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 
 import './TopBar.css';
+import Typewriter from 'typewriter-effect';
 
 import $ from 'jquery';
 import { NavLink } from 'react-router-dom';
@@ -72,7 +73,14 @@ const TopBar = () => {
         <>
             <div className="Dashboard_topbar d-center">
                 <marquee direction="left" className="topbar_news d-450-none">
-                    Tesla is quickly responding to the NHTSA's investigation of in-dash gaming while cars are moving. The Guardian has learned Tesla will deliver an update disabling on-the-move Passenger Play. A spokeswoman for the regulator said Tesla promised the change after
+                    <Typewriter
+                        options={{
+                            strings: ["Tesla is quickly responding to the NHTSA's investigation of in-dash gaming while cars are moving. The Guardian has learned Tesla will deliver an update disabling on-the-move Passenger Play. A spokeswoman for the regulator said Tesla promised the change after."],
+                            autoStart: true,
+                            loop: true,
+                            delay: 50,
+                        }}
+                    />
                 </marquee>
                 <div className=" d-450-block"></div>
                 <div className="icons d-center">

@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../../db/connection');
 
 const CreateLogs = require('../Employee/logs').CreateLog;
+const SendWhatsappNotification = require('../Whatsapp/whatsapp').SendWhatsappNotification;
 
 router.post('/getmatchedstoreitems', ( req, res ) => {
 
@@ -362,9 +363,10 @@ router.post('/store/accept_inventory_request', ( req, res ) => {
     const { request_id, accepted_by } = req.body;
 
     db.query(
-        "UPDATE tbl_inventory_request_to_store SET accepted_by = ?, accept_date = ?, accept_time = ? WHERE id = ?",
-        [ accepted_by, new Date(), new Date().toTimeString(), request_id ],
-        ( err ) => {
+        "UPDATE tbl_inventory_request_to_store SET accepted_by = ?, accept_date = ?, accept_time = ? WHERE id = ?;" +
+        "SELECT requested_by FROM tbl_inventory_request_to_store WHERE id = ?;",
+        [ accepted_by, new Date(), new Date().toTimeString(), request_id, request_id ],
+        ( err, rslt ) => {
 
             if( err )
             {
@@ -375,9 +377,29 @@ router.post('/store/accept_inventory_request', ( req, res ) => {
 
             }else 
             {
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ accepted_by, rslt[1][0].requested_by ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "You have accepted the request from the inventory department.", result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, result[0][0].name + " has accepted your item request, please wait... while our store department is delivering your required items.", result[1][0].cell );
+                        }
+            
+                    }
+                );
                 res.send('success');
                 res.end();
-
             }
 
         }
@@ -442,8 +464,9 @@ router.post('/store/issue_items_to_inventory', ( req, res ) => {
 
     db.query(
         "UPDATE tbl_inventory_request_to_store SET issued = 1 WHERE id = ?;" +
-        "UPDATE tbl_item_requests SET status = ? WHERE id = ?",
-        [ id, 'delivering_to_inventory', request_id ],
+        "UPDATE tbl_item_requests SET status = ? WHERE id = ?;" +
+        "SELECT requested_by, accepted_by FROM tbl_inventory_request_to_store WHERE id = ?;",
+        [ id, 'delivering_to_inventory', request_id, request_id ],
         ( err, rslt ) => {
 
             if( err )
@@ -455,6 +478,8 @@ router.post('/store/issue_items_to_inventory', ( req, res ) => {
 
             }else 
             {
+                res.send( rslt );
+                res.end();
              
                 CreateLogs( 
                     'tbl_item_requests', 
@@ -462,8 +487,27 @@ router.post('/store/issue_items_to_inventory', ( req, res ) => {
                     "Delivering items to inventory",
                     'info'
                 );
-                res.send( rslt );
-                res.end();
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ rslt[2][0].accepted_by, rslt[2][0].requested_by ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "Kindly deliver the required items to the inventory department.", result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, result[0][0].name + " is delivering you the required items, kindly receive.", result[1][0].cell );
+                        }
+            
+                    }
+                );
 
             }
 

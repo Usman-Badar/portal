@@ -9,7 +9,11 @@ const db = mysql.createPool(
         database: process.env.DB_NAME,
         multipleStatements: true,
         supportBigNumbers: true,
-        connectionLimit: 300
+        waitForConnections: true,
+        connectionLimit: 300,
+        queueLimit: 300,
+        connectTimeout: 10000,
+        acquireTimeout: 10000,
     }
 );
 
@@ -45,7 +49,9 @@ setInterval(() => {
             Open: db._allConnections.length,
             Acquiring: db._acquiringConnections.length,
             Free: db._freeConnections.length,
-            Queue: db._connectionQueue.length
+            Queue: db._connectionQueue.length,
+            Date: new Date().toDateString(),
+            Time: new Date().toTimeString()
         }
     ];
     console.table(tbl);

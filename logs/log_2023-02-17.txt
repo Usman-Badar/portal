@@ -1,0 +1,29 @@
+09:04:48 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Cannot find module './decodePacket.js'
+Require stack:
+- F:\IT\Web Development\MERN\portal\node_modules\engine.io-parser\build\cjs\index.js
+- F:\IT\Web Development\MERN\portal\node_modules\engine.io\build\transport.js
+- F:\IT\Web Development\MERN\portal\node_modules\engine.io\build\transports\polling.js
+- F:\IT\Web Development\MERN\portal\node_modules\engine.io\build\transports\index.js
+- F:\IT\Web Development\MERN\portal\node_modules\engine.io\build\server.js
+- F:\IT\Web Development\MERN\portal\node_modules\engine.io\build\engine.io.js
+- F:\IT\Web Development\MERN\portal\node_modules\socket.io\dist\index.js
+- F:\IT\Web Development\MERN\portal\server.js
+
+09:40:51 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: app.use() requires a middleware function
+
+09:45:09 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_NAME_NOT_RESOLVED at https://web.whatsapp.com/
+
+09:46:55 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_NAME_NOT_RESOLVED at https://web.whatsapp.com/
+
+09:47:17 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: net::ERR_NAME_NOT_RESOLVED at https://web.whatsapp.com/
+

@@ -157,20 +157,65 @@ router.post('/mark_employees_attendance', ( req, res ) => {
                     }else
                     {
                         db.query(
-                            "UPDATE `emp_attendance` SET time_out = ? WHERE emp_id = ? AND emp_date = ?;",
-                            [
-                                employees_attendance[x].time,
-                                employees_attendance[x].emp_id, 
-                                d.getFullYear() + '-' + ( parseInt(d.getMonth() + 1).toString().length === 1 ? '0' + parseInt(d.getMonth() + 1).toString() : parseInt(d.getMonth() + 1).toString() ) + '-' + ( d.getDate().toString().length === 1 ? '0' + d.getDate().toString() : d.getDate() ) 
-                            ],
-                            ( err ) => {
+                            "SELECT emp_id, time_in, time_out FROM emp_attendance WHERE emp_id = ? AND emp_date = ?;",
+                            [ employees_attendance[x].emp_id, d.getFullYear() + '-' + ( parseInt(d.getMonth() + 1).toString().length === 1 ? '0' + parseInt(d.getMonth() + 1).toString() : parseInt(d.getMonth() + 1).toString() ) + '-' + ( d.getDate().toString().length === 1 ? '0' + d.getDate().toString() : d.getDate() ) ],
+                            ( err, rslt ) => {
                         
                                 if ( err )
                                 {
                                     console.log( err );
                                 }else
                                 {
-                                    console.log("RECORD UPDATED REF# - EMP-ID => (" + employees_attendance[x].emp_id + ") AT: ", new Date().toTimeString());
+    
+                                    for ( let x = 0; x < holidays.length; x++ )
+                                    {
+                                        const h_d = new Date(holidays[x].day);
+    
+                                        if ( ( h_d.getFullYear() + '-' + (h_d.getMonth() + 1) + '-' + h_d.getDate() ) === ( d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() ) )
+                                        {
+                                            status = holidays[x].status;
+                                        }
+                                    }
+
+                                    if ( !rslt[0] )
+                                    {
+                                        db.query(
+                                            "INSERT INTO `emp_attendance`(`emp_id`, `status`, `time_out`, `emp_date`) VALUES (?,?,?,?);",
+                                            [ employees_attendance[x].emp_id, status, employees_attendance[x].time, d ],
+                                            ( err ) => {
+                                        
+                                                if ( err )
+                                                {
+                                                    console.log( err );
+                                                }else
+                                                {
+                                                    console.log("RECORD INSERTED REF# - EMP-ID => (" + employees_attendance[x].emp_id + ") AT: ", new Date().toTimeString());
+                                                }
+                                        
+                                            }
+                                        )
+                                    }else
+                                    {
+                                        db.query(
+                                            "UPDATE `emp_attendance` SET time_out = ? WHERE emp_id = ? AND emp_date = ?;",
+                                            [
+                                                employees_attendance[x].time,
+                                                employees_attendance[x].emp_id, 
+                                                d.getFullYear() + '-' + ( parseInt(d.getMonth() + 1).toString().length === 1 ? '0' + parseInt(d.getMonth() + 1).toString() : parseInt(d.getMonth() + 1).toString() ) + '-' + ( d.getDate().toString().length === 1 ? '0' + d.getDate().toString() : d.getDate() ) 
+                                            ],
+                                            ( err ) => {
+                                        
+                                                if ( err )
+                                                {
+                                                    console.log( err );
+                                                }else
+                                                {
+                                                    console.log("RECORD UPDATED REF# - EMP-ID => (" + employees_attendance[x].emp_id + ") AT: ", new Date().toTimeString());
+                                                }
+                                        
+                                            }
+                                        )
+                                    }
                                 }
                         
                             }

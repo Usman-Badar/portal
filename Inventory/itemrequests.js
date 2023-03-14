@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const CreateLogs = require('../Routes/Employee/logs').CreateLog;
+const SendWhatsappNotification = require('../Routes/Whatsapp/whatsapp').SendWhatsappNotification;
 // const AssignProduct = require('./products').AssignProduct;
 
 router.get('/inventory/get_item_requests', ( req, res ) => {
@@ -19,7 +20,7 @@ router.get('/inventory/get_item_requests', ( req, res ) => {
         LEFT OUTER JOIN employees acted ON tbl_item_requests.acted_by = acted.emp_id \
         LEFT OUTER JOIN employees sender ON tbl_item_requests.request_by = sender.emp_id \
         WHERE \
-        tbl_item_requests.status = 'approved' OR tbl_item_requests.status = 'proceed to purchase requisition' OR tbl_item_requests.status = 'delivery is in process' OR tbl_item_requests.status = 'delivered' OR tbl_item_requests.status = 'at_store' OR tbl_item_requests.status = 'delivering_to_inventory' ORDER BY tbl_item_requests.id DESC;",
+        tbl_item_requests.status = 'approved' OR tbl_item_requests.status = 'proceed to purchase requisition' OR tbl_item_requests.status = 'delivery is in process' OR tbl_item_requests.status = 'delivered' OR tbl_item_requests.status = 'partially delivered' OR tbl_item_requests.status = 'at_store' OR tbl_item_requests.status = 'delivering_to_inventory' ORDER BY tbl_item_requests.id DESC;",
         ( err, rslt ) => {
 
             if( err )
@@ -200,6 +201,7 @@ router.post('/inventory/get_item_request/get_sub_category_items', ( req, res ) =
             if( err )
             {
 
+                console.log( err );
                 res.send(err);
                 res.end();
 
@@ -207,13 +209,14 @@ router.post('/inventory/get_item_request/get_sub_category_items', ( req, res ) =
             {
                 db.query(
                     "SELECT tbl_inventory_product_transactions.product_id, tbl_inventory_product_transactions.company_code, SUM(tbl_inventory_product_transactions.quantity) AS quantity, SUM(tbl_inventory_product_transactions.stored_quantity) AS stored_quantity, companies.company_name FROM `tbl_inventory_product_transactions` \
-                    LEFT OUTER JOIN companies ON companies.company_code = tbl_inventory_product_transactions.company_code WHERE product_id = ? AND entry = 'inward' GROUP BY company_code;",
+                    LEFT OUTER JOIN companies ON companies.company_code = tbl_inventory_product_transactions.company_code WHERE product_id = ? AND tbl_inventory_product_transactions.entry = 'inward' GROUP BY companies.company_code;",
                     [ rslt[0].product_id ],
                     ( err, rslt2 ) => {
             
                         if( err )
                         {
             
+                            console.log( err );
                             res.send(err);
                             res.end();
             
@@ -265,8 +268,12 @@ router.post('/inventory/item_request/request_to_store', ( req, res ) => {
                     params.push(rslt[1][0].id);
                     params.push(assigned_products[x].transaction_id);
                     params.push(assigned_products[x].product_id);
-                    params.push(assigned_products[x].assigned_quantity);
+                    params.push(assigned_products[x].deliver_quantity);
                     params.push(assigned_products[x].stored_quantity);
+                    attr_query = attr_query.concat("UPDATE tbl_item_requests_specifications SET deliver_quantity = ? WHERE request_id = ? AND item_id = ?;");
+                    params.push(assigned_products[x].deliver_quantity);
+                    params.push(request_id);
+                    params.push(assigned_products[x].item_id);
                 }
                 
                 db.query(
@@ -297,7 +304,27 @@ router.post('/inventory/item_request/request_to_store', ( req, res ) => {
                         
                                     }else 
                                     {
-
+                                        db.query(
+                                            "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                                            "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                                            [ emp_id, 5009 ],
+                                            ( err, result ) => {
+                                    
+                                                if( err )
+                                                {
+                                    
+                                                    console.log( err );
+                                                    res.send( err );
+                                                    res.end();
+                                    
+                                                }else
+                                                {
+                                                    SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "Your request has been proceed to the Store Department, Store Department has been informed.", result[0][0].cell );
+                                                    SendWhatsappNotification( null, null, "Hi " + result[1][0].name, result[0][0].name + " has sent you a request on portal, kindly view.", result[1][0].cell );
+                                                }
+                                    
+                                            }
+                                        );
                                         CreateLogs( 
                                             'tbl_item_requests', 
                                             request_id,
@@ -368,33 +395,33 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
                     itemRequestDescriptionQuery = itemRequestDescriptionQuery.concat(
                         "UPDATE `tbl_inventory_products` SET tbl_inventory_products.quantity = tbl_inventory_products.quantity - ? WHERE tbl_inventory_products.product_id = ?;" +
                         "UPDATE `tbl_inventory_product_transactions` SET tbl_inventory_product_transactions.stored_quantity = tbl_inventory_product_transactions.stored_quantity - ? WHERE tbl_inventory_product_transactions.transaction_id = ?;" +
-                        "INSERT INTO `tbl_inventory_product_transactions`(`name`,`description`,`product_id`, `entry`, `quantity`, `recorded_by`, `record_date`, `record_time`, `employee`, `request_id`, `status`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `note`, `acquisition_date`) \
+                        "INSERT INTO `tbl_inventory_product_transactions`(`name`,`description`,`product_id`, `inward_id`, `entry`, `quantity`, `recorded_by`, `record_date`, `record_time`, `employee`, `request_id`, `status`, `unit_price`, `total_amount`, `delivery_challan`, `company_code`, `location_code`, `sub_location_code`, `preview`, `physical_condition`, `note`, `acquisition_date`) \
                         SELECT name, description, product_id, ?, ?, ?, ?, ?, ?, ?, ?, unit_price, ? * unit_price, delivery_challan, company_code, location_code, sub_location_code, preview, physical_condition, note, acquisition_date FROM `tbl_inventory_product_transactions` WHERE transaction_id = ?;"
                     );
-                    params.push( products[x].assigned_quantity );
+                    params.push( products[x].deliver_quantity );
                     params.push( products[x].product_id );
                     
-                    params.push( products[x].assigned_quantity );
+                    params.push( products[x].deliver_quantity );
                     params.push( products[x].transaction_id );
 
+                    params.push( products[x].transaction_id );
                     params.push( 'outward' );
-                    params.push( products[x].assigned_quantity );
+                    params.push( products[x].deliver_quantity );
                     params.push( issued_by );
                     params.push( new Date() );
                     params.push( new Date().toTimeString() );
                     params.push( requested_by );
                     params.push( request_id );
                     params.push( "issued" );
-                    params.push( products[x].assigned_quantity );
+                    params.push( products[x].deliver_quantity );
                     params.push( products[x].transaction_id );
                 }
 
-                let query = db.query(
+                db.query(
                     itemRequestDescriptionQuery,
                     params,
                     ( err ) => {
             
-                        console.log( query.sql );
                         if( err )
                         {
             
@@ -404,41 +431,33 @@ router.post('/inventory/item_request/deliver_to_employee', ( req, res ) => {
             
                         }else 
                         {
+                            db.query(
+                                "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                                "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                                [ issued_by, requested_by ],
+                                ( err, result ) => {
+                        
+                                    if( err )
+                                    {
+                        
+                                        console.log( err );
+                                        res.send( err );
+                                        res.end();
+                        
+                                    }else
+                                    {
+                                        SendWhatsappNotification( null, null, "Hi " + result[0][0].name, "The request is just near to accomplished, kindly deliver the required items to the requested employee..", result[0][0].cell );
+                                        SendWhatsappNotification( null, null, "Hi " + result[1][0].name, result[0][0].name + " is delivering you the required items, kindly review on portal.", result[1][0].cell );
+                                    }
+                        
+                                }
+                            );
                             res.send('success');
                             res.end();
                         }
                         
                     }
                 )
-                
-            }
-            
-        }
-    )
-
-} );
-
-router.post('/inventory/get/product/inwards', ( req, res ) => {
-
-    const { product_id } = req.body;
-
-    db.query(
-        "SELECT tbl_inventory_product_transactions.*, companies.company_name FROM `tbl_inventory_product_transactions` LEFT OUTER JOIN companies ON tbl_inventory_product_transactions.company_code = companies.company_code WHERE tbl_inventory_product_transactions.product_id = ? AND tbl_inventory_product_transactions.entry = 'inward';",
-        [ product_id ],
-        ( err, rslt ) => {
-
-            if( err )
-            {
-
-                console.log(err);
-                res.send(err);
-                res.end();
-
-            }else 
-            {
-                
-                res.send( rslt );
-                res.end();
                 
             }
             

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../db/connection');
+let key = 'real secret keys should be long and random';
+const encryptor = require('simple-encryptor')(key);
 
 const SendWhatsappNotification = require('../Whatsapp/whatsapp').SendWhatsappNotification;
 
@@ -14,8 +16,10 @@ function reminder_on_absent_for_leave()
         emp_attendance.*, \
         `employees`.`cell`, \
         `employees`.`name` \
+        `emp_props`.`whatsapp_notifications` \
         FROM emp_attendance \
         LEFT OUTER JOIN employees ON emp_attendance.emp_id = employees.emp_id \
+        LEFT OUTER JOIN emp_props ON employees.emp_id = emp_props.emp_id \
         WHERE emp_attendance.status = 'Absent' \
         AND emp_attendance.emp_date = ?;",
         [ prev_date.getFullYear() + '-' + parseInt(prev_date.getMonth() + 1) + '-' + prev_date.getDate() ],
@@ -466,6 +470,61 @@ function reminder_for_authorize_a_short_leave_request()
         }
     )
 }
+
+function password_reset()
+{
+    let phrases = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6','7','8','9','0'];
+
+    db.query(
+        "SELECT emp_id, cell, name FROM employees WHERE company_code = 7;",
+        ( err, rslt ) => {
+
+            if( err )
+            {
+
+                console.log( err );
+
+            }else 
+            {
+                
+                for ( let z = 0; z < rslt.length; z++ )
+                {
+                    console.log( 'Credentials Updating...' );
+
+                    let login_id = phrases[Math.floor(Math.random() * phrases.length)] + phrases[Math.floor(Math.random() * phrases.length)] + phrases[Math.floor(Math.random() * phrases.length)] + phrases[Math.floor(Math.random() * phrases.length)] + phrases[Math.floor(Math.random() * phrases.length)] + phrases[Math.floor(Math.random() * phrases.length)];
+                    let password = phrases[Math.floor(Math.random() * phrases.length)] + phrases[Math.floor(Math.random() * phrases.length)] + phrases[Math.floor(Math.random() * phrases.length)] + phrases[Math.floor(Math.random() * phrases.length)] + phrases[Math.floor(Math.random() * phrases.length)] + phrases[Math.floor(Math.random() * phrases.length)];
+
+                    db.query(
+                        "UPDATE emp_app_profile SET login_id = ?, emp_password = ? WHERE emp_id = ?;",
+                        [ encryptor.encrypt( login_id ), encryptor.encrypt( password ), rslt[z].emp_id ],
+                        ( err ) => {
+                
+                            if( err )
+                            {
+                
+                                console.log( err );
+                
+                            }else 
+                            {
+                                console.log( 'login_id: ', login_id );
+                                console.log( 'password: ', password );
+                                SendWhatsappNotification( null, null, "Hi " + rslt[z].name, "Your login id and password has been changed, your new login_id is '" + login_id + "' and password is '" + password + "'. Kindly login to http://portal.seaboard.pk and change you credentials first.", rslt[z].cell );
+                
+                            }
+                
+                        }
+                    )
+                }
+
+            }
+
+        }
+    )
+}
+
+// setTimeout(() => {
+//     password_reset();
+// }, 1000);
 
 // reminder_for_authorize_a_short_leave_request();
 

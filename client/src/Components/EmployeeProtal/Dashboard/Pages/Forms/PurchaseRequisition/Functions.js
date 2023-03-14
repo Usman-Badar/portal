@@ -19,6 +19,25 @@ export const onContentInput = ( e ) => {
 
 }
 
+export const onContentEdit = ( e ) => {
+
+    let id = e.target.id;
+    let row = id.split('_').pop();
+    let row_id = "specification_row_" + row;
+    
+    let row_child_nodes = document.getElementById(row_id).childNodes;
+    let row_serial_number = row_child_nodes[0];
+    let row_description = row_child_nodes[1];
+    let row_quantity = row_child_nodes[2];
+    let row_est_cost = row_child_nodes[3];
+    let row_total_cost = row_child_nodes[4];
+    
+    CalculateEstTotalCost( e, row_quantity, row_est_cost, row_total_cost, row_serial_number, row_description, row );
+
+    document.getElementById(row_id).className = 'bg-success text-light';
+
+}
+
 const CalculateEstTotalCost = ( e, row_quantity, row_est_cost, row_total_cost, row_serial_number, row_description, row ) => {
 
     if (
@@ -180,7 +199,8 @@ export const SubmitPR = ( e, setData, setSubmitConfirmation ) => {
     const company_code = e.target['company_code'].value;
     const location_code = e.target['location_code'].value;
     const new_purchase_checkbox = e.target['new_purchase'].checked;
-    const repair_replacement_checkbox = e.target['repair_replacement'].checked;
+    const repair_checkbox = e.target['repair'].checked;
+    const replace_recycle_checkbox = e.target['replace_recycle'].checked;
     const budgeted_checkbox = e.target['budgeted'].checked;
     const not_budgeted_checkbox = e.target['not_budgeted'].checked;
     const invoice_attached_checkbox = e.target['invoice_attached'].checked;
@@ -191,7 +211,8 @@ export const SubmitPR = ( e, setData, setSubmitConfirmation ) => {
             company_code: company_code,
             location_code: location_code,
             new_purchase_checkbox: new_purchase_checkbox,
-            repair_replacement_checkbox: repair_replacement_checkbox,
+            repair_checkbox: repair_checkbox,
+            replace_recycle_checkbox: replace_recycle_checkbox,
             budgeted_checkbox: budgeted_checkbox,
             not_budgeted_checkbox: not_budgeted_checkbox,
             invoice_attached_checkbox: invoice_attached_checkbox,
@@ -478,5 +499,42 @@ export const openRequestDetails = ( pr_id, setRequestDetails, setSpecifications,
 
         }
     );
+
+}
+
+export const addRow = () => {
+
+    let rows = document.getElementById('specifications_table_body').childNodes;
+    let row = document.createElement('tr');
+    row.id = "specification_row_" + parseInt(rows.length + 1);
+
+    let column_serial_number = document.createElement('td');
+    column_serial_number.id = "specification_serial_number_" + parseInt(rows.length + 1);
+    
+    let column_description = document.createElement('td');
+    column_description.contentEditable = true;
+    column_description.addEventListener( 'input', onContentInput );
+    column_description.id = "specification_description_" + parseInt(rows.length + 1);
+    
+    let column_quantity = document.createElement('td');
+    column_quantity.contentEditable = true;
+    column_quantity.addEventListener( 'input', onContentInput );
+    column_quantity.id = "specification_quantity_" + parseInt(rows.length + 1);
+    
+    let column_est_cost = document.createElement('td');
+    column_est_cost.contentEditable = true;
+    column_est_cost.addEventListener( 'input', onContentInput );
+    column_est_cost.id = "specification_est_cost_" + parseInt(rows.length + 1);
+    
+    let column_total_est_cost = document.createElement('td');
+    column_total_est_cost.id = "specification_total_cost_" + parseInt(rows.length + 1);
+
+    row.appendChild(column_serial_number);
+    row.appendChild(column_description);
+    row.appendChild(column_quantity);
+    row.appendChild(column_est_cost);
+    row.appendChild(column_total_est_cost);
+
+    document.getElementById('specifications_table_body').appendChild(row);
 
 }

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../db/connection');
+const SendWhatsappNotification = require('../Whatsapp/whatsapp').SendWhatsappNotification;
 
 // the following request is to get all users data
 
@@ -322,19 +323,21 @@ router.post('/getemployee', ( req, res ) => {
         LEFT OUTER JOIN emp_armed_license ON employees.emp_id = emp_armed_license.emp_id \
         LEFT OUTER JOIN emp_driving_license ON employees.emp_id = emp_driving_license.emp_id \
         LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code \
-        LEFT OUTER JOIN departments ON designations.department_code = departments.department_code \
+        LEFT OUTER JOIN departments ON employees.department_code = departments.department_code \
         LEFT OUTER JOIN companies ON employees.company_code = companies.company_code \
         LEFT OUTER JOIN locations ON employees.location_code = locations.location_code \
         WHERE \
         employees.emp_id = " + empID + ";" +
-        "SELECT \
-        tbl_er.sr, \
-        tbl_er.category, \
-        employees.name, \
-        employees.email, \
-        employees.gender \
-        FROM tbl_er \
+        "SELECT  \
+        tbl_er.sr,  \
+        tbl_er.category,  \
+        employees.name,  \
+        employees.email,  \
+        employees.gender, \
+        emp_props.pr_approval_limit \
+        FROM tbl_er  \
         LEFT OUTER JOIN employees ON employees.emp_id = tbl_er.sr \
+        LEFT OUTER JOIN emp_props ON employees.emp_id = emp_props.emp_id  \
         WHERE tbl_er.jr = ?;" +
         ( view ? "SELECT * FROM `tbl_portal_menu` WHERE view = ? ORDER BY indexing ASC" : '' ),
         [ empID, view ],
@@ -350,8 +353,54 @@ router.post('/getemployee', ( req, res ) => {
             }else 
             {
 
-                res.send( rslt );
-                res.end();
+                let query = "SELECT * FROM invtry_emp_approval_to_related_companies ";
+
+                if ( rslt[1].length > 0 )
+                {
+                    query = query.concat(" WHERE ");
+                    for ( let i = 0; i < rslt[1].length; i++ )
+                    {
+                        if ( i === 0 )
+                        {
+                            query = query.concat(" emp_id = " + rslt[1][i].sr);
+                        }else
+                        {
+                            query = query.concat(" OR emp_id = " + rslt[1][i].sr);
+                        }
+                    }
+                }
+
+                db.query(
+                    query,
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+                            res.status(500).send(err);
+                            res.end();
+            
+                        }else 
+                        {
+                            
+                            for ( let i = 0; i < rslt[1].length; i++ )
+                            {
+                                let arr = [];
+                                for ( let ix = 0; ix < result.length; ix++ )
+                                {
+                                    if ( result[ix].emp_id === rslt[1][i].sr )
+                                    {
+                                        arr.push(result[ix].company_code);
+                                    }
+                                }
+                                rslt[1][i].companies = arr;
+                            }
+                            res.send( rslt );
+                            res.end();
+            
+                        }
+            
+                    }
+                );
 
             }
 
@@ -780,13 +829,18 @@ router.get('/getempprops', ( req, res ) => {
 
 } );
 
-router.get('/get/employees/all', ( req, res ) => {
+router.post('/get/employees/all', ( req, res ) => {
+
+    const { emp_id, accessKey } = req.body;
 
     db.query(
-        "SELECT employees.emp_id, employees.name, designations.designation_name, emp_app_profile.emp_image, companies.company_name FROM employees \
-        LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code \
-        LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id \
-        LEFT OUTER JOIN companies ON employees.company_code = companies.company_code WHERE employees.emp_status = 'Active' ORDER BY employees.name ASC;",
+        "SELECT employees.emp_id, employees.name, designations.designation_name, emp_app_profile.emp_image, companies.company_name FROM employees  \
+        LEFT OUTER JOIN designations ON employees.designation_code = designations.designation_code  \
+        RIGHT OUTER JOIN tbl_er ON employees.emp_id = tbl_er.jr  \
+        LEFT OUTER JOIN emp_app_profile ON employees.emp_id = emp_app_profile.emp_id  \
+        LEFT OUTER JOIN companies ON employees.company_code = companies.company_code WHERE  \
+        employees.emp_status = 'Active' " + ( accessKey == 0 ? ("AND tbl_er.sr = " + emp_id) : "" ) + " \
+        GROUP BY employees.emp_id ORDER BY employees.name ASC;",
         ( err, rslt ) => {
 
             if( err )
@@ -799,6 +853,7 @@ router.get('/get/employees/all', ( req, res ) => {
             }else 
             {
 
+                console.log( rslt );
                 res.send( rslt );
                 res.end();
 
@@ -828,8 +883,29 @@ router.post('/employees/tickets/generate', ( req, res ) => {
             }else 
             {
 
-                res.send("success");
-                res.end();
+                db.query(
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;" + 
+                    "SELECT name, cell FROM employees WHERE emp_id = ?;",
+                    [ generated_by, emp_id ],
+                    ( err, result ) => {
+            
+                        if( err )
+                        {
+            
+                            console.log( err );
+                            res.send( err );
+                            res.end();
+            
+                        }else
+                        {
+                            SendWhatsappNotification( null, null, "Hi " + result[0][0].name, ticket + " ticket has been given to the employee " + result[1][0].name + ".", result[0][0].cell );
+                            SendWhatsappNotification( null, null, "Hi " + result[1][0].name, result[0][0].name + " has given you a " + ticket + " ticket with remarks '" + remarks + "'.", result[1][0].cell );
+                            res.send('success');
+                            res.end();
+                        }
+            
+                    }
+                );
 
             }
 

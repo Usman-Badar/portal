@@ -70,6 +70,14 @@ app.use((req, res, next) => {
 
 app.use("/client", express.static(__dirname + "/client"));
 app.use("/assets", express.static(__dirname + "/assets"));
+app.use( express.static( path.join( __dirname, 'client' ) ) );
+
+app.set('views', path.join(__dirname, 'views'));
+// Set EJS View Engine**
+app.set('view engine','ejs');
+// Set HTML engine**
+app.engine('html', require('ejs').renderFile);
+
 app.use( fileUpload() );
 app.use( compression() );
 require('dotenv').config();
@@ -80,6 +88,18 @@ https.globalAgent.maxSockets = Infinity;
 // app.get('/', function ( req, res ) {
 //     res.sendFile( path.join( __dirname, 'client', 'index.html' ) );
 // })
+
+app.get('/signature/index/:id', function (req, res) {
+    res.render('index.html');
+});
+
+app.get('/signature/match/:id', function (req, res) {
+    res.render('match.html');
+});
+
+app.get('/signature/approve/:id', function (req, res) {
+    res.render('approve.html');
+});
 
 app.get('/testing', function ( req, res ) {
     res.send('success');
@@ -135,6 +155,8 @@ app.use( require('./Routes/Services/ReadTxtFile') );
 
 // Following route for custom web services
 app.use( require('./Routes/Services/markEmpAbsent') );
+
+app.use( require('./Routes/Services/markEmpLateWhenNoTimeOut') );
 
 // Following route for set status to valid
 app.use( require('./Routes/Services/SetInOutStatusToValid') );
@@ -250,6 +272,17 @@ app.use( require('./Attendance/auth') );
 
 // WHATSAPP ROUTES
 app.use( require('./Routes/Whatsapp/whatsapp').router );
+
+
+
+
+
+
+
+
+
+// CONTAINER ROUTES
+app.use( require('./Routes/Containers/container') );
 
 
 

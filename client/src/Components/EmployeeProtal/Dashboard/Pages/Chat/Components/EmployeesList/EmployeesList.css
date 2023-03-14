@@ -20,8 +20,13 @@
 
 .EmployeeChat .Left .employee p {
     font-size: 11px !important;
+    transition: .5s;
 }
 
 .EmployeeChat .Left .employee:hover {
-    background-color: rgb(211, 211, 211, .5);
+    background-color: rgb(211, 211, 211, .4);
+}
+
+.EmployeeChat .Left .employee:hover p {
+    transform: translateX(5px);
 }

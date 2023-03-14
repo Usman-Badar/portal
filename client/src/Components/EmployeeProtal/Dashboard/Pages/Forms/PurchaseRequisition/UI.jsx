@@ -4,7 +4,7 @@ import './Style.css';
 import { Route, Switch } from 'react-router-dom';
 import Modal from '../../../../../UI/Modal/Modal';
 
-const UI = ( { ApproveRequisition, AttachedQuotations, Specifications, RequestDetails, history, Requests, RejectRequisition, CancelRequisition, SubmitConfirmation, ShowQuotationModal, Quotations, Locations, Companies, SubmitPR, loadRequests, openRequestDetails, PRSubmittion, setSubmitConfirmation, onAttachQuotations, onContentInput, setShowQuotationModal } ) => {
+const UI = ( { ApproveRequisition, AttachedQuotations, Specifications, RequestDetails, history, Requests, addRow, RejectRequisition, CancelRequisition, SubmitConfirmation, ShowQuotationModal, Quotations, Locations, Companies, SubmitPR, loadRequests, openRequestDetails, PRSubmittion, setSubmitConfirmation, onAttachQuotations, onContentInput, onContentEdit, setShowQuotationModal } ) => {
     
     return (
         <>
@@ -22,6 +22,7 @@ const UI = ( { ApproveRequisition, AttachedQuotations, Specifications, RequestDe
                                     Quotations={ Quotations }
                                     history={ history }
                                     
+                                    addRow={ addRow }
                                     SubmitPR={ SubmitPR }
                                     onContentInput={ onContentInput }
                                     setShowQuotationModal={ setShowQuotationModal }
@@ -46,6 +47,7 @@ const UI = ( { ApproveRequisition, AttachedQuotations, Specifications, RequestDe
                                     Quotations={ AttachedQuotations }
                                     history={ history }
 
+                                    onContentEdit={ onContentEdit }
                                     openRequestDetails={ openRequestDetails }
                                     CancelRequisition={ CancelRequisition }
                                     RejectRequisition={ RejectRequisition }
@@ -63,7 +65,7 @@ const UI = ( { ApproveRequisition, AttachedQuotations, Specifications, RequestDe
 
 export default UI;
 
-const PRForm = ( { history, Locations, Quotations, Companies, SubmitPR, setShowQuotationModal, onContentInput } ) => {
+const PRForm = ( { history, Locations, Quotations, Companies, SubmitPR, setShowQuotationModal, addRow, onContentInput } ) => {
 
     return (
         <>
@@ -121,8 +123,12 @@ const PRForm = ( { history, Locations, Quotations, Companies, SubmitPR, setShowQ
                             <input type="checkbox" value="New Purchase" name="new_purchase" className='ml-2' />
                         </div>
                         <div className='grid_container align-items-center'>
-                            <span>Repair / Replacement</span>
-                            <input type="checkbox" value="Repair / Replacement" name="repair_replacement" className='ml-2' />
+                            <span>Repair</span>
+                            <input type="checkbox" value="Repair" name="repair" className='ml-2' />
+                        </div>
+                        <div className='grid_container align-items-center'>
+                            <span>Replacement / Recycle</span>
+                            <input type="checkbox" value="Replacement / Recycle" name="replace_recycle" className='ml-2' />
                         </div>
                         <div className='grid_container align-items-center'>
                             <span>Budgeted</span>
@@ -144,16 +150,19 @@ const PRForm = ( { history, Locations, Quotations, Companies, SubmitPR, setShowQ
 
                     <br />
 
-                    <label className="mb-1"><b>Purchase / Repair / Replacement Specifications</b></label>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <label className='mb-1'><b>Purchase / Repair / Replacement Specifications</b></label>
+                        <i className="las la-plus-circle la-2x" style={ { cursor: 'pointer' } } title='Add New Row' onClick={ addRow }></i>
+                    </div>
 
                     <table className="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Sr.No.</th>
-                                <th>Description</th>
-                                <th>Quantity</th>
-                                <th>Estimated Price</th>
-                                <th>Total Price</th>
+                                <th className='text-center'>Sr.No.</th>
+                                <th className='text-center'>Description</th>
+                                <th className='text-center'>Quantity</th>
+                                <th className='text-center'>Estimated Price</th>
+                                <th className='text-center'>Total Price</th>
                             </tr>
                         </thead>
                         <tbody id="specifications_table_body">
@@ -164,76 +173,13 @@ const PRForm = ( { history, Locations, Quotations, Companies, SubmitPR, setShowQ
                                 <td id="specification_est_cost_1" contentEditable onInput={ onContentInput }></td>
                                 <td id="specification_total_cost_1"></td>
                             </tr>
-                            <tr id="specification_row_2">
-                                <td id="specification_serial_number_2"></td>
-                                <td id="specification_description_2" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_quantity_2" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_est_cost_2" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_total_cost_2"></td>
-                            </tr>
-                            <tr id="specification_row_3">
-                                <td id="specification_serial_number_3"></td>
-                                <td id="specification_description_3" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_quantity_3" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_est_cost_3" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_total_cost_3"></td>
-                            </tr>
-                            <tr id="specification_row_4">
-                                <td id="specification_serial_number_4"></td>
-                                <td id="specification_description_4" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_quantity_4" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_est_cost_4" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_total_cost_4"></td>
-                            </tr>
-                            <tr id="specification_row_5">
-                                <td id="specification_serial_number_5"></td>
-                                <td id="specification_description_5" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_quantity_5" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_est_cost_5" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_total_cost_5"></td>
-                            </tr>
-                            <tr id="specification_row_6">
-                                <td id="specification_serial_number_6"></td>
-                                <td id="specification_description_6" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_quantity_6" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_est_cost_6" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_total_cost_6"></td>
-                            </tr>
-                            <tr id="specification_row_7">
-                                <td id="specification_serial_number_7"></td>
-                                <td id="specification_description_7" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_quantity_7" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_est_cost_7" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_total_cost_7"></td>
-                            </tr>
-                            <tr id="specification_row_8">
-                                <td id="specification_serial_number_8"></td>
-                                <td id="specification_description_8" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_quantity_8" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_est_cost_8" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_total_cost_8"></td>
-                            </tr>
-                            <tr id="specification_row_9">
-                                <td id="specification_serial_number_9"></td>
-                                <td id="specification_description_9" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_quantity_9" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_est_cost_9" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_total_cost_9"></td>
-                            </tr>
-                            <tr id="specification_row_10">
-                                <td id="specification_serial_number_10"></td>
-                                <td id="specification_description_10" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_quantity_10" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_est_cost_10" contentEditable onInput={ onContentInput }></td>
-                                <td id="specification_total_cost_10"></td>
-                            </tr>
                         </tbody>
                         <tfoot>
                             <tr id="specification_total_row">
                                 <td></td>
-                                <td id="total_calculated_amount_label"><b>Total Estimated Amount</b></td>
                                 <td></td>
                                 <td></td>
+                                <td className='text-center' id="total_calculated_amount_label"><b>Total Estimated Amount</b></td>
                                 <td id="total_calculated_amount"></td>
                             </tr>
                         </tfoot>
@@ -252,7 +198,7 @@ const PRForm = ( { history, Locations, Quotations, Companies, SubmitPR, setShowQ
 
 }
 
-const RequestDetailsView = ( { ApproveRequisition, history, Quotations, Specifications, RequestDetails, CancelRequisition, RejectRequisition, openRequestDetails } ) => {
+const RequestDetailsView = ( { ApproveRequisition, history, Quotations, Specifications, RequestDetails, CancelRequisition, RejectRequisition, openRequestDetails, onContentEdit } ) => {
 
     const [ View, setView ] = useState("application");
 
@@ -272,9 +218,22 @@ const RequestDetailsView = ( { ApproveRequisition, history, Quotations, Specific
                 ?
                 parseInt(RequestDetails.requested_by) === parseInt(sessionStorage.getItem("EmpID")) ||
                 parseInt(RequestDetails.request_submitted_on_behalf) === parseInt(sessionStorage.getItem("EmpID")) ||
-                parseInt(RequestDetails.appr_rejct_by) === parseInt(sessionStorage.getItem("EmpID"))
+                parseInt(RequestDetails.appr_rejct_by) === parseInt(sessionStorage.getItem("EmpID")) ||
+                parseInt(RequestDetails.submitted_to) === parseInt(sessionStorage.getItem("EmpID"))
                 ?
-                <Detailing ApproveRequisition={ ApproveRequisition } pr_id={ window.location.href.split('?').pop().split('=').pop() } RejectRequisition={ RejectRequisition } CancelRequisition={ CancelRequisition } history={ history } Quotations={ Quotations } setView={ setView } View={ View } RequestDetails={ RequestDetails } Specifications={ Specifications } />
+                <Detailing 
+                    ApproveRequisition={ ApproveRequisition } 
+                    pr_id={ window.location.href.split('?').pop().split('=').pop() } 
+                    RejectRequisition={ RejectRequisition } 
+                    CancelRequisition={ CancelRequisition } 
+                    history={ history } 
+                    Quotations={ Quotations } 
+                    setView={ setView } 
+                    View={ View } 
+                    RequestDetails={ RequestDetails } 
+                    Specifications={ Specifications } 
+                    onContentEdit={ onContentEdit }
+                />
                 :
                 <>
                     <h6 className="text-center">Access Denied</h6>
@@ -290,8 +249,9 @@ const RequestDetailsView = ( { ApproveRequisition, history, Quotations, Specific
 
 }
 
-const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequisition, history, Quotations, View, setView, RequestDetails, Specifications } ) => {
+const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequisition, history, Quotations, View, setView, RequestDetails, Specifications, onContentEdit } ) => {
 
+    const [ EditConfirm, setEditConfirm ] = useState(false);
     const [ CancelConfirm, setCancelConfirm ] = useState(false);
     const [ RejectConfirm, setRejectConfirm ] = useState(false);
     const [ ApprovalConfirm, setApprovalConfirm ] = useState(false);
@@ -336,11 +296,70 @@ const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequis
                             ?
                             <>
                                 <button className="btn cancle" onClick={ () => setCancelConfirm(true) }>Cancel</button>
+                                {/* <button className="btn submit" onClick={ () => setEditConfirm(!EditConfirm) }>
+                                    { EditConfirm ? "Cancel Editing" : "Edit" }
+                                </button> */}
                             </>
                             :null
                         }
                     </div>
                 </div>
+
+                {
+                    EditConfirm
+                    ?
+                    <div className='border p-3 bg-light my-3'>
+                        <h6>Editing Option Has Been Enabled</h6>
+                        <p>
+                            Now the user is now be able to edit only the specifications in purchase requisition. Changes will be shown with colors, and each colors define an action performed.
+                            <ol>
+                                <li>
+                                    <div className='d-flex align-items-center'>
+                                        <div
+                                            className='bg-primary' 
+                                            style={
+                                                {
+                                                    width: '100px',
+                                                    height: '2px'
+                                                }
+                                            }
+                                        ></div>
+                                        <div className="pl-2">New Added</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className='d-flex align-items-center'>
+                                        <div
+                                            className='bg-success' 
+                                            style={
+                                                {
+                                                    width: '100px',
+                                                    height: '2px'
+                                                }
+                                            }
+                                        ></div>
+                                        <div className="pl-2">Edited</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className='d-flex align-items-center'>
+                                        <div
+                                            className='bg-danger' 
+                                            style={
+                                                {
+                                                    width: '100px',
+                                                    height: '2px'
+                                                }
+                                            }
+                                        ></div>
+                                        <div className="pl-2">Deleted</div>
+                                    </div>
+                                </li>
+                            </ol>
+                        </p>
+                    </div>
+                    :null
+                }
 
                 {
                     View === 'application'
@@ -361,31 +380,6 @@ const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequis
                             </div>
 
                             <div className="grid_container mb-3 px-5">
-                                
-                                {/* <div className='grid_container align-items-center'>
-                                    <span>New Purchase</span>
-                                    <input checked={ RequestDetails.new_purchase === 1 ? true : false } type="checkbox" className='ml-2' />
-                                </div>
-
-                                <div className='grid_container align-items-center'>
-                                    <span>Repair / Replacement</span>
-                                    <input checked={ RequestDetails.repair_replacement === 1 ? true : false } type="checkbox" className='ml-2' />
-                                </div>
-
-                                <div className='grid_container align-items-center'>
-                                    <span>Budgeted</span>
-                                    <input checked={ RequestDetails.budgeted === 1 ? true : false } type="checkbox" className='ml-2' />
-                                </div>
-                        
-                                <div className='grid_container align-items-center'>
-                                    <span>Not Budgeted</span>
-                                    <input checked={ RequestDetails.not_budgeted === 1 ? true : false } type="checkbox" className='ml-2' />
-                                </div>
-                    
-                                <div className='grid_container align-items-center'>
-                                    <span>Invoice Attached</span>
-                                    <input checked={ RequestDetails.invoice_attached === 1 ? true : false } type="checkbox" className='ml-2' />
-                                </div> */}
 
                                 {
                                     RequestDetails.new_purchase === 1
@@ -397,10 +391,19 @@ const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequis
                                     :null
                                 }
                                 {
-                                    RequestDetails.repair_replacement
+                                    RequestDetails.repair
                                     ?
                                     <div className='grid_container align-items-center'>
-                                        <span>Repair / Replacement</span>
+                                        <span>Repair</span>
+                                        <input checked={ true } type="checkbox" className='ml-2' />
+                                    </div>
+                                    :null
+                                }
+                                {
+                                    RequestDetails.replace_recycle
+                                    ?
+                                    <div className='grid_container align-items-center'>
+                                        <span>Replacement / Recycle</span>
                                         <input checked={ true } type="checkbox" className='ml-2' />
                                     </div>
                                     :null
@@ -442,43 +445,86 @@ const Detailing = ( { pr_id, CancelRequisition, ApproveRequisition, RejectRequis
 
                             <label className="mb-1"><b>Purchase / Repair / Replacement Specifications</b></label>
 
-                            <table className="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th className='text-center'>Sr.No.</th>
-                                        <th className='text-center'>Description</th>
-                                        <th className='text-center'>Quantity</th>
-                                        <th className='text-center'>Estimated Cost</th>
-                                        <th className='text-center'>Total Cost</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        Specifications.map(
-                                            ( val, index ) => {
-                                                return (
-                                                    <tr key={ index }>
-                                                        <td className='text-center'> { index + 1 } </td>
-                                                        <td className='text-center'> { val.description } </td>
-                                                        <td className='text-center'> { val.quantity } </td>
-                                                        <td className='text-center'> Rs { val.estimated_cost.toLocaleString('en') } </td>
-                                                        <td className='text-center'> Rs { val.total_estimated_cost.toLocaleString('en') } </td>
-                                                    </tr>
-                                                )
-                                            }
-                                        )
-                                    }
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td className='text-center'></td>
-                                        <td className='text-center'></td>
-                                        <td className='text-center'></td>
-                                        <td className='text-center'><b>Total</b></td>
-                                        <td className='text-center'> Rs { RequestDetails.total_value.toLocaleString('en') } </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                            {
+                                EditConfirm
+                                ?
+                                <table className="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th className='text-center'>Sr.No.</th>
+                                            <th className='text-center'>Description</th>
+                                            <th className='text-center'>Quantity</th>
+                                            <th className='text-center'>Estimated Price</th>
+                                            <th className='text-center'>Total Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="specifications_table_body">
+                                        {
+                                            Specifications.map(
+                                                ( val, index ) => {
+                                                    console.log( val );
+                                                    return (
+                                                        <tr id={ "specification_row_" + ( index + 1 ) }>
+                                                            <td id={ "specification_serial_number_" + ( index + 1 ) }>{ val.sr_no }</td>
+                                                            <td id={ "specification_description_" + ( index + 1 ) } contentEditable onInput={ onContentEdit }>{ val.description }</td>
+                                                            <td id={ "specification_quantity_" + ( index + 1 ) } contentEditable onInput={ onContentEdit }>{ val.quantity }</td>
+                                                            <td id={ "specification_est_cost_" + ( index + 1 ) } contentEditable onInput={ onContentEdit }>{ val.estimated_cost }</td>
+                                                            <td id={ "specification_total_cost_" + ( index + 1 ) }>{ val.total_estimated_cost }</td>
+                                                        </tr>
+                                                    )
+                                                }
+                                            )
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr id="specification_total_row">
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td className='text-center' id="total_calculated_amount_label"><b>Total Estimated Amount</b></td>
+                                            <td id="total_calculated_amount">{ RequestDetails.total_value }</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                :
+                                <table className="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th className='text-center'>Sr.No.</th>
+                                            <th className='text-center'>Description</th>
+                                            <th className='text-center'>Quantity</th>
+                                            <th className='text-center'>Estimated Cost</th>
+                                            <th className='text-center'>Total Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            Specifications.map(
+                                                ( val, index ) => {
+                                                    return (
+                                                        <tr key={ index }>
+                                                            <td className='text-center'> { index + 1 } </td>
+                                                            <td className='text-center'> { val.description } </td>
+                                                            <td className='text-center'> { val.quantity } </td>
+                                                            <td className='text-center'> Rs { val.estimated_cost.toLocaleString('en') } </td>
+                                                            <td className='text-center'> Rs { val.total_estimated_cost.toLocaleString('en') } </td>
+                                                        </tr>
+                                                    )
+                                                }
+                                            )
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td className='text-center'></td>
+                                            <td className='text-center'></td>
+                                            <td className='text-center'></td>
+                                            <td className='text-center'><b>Total</b></td>
+                                            <td className='text-center'> Rs { RequestDetails.total_value.toLocaleString('en') } </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            }
 
                             <label className="mb-0"><b>Additional Notes</b></label>
                             <textarea className="form-control" value={ RequestDetails.note } />

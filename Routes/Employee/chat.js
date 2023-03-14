@@ -94,17 +94,19 @@ router.post('/getchatemployees', ( req, res ) => {
 
                 if ( rslt.length > 0 )
                 {
+                    let limit = rslt.length;
+                    let count = [];
                     let lastChats = [];
-                    for ( let x = 0; x < rslt.length; x++ )
+                    function getLastChat()
                     {
                         db.query(
                             "SELECT emp_chats.* \
                             FROM \
                             emp_chats \
                             WHERE sender_id = " + currentEmp + " \
-                            AND receiver_id = " + rslt[x].emp_id + " \
+                            AND receiver_id = " + rslt[count.length].emp_id + " \
                             OR receiver_id = " + currentEmp + " \
-                            AND sender_id = " + rslt[x].emp_id + " \
+                            AND sender_id = " + rslt[count.length].emp_id + " \
                             AND sender_status != 'deleted' ORDER BY id DESC LIMIT 1",
                             ( err, result ) => {
                     
@@ -116,12 +118,22 @@ router.post('/getchatemployees', ( req, res ) => {
                     
                                 }else 
                                 {
-
+                                    
                                     lastChats.push( result[0] );
                                     if ( lastChats.length === rslt.length )
                                     {
                                         res.send( [rslt, lastChats] );
                                         res.end();
+                                    }else
+                                    {
+                                        if ( ( count.length + 1 ) === limit )
+                                        {
+                                            console.log( "Last Chat Procedure Completed..." );
+                                        }else
+                                        {
+                                            count.push(1);
+                                            getLastChat();
+                                        }
                                     }
                     
                                 }
@@ -129,6 +141,7 @@ router.post('/getchatemployees', ( req, res ) => {
                             }
                         );
                     }
+                    getLastChat();
                 }else
                 {
                     res.send( [rslt, []] );
@@ -174,17 +187,19 @@ router.post('/getallemployees', ( req, res ) => {
 
                 if ( rslt.length > 0 )
                 {
+                    let limit = rslt.length;
+                    let count = [];
                     let lastChats = [];
-                    for ( let x = 0; x < rslt.length; x++ )
+                    function getLastChat()
                     {
                         db.query(
                             "SELECT emp_chats.* \
                             FROM \
                             emp_chats \
                             WHERE sender_id = " + currentEmp + " \
-                            AND receiver_id = " + rslt[x].emp_id + " \
+                            AND receiver_id = " + rslt[count.length].emp_id + " \
                             OR receiver_id = " + currentEmp + " \
-                            AND sender_id = " + rslt[x].emp_id + " \
+                            AND sender_id = " + rslt[count.length].emp_id + " \
                             AND sender_status != 'deleted' ORDER BY id DESC LIMIT 1",
                             ( err, result ) => {
                     
@@ -196,12 +211,22 @@ router.post('/getallemployees', ( req, res ) => {
                     
                                 }else 
                                 {
-
+                                    
                                     lastChats.push( result[0] );
                                     if ( lastChats.length === rslt.length )
                                     {
                                         res.send( [rslt, lastChats] );
                                         res.end();
+                                    }else
+                                    {
+                                        if ( ( count.length + 1 ) === limit )
+                                        {
+                                            console.log( "Last Chat Procedure Completed..." );
+                                        }else
+                                        {
+                                            count.push(1);
+                                            getLastChat();
+                                        }
                                     }
                     
                                 }
@@ -209,6 +234,7 @@ router.post('/getallemployees', ( req, res ) => {
                             }
                         );
                     }
+                    getLastChat();
                 }else
                 {
                     res.send( [rslt, []] );

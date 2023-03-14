@@ -10,6 +10,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
+import { createFromObjectArray } from "styled-xl";
+import { saveAs } from "file-saver";
+
 const Attendance = () => {
 
     const EmpData = useSelector( ( state ) => state.EmpAuth.EmployeeData );
@@ -128,6 +131,212 @@ const Attendance = () => {
 
     }
 
+    const exportDataInExcel = () => {
+
+
+        // var objData = [
+        //     {firstName: "Tom", lastName: "Antony", mat: 30, phy: 90, che: 76 }
+        // ];
+
+        var objData = [];
+        var normalRow = [];
+        var status = "";
+        var styling = {};
+        var days;
+        var d;
+        var dayName;
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        for ( let x = 0; x < DailyAttendance.length; x++ )
+        {
+            days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            d = new Date(DailyAttendance[x].emp_date.toString().substring(0, 10));
+            dayName = days[d.getDay()];
+            styling = { backgroundColor: dayName === 'Sunday' ? '#899499' : DailyAttendance[x].status === 'Holiday' ? '#899499' : DailyAttendance[x].status === 'OFF' ? '#899499' : DailyAttendance[x].status === 'Absent' ? '#D3D3D3' : DailyAttendance[x].status === 'leave' ? '#D3D3D3' : DailyAttendance[x].status === 'Late' ? '#D3D3D3' : '#fff' };
+            if ( DailyAttendance[x].status === 'leave' && DailyAttendance[x].time_in === null && DailyAttendance[x].time_out === null && DailyAttendance[x].break_in === null && DailyAttendance[x].break_out === null )
+            {
+                status = capitalizeFirstLetter(DailyAttendance[x].status);
+                normalRow = {
+                    "ID": DailyAttendance[x].emp_id,
+                    "Name": DailyAttendance[x].name,
+                    "Date": new Date(DailyAttendance[x].emp_date).toDateString(),
+                    "Day": dayName,
+                    "Time In": "",
+                    "Time Out": "",
+                    "Start Break": "",
+                    "End Break": "",
+                    "Status": status,
+                }
+            }else
+            if ( DailyAttendance[x].status === 'leave' && (DailyAttendance[x].time_in !== null || DailyAttendance[x].time_out !== null || DailyAttendance[x].break_in !== null || DailyAttendance[x].break_out !== null) )
+            {
+                status = "Short Leave";
+                normalRow = {
+                    "ID": DailyAttendance[x].emp_id,
+                    "Name": DailyAttendance[x].name,
+                    "Date": new Date(DailyAttendance[x].emp_date).toDateString(),
+                    "Day": dayName,
+                    "Time In": DailyAttendance[x].time_in ? DailyAttendance[x].time_in : "",
+                    "Time Out": DailyAttendance[x].time_out ? DailyAttendance[x].time_out : "",
+                    "Start Break": DailyAttendance[x].break_in ? DailyAttendance[x].break_in : "",
+                    "End Break": DailyAttendance[x].break_out ? DailyAttendance[x].break_out : "",
+                    "Status": status,
+                }
+            }else
+            {
+                status = capitalizeFirstLetter(DailyAttendance[x].status);
+                normalRow = {
+                    "ID": DailyAttendance[x].emp_id,
+                    "Name": DailyAttendance[x].name,
+                    "Date": new Date(DailyAttendance[x].emp_date).toDateString(),
+                    "Day": dayName,
+                    "Time In": DailyAttendance[x].time_in ? DailyAttendance[x].time_in : "",
+                    "Time Out": DailyAttendance[x].time_out ? DailyAttendance[x].time_out : "",
+                    "Start Break": DailyAttendance[x].break_in ? DailyAttendance[x].break_in : "",
+                    "End Break": DailyAttendance[x].break_out ? DailyAttendance[x].break_out : "",
+                    "Status": status,
+                }
+            }
+            objData.push(normalRow)
+        }
+    
+        var sheetName = "attendance-sheet";
+        const headerStyle = {
+            horizontalAlignment: "center",
+            backgroundColor: "#1167b1",
+            fontColor: "#FFFFFF",
+            fontName: "Arial",
+            fontSize: 12
+        };
+    
+          //create a constant contentStyle with default styles for the all the rows
+        const contentStyle = {
+            fontSize: 12
+        };
+
+        var darkGrayStyle = { backgroundColor: "#899499", fontColor: "#ffffff" };
+        var statusDarkGrayColor = [
+            { type: "equal", style: darkGrayStyle, value: "5000" },
+        ];
+
+        const columnConfig = [
+            {
+                key: "ID",
+                displayName: "ID",
+                width: 10,
+                conditionalFormatRules: statusDarkGrayColor,
+                applyConditionalFormatToCols: ["all"],
+                style: {
+                    backgroundColor: '#fff',
+                    fontColor: "#000"
+                }
+            },
+            {
+                key: "Name",
+                displayName: "Name",
+                width: 25,
+                // conditionalFormatRules: statusDarkGrayColor,
+                // applyConditionalFormatToCols: ["all"],
+                style: {
+                    backgroundColor: '#fff',
+                    fontColor: "#000"
+                }
+            },
+            {
+                key: "Date",
+                displayName: "Date",
+                width: 20,
+                // conditionalFormatRules: statusDarkGrayColor,
+                // applyConditionalFormatToCols: ["all"],
+                style: {
+                    backgroundColor: '#fff',
+                    fontColor: "#000"
+                }
+            },
+            {
+                key: "Day",
+                displayName: "Day",
+                width: 15,
+                // conditionalFormatRules: statusDarkGrayColor,
+                // applyConditionalFormatToCols: ["all"],
+                style: {
+                    backgroundColor: '#fff',
+                    fontColor: "#000"
+                }
+            },
+            {
+                key: "Time In",
+                displayName: "Time In",
+                width: 15,
+                // conditionalFormatRules: statusDarkGrayColor,
+                // applyConditionalFormatToCols: ["all"],
+                style: {
+                    backgroundColor: '#fff',
+                    fontColor: "#000"
+                }
+            },
+            {
+                key: "Time Out",
+                displayName: "Time Out",
+                width: 15,
+                // conditionalFormatRules: statusDarkGrayColor,
+                // applyConditionalFormatToCols: ["all"],
+                style: {
+                    backgroundColor: '#fff',
+                    fontColor: "#000"
+                }
+            },
+            {
+                key: "Start Break",
+                displayName: "Start Break",
+                width: 15,
+                // conditionalFormatRules: statusDarkGrayColor,
+                // applyConditionalFormatToCols: ["all"],
+                style: {
+                    backgroundColor: '#fff',
+                    fontColor: "#000"
+                }
+            },
+            {
+                key: "End Break",
+                displayName: "End Break",
+                width: 15,
+                // conditionalFormatRules: statusDarkGrayColor,
+                // applyConditionalFormatToCols: ["all"],
+                style: {
+                    backgroundColor: '#fff',
+                    fontColor: "#000"
+                }
+            },
+            {
+                key: "Status",
+                displayName: "Status",
+                width: 10,
+                style: {
+                    backgroundColor: '#fff',
+                    fontColor: "#000"
+                }
+            }
+        ]
+    
+        var filePromise = createFromObjectArray(
+            sheetName,//Sheet name
+            objData, // array of objects to be converted to xlsx,
+            contentStyle,
+            headerStyle,
+            columnConfig,
+            null,
+            true
+        );
+        filePromise.then((blob) => {
+            saveAs(blob, "attendance-sheet.xlsx");
+        });
+
+    }
+
     return (
         <>
             <ToastContainer />
@@ -243,6 +452,7 @@ const Attendance = () => {
                             />
                             :null
                         }
+                        {/* <button className="download-table-xls-button" onClick={ exportDataInExcel }>Export in excel</button> */}
                     </div>
                 </div>
                 <div>

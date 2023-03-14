@@ -5,14 +5,11 @@
     height: 100vh;
     position: relative;
     overflow: hidden;
-    font-family: Poppins;
     padding-top: 100px;
     background-color: var( --lightgray );
 }
 
-.Emp_Login2 p,
-.Emp_Login2 input,
-.Emp_Login2 button {
+.Emp_Login2 p {
     font-size: 12px;
 }
 
@@ -20,11 +17,32 @@
     position: absolute;
     z-index: 0;
     top: 0;
+    opacity: 0;
+    animation: svgAnimation 1s linear 1 forwards alternate;
+}
+
+@keyframes svgAnimation {
+    100% {
+        opacity: 1;
+    }
+}
+
+.Emp_Login2 .Emp_Login2_Div {
+    animation: slideDown 1s linear 1 forwards alternate;
+    transform: translateY(-20px);
+}
+
+@keyframes slideDown {
+    100% {
+        transform: translateY(0);
+    }
 }
 
 .Emp_Login2 .Emp_Login2_Div h1 {
     margin-bottom: 50px;
     color: white;
+    font-family: Cinzel;
+    letter-spacing: 10px;
 }
 
 .Emp_Login2 .Emp_Login2_Div {
@@ -48,6 +66,8 @@
     position: relative;
     background-color: rgb(211, 211, 211, .2);
     border-radius: 30px;
+    letter-spacing: 2px;
+    font-family: JosefinSans;
     text-transform: uppercase;
 }
 
@@ -91,7 +111,7 @@
 .Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .PassDiv input,
 .Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .LoginDiv label,
 .Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .PassDiv label {
-    font-family: Quicksand !important;
+    font-family: JosefinSans !important;
 }
 
 .Emp_Login2 .Emp_Login2_Div .Emp_Login2_Div_Box .PassDiv .passDiv_input{

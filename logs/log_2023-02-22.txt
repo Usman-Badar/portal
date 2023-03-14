@@ -1,0 +1,121 @@
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'name')
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'name')
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:42:28 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: EPERM: operation not permitted, open './err.mp3'
+
+08:45:47 GMT+0500 (Pakistan Standard Time)
+type: error
+ProtocolError: Protocol error (Runtime.callFunctionOn): Target closed.
+
+09:05:48 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: moment(...).format(...).add is not a function
+
+14:09:44 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: ENOENT: no such file or directory, open './2-2023-monthly_attendance.xlsx'
+
+14:09:44 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'name')
+
+14:09:44 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: ENOENT: no such file or directory, open './err.mp3'
+
+14:09:44 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: ENOENT: no such file or directory, open './2-2023-monthly_attendance.xlsx'
+
+14:11:52 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+14:11:52 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: TypeError: Cannot read properties of undefined (reading 'WidFactory')
+    at __puppeteer_evaluation_script__:2:42
+
+15:24:15 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'emp_date')
+
+15:24:47 GMT+0500 (Pakistan Standard Time)
+type: error
+TypeError: Cannot read properties of undefined (reading 'emp_date')
+
+15:45:41 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: [LT01] Whatsapp business can't send this yet
+
+16:39:15 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: cell is not defined
+
+16:41:07 GMT+0500 (Pakistan Standard Time)
+type: error
+ReferenceError: cell is not defined
+
+16:42:03 GMT+0500 (Pakistan Standard Time)
+type: error
+Error: Evaluation failed: Error: wid error: invalid wid
+    at new c (https://web.whatsapp.com/app.9e31a8725d9f2a90915f.js:68:45610)
+    at Object.s [as createWid] (https://web.whatsapp.com/app.9e31a8725d9f2a90915f.js:68:50831)
+    at __puppeteer_evaluation_script__:2:53
+

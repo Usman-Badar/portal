@@ -143,25 +143,7 @@ const App = () => {
                     {/* 
                         For Inventory
                     */}
-                    {/* <Route exact path='/invtry' render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path="/invtry_assets" render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path='/invtry_assets/invtrysubassets/:id' render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path="/invtry_assets/new/entry" render={ () => <Sus content={ <Dashboard /> } /> } />
-
-                    <Route exact path='/invtry_pr_requests' render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path='/invtry_pr_requests/invtry_pr_request_details/:id' render={ () => <Sus content={ <Dashboard /> } /> } />
-
-                    <Route exact path="/view_invtry_requests" render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path="/view_invtry_requests/employee=:id" render={ () => <Sus content={ <Dashboard /> } /> } />
-
-                    <Route exact path="/invtry_locations" render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path="/invtry_locations/invtrysublocations/:id" render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path="/invtry_locations/invtrysublocations/:id&&request=:id" render={ () => <Sus content={ <Dashboard /> } /> } />
-
-                    <Route exact path='/invtry_Login' render={ () => <Sus content={ <InvtryLogin /> } /> } />
-                    <Route exact path='/invtry_logout' render={ () => <Sus content={ <InvtryLogOut /> } /> } />
-
-                     */}
+                    <Route exact path="/inventory/challan/:path" render={ () => <Sus content={ <Dashboard /> } /> } />
 
                     {/* VIEWS */}
                     <Route exact path="/view=quotations/:id" render={ () => <Sus content={ <Quatation /> } /> } />
@@ -189,7 +171,7 @@ const App = () => {
                     */}
                     <Route exact path="/item_requests" render={ () => <Sus content={ <Dashboard /> } /> } />
                     <Route exact path="/item_requests/:path" render={ () => <Sus content={ <Dashboard /> } /> } />
-                    <Route exact path="/item_requests/:path/index=:index" render={ () => <Sus content={ <Dashboard /> } /> } />
+                    <Route exact path="/item_requests/:path/id=:index" render={ () => <Sus content={ <Dashboard /> } /> } />
 
 
                     {/* REPAIR REQUEST */}
@@ -200,6 +182,15 @@ const App = () => {
                     <Route exact path="/purchase/requisition/requests" render={ () => <Sus content={ <Dashboard /> } /> } />
                     <Route exact path="/purchase/requisition/details" render={ () => <Sus content={ <Dashboard /> } /> } />
 
+                    {/* PURCAHSE ORDER */}
+                    <Route exact path="/purchase/order/form" render={ () => <Sus content={ <Dashboard /> } /> } />
+                    <Route exact path="/purchase/order/requests" render={ () => <Sus content={ <Dashboard /> } /> } />
+                    <Route exact path="/purchase/order/details" render={ () => <Sus content={ <Dashboard /> } /> } />
+                    
+                    {/* 
+                        For Container
+                    */}
+                    <Route exact path="/logistics/container/:path" render={ () => <Sus content={ <Dashboard /> } /> } />
                     
                 </Switch>
             </>

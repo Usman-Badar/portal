@@ -49,6 +49,7 @@
 
 .form-control {
     border: 1px solid lightgray !important;
+    font-size: 14px;
 }
 
 .d-450-block {
@@ -81,8 +82,10 @@ input[type='checkbox'] {
     color: #fff;
     border-radius: 20px;
     padding: 5px 20px;
-    font-size: 13px;
+    font-size: 14px !important;
     font-family: Roboto-Light;
+    font-weight: 500;
+    letter-spacing: 2px;
 }
 
 .btn {
@@ -102,6 +105,12 @@ input[type='checkbox'] {
     color: #fff !important;
 }
 
+.btn.light {
+    border: 1px solid #d3d3d3;
+    background-color: #f8f9fa;
+    box-shadow: inset 1px 1px 1px 0 #ccdbe8, inset -1px -1px 1px 1px hsla(0, 0%, 100%, .5);
+}
+
 [contenteditable] {
     outline: 0px solid transparent;
 }
@@ -109,7 +118,7 @@ input[type='checkbox'] {
 #root {
     --black: #3A5579;
     --dark-black: #272F3E;
-    --c-green: #90B7CE ;
+    --c-green: #90B7CE;
     /* #D5EEEF */
     --dark-c-green: #90B7CE;
     --orange: #E26649;
@@ -130,8 +139,13 @@ textarea {
     font-family: Roboto-Light;
 }
 
+.p-relative {
+    position: relative;
+}
+
 .heading {
-    font-family: Roboto;
+    font-family: Raleway;
+    text-transform: uppercase;
     position: relative;
     width: fit-content;
 }
@@ -141,11 +155,12 @@ textarea {
     position: absolute;
     bottom: -5px;
     right: 0;
+    width: fit-content;
     text-transform: uppercase;
 }
 
 .color-c-green {
-    color: var( --c-green);
+    color: var(--c-green);
     font-weight: bold;
 }
 
@@ -159,9 +174,11 @@ textarea {
     .d-450-block {
         display: block !important;
     }
+
     .d-450-none {
         display: none !important;
     }
+
     .Descussion .previous_descussions {
         width: 100%;
     }
@@ -172,6 +189,7 @@ textarea {
         opacity: .5;
         z-index: -1 !important;
     }
+
     100% {
         opacity: 1;
         z-index: -1 !important;
@@ -212,7 +230,7 @@ textarea {
 }
 
 .commentBox .header {
-    background-color: var( --black);
+    background-color: var(--black);
     color: #fff;
     padding: 10px;
     border-radius: 10px 10px 0 0;
@@ -223,7 +241,7 @@ textarea {
 }
 
 .commentBox .header .counting {
-    background-color: var( --orange);
+    background-color: var(--orange);
     padding: 0 7px;
     margin-left: 10px;
     border-radius: 50%;
@@ -256,7 +274,7 @@ textarea {
 }
 
 .commentBox .comments_content p.mine {
-    background-color: var( --blue);
+    background-color: var(--blue);
     color: #fff;
     text-align: right;
 }
@@ -282,14 +300,14 @@ textarea {
 
 .commentBox .newComment input {
     width: 100%;
-    background-color: var( --lightgray);
+    background-color: var(--lightgray);
     outline: none;
     border: 0;
     padding: 0 10px;
 }
 
 .commentBox .newComment button {
-    background-color: var( --orange);
+    background-color: var(--orange);
     color: #fff;
     outline: none;
     border: 0;
@@ -298,7 +316,7 @@ textarea {
 }
 
 .commentBox .header:hover {
-    background-color: var( --dark-black);
+    background-color: var(--dark-black);
 }
 
 .commentBox.open {
@@ -371,4 +389,79 @@ td {
 .badge.badge-dark {
     background: var(--dark-black) !important;
     color: #ffff;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: var(--blue);
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px var(--blue);
+}
+
+input:checked+.slider.danger {
+    background-color: var(--orange);
+}
+
+input:focus+.slider.danger {
+    box-shadow: 0 0 1px var(--orange);
+}
+
+input:checked+.slider.green {
+    background-color: var(--success);
+}
+
+input:focus+.slider.green {
+    box-shadow: 0 0 1px var(--success);
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.dot {
+    height: 14px;
+    width: 14px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: block;
 }

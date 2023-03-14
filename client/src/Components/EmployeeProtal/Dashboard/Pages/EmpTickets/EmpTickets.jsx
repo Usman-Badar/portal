@@ -5,9 +5,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import $ from 'jquery';
 
 import { searchEmployees, getEmployees, generateTicket, getIssuedTickets } from './Functions';
+import { useSelector } from "react-redux";
 const UI = lazy(() => import('./UI'));
 
 const EmpTickets = () => {
+    
+    const AccessControls = useSelector( ( state ) => state.EmpAuth.EmployeeData );
 
     const [ ShowModal, setShowModal ] = useState(false);
     const [ Keyword, setKeyword ] = useState();
@@ -50,7 +53,7 @@ const EmpTickets = () => {
                     setTicket={ setTicket }
                     setEmployee={ setEmployee }
                     searchEmployees={ (e) => searchEmployees( e, setKeyword, setEmployee ) }
-                    getEmployees={ () => getEmployees( Employees, setEmployees ) }
+                    getEmployees={ () => getEmployees( Employees, AccessControls, setEmployees ) }
                     generateTicket={ (e) => generateTicket( e, Employee, Ticket, toast, setEmployee, setTicket ) }
                 />
             </Suspense>

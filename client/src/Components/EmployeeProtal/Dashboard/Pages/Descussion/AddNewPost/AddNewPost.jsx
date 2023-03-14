@@ -6,7 +6,7 @@ const AddNewPost = () => {
 
     return (
         <>
-            <div className="createpost">
+            <div className="createpost popUps">
                 <textarea name="" placeholder="What is in your mind John? Let discuss" className="form-control"></textarea>
                 <div className="d-flex justify-content-between align-items-center mt-3 options-container">
                     <div className="left">
